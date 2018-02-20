@@ -2,7 +2,51 @@
 
 ### Table of Contents
 
+-   [Introduction](#introduction)
+-   [Installation](#installation)
+-   [Topics](#topics)
 -   [InitializeSDK](#initializesdk)
+
+## Introduction
+
+Welcome to the Bitski.js documentation. Bitski.js is a JavaScript library for interacting with the Ethereum blockchain.
+
+
+## Installation
+
+### Get an API Token
+
+Visit our [developer portal] and sign up to get an api token
+
+### Install SDK on your website
+
+#### Hosted Installation
+
+CDN Link coming soon.
+
+#### Install as a package
+
+`npm install bitski`
+
+#### Manual Installation
+
+Download the SDK from github.
+
+### Initialize the SDK
+
+Call `Bitski.initializeSDK();`
+
+
+## Topics
+
+### Web3
+
+Web3 is…
+
+### Ethereum
+
+Ethereum is…
+
 
 ## InitializeSDK
 
