@@ -1,4 +1,7 @@
 {
+  "name": "Bitski-JS-SDK",
+  "description": "Bitski JavaScript SDK",
+  "version": "0.0.0",
   "scripts": {
     "build": "WEBPACK_ENV=build webpack",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch"
