@@ -34,6 +34,9 @@ var config = {
     library: libraryName,
     libraryTarget: 'umd',
     umdNamedDefine: true
+  },
+  externals: {
+    'oidc-client': 'Oidc'
   }
 };
 

@@ -1,4 +1,4 @@
-var XHR2 = require('xhr2');
+import XHR2 from 'xhr2';
 
 import Oidc from 'oidc-client';
 
