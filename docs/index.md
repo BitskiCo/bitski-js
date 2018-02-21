@@ -26,7 +26,9 @@ CDN Link coming soon.
 
 #### Install as a package
 
-`npm install bitski`
+```bash
+npm install bitski
+```
 
 #### Manual Installation
 
@@ -34,7 +36,9 @@ Download the SDK from github.
 
 ### Initialize the SDK
 
-Call `Bitski.initializeSDK();`
+```javascript
+Bitski.initializeSDK();
+```
 
 
 ## Topics
