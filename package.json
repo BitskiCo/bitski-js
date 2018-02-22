@@ -1,5 +1,5 @@
 {
-  "name": "Bitski-JS-SDK",
+  "name": "bitski.js",
   "description": "Bitski JavaScript SDK",
   "repository": {
     "type": "git",
@@ -9,7 +9,7 @@
   "scripts": {
     "build": "WEBPACK_ENV=build webpack",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch",
-    "generateDocs": "documentation build src/** --config docs/documentation.yml -o docs/index.md -f md"
+    "generateDocs": "documentation build src/** --config docs/documentation.yml -g -t node_modules/bitski-documentation-theme -o docs -f html"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
@@ -27,6 +27,7 @@
     "xhr2": "^0.1.4"
   },
   "devDependencies": {
+    "bitski-documentation-theme": "github:OutThereLabs/bitski-documentation-theme",
     "documentation": "^5.4.0"
   }
 }
