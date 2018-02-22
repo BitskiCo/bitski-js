@@ -6,7 +6,29 @@ Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.DEBUG;
 
 /**
- * OAuthHttpProvider should be used to send rpc calls over http
+ * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
+ * @class
+ * @param {string} host - JSON-RPC endpoint
+ * @param {number} timeout - Timeout in seconds
+ * @param {Object} settings - settings object for configuring OAuth, see {@link InitializeWeb3}
+ * @example
+ * // Set up a new HTTPOAuthProvider
+ * var settings = {
+ *   authority: 'https://hydra.outtherelabs.com/',
+ *   client_id: 'YOUR-CLIENT-ID',
+ *   redirect_uri: 'https://exampledapp.co/',
+ *   post_logout_redirect_uri: 'https://exampledapp.co',
+ *   response_type: 'token id_token',
+ *   scope: 'openid',
+ *   popup_redirect_uri: 'https://exampledapp.co',
+ *   popup_post_logout_redirect_uri: 'https://exampledapp.co',
+ *   silent_redirect_uri: 'https://exampledapp.co',
+ *   automaticSilentRenew: true,
+ *   silentRequestTimeout: 10000,
+ *   filterProtocolClaims: true,
+ *   loadUserInfo: true
+ * };
+ * var provider = new OAuthHttpProvider('https://my-rpc-server.com', 1000, settings);
  */
 var OAuthHttpProvider = function (host, timeout, settings) {
   this.host = host || 'http://localhost:8545';
@@ -20,7 +42,7 @@ var OAuthHttpProvider = function (host, timeout, settings) {
     if (typeof (user) === 'undefined' || user === null) {
       throw Error("Not signed in");
     }
-    
+
     return user;
   }).catch(function (err) {
     if (err.toString() !== "Error: Not signed in") {
@@ -47,7 +69,8 @@ var OAuthHttpProvider = function (host, timeout, settings) {
  * Should be called to prepare new XMLHttpRequest
  *
  * @method prepareRequest
- * @param {Boolean} true if request should be async
+ * @memberof OAuthHttpProvider.prototype
+ * @param {Boolean} async - true if request should be async
  * @return {XMLHttpRequest} object
  */
 OAuthHttpProvider.prototype.prepareRequest = function (async) {
@@ -74,9 +97,10 @@ OAuthHttpProvider.prototype.prepareRequest = function (async) {
 };
 
 /**
- * Should be called to make sync request
+ * Should be called to make sync request.
  *
  * @method send
+ * @memberof OAuthHttpProvider.prototype
  * @param {Object} payload
  * @return {Object} result
  */
@@ -101,11 +125,12 @@ OAuthHttpProvider.prototype.send = function (payload) {
 };
 
 /**
- * Should be used to make async request
+ * Should be used to make async request.
  *
  * @method sendAsync
+ * @memberof OAuthHttpProvider.prototype
  * @param {Object} payload
- * @param {Function} callback triggered on end with (err, result)
+ * @param {Function} callback - triggered on end with (err, result)
  */
 OAuthHttpProvider.prototype.sendAsync = function (payload, callback) {
   var request = this.prepareRequest(true);
@@ -137,9 +162,10 @@ OAuthHttpProvider.prototype.sendAsync = function (payload, callback) {
 };
 
 /**
- * Synchronously tries to make Http request
+ * Returns connection status of provider.
  *
  * @method isConnected
+ * @memberof OAuthHttpProvider.prototype
  * @return {Boolean} returns true if request haven't failed. Otherwise false
  */
 OAuthHttpProvider.prototype.isConnected = function () {

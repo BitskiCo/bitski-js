@@ -3,5 +3,5 @@ toc:
     file: introduction.md
   - name: Installation
     file: installation.md
-  - name: Topics
-    file: topics.md
+  - name: Usage
+    file: usage.md

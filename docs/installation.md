@@ -20,5 +20,6 @@ Download the SDK from github.
 
 ### Initialize the SDK
 ```javascript
-Bitski.initializeSDK();
+web3 = InitializeWeb3(settings);
 ```
+See [InitializeWeb3](#initializeweb3) below.
