@@ -26,17 +26,26 @@ var libraryName = 'bitski';
 var outputFile = libraryName + '.js';
 
 var config = {
-  entry: __dirname + '/src/index.js',
   devtool: 'source-map',
+  entry: __dirname + '/src/index.ts',
+  externals: {
+    'oidc-client': 'Oidc',
+    'web3-providers-http': 'web3-providers-http'
+  },
+  module: {
+    loaders: [{
+      test: /\.ts$/,
+      loader: 'ts-loader'
+    }]
+  },
   output: {
     path: __dirname + '/lib',
     filename: outputFile,
     library: libraryName,
-    libraryTarget: 'umd',
-    umdNamedDefine: true
+    libraryTarget: 'umd'
   },
-  externals: {
-    'oidc-client': 'Oidc'
+  resolve: {
+    extensions: ['.ts', '.js']
   }
 };
 

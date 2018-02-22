@@ -1,4 +1,5 @@
-import OAuthHttpProvider from './oauthhttpprovider';
+import Web3 from 'web3';
+import { OAuthHttpProvider } from './oauthhttpprovider';
 
 /**
  * Initialize [Web3](https://github.com/ethereum/web3) with Bitski. This will be ignored if a web3 object already exists.
@@ -35,11 +36,9 @@ import OAuthHttpProvider from './oauthhttpprovider';
  * });
  * @returns {Web3} Web3 object configured for Bitski.
  */
-export function InitializeWeb3(settings) {
-    if (typeof web3 !== 'undefined') {
-        console.warn("Web3 provider already exists!");
-    } else {
-        var web3Client = new Web3(new OAuthHttpProvider("https://keep-api.outtherelabs.com/v1/web3/kovan", 0, settings));
-        return web3Client;
-    }
+
+export function InitializeWeb3(settings: any) {
+    var provider = new OAuthHttpProvider("https://keep-api.outtherelabs.com/v1/web3/kovan", 0, settings);
+    var web3Client = new Web3(provider);
+    return web3Client;
 };

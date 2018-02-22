@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>bitski.js 0.0.1 | Documentation</title>
+  <title>bitski 0.0.1 | Documentation</title>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' type='text/css' rel='stylesheet' />
   <link href='assets/style.css' type='text/css' rel='stylesheet' />
@@ -13,7 +13,7 @@
     <div class='flex mx-auto'>
       <div id='split-left' class='overflow-auto fs0 height-viewport-100 col-3'>
         <div class='py1 px2'>
-          <h3 class='mb0 no-anchor'>bitski.js</h3>
+          <h3 class='mb0 no-anchor'>bitski</h3>
           <div class='mb1'><code>0.0.1</code></div>
           <div id='toc'>
             <ul class='list-reset h5 py1-ul'>
@@ -50,9 +50,9 @@
               
                 
                 <li><a
-                  href='#initializeweb3'
+                  href='#oauthhttpprovider'
                   class="">
-                  InitializeWeb3
+                  OAuthHttpProvider
                   
                 </a>
                 
@@ -60,47 +60,21 @@
               
                 
                 <li><a
-                  href='#oauthhttpprovider'
-                  class=" toggle-sibling">
-                  OAuthHttpProvider
-                  <span class='icon'>▸</span>
+                  href='#httpprovider'
+                  class="">
+                  HttpProvider
+                  
                 </a>
                 
-                <div class='toggle-target display-none'>
+                </li>
+              
+                
+                <li><a
+                  href='#initializeweb3'
+                  class="">
+                  InitializeWeb3
                   
-                  
-                    <ul class='list-reset py1-ul pl1'>
-                      <li class='h5'><span>Instance members</span></li>
-                      
-                      <li><a
-                        href='#oauthhttpproviderpreparerequest'
-                        class='regular pre-open'>
-                        #prepareRequest
-                      </a></li>
-                      
-                      <li><a
-                        href='#oauthhttpprovidersend'
-                        class='regular pre-open'>
-                        #send
-                      </a></li>
-                      
-                      <li><a
-                        href='#oauthhttpprovidersendasync'
-                        class='regular pre-open'>
-                        #sendAsync
-                      </a></li>
-                      
-                      <li><a
-                        href='#oauthhttpproviderisconnected'
-                        class='regular pre-open'>
-                        #isConnected
-                      </a></li>
-                      
-                    </ul>
-                  
-                  
-                  
-                </div>
+                </a>
                 
                 </li>
               
@@ -175,13 +149,169 @@ Web3.js as normal.</p>
   
   <div class='clearfix'>
     
+    <h3 class='fl m0' id='oauthhttpprovider'>
+      OAuthHttpProvider
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/2a1bd1a30379bf01e543db68d6a21b77c003973a/bitski.js#L41-L82'>
+      <span>bitski.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls</p>
+
+
+  <div class='pre p1 fill-light mt0'>new OAuthHttpProvider(host: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, timeout: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, settings: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>host</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    JSON-RPC endpoint
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>timeout</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    Timeout in seconds
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>settings</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    settings object for configuring OAuth, see 
+<a href="#initializeweb3">InitializeWeb3</a>
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Set up a new HTTPOAuthProvider</span>
+<span class="hljs-keyword">var</span> settings = {
+  <span class="hljs-attr">authority</span>: <span class="hljs-string">'https://hydra.outtherelabs.com/'</span>,
+  <span class="hljs-attr">client_id</span>: <span class="hljs-string">'YOUR-CLIENT-ID'</span>,
+  <span class="hljs-attr">redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co/'</span>,
+  <span class="hljs-attr">post_logout_redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co'</span>,
+  <span class="hljs-attr">response_type</span>: <span class="hljs-string">'token id_token'</span>,
+  <span class="hljs-attr">scope</span>: <span class="hljs-string">'openid'</span>,
+  <span class="hljs-attr">popup_redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co'</span>,
+  <span class="hljs-attr">popup_post_logout_redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co'</span>,
+  <span class="hljs-attr">silent_redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co'</span>,
+  <span class="hljs-attr">automaticSilentRenew</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">silentRequestTimeout</span>: <span class="hljs-number">10000</span>,
+  <span class="hljs-attr">filterProtocolClaims</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">loadUserInfo</span>: <span class="hljs-literal">true</span>
+};
+<span class="hljs-keyword">var</span> provider = <span class="hljs-keyword">new</span> OAuthHttpProvider(<span class="hljs-string">'https://my-rpc-server.com'</span>, <span class="hljs-number">1000</span>, settings);</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='py2 mx3 mb2 clearfix add-divider'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='httpprovider'>
+      HttpProvider
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/2a1bd1a30379bf01e543db68d6a21b77c003973a/bitski.js#L41-L82'>
+      <span>bitski.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+
+  <div class='pre p1 fill-light mt0'>new HttpProvider()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='py2 mx3 mb2 clearfix add-divider'>
+
+  
+  <div class='clearfix'>
+    
     <h3 class='fl m0' id='initializeweb3'>
       InitializeWeb3
     </h3>
     
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/3f4711ec9c969a3bce3cf4e6e141befd53550d14/src/index.js#L38-L45'>
-      <span>src/index.js</span>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/2a1bd1a30379bf01e543db68d6a21b77c003973a/bitski.js#L124-L128'>
+      <span>bitski.js</span>
       </a>
     
   </div>
@@ -387,411 +517,6 @@ web3 = InitializeWeb3({
   
 
   
-
-  
-
-  
-</section>
-
-          
-        
-          
-            <section class='py2 mx3 mb2 clearfix add-divider'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='oauthhttpprovider'>
-      OAuthHttpProvider
-    </h3>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/3f4711ec9c969a3bce3cf4e6e141befd53550d14/src/oauthhttpprovider.js#L33-L66'>
-      <span>src/oauthhttpprovider.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls</p>
-
-
-  <div class='pre p1 fill-light mt0'>new OAuthHttpProvider(host: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, timeout: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, settings: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>host</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    JSON-RPC endpoint
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>timeout</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
-	    Timeout in seconds
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>settings</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    settings object for configuring OAuth, see 
-<a href="#initializeweb3">InitializeWeb3</a>
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// Set up a new HTTPOAuthProvider</span>
-<span class="hljs-keyword">var</span> settings = {
-  <span class="hljs-attr">authority</span>: <span class="hljs-string">'https://hydra.outtherelabs.com/'</span>,
-  <span class="hljs-attr">client_id</span>: <span class="hljs-string">'YOUR-CLIENT-ID'</span>,
-  <span class="hljs-attr">redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co/'</span>,
-  <span class="hljs-attr">post_logout_redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co'</span>,
-  <span class="hljs-attr">response_type</span>: <span class="hljs-string">'token id_token'</span>,
-  <span class="hljs-attr">scope</span>: <span class="hljs-string">'openid'</span>,
-  <span class="hljs-attr">popup_redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co'</span>,
-  <span class="hljs-attr">popup_post_logout_redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co'</span>,
-  <span class="hljs-attr">silent_redirect_uri</span>: <span class="hljs-string">'https://exampledapp.co'</span>,
-  <span class="hljs-attr">automaticSilentRenew</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">silentRequestTimeout</span>: <span class="hljs-number">10000</span>,
-  <span class="hljs-attr">filterProtocolClaims</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">loadUserInfo</span>: <span class="hljs-literal">true</span>
-};
-<span class="hljs-keyword">var</span> provider = <span class="hljs-keyword">new</span> OAuthHttpProvider(<span class="hljs-string">'https://my-rpc-server.com'</span>, <span class="hljs-number">1000</span>, settings);</pre>
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='oauthhttpproviderpreparerequest'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>prepareRequest(async)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='py2 mx3 mb2 clearfix add-divider'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/3f4711ec9c969a3bce3cf4e6e141befd53550d14/src/oauthhttpprovider.js#L76-L97'>
-      <span>src/oauthhttpprovider.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Should be called to prepare new XMLHttpRequest</p>
-
-
-  <div class='pre p1 fill-light mt0'>prepareRequest(async: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>): <a href="https://developer.mozilla.org/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>async</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>)</code>
-	    true if request should be async
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a></code>:
-        object
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='oauthhttpprovidersend'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>send(payload)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='py2 mx3 mb2 clearfix add-divider'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/3f4711ec9c969a3bce3cf4e6e141befd53550d14/src/oauthhttpprovider.js#L107-L125'>
-      <span>src/oauthhttpprovider.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Should be called to make sync request.</p>
-
-
-  <div class='pre p1 fill-light mt0'>send(payload: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>payload</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
-        result
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='oauthhttpprovidersendasync'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>sendAsync(payload, callback)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='py2 mx3 mb2 clearfix add-divider'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/3f4711ec9c969a3bce3cf4e6e141befd53550d14/src/oauthhttpprovider.js#L135-L162'>
-      <span>src/oauthhttpprovider.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Should be used to make async request.</p>
-
-
-  <div class='pre p1 fill-light mt0'>sendAsync(payload: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, callback: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>payload</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>callback</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</code>
-	    triggered on end with (err, result)
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='oauthhttpproviderisconnected'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>isConnected()</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='py2 mx3 mb2 clearfix add-divider'>
-
-  
-  <div class='clearfix'>
-    
-    
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/OutThereLabs/bitski-js-sdk/blob/3f4711ec9c969a3bce3cf4e6e141befd53550d14/src/oauthhttpprovider.js#L171-L183'>
-      <span>src/oauthhttpprovider.js</span>
-      </a>
-    
-  </div>
-  
-
-  <p>Returns connection status of provider.</p>
-
-
-  <div class='pre p1 fill-light mt0'>isConnected(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
-        returns true if request haven't failed. Otherwise false
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
 
   
 
