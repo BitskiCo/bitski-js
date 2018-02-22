@@ -8,8 +8,7 @@
   "version": "0.0.1",
   "scripts": {
     "build": "WEBPACK_ENV=build webpack",
-    "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch",
-    "generateDocs": "tsc --module amd --outFile bitski.js src/index.ts; documentation build bitski.js --config docs/documentation.yml -g -t node_modules/bitski-documentation-theme -o docs -f html; rm bitski.js"
+    "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
@@ -29,10 +28,11 @@
   },
   "devDependencies": {
     "bitski-documentation-theme": "github:OutThereLabs/bitski-documentation-theme",
-    "documentation": "^5.4.0",
     "ts-loader": "^3.5.0",
     "tslint": "^5.9.1",
     "tslint-loader": "^3.5.3",
+    "typedoc": "^0.10.0",
+    "typedoc-webpack-plugin": "^1.1.4",
     "typescript": "^2.7.2"
   }
 }
