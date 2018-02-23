@@ -1,11 +1,11 @@
 import { Log, UserManager, User } from 'oidc-client';
 
-import Web3 from 'web3';
 import 'xhr2';
 
 Log.logger = console;
 Log.level = Log.DEBUG;
 
+import HttpProvider from 'web3-providers-http'
 
 /**
  * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
@@ -32,13 +32,13 @@ Log.level = Log.DEBUG;
  * };
  * var provider = new OAuthHttpProvider('https://my-rpc-server.com', 1000, settings);
  */
-export class OAuthHttpProvider extends Web3.providers.HttpProvider {
+export class OAuthHttpProvider extends HttpProvider {
   userManager: UserManager;
   currentUser: User;
   host: string;
 
   constructor(host: string, timeout: number, settings: any) {
-    super(host, timeout);
+    super(host, timeout, []);
 
     var userManager = new UserManager(settings);
     var provider = this;
@@ -71,7 +71,7 @@ export class OAuthHttpProvider extends Web3.providers.HttpProvider {
     this.host = host;
   }
 
-  _prepareRequest(): XMLHttpRequest {
+  private _prepareRequest(): XMLHttpRequest {
     var request = new XMLHttpRequest();
     request.open('POST', this.host, true);
     request.setRequestHeader('Content-Type','application/json');
