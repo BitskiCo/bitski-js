@@ -6,6 +6,7 @@ Log.logger = console;
 Log.level = Log.DEBUG;
 
 import HttpProvider from 'web3-providers-http'
+import {JsonRPCRequest, JsonRPCResponse} from 'web3-providers-http'
 
 /**
  * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
@@ -79,5 +80,9 @@ export class OAuthHttpProvider extends HttpProvider {
       request.setRequestHeader('Authorization', "Bearer " + this.currentUser.access_token);
     }
     return request
+  }
+
+  sendAsync(payload: JsonRPCRequest, callback: (e: Error, val: JsonRPCResponse) => void): void {
+    return super.send(payload, callback)
   }
 };

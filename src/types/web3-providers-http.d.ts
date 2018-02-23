@@ -1,11 +1,11 @@
 declare module 'web3-providers-http' {
-    interface JsonRPCRequest {
+    export interface JsonRPCRequest {
         jsonrpc: string
         method: string
         params: any[]
         id: number
     }
-    interface JsonRPCResponse {
+    export interface JsonRPCResponse {
         jsonrpc: string
         id: number
         result?: any
@@ -24,7 +24,6 @@ declare module 'web3-providers-http' {
         
         constructor(host: string, timeout: number, headers: any);
     
-        send(payload: JsonRPCRequest): JsonRPCResponse
-        sendAsync(payload: JsonRPCRequest, callback: (e: Error, val: JsonRPCResponse) => void): void
+        send(payload: JsonRPCRequest, callback: (e: Error, val: JsonRPCResponse) => void): void
     }
 }
