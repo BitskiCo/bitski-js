@@ -35,7 +35,7 @@ import {JsonRPCRequest, JsonRPCResponse} from 'web3-providers-http'
  */
 export class OAuthHttpProvider extends HttpProvider {
   userManager: UserManager;
-  currentUser: User;
+  currentUser: User = null;
   host: string;
 
   constructor(host: string, timeout: number, settings: any) {
@@ -76,7 +76,7 @@ export class OAuthHttpProvider extends HttpProvider {
     var request = new XMLHttpRequest();
     request.open('POST', this.host, true);
     request.setRequestHeader('Content-Type','application/json');
-    if (this.currentUser !== null) {
+    if (typeof (this.currentUser) !== 'undefined' && this.currentUser !== null) {
       request.setRequestHeader('Authorization', "Bearer " + this.currentUser.access_token);
     }
     return request
