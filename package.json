@@ -27,7 +27,7 @@
     "xhr2": "^0.1.4"
   },
   "devDependencies": {
-    "bitski-documentation-theme": "github:OutThereLabs/bitski-documentation-theme",
+    "fsevents": "^1.1.3",
     "ts-loader": "^3.5.0",
     "tslint": "^5.9.1",
     "tslint-loader": "^3.5.3",

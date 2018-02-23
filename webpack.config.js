@@ -30,8 +30,7 @@ var config = {
   devtool: 'source-map',
   entry: __dirname + '/src/index.ts',
   externals: {
-    'oidc-client': 'Oidc',
-    'web3-providers-http': 'web3-providers-http'
+    'oidc-client': 'Oidc'
   },
   module: {
     loaders: [{
