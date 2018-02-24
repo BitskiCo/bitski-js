@@ -1,0 +1,11 @@
+- title: Home
+  url: /
+
+- title: Usage
+  url: /usage
+
+- title: Examples
+  url: /examples
+
+- title: API Reference
+  url: /api/

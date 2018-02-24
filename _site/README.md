@@ -1,4 +1,8 @@
-## Getting Started
+## Bitski.js
+
+Current version: 0.0.1
+
+Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain (currently Kovan TestNet only).
 
 You can easily get started by adding these two script tags to HEAD:
 
@@ -21,7 +25,7 @@ var settings = {
 
     popup_redirect_uri:'https://your-site.co/',
     popup_post_logout_redirect_uri:'https://your-site.co/',
-    
+
     silent_redirect_uri:'https://your-site.co/',
     automaticSilentRenew:true,
     silentRequestTimeout:10000,
@@ -36,3 +40,9 @@ if (typeof web3 !== 'undefined') {
   web3 = bitski.InitializeWeb3(settings);
 }
 ```
+
+### More Info
+* [Usage](usage.md)
+* [Examples](examples.md)
+* [API Reference](_api/index.md)
+* [Contact Us](http://bitski.co)
