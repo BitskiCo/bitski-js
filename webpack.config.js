@@ -28,7 +28,7 @@ var outputFile = libraryName + '.js';
 
 var config = {
   devtool: 'source-map',
-  entry: __dirname + '/src/index.ts',
+  entry: __dirname + '/src/bitski.ts',
   externals: {
     'oidc-client': 'Oidc'
   },
