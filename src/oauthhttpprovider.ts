@@ -1,4 +1,4 @@
-import { Log, UserManager, User } from 'oidc-client';
+import { Log, UserManager, User, UserManagerSettings } from 'oidc-client';
 
 import 'xhr2';
 
@@ -22,7 +22,7 @@ export class OAuthHttpProvider extends HttpProvider {
    * @param timeout Timeout in seconds
    * @param settings settings object for configuring OAuth, see {@link InitializeWeb3}
    */
-  constructor(host: string, timeout: number, settings: any) {
+  constructor(host: string, timeout: number, settings: UserManagerSettings) {
     super(host, timeout, []);
 
     var userManager = new UserManager(settings);
@@ -32,6 +32,10 @@ export class OAuthHttpProvider extends HttpProvider {
     this.settings = settings;
   }
 
+  /**
+   * Sign in using the current settings.
+   * @returns A promise for a user.
+   */
   signIn(): Promise<User> {
     var provider = this;
 
@@ -46,7 +50,7 @@ export class OAuthHttpProvider extends HttpProvider {
         throw err;
       }
 
-      return new UserManager(provider.settings).signinRedirectCallback();
+      return provider.userManager.signinRedirectCallback();
     }).catch(function (err: any) {
       if (err.toString() !== "Error: No state in response" && err.toString() !== "Error: No matching state found in storage") {
         throw err;
