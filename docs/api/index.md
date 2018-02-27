@@ -32,7 +32,7 @@
 
 
 
-<small>*Defined in [bitski.ts:15](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/bitski.ts#L15)*</small>
+<small>*Defined in [bitski.ts:15](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitski.ts#L15)*</small>
 
 
 
@@ -95,7 +95,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Overrides [OAuthHttpProvider](#class-oauthhttpprovider).[constructor](#_oauthhttpprovider_.oauthhttpprovider.constructor)*</small>
 
-<small>*Defined in [bitskiprovider.ts:10](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/bitskiprovider.ts#L10)*</small>
+<small>*Defined in [bitskiprovider.ts:39](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L39)*</small>
 
 
 
@@ -128,7 +128,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from HttpProvider.addDefaultEvents*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:19](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L19)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:19](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L19)*</small>
 
 
 
@@ -143,7 +143,20 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from HttpProvider.connection*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L18)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L18)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovider.currentsigninpromise"></a>
+
+#### «Private» currentSignInPromise
+
+
+`currentSignInPromise:  Promise&lt;User&gt;  =  null`
+
+<small>*Defined in [bitskiprovider.ts:38](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L38)*</small>
 
 
 
@@ -158,7 +171,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from [OAuthHttpProvider](#class-oauthhttpprovider).[currentUser](#_oauthhttpprovider_.oauthhttpprovider.currentuser)*</small>
 
-<small>*Defined in [oauthhttpprovider.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L16)*</small>
+<small>*Defined in [oauthhttpprovider.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L16)*</small>
 
 
 
@@ -173,7 +186,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from [OAuthHttpProvider](#class-oauthhttpprovider).[host](#_oauthhttpprovider_.oauthhttpprovider.host)*</small>
 
-<small>*Defined in [oauthhttpprovider.ts:17](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L17)*</small>
+<small>*Defined in [oauthhttpprovider.ts:17](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L17)*</small>
 
 
 
@@ -188,7 +201,20 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from HttpProvider.notificationCallbacks*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:17](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L17)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:17](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L17)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovider.queuedsends"></a>
+
+#### «Private» queuedSends
+
+
+`queuedSends:  object[]  =  []`
+
+<small>*Defined in [bitskiprovider.ts:39](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L39)*</small>
 
 
 
@@ -203,7 +229,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from HttpProvider.responseCallbacks*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L16)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L16)*</small>
 
 
 
@@ -218,7 +244,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from [OAuthHttpProvider](#class-oauthhttpprovider).[settings](#_oauthhttpprovider_.oauthhttpprovider.settings)*</small>
 
-<small>*Defined in [oauthhttpprovider.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L18)*</small>
+<small>*Defined in [oauthhttpprovider.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L18)*</small>
 
 
 
@@ -233,7 +259,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from [OAuthHttpProvider](#class-oauthhttpprovider).[userManager](#_oauthhttpprovider_.oauthhttpprovider.usermanager)*</small>
 
-<small>*Defined in [oauthhttpprovider.ts:15](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L15)*</small>
+<small>*Defined in [oauthhttpprovider.ts:15](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L15)*</small>
 
 
 
@@ -241,6 +267,34 @@ A Web3 provider that connects to the Bitski service
 
 
 ### Methods
+<a id="_bitskiprovider_.bitskiprovider.flushqueuedsends"></a>
+
+#### «Private» flushQueuedSends
+
+
+`flushQueuedSends(user: User): void`
+
+
+
+<small>*Defined in [bitskiprovider.ts:73](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L73)*</small>
+
+
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| user | `User`   |  - |
+
+
+
+
+
+**Returns:** `void`
+
+
+
+
 <a id="_bitskiprovider_.bitskiprovider.on"></a>
 
 ####  on
@@ -252,7 +306,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from HttpProvider.on*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:20](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L20)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:20](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L20)*</small>
 
 
 
@@ -283,7 +337,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from HttpProvider.removeAllListeners*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:22](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L22)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:22](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L22)*</small>
 
 
 
@@ -313,7 +367,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from HttpProvider.removeListener*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:21](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L21)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:21](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L21)*</small>
 
 
 
@@ -342,7 +396,7 @@ A Web3 provider that connects to the Bitski service
 
 
 
-<small>*Defined in [bitskiprovider.ts:36](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/bitskiprovider.ts#L36)*</small>
+<small>*Defined in [bitskiprovider.ts:50](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L50)*</small>
 
 
 
@@ -372,7 +426,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from HttpProvider.reset*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:23](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L23)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:23](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L23)*</small>
 
 
 
@@ -394,7 +448,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Overrides HttpProvider.send*</small>
 
-<small>*Defined in [bitskiprovider.ts:40](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/bitskiprovider.ts#L40)*</small>
+<small>*Defined in [bitskiprovider.ts:80](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L80)*</small>
 
 
 
@@ -425,7 +479,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Inherited from [OAuthHttpProvider](#class-oauthhttpprovider).[sendAsync](#_oauthhttpprovider_.oauthhttpprovider.sendasync)*</small>
 
-<small>*Defined in [oauthhttpprovider.ts:75](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L75)*</small>
+<small>*Defined in [oauthhttpprovider.ts:79](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L79)*</small>
 
 
 
@@ -454,7 +508,7 @@ A Web3 provider that connects to the Bitski service
 
 
 
-<small>*Defined in [bitskiprovider.ts:52](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/bitskiprovider.ts#L52)*</small>
+<small>*Defined in [bitskiprovider.ts:93](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L93)*</small>
 
 
 
@@ -484,15 +538,227 @@ A Web3 provider that connects to the Bitski service
 
 
 
-<small>*Inherited from [OAuthHttpProvider](#class-oauthhttpprovider).[signIn](#_oauthhttpprovider_.oauthhttpprovider.signin)*</small>
+<small>*Overrides [OAuthHttpProvider](#class-oauthhttpprovider).[signIn](#_oauthhttpprovider_.oauthhttpprovider.signin)*</small>
 
-<small>*Defined in [oauthhttpprovider.ts:35](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L35)*</small>
+<small>*Defined in [bitskiprovider.ts:54](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L54)*</small>
 
 
 
 
 
 **Returns:** `Promise`.<`User`>
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings"></a>
+
+####  BitskiProviderSettings
+
+
+
+
+
+
+### Constructors
+<a id="_bitskiprovider_.bitskiprovidersettings.constructor-1"></a>
+
+####  constructor
+
+
+`new BitskiProviderSettings(authority: string, client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string): BitskiProviderSettings`
+
+
+
+<small>*Defined in [bitskiprovider.ts:22](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L22)*</small>
+
+
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| authority | `string`   |  - |
+| client_id | `string`   |  - |
+| redirect_uri | `string`   |  - |
+| post_logout_redirect_uri | `string`   |  - |
+
+
+
+
+
+**Returns:** [BitskiProviderSettings](#class-bitskiprovidersettings)
+
+
+
+
+
+### Properties
+<a id="_bitskiprovider_.bitskiprovidersettings.authority"></a>
+
+####  authority
+
+
+`authority:  string `
+
+<small>*Defined in [bitskiprovider.ts:6](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L6)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.automaticsilentrenew"></a>
+
+####  automaticSilentRenew
+
+
+`automaticSilentRenew:  boolean  = true`
+
+<small>*Defined in [bitskiprovider.ts:19](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L19)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.client_id"></a>
+
+####  client_id
+
+
+`client_id:  string `
+
+<small>*Defined in [bitskiprovider.ts:7](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L7)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.filterprotocolclaims"></a>
+
+####  filterProtocolClaims
+
+
+`filterProtocolClaims:  boolean  = true`
+
+<small>*Defined in [bitskiprovider.ts:21](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L21)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.loaduserinfo"></a>
+
+####  loadUserInfo
+
+
+`loadUserInfo:  boolean  = true`
+
+<small>*Defined in [bitskiprovider.ts:22](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L22)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.popup_post_logout_redirect_uri"></a>
+
+####  popup_post_logout_redirect_uri
+
+
+`popup_post_logout_redirect_uri:  string  =  this.popup_post_logout_redirect_uri`
+
+<small>*Defined in [bitskiprovider.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L16)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.popup_redirect_uri"></a>
+
+####  popup_redirect_uri
+
+
+`popup_redirect_uri:  string  =  this.redirect_uri`
+
+<small>*Defined in [bitskiprovider.ts:15](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L15)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.post_logout_redirect_uri"></a>
+
+####  post_logout_redirect_uri
+
+
+`post_logout_redirect_uri:  string `
+
+<small>*Defined in [bitskiprovider.ts:13](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L13)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.redirect_uri"></a>
+
+####  redirect_uri
+
+
+`redirect_uri:  string `
+
+<small>*Defined in [bitskiprovider.ts:12](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L12)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.response_type"></a>
+
+####  response_type
+
+
+`response_type:  string  = "token id_token"`
+
+<small>*Defined in [bitskiprovider.ts:9](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L9)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.scope"></a>
+
+####  scope
+
+
+`scope:  string  = "openid"`
+
+<small>*Defined in [bitskiprovider.ts:10](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L10)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.silentrequesttimeout"></a>
+
+####  silentRequestTimeout
+
+
+`silentRequestTimeout:  number  = 10000`
+
+<small>*Defined in [bitskiprovider.ts:20](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L20)*</small>
+
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.silent_redirect_uri"></a>
+
+####  silent_redirect_uri
+
+
+`silent_redirect_uri:  string  =  this.redirect_uri`
+
+<small>*Defined in [bitskiprovider.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/bitskiprovider.ts#L18)*</small>
+
 
 
 
@@ -524,13 +790,13 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 
 
-`new OAuthHttpProvider(host: string, timeout: number, settings: any): OAuthHttpProvider`
+`new OAuthHttpProvider(host: string, timeout: number, settings: UserManagerSettings): OAuthHttpProvider`
 
 
 
 <small>*Overrides HttpProvider.__constructor*</small>
 
-<small>*Defined in [oauthhttpprovider.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L18)*</small>
+<small>*Defined in [oauthhttpprovider.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L18)*</small>
 
 
 
@@ -541,7 +807,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 | ------ | ------ | ------ |
 | host | `string`   |  JSON-RPC endpoint |
 | timeout | `number`   |  Timeout in seconds |
-| settings | `any`   |  settings object for configuring OAuth, see [InitializeWeb3](#_bitski_.initializeweb3) |
+| settings | `UserManagerSettings`   |  settings object for configuring OAuth, see [InitializeWeb3](#_bitski_.initializeweb3) |
 
 
 
@@ -563,7 +829,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.addDefaultEvents*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:19](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L19)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:19](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L19)*</small>
 
 
 
@@ -578,7 +844,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.connection*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L18)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L18)*</small>
 
 
 
@@ -591,7 +857,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 `currentUser:  User  =  null`
 
-<small>*Defined in [oauthhttpprovider.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L16)*</small>
+<small>*Defined in [oauthhttpprovider.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L16)*</small>
 
 
 
@@ -604,7 +870,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 `host:  string `
 
-<small>*Defined in [oauthhttpprovider.ts:17](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L17)*</small>
+<small>*Defined in [oauthhttpprovider.ts:17](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L17)*</small>
 
 
 
@@ -619,7 +885,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.notificationCallbacks*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:17](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L17)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:17](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L17)*</small>
 
 
 
@@ -634,7 +900,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.responseCallbacks*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L16)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:16](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L16)*</small>
 
 
 
@@ -647,7 +913,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 `settings:  any `
 
-<small>*Defined in [oauthhttpprovider.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L18)*</small>
+<small>*Defined in [oauthhttpprovider.ts:18](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L18)*</small>
 
 
 
@@ -660,7 +926,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 `userManager:  UserManager `
 
-<small>*Defined in [oauthhttpprovider.ts:15](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L15)*</small>
+<small>*Defined in [oauthhttpprovider.ts:15](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L15)*</small>
 
 
 
@@ -677,7 +943,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 
 
-<small>*Defined in [oauthhttpprovider.ts:65](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L65)*</small>
+<small>*Defined in [oauthhttpprovider.ts:69](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L69)*</small>
 
 
 
@@ -699,7 +965,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.on*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:20](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L20)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:20](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L20)*</small>
 
 
 
@@ -730,7 +996,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.removeAllListeners*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:22](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L22)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:22](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L22)*</small>
 
 
 
@@ -760,7 +1026,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.removeListener*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:21](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L21)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:21](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L21)*</small>
 
 
 
@@ -791,7 +1057,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.reset*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:23](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L23)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:23](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L23)*</small>
 
 
 
@@ -813,7 +1079,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 <small>*Inherited from HttpProvider.send*</small>
 
-<small>*Defined in [types/web3-providers-http.d.ts:27](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/types/web3-providers-http.d.ts#L27)*</small>
+<small>*Defined in [types/web3-providers-http.d.ts:27](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/types/web3-providers-http.d.ts#L27)*</small>
 
 
 
@@ -842,7 +1108,7 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 
 
-<small>*Defined in [oauthhttpprovider.ts:75](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L75)*</small>
+<small>*Defined in [oauthhttpprovider.ts:79](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L79)*</small>
 
 
 
@@ -871,13 +1137,18 @@ A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
 
 
 
-<small>*Defined in [oauthhttpprovider.ts:35](https://github.com/OutThereLabs/bitski-js-sdk/blob/8c4b53a/src/oauthhttpprovider.ts#L35)*</small>
+<small>*Defined in [oauthhttpprovider.ts:39](https://github.com/OutThereLabs/bitski-js-sdk/blob/13796b5/src/oauthhttpprovider.ts#L39)*</small>
 
+
+
+Sign in using the current settings.
 
 
 
 
 **Returns:** `Promise`.<`User`>
+A promise for a user.
+
 
 
 
