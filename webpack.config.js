@@ -46,8 +46,15 @@ var config = {
   },
   plugins: [
     new TypedocWebpackPlugin({
-      out: '../docs'
-    })
+      out: '../docs/api',
+      module: 'commonjs',
+      readme: 'none',
+      theme: 'markdown',
+      name: 'Bitski.js',
+      mode: 'modules',
+      includeDeclarations: false,
+      excludeExternals: true,
+    }, './src')
   ],
   resolve: {
     extensions: ['.ts', '.js']
