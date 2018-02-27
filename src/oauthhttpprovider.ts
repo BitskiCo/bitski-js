@@ -10,34 +10,16 @@ import {JsonRPCRequest, JsonRPCResponse} from 'web3-providers-http'
 
 /**
  * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
- * @class
- * @param {string} host - JSON-RPC endpoint
- * @param {number} timeout - Timeout in seconds
- * @param {Object} settings - settings object for configuring OAuth, see {@link InitializeWeb3}
- * @example
- * // Set up a new HTTPOAuthProvider
- * var settings = {
- *   authority: 'https://hydra.outtherelabs.com/',
- *   client_id: 'YOUR-CLIENT-ID',
- *   redirect_uri: 'https://exampledapp.co/',
- *   post_logout_redirect_uri: 'https://exampledapp.co',
- *   response_type: 'token id_token',
- *   scope: 'openid',
- *   popup_redirect_uri: 'https://exampledapp.co',
- *   popup_post_logout_redirect_uri: 'https://exampledapp.co',
- *   silent_redirect_uri: 'https://exampledapp.co',
- *   automaticSilentRenew: true,
- *   silentRequestTimeout: 10000,
- *   filterProtocolClaims: true,
- *   loadUserInfo: true
- * };
- * var provider = new OAuthHttpProvider('https://my-rpc-server.com', 1000, settings);
  */
 export class OAuthHttpProvider extends HttpProvider {
   userManager: UserManager;
   currentUser: User = null;
   host: string;
-
+  /**
+   * @param host JSON-RPC endpoint
+   * @param timeout Timeout in seconds
+   * @param settings settings object for configuring OAuth, see {@link InitializeWeb3}
+   */
   constructor(host: string, timeout: number, settings: any) {
     super(host, timeout, []);
 
@@ -48,7 +30,7 @@ export class OAuthHttpProvider extends HttpProvider {
       if (typeof (user) === 'undefined' || user === null) {
         throw Error("Not signed in");
       }
-      
+
       return user;
     }).catch(function (err: any) {
       if (err.toString() !== "Error: Not signed in") {
@@ -68,7 +50,7 @@ export class OAuthHttpProvider extends HttpProvider {
       provider.currentUser = user;
     });
 
-    this.userManager = userManager;    
+    this.userManager = userManager;
     this.host = host;
   }
 
