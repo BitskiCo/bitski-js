@@ -8,7 +8,7 @@ import { BitskiProvider } from './bitskiprovider';
  * @param post_logout_redirect_uri Post logout redirect URL, defaults to window.URL
  * @example
  * // Set up Bitski for exampledapp.co
- * web3 = bitsi.InitializeWeb3('YOUR-CLIENT-ID');
+ * web3 = bitski.InitializeWeb3('YOUR-CLIENT-ID');
  * @returns Web3 object configured for Bitski.
  */
 
