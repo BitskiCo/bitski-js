@@ -46,12 +46,14 @@ var config = {
   },
   plugins: [
     new TypedocWebpackPlugin({
-      out: '../docs/_api',
+      out: '../docs/api',
       module: 'commonjs',
       readme: 'none',
       theme: 'markdown',
       name: 'Bitski.js',
-      mode: 'modules'
+      mode: 'modules',
+      includeDeclarations: false,
+      excludeExternals: true,
     }, './src')
   ],
   resolve: {

@@ -22,10 +22,6 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 #theme: "bitski-docs-jekyll-theme"
 remote_theme: OutThereLabs/bitski-docs-jekyll-theme
 
-collections:
-  api:
-    output: true
-
 defaults:
   - scope:
       path: "_api"
