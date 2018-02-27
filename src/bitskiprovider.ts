@@ -10,20 +10,20 @@ import { User } from 'oidc-client';
 export class BitskiProvider extends OAuthHttpProvider {
     /**
      * @param cliend_id OAuth Client ID
-     * @param redirect_uri Redirect URL, defaults to window.URL
-     * @param post_logout_redirect_uri Post logout redirect URL, defaults to window.URL
+     * @param redirect_uri Redirect URL, defaults to window.location.href
+     * @param post_logout_redirect_uri Post logout redirect URL, defaults to window.location.href
      */
     constructor(client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
         var settings = {
           authority: 'https://hydra.outtherelabs.com/',
           client_id: client_id,
-          redirect_uri: redirect_uri || window.URL,
-          post_logout_redirect_uri: post_logout_redirect_uri || window.URL,
+          redirect_uri: redirect_uri || window.location.href,
+          post_logout_redirect_uri: post_logout_redirect_uri || window.location.href,
           response_type: 'token id_token',
           scope: 'openid',
-          popup_redirect_uri: redirect_uri || window.URL,
-          popup_post_logout_redirect_uri: post_logout_redirect_uri || window.URL,
-          silent_redirect_uri: redirect_uri || window.URL,
+          popup_redirect_uri: redirect_uri || window.location.href,
+          popup_post_logout_redirect_uri: post_logout_redirect_uri || window.location.href,
+          silent_redirect_uri: redirect_uri || window.location.href,
           automaticSilentRenew: true,
           silentRequestTimeout: 10000,
           filterProtocolClaims: true,
