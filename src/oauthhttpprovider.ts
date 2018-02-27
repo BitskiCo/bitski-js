@@ -15,6 +15,8 @@ export class OAuthHttpProvider extends HttpProvider {
   userManager: UserManager;
   currentUser: User = null;
   host: string;
+  settings: any;
+
   /**
    * @param host JSON-RPC endpoint
    * @param timeout Timeout in seconds
@@ -24,9 +26,16 @@ export class OAuthHttpProvider extends HttpProvider {
     super(host, timeout, []);
 
     var userManager = new UserManager(settings);
+
+    this.userManager = userManager;
+    this.host = host;
+    this.settings = settings;
+  }
+
+  signIn(): Promise<User> {
     var provider = this;
 
-    userManager.getUser().then(function (user: User) {
+    return this.userManager.getUser().then(function (user: User) {
       if (typeof (user) === 'undefined' || user === null) {
         throw Error("Not signed in");
       }
@@ -37,21 +46,20 @@ export class OAuthHttpProvider extends HttpProvider {
         throw err;
       }
 
-      return new UserManager(settings).signinRedirectCallback();
+      return new UserManager(provider.settings).signinRedirectCallback();
     }).catch(function (err: any) {
       if (err.toString() !== "Error: No state in response" && err.toString() !== "Error: No matching state found in storage") {
         throw err;
       }
-      return userManager.signinRedirect({ state: 'some data' });
+      return provider.userManager.signinRedirect({ state: 'some data' });
     }).catch(function (err: any) {
       console.log("Error setting up Web3 OAuth", err);
       throw err;
     }).then(function(user: User){
       provider.currentUser = user;
-    });
 
-    this.userManager = userManager;
-    this.host = host;
+      return user;
+    });
   }
 
   private _prepareRequest(): XMLHttpRequest {
@@ -65,6 +73,6 @@ export class OAuthHttpProvider extends HttpProvider {
   }
 
   sendAsync(payload: JsonRPCRequest, callback: (e: Error, val: JsonRPCResponse) => void): void {
-    return super.send(payload, callback)
+    return this.send(payload, callback)
   }
 };
