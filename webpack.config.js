@@ -54,6 +54,8 @@ var config = {
       mode: 'modules',
       includeDeclarations: false,
       excludeExternals: true,
+      mdSourceRepo: 'https://github.com/OutThereLabs/bitski-js-sdk',
+      mdSourceBranch: 'master'
     }, './src')
   ],
   resolve: {
