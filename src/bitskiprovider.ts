@@ -11,7 +11,7 @@ class BitskiProviderSettings implements UserManagerSettings {
 
     redirect_uri: string;
     post_logout_redirect_uri: string;
-    
+
     popup_redirect_uri: string = this.redirect_uri;
     popup_post_logout_redirect_uri: string = this.popup_post_logout_redirect_uri;
 
@@ -32,7 +32,9 @@ class BitskiProviderSettings implements UserManagerSettings {
 /**
  * A Web3 provider that connects to the Bitski service
  * @example
+ * ```javascript
  * var provider = new BitskiProvider('MY_CLIENT_ID');
+ * ```
  */
 export class BitskiProvider extends OAuthHttpProvider {
     private currentSignInPromise: Promise<User> = null;
