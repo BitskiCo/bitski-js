@@ -44,7 +44,7 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param post_logout_redirect_uri Post logout redirect URL, defaults to window.location.href
      */
     constructor(client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
-        super('https://api.bitski.com/v1/web3/kovan', 0, new BitskiProviderSettings('https://hydra-hardened.outtherelabs.com/', client_id, redirect_uri, post_logout_redirect_uri));
+        super('https://api.bitski.com/v1/web3/kovan', 0, new BitskiProviderSettings('https://account.bitski.com/', client_id, redirect_uri, post_logout_redirect_uri));
     }
 
     private requiresAuthentication(method: string): boolean {
