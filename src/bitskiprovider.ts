@@ -47,8 +47,27 @@ export class BitskiProvider extends OAuthHttpProvider {
         super('https://api.bitski.com/v1/web3/kovan', 0, new BitskiProviderSettings('https://hydra-hardened.outtherelabs.com/', client_id, redirect_uri, post_logout_redirect_uri));
     }
 
-    private requiresSignIn(method: string): boolean {
-        return true; // TODO: Non authenticated calls
+    private requiresAuthentication(method: string): boolean {
+        switch (method) {
+            case "eth_coinbase":
+            case "eth_accounts":
+            case "eth_accounts":
+            case "eth_sign":
+            case "eth_sendTransaction":
+                return true;
+            default:
+                return true; // Temp, should eventually be false
+        }
+    }
+
+    private requiresAuthorization(method: string): boolean {
+        switch (method) {
+            case "eth_sign":
+            case "eth_sendTransaction":
+                return true;
+            default:
+                return false;
+        }
     }
 
     signIn(): Promise<User> {
@@ -82,7 +101,7 @@ export class BitskiProvider extends OAuthHttpProvider {
 
         if (this.currentUser) {
             this.sendAuthenticated(payload, this.currentUser, callback);
-        } else if (this.requiresSignIn(payload.method)) {
+        } else if (this.requiresAuthentication(payload.method)) {
             this.queuedSends.push({payload: payload, callback: callback});
             this.signIn();
         } else {
@@ -91,6 +110,18 @@ export class BitskiProvider extends OAuthHttpProvider {
     }
 
     sendAuthenticated(payload: JsonRPCRequest, user: User, callback: (e: Error, val: JsonRPCResponse) => void): void {
-        super.send(payload, callback);
+        if (this.requiresAuthorization(payload.method)) {
+            this.showAuthorization(payload, user, callback)
+        } else {
+            super.send(payload, callback);
+        }
+    }
+
+    showAuthorization(payload: JsonRPCRequest, user: User, callback: (e: Error, val: JsonRPCResponse) => void): void {
+        callback(Error("Bitski can't sign transactions yet."), null);
+    }
+
+    isConnected(): boolean {
+        return true
     }
 }

@@ -276,7 +276,7 @@ A Web3 provider that connects to the Bitski service
 
 
 
-<small>*Defined in [bitskiprovider.ts:73](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L73)*</small>
+<small>*Defined in [bitskiprovider.ts:92](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L92)*</small>
 
 
 
@@ -291,6 +291,26 @@ A Web3 provider that connects to the Bitski service
 
 
 **Returns:** `void`
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovider.isconnected"></a>
+
+####  isConnected
+
+
+`isConnected(): boolean`
+
+
+
+<small>*Defined in [bitskiprovider.ts:124](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L124)*</small>
+
+
+
+
+
+**Returns:** `boolean`
 
 
 
@@ -387,16 +407,44 @@ A Web3 provider that connects to the Bitski service
 
 
 
-<a id="_bitskiprovider_.bitskiprovider.requiressignin"></a>
+<a id="_bitskiprovider_.bitskiprovider.requiresauthentication"></a>
 
-#### «Private» requiresSignIn
+#### «Private» requiresAuthentication
 
 
-`requiresSignIn(method: string): boolean`
+`requiresAuthentication(method: string): boolean`
 
 
 
 <small>*Defined in [bitskiprovider.ts:50](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L50)*</small>
+
+
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| method | `string`   |  - |
+
+
+
+
+
+**Returns:** `boolean`
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovider.requiresauthorization"></a>
+
+#### «Private» requiresAuthorization
+
+
+`requiresAuthorization(method: string): boolean`
+
+
+
+<small>*Defined in [bitskiprovider.ts:63](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L63)*</small>
 
 
 
@@ -448,7 +496,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Overrides HttpProvider.send*</small>
 
-<small>*Defined in [bitskiprovider.ts:80](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L80)*</small>
+<small>*Defined in [bitskiprovider.ts:99](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L99)*</small>
 
 
 
@@ -508,7 +556,37 @@ A Web3 provider that connects to the Bitski service
 
 
 
-<small>*Defined in [bitskiprovider.ts:93](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L93)*</small>
+<small>*Defined in [bitskiprovider.ts:112](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L112)*</small>
+
+
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| payload | `JsonRPCRequest`   |  - |
+| user | `User`   |  - |
+| callback | `function`   |  - |
+
+
+
+
+
+**Returns:** `void`
+
+
+
+
+<a id="_bitskiprovider_.bitskiprovider.showauthorization"></a>
+
+####  showAuthorization
+
+
+`showAuthorization(payload: JsonRPCRequest, user: User, callback: function): void`
+
+
+
+<small>*Defined in [bitskiprovider.ts:120](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L120)*</small>
 
 
 
@@ -540,7 +618,7 @@ A Web3 provider that connects to the Bitski service
 
 <small>*Overrides [OAuthHttpProvider](#class-oauthhttpprovider).[signIn](#_oauthhttpprovider_.oauthhttpprovider.signin)*</small>
 
-<small>*Defined in [bitskiprovider.ts:54](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L54)*</small>
+<small>*Defined in [bitskiprovider.ts:73](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L73)*</small>
 
 
 
