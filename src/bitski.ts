@@ -3,7 +3,7 @@ import { BitskiProvider } from './bitskiprovider';
 
 /**
  * Initialize [Web3](https://github.com/ethereum/web3) with Bitski. This will be ignored if a web3 object already exists.
- * @param cliend_id OAuth Client ID
+ * @param client_id OAuth Client ID
  * @param redirect_uri Redirect URL, defaults to window.URL
  * @param post_logout_redirect_uri Post logout redirect URL, defaults to window.URL
  * @example
