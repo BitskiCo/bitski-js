@@ -1,40 +1,8 @@
-pre { margin-bottom: 1rem; }
-
-p { margin-bottom: 1rem; }
-
-h1 { font-size: 1.6rem; line-height: 1; color: #5e35b1; margin-bottom: 1rem; }
-
-h2 { font-size: 1.5rem; font-weight: 600; color: #333; }
-
-h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
-
-h4 { font-size: 1rem; margin-bottom: 0.5rem; }
-
-a { color: #2196f3; font-weight: 500; text-decoration: none; }
-a:hover { color: #0069c0; }
-
-ul { list-style: none; }
-
-.container::after { clear: both; content: ""; display: block; }
-
-.sidebar { padding-top: 2rem; width: calc(100% - 4rem); float: left; margin-left: 2rem; }
-@media (min-width: 768px) { .sidebar { width: calc(25% - 2.5rem); float: left; margin-left: 2rem; } }
-
-nav ul { list-style-type: none; }
-
-.content { padding-top: 2rem; overflow: hidden; width: calc(100% - 4rem); float: left; margin-left: 2rem; }
-@media (min-width: 768px) { .content { width: calc(75% - 3.5rem); float: left; margin-left: 2rem; } }
-
-footer { width: calc(100% - 4rem); float: left; margin-left: 2rem; font-size: 0.8rem; padding: 2rem 0; font-weight: 500; color: #666; }
-
 /** Reset some basic elements */
 body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, hr, dl, dd, ol, ul, figure { margin: 0; padding: 0; }
 
 /** Basic styling */
 body { font: 400 16px/1.5 -apple-system-font, "Source Sans Pro", sans-serif; color: #333; background-color: #fdfdfd; }
-
-/** Set `margin-bottom` to maintain vertical rhythm */
-h1, h2, h3, h4, h5, h6, p, blockquote, pre, ul, ol, dl, figure, .highlight { margin-bottom: 15px; }
 
 /** Images */
 img { max-width: 100%; vertical-align: middle; }
@@ -61,9 +29,9 @@ blockquote { color: #828282; border-left: 4px solid #e8e8e8; padding-left: 15px;
 blockquote > :last-child { margin-bottom: 0; }
 
 /** Code formatting */
-pre, code { font-size: 14.4px; border: 1px solid #e8e8e8; border-radius: 3px; }
+pre { font-size: 14.4px; border: 1px solid #e8e8e8; border-radius: 3px; }
 
-code { padding: 1px 5px; }
+code { font-size: 14.4px; }
 
 pre { padding: 8px 12px; overflow-x: auto; }
 pre > code { border: 0; padding-right: 0; padding-left: 0; }
@@ -83,7 +51,7 @@ table th { background-color: #f0f0f0; border: 1px solid #dedede; border-bottom-c
 table td { border: 1px solid #e8e8e8; }
 
 /** Syntax highlighting styles */
-.highlight { background: #fff; }
+.highlight { background: #fff; margin-bottom: 1rem; }
 .highlighter-rouge .highlight { background: #f9f9f9; }
 
 .highlight { background: #FFFFFF; color: #929292; }
@@ -215,3 +183,48 @@ table td { border: 1px solid #e8e8e8; }
 .highlight .vi { color: #C82829; }
 
 .highlight .il { color: #F5871F; }
+
+pre { margin-bottom: 1rem; }
+
+p { margin-bottom: 1rem; }
+
+h1 { font-size: 1.6rem; line-height: 1; color: #5e35b1; margin-bottom: 1rem; }
+
+h2 { font-size: 1.4rem; font-weight: 600; color: #333; margin-bottom: 0.5em; }
+
+h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+
+h4 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+
+h5 { font-size: 0.9rem; color: #999; font-weight: 400; margin-bottom: 0.5em; }
+
+a { color: #2196f3; font-weight: 500; text-decoration: none; }
+a:hover { color: #0069c0; }
+
+ul { list-style: none; }
+
+hr { margin: 1rem 0; height: 2px; display: block; border: none; background: #eee; }
+
+hr + hr { display: none; }
+
+p small { display: block; margin-top: -0.5rem; }
+
+small { font-size: 0.7em; color: #828282; }
+
+small a { font-weight: normal; color: #828282; }
+
+code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+
+code { color: #777; }
+
+.container::after { clear: both; content: ""; display: block; }
+
+.sidebar { padding-top: 2rem; width: calc(100% - 4rem); float: left; margin-left: 2rem; }
+@media (min-width: 768px) { .sidebar { width: calc(25% - 2.5rem); float: left; margin-left: 2rem; } }
+
+nav ul { list-style-type: none; }
+
+.content { padding-top: 2rem; overflow: hidden; width: calc(100% - 4rem); float: left; margin-left: 2rem; }
+@media (min-width: 768px) { .content { width: calc(75% - 3.5rem); float: left; margin-left: 2rem; } }
+
+footer { width: calc(100% - 4rem); float: left; margin-left: 2rem; font-size: 0.8rem; padding: 2rem 0; font-weight: 500; color: #666; }

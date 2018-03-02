@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link type="text/plain" rel="author" href="http://localhost:4000/humans.txt" />
-    <link rel="shortcut icon" href="/favicon.ico?v=bde027934890ebbb243c41d28d200e6af200da35">
-    <link href="/assets/css/style.css?v=bde027934890ebbb243c41d28d200e6af200da35" rel="stylesheet" media="screen">
+    <link rel="shortcut icon" href="/favicon.ico?v=057cc9dbb4e7ef88a5edeca31777b8fe32afdc00">
+    <link href="/assets/css/style.css?v=057cc9dbb4e7ef88a5edeca31777b8fe32afdc00" rel="stylesheet" media="screen">
   </head>
   <body class="index">
     <div class="container">
@@ -49,32 +49,16 @@
 
 <p>Then, where you would normally check for Web3, you can run the Bitski SDK instead of falling back to displaying Metamask installation instructions:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">settings</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">authority</span><span class="p">:</span> <span class="s1">'https://hydra.outtherelabs.com/'</span><span class="p">,</span>
-    <span class="na">client_id</span><span class="p">:</span> <span class="s1">'&lt;YOUR-CLIENT-ID&gt;'</span><span class="p">,</span>
-    <span class="na">redirect_uri</span><span class="p">:</span> <span class="s1">'https://your-site.co/'</span><span class="p">,</span>
-    <span class="na">post_logout_redirect_uri</span><span class="p">:</span> <span class="s1">'https://your-site.co/'</span><span class="p">,</span>
-    <span class="na">response_type</span><span class="p">:</span> <span class="s1">'token id_token'</span><span class="p">,</span>
-    <span class="na">scope</span><span class="p">:</span> <span class="s1">'openid'</span><span class="p">,</span>
-    <span class="na">popup_redirect_uri</span><span class="p">:</span><span class="s1">'https://your-site.co/'</span><span class="p">,</span>
-    <span class="na">popup_post_logout_redirect_uri</span><span class="p">:</span><span class="s1">'https://your-site.co/'</span><span class="p">,</span>
-    <span class="na">silent_redirect_uri</span><span class="p">:</span><span class="s1">'https://your-site.co/'</span><span class="p">,</span>
-    <span class="na">automaticSilentRenew</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
-    <span class="na">silentRequestTimeout</span><span class="p">:</span><span class="mi">10000</span><span class="p">,</span>
-    <span class="na">filterProtocolClaims</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="na">loadUserInfo</span><span class="p">:</span> <span class="kc">true</span>
-<span class="p">};</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">web3</span> <span class="o">!==</span> <span class="s1">'undefined'</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">web3</span> <span class="o">!==</span> <span class="s1">'undefined'</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">web3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Web3</span><span class="p">(</span><span class="nx">web3</span><span class="p">.</span><span class="nx">currentProvider</span><span class="p">);</span>
 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-  <span class="nx">web3</span> <span class="o">=</span> <span class="nx">InitializeWeb3</span><span class="p">(</span><span class="nx">settings</span><span class="p">);</span>
+  <span class="nx">web3</span> <span class="o">=</span> <span class="nx">bitski</span><span class="p">.</span><span class="nx">InitializeWeb3</span><span class="p">(</span><span class="s1">'&lt;YOUR-CLIENT-ID&gt;'</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
 <p>You can also require your users to use a Bitski wallet &amp; account by setting <code class="highlighter-rouge">window.web3</code> without the check, which should override any existing Metamask or DApp browser providers.</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">web3</span> <span class="o">=</span> <span class="nx">InitializeWeb3</span><span class="p">(</span><span class="nx">settings</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">web3</span> <span class="o">=</span> <span class="nx">bitski</span><span class="p">.</span><span class="nx">InitializeWeb3</span><span class="p">(</span><span class="s1">'&lt;YOUR-CLIENT-ID&gt;'</span><span class="p">);</span>
 </code></pre></div></div>
 
 <h3 id="more-info">More Info</h3>
