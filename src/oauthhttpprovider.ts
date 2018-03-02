@@ -12,15 +12,27 @@ import {JsonRPCRequest, JsonRPCResponse} from 'web3-providers-http'
  * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
  */
 export class OAuthHttpProvider extends HttpProvider {
+  /**
+   * Instance user manager object.
+   */
   userManager: UserManager;
+  /**
+   * The current logged in `User`
+   */
   currentUser: User = null;
+  /**
+   * The JSON-RPC endpoint
+   */
   host: string;
-  settings: any;
+  /**
+   * Object containing the OAuth settings. see {@link BitskiProviderSettings}
+   */
+  settings: UserManagerSettings;
 
   /**
    * @param host JSON-RPC endpoint
    * @param timeout Timeout in seconds
-   * @param settings settings object for configuring OAuth, see {@link InitializeWeb3}
+   * @param settings settings object for configuring OAuth, see {@link BitskiProviderSettings}
    */
   constructor(host: string, timeout: number, settings: UserManagerSettings) {
     super(host, timeout, []);
@@ -65,7 +77,10 @@ export class OAuthHttpProvider extends HttpProvider {
       return user;
     });
   }
-
+  /**
+   * Prepares a new XMLHttpRequest with the proper headers
+   * @returns Request object that is ready for a payload.
+   */
   private _prepareRequest(): XMLHttpRequest {
     var request = new XMLHttpRequest();
     request.open('POST', this.host, true);
@@ -75,7 +90,11 @@ export class OAuthHttpProvider extends HttpProvider {
     }
     return request
   }
-
+  /**
+   * Send a web3 / JSON-RPC request asynchronously.
+   * @param payload The JSON-RPC request object to send
+   * @param callback Handler function invoked when the request has completed.
+   */
   sendAsync(payload: JsonRPCRequest, callback: (e: Error, val: JsonRPCResponse) => void): void {
     return this.send(payload, callback)
   }

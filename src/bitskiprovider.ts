@@ -2,25 +2,75 @@ import { OAuthHttpProvider } from './oauthhttpprovider';
 import {JsonRPCRequest, JsonRPCResponse} from 'web3-providers-http'
 import { User, UserManagerSettings } from 'oidc-client';
 
+/**
+ * Settings for configuring Bitski.
+ */
 class BitskiProviderSettings implements UserManagerSettings {
+    /**
+     * OAuth provider URL
+     */
     authority: string;
+    /**
+     * Your client application's identifier as registered with Bitski.
+     */
     client_id: string;
-
+    /**
+     * The type of response desired from the provider.
+     */
     response_type: string = 'token id_token';
+    /**
+     * The OAuth scope being requested from Bitski.
+     */
     scope: string = 'openid';
-
+    /**
+     * The redirect URI of your client application to receive the OAuth response
+     * from the Bitski.
+     */
     redirect_uri: string;
+    /**
+     * The post-logout redirect URI.
+     */
     post_logout_redirect_uri: string;
-
+    /**
+     * The URL for the page containing the call to `signinPopupCallback` to
+     * handle the callback from Bitski.
+     */
     popup_redirect_uri: string = this.redirect_uri;
+    /**
+     * The post-logout redirect URI for the popup method.
+     */
     popup_post_logout_redirect_uri: string = this.popup_post_logout_redirect_uri;
-
+    /**
+     * The URL for the page containing the code handling the silent renew.
+     */
     silent_redirect_uri: string = this.redirect_uri;
+    /**
+     * Flag to indicate if there should be an automatic attempt to renew the
+     * access token prior to its expiration. The attempt is made as a result
+     * of the `accessTokenExpiring` event being raised.
+     */
     automaticSilentRenew: boolean =  true;
+    /**
+     * Number of milliseconds to wait for the silent renew to return before
+     * assuming it has failed or timed out.
+     */
     silentRequestTimeout: number = 10000;
+    /**
+     * Should OIDC protocol claims be removed from profile.
+     */
     filterProtocolClaims: boolean = true;
+    /**
+     * Flag to control if additional identity data is loaded from the user
+     * info endpoint in order to populate the user's profile.
+     */
     loadUserInfo: boolean =  true;
-
+    /**
+     * Create new instance of BitskiProviderSettings
+     * @param authority Bitski OAuth URL
+     * @param client_id Your application's Bitski client ID
+     * @param redirect_uri URL to redirect to after log in
+     * @param post_logout_redirect_uri URL to redirect to after log out
+     */
     constructor(authority: string, client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
         this.authority = authority;
         this.client_id = client_id;
@@ -37,11 +87,18 @@ class BitskiProviderSettings implements UserManagerSettings {
  * ```
  */
 export class BitskiProvider extends OAuthHttpProvider {
+    /**
+     * Cached sign in promise.
+     */
     private currentSignInPromise: Promise<User> = null;
+
+    /**
+     * Queued requests to be sent upon logging in.
+     */
     private queuedSends: {payload: JsonRPCRequest, callback: { (e: Error, val: JsonRPCResponse): void }}[] = [];
 
     /**
-     * @param cliend_id OAuth Client ID
+     * @param client_id OAuth Client ID
      * @param redirect_uri Redirect URL, defaults to window.location.href
      * @param post_logout_redirect_uri Post logout redirect URL, defaults to window.location.href
      */
@@ -49,6 +106,12 @@ export class BitskiProvider extends OAuthHttpProvider {
         super('https://api.bitski.com/v1/web3/kovan', 0, new BitskiProviderSettings('https://account.bitski.com/', client_id, redirect_uri, post_logout_redirect_uri));
     }
 
+    /**
+     * Returns a boolean value that indicates whether the Web3 method
+     * can be executed without being logged in.
+     * @param method A web3 method name (ex: "eth_sign")
+     * @returns boolean for if the method can be executed without being logged in.
+     */
     private requiresAuthentication(method: string): boolean {
         switch (method) {
             case "eth_coinbase":
@@ -62,6 +125,11 @@ export class BitskiProvider extends OAuthHttpProvider {
         }
     }
 
+    /**
+     * Returns a boolean value that indicates whether the Web3 method
+     * can be executed without the user's explicit authorization.
+     * @param method a web3 method name (ex: "eth_sign")
+     */
     private requiresAuthorization(method: string): boolean {
         switch (method) {
             case "eth_sign":
@@ -72,6 +140,10 @@ export class BitskiProvider extends OAuthHttpProvider {
         }
     }
 
+    /**
+     * Sign in to Bitski.
+     * @returns Promise with the current user
+     */
     signIn(): Promise<User> {
         if (this.currentSignInPromise) {
             return this.currentSignInPromise;
@@ -91,6 +163,10 @@ export class BitskiProvider extends OAuthHttpProvider {
         return currentSignInPromise;
     }
 
+    /**
+     * Flush all queued requests
+     * @param user User authentication object to send the requests through.
+     */
     private flushQueuedSends(user: User): void {
         while(this.queuedSends.length > 0) {
             let queuedSend = this.queuedSends.pop();
@@ -98,6 +174,11 @@ export class BitskiProvider extends OAuthHttpProvider {
         }
     }
 
+    /**
+     * Sends a Web3 request.
+     * @param payload JSON-RPC request object to send.
+     * @param callback Handler for send request. `function (e: Error, val: JSONRPCResponse) => void`
+     */
     send(payload: JsonRPCRequest, callback: (e: Error, val: JsonRPCResponse) => void): void {
         var provider = this;
 
@@ -111,6 +192,12 @@ export class BitskiProvider extends OAuthHttpProvider {
         }
     }
 
+    /**
+     * Sends a request with authentication headers.
+     * @param payload JSON-RPC request object to send.
+     * @param user User authentication object to send the requests through.
+     * @param callback Handler for send request. `function (e: Error, val: JSONRPCResponse) => void`
+     */
     sendAuthenticated(payload: JsonRPCRequest, user: User, callback: (e: Error, val: JsonRPCResponse) => void): void {
         if (this.requiresAuthorization(payload.method)) {
             this.showAuthorization(payload, user, callback)
@@ -119,10 +206,19 @@ export class BitskiProvider extends OAuthHttpProvider {
         }
     }
 
+    /**
+     * Presents an authorization request to the user.
+     * @param payload JSON-RPC request object to send.
+     * @param callback Handler for send request. `function (e: Error, val: JSONRPCResponse) => void`
+     */
     showAuthorization(payload: JsonRPCRequest, user: User, callback: (e: Error, val: JsonRPCResponse) => void): void {
         callback(Error("Bitski can't sign transactions yet."), null);
     }
 
+    /**
+     * Check whether we are connected to the server.
+     * @returns boolean if we are connected.
+     */
     isConnected(): boolean {
         return true
     }

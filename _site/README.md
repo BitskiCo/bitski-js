@@ -21,33 +21,17 @@ _Note: We will be moving to a dedicated CDN soon._
 Then, where you would normally check for Web3, you can run the Bitski SDK instead of falling back to displaying Metamask installation instructions:
 
 ```javascript
-var settings = {
-    authority: 'https://hydra.outtherelabs.com/',
-    client_id: '<YOUR-CLIENT-ID>',
-    redirect_uri: 'https://your-site.co/',
-    post_logout_redirect_uri: 'https://your-site.co/',
-    response_type: 'token id_token',
-    scope: 'openid',
-    popup_redirect_uri:'https://your-site.co/',
-    popup_post_logout_redirect_uri:'https://your-site.co/',
-    silent_redirect_uri:'https://your-site.co/',
-    automaticSilentRenew:true,
-    silentRequestTimeout:10000,
-    filterProtocolClaims: true,
-    loadUserInfo: true
-};
-
 if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
 } else {
-  web3 = InitializeWeb3(settings);
+  web3 = bitski.InitializeWeb3('<YOUR-CLIENT-ID>');
 }
 ```
 
 You can also require your users to use a Bitski wallet & account by setting `window.web3` without the check, which should override any existing Metamask or DApp browser providers.
 
 ```javascript
-web3 = InitializeWeb3(settings);
+web3 = bitski.InitializeWeb3('<YOUR-CLIENT-ID>');
 ```
 
 ### More Info
