@@ -1,6 +1,8 @@
-import { OAuthHttpProvider } from './oauthhttpprovider';
-import {JsonRPCRequest, JsonRPCResponse} from 'web3-providers-http'
+import { OAuthHttpProvider, OAuthProviderIntegrationType } from './oauthhttpprovider';
+import { Dialog } from './dialog';
+import { JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http'
 import { User, UserManagerSettings } from 'oidc-client';
+import Web3 from 'web3';
 
 /**
  * Settings for configuring Bitski.
@@ -74,8 +76,13 @@ class BitskiProviderSettings implements UserManagerSettings {
     constructor(authority: string, client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
         this.authority = authority;
         this.client_id = client_id;
+
         this.redirect_uri = redirect_uri || window.location.href;
+        this.popup_redirect_uri = redirect_uri || window.location.href;
+        this.silent_redirect_uri = redirect_uri || window.location.href;
+
         this.post_logout_redirect_uri = post_logout_redirect_uri || window.location.href;
+        this.popup_post_logout_redirect_uri = post_logout_redirect_uri || window.location.href;
     }
 }
 
@@ -88,14 +95,11 @@ class BitskiProviderSettings implements UserManagerSettings {
  */
 export class BitskiProvider extends OAuthHttpProvider {
     /**
-     * Cached sign in promise.
-     */
-    private currentSignInPromise: Promise<User> = null;
-
-    /**
      * Queued requests to be sent upon logging in.
      */
-    private queuedSends: {payload: JsonRPCRequest, callback: { (e: Error, val: JsonRPCResponse): void }}[] = [];
+    private queuedSends: { payload: JsonRPCRequest, callback: { (e: Error, val: JsonRPCResponse): void } }[] = [];
+    private pendingTransactions: { payload: JsonRPCRequest, callback: { (e: Error, val: JsonRPCResponse): void } }[] = [];
+    private currentTransactionDialog?: Dialog = null;
 
     /**
      * @param client_id OAuth Client ID
@@ -112,6 +116,34 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param method A web3 method name (ex: "eth_sign")
      * @returns boolean for if the method can be executed without being logged in.
      */
+    receiveMessage(event: MessageEvent): void {
+        super.receiveMessage(event);
+
+        if (event.origin !== "https://www.bitski.com") {
+            return;
+        }
+
+        console.log("Got an event from the account service: " + event);
+
+        var response: JsonRPCResponse = event.data;
+
+        var matchingTransactions = this.pendingTransactions.filter(function (pendingTransaction) {
+            return (pendingTransaction.payload.id === response.id);
+        });
+
+        var provider = this;
+        if (matchingTransactions.length > 0) {
+            matchingTransactions.forEach(function (transaction, index) {
+                provider.pendingTransactions.splice(index,1);
+                transaction.callback(null, response);
+                if (provider.currentTransactionDialog) {
+                    provider.currentTransactionDialog.dismiss();
+                    provider.currentTransactionDialog = null;
+                }
+            });
+        }
+    }
+
     private requiresAuthentication(method: string): boolean {
         switch (method) {
             case "eth_coinbase":
@@ -140,27 +172,9 @@ export class BitskiProvider extends OAuthHttpProvider {
         }
     }
 
-    /**
-     * Sign in to Bitski.
-     * @returns Promise with the current user
-     */
-    signIn(): Promise<User> {
-        if (this.currentSignInPromise) {
-            return this.currentSignInPromise;
-        }
-
-        var currentSignInPromise = super.signIn();
-        this.currentSignInPromise = currentSignInPromise;
-
-        var provider = this;
-
-        currentSignInPromise.then(function(user){
-            provider.flushQueuedSends(user);
-        }).catch(function(error){
-            provider.currentSignInPromise = null;
-        });
-
-        return currentSignInPromise;
+    didSignIn(user: User) {
+        super.didSignIn(user);
+        this.flushQueuedSends(user);
     }
 
     /**
@@ -168,7 +182,7 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param user User authentication object to send the requests through.
      */
     private flushQueuedSends(user: User): void {
-        while(this.queuedSends.length > 0) {
+        while (this.queuedSends.length > 0) {
             let queuedSend = this.queuedSends.pop();
             this.sendAuthenticated(queuedSend.payload, user, queuedSend.callback);
         }
@@ -185,7 +199,7 @@ export class BitskiProvider extends OAuthHttpProvider {
         if (this.currentUser) {
             this.sendAuthenticated(payload, this.currentUser, callback);
         } else if (this.requiresAuthentication(payload.method)) {
-            this.queuedSends.push({payload: payload, callback: callback});
+            this.queuedSends.push({ payload: payload, callback: callback });
             this.signIn();
         } else {
             super.send(payload, callback);
@@ -212,7 +226,26 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param callback Handler for send request. `function (e: Error, val: JSONRPCResponse) => void`
      */
     showAuthorization(payload: JsonRPCRequest, user: User, callback: (e: Error, val: JsonRPCResponse) => void): void {
-        callback(Error("Bitski can't sign transactions yet."), null);
+        switch (this.integrationType) {
+            case OAuthProviderIntegrationType.IFRAME:
+                this.pendingTransactions.push({ payload: payload, callback: callback });
+
+                var iframe = document.createElement("iframe");
+                iframe.width = "360px";
+                iframe.height = "340px";
+                iframe.frameBorder = "0";
+                iframe.src = "https://www.bitski.com/eth-send-transaction?network=kovan&payload=" + btoa(JSON.stringify(payload)) + "&accessToken=" + user.access_token;
+
+                if (this.currentTransactionDialog) {
+                    this.currentTransactionDialog.dismiss();
+                }
+
+                this.currentTransactionDialog = new Dialog(iframe);
+                break;
+            case OAuthProviderIntegrationType.REDIRECT:
+                window.location.href = "https://www.bitski.com/eth-send-transaction?network=kovan&callback=" + window.location.href + "&payload=" + btoa(JSON.stringify(payload)) + "&accessToken=" + user.access_token;
+                break;
+        }
     }
 
     /**
