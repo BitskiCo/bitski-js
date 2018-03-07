@@ -100,6 +100,12 @@ export class BitskiProvider extends OAuthHttpProvider {
     private queuedSends: { payload: JsonRPCRequest, callback: { (e: Error, val: JsonRPCResponse): void } }[] = [];
     private pendingTransactions: { payload: JsonRPCRequest, callback: { (e: Error, val: JsonRPCResponse): void } }[] = [];
     private currentTransactionDialog?: Dialog = null;
+    private currentTransactionWindow?: Window = null;
+
+    /**
+     * Determins how the authorization modals show up for eth_call and eth_sendTransaction.
+     */
+    public authorizationIntegrationType: OAuthProviderIntegrationType = OAuthProviderIntegrationType.IFRAME;
 
     /**
      * @param client_id OAuth Client ID
@@ -226,7 +232,15 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param callback Handler for send request. `function (e: Error, val: JSONRPCResponse) => void`
      */
     showAuthorization(payload: JsonRPCRequest, user: User, callback: (e: Error, val: JsonRPCResponse) => void): void {
-        switch (this.integrationType) {
+        if (this.currentTransactionDialog) {
+            this.currentTransactionDialog.dismiss();
+        }
+
+        if (this.currentTransactionWindow) {
+            this.currentTransactionWindow.close();
+        }
+
+        switch (this.authorizationIntegrationType) {
             case OAuthProviderIntegrationType.IFRAME:
                 this.pendingTransactions.push({ payload: payload, callback: callback });
 
@@ -236,14 +250,17 @@ export class BitskiProvider extends OAuthHttpProvider {
                 iframe.frameBorder = "0";
                 iframe.src = "https://www.bitski.com/eth-send-transaction?network=kovan&payload=" + btoa(JSON.stringify(payload)) + "&accessToken=" + user.access_token;
 
-                if (this.currentTransactionDialog) {
-                    this.currentTransactionDialog.dismiss();
-                }
-
                 this.currentTransactionDialog = new Dialog(iframe);
                 break;
             case OAuthProviderIntegrationType.REDIRECT:
                 window.location.href = "https://www.bitski.com/eth-send-transaction?network=kovan&callback=" + window.location.href + "&payload=" + btoa(JSON.stringify(payload)) + "&accessToken=" + user.access_token;
+                break;
+            case OAuthProviderIntegrationType.POPUP:
+                var url = "https://www.bitski.com/eth-send-transaction?network=kovan&payload=" + btoa(JSON.stringify(payload)) + "&accessToken=" + user.access_token;
+                var newwindow = window.open(url ,"Bitski Authorization", 'width=360,height=340,toolbar=0,menubar=0,location=0');  
+                if (window.focus) {newwindow.focus()};
+                
+                this.currentTransactionWindow = newwindow;
                 break;
         }
     }
