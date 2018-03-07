@@ -108,6 +108,10 @@ export class OAuthHttpProvider extends HttpProvider {
         throw err;
       }
 
+      if (window.opener) {
+        return provider.userManager.signinPopupCallback();
+      }
+
       return provider.userManager.signinRedirectCallback();
     }).catch(function (err: any) {
       if (err.toString() !== "Error: No state in response" && err.toString() !== "Error: No matching state found in storage") {
@@ -146,7 +150,10 @@ export class OAuthHttpProvider extends HttpProvider {
   didSignIn(user: User): void {
     this.currentUser = user;
 
-    parent.postMessage(user, "*");
+    if (window.parent !== window) {
+      // We are in an IFRAME
+      parent.postMessage(user, "*");
+    }
 
     if (this.authenticationDialog) {
       this.authenticationDialog.dismiss();
