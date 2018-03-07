@@ -12,6 +12,7 @@ import { JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http'
 export enum OAuthProviderIntegrationType {
   IFRAME,
   REDIRECT,
+  POPUP
 }
 
 /**
@@ -31,7 +32,11 @@ export class OAuthHttpProvider extends HttpProvider {
    */
   host: string;
 
-  public integrationType: OAuthProviderIntegrationType = OAuthProviderIntegrationType.IFRAME;
+  /**
+   * Determins how the authentication modals show up.
+   */
+  public authenticationIntegrationType: OAuthProviderIntegrationType = OAuthProviderIntegrationType.REDIRECT;
+
   private authenticationDialog?: Dialog;
 
   /**
@@ -108,7 +113,7 @@ export class OAuthHttpProvider extends HttpProvider {
       if (err.toString() !== "Error: No state in response" && err.toString() !== "Error: No matching state found in storage") {
         throw err;
       }
-      switch (provider.integrationType) {
+      switch (provider.authenticationIntegrationType) {
         case OAuthProviderIntegrationType.REDIRECT:
           return provider.userManager.signinRedirect({ state: 'some data' });
         case OAuthProviderIntegrationType.IFRAME:
@@ -121,6 +126,8 @@ export class OAuthHttpProvider extends HttpProvider {
 
             provider.authenticationDialog = new Dialog(iframe);
           });
+        case OAuthProviderIntegrationType.POPUP:
+          return provider.userManager.signinPopup({ state: 'some data' });
       }
     }).catch(function (err: any) {
       console.log("Error setting up Web3 OAuth", err);
@@ -145,6 +152,7 @@ export class OAuthHttpProvider extends HttpProvider {
       this.authenticationDialog.dismiss();
     }
   }
+
   /**
    * Prepares a new XMLHttpRequest with the proper headers
    * @returns Request object that is ready for a payload.
