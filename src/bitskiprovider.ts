@@ -66,6 +66,9 @@ class BitskiProviderSettings implements UserManagerSettings {
      * info endpoint in order to populate the user's profile.
      */
     loadUserInfo: boolean =  true;
+
+    popupWindowFeatures: string = 'location=no,toolbar=no,width=360,height=340,left=100,top=100;';
+
     /**
      * Create new instance of BitskiProviderSettings
      * @param authority Bitski OAuth URL
