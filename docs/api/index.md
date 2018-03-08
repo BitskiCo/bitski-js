@@ -229,7 +229,7 @@ Determins how the authorization modals show up for eth_call and eth_sendTransact
 ```javascript
 var authorizationIntegrationType: OAuthProviderIntegrationType =  OAuthProviderIntegrationType.IFRAME
 ```
-<small>*Defined in [bitskiprovider.ts:108](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L108)*</small>
+<small>*Defined in [bitskiprovider.ts:111](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L111)*</small>
 
 
 
@@ -239,7 +239,7 @@ var authorizationIntegrationType: OAuthProviderIntegrationType =  OAuthProviderI
 ```javascript
 private var currentTransactionDialog: Dialog =  null
 ```
-<small>*Defined in [bitskiprovider.ts:102](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L102)*</small>
+<small>*Defined in [bitskiprovider.ts:105](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L105)*</small>
 
 
 <a id="_bitskiprovider_.bitskiprovider.currenttransactionwindow"></a>
@@ -248,7 +248,7 @@ private var currentTransactionDialog: Dialog =  null
 ```javascript
 private var currentTransactionWindow: Window =  null
 ```
-<small>*Defined in [bitskiprovider.ts:103](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L103)*</small>
+<small>*Defined in [bitskiprovider.ts:106](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L106)*</small>
 
 
 
@@ -260,7 +260,7 @@ private var currentTransactionWindow: Window =  null
 ```javascript
 private var pendingTransactions: object[] =  []
 ```
-<small>*Defined in [bitskiprovider.ts:101](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L101)*</small>
+<small>*Defined in [bitskiprovider.ts:104](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L104)*</small>
 
 
 <a id="_bitskiprovider_.bitskiprovider.queuedsends"></a>
@@ -273,7 +273,7 @@ Queued requests to be sent upon logging in.
 ```javascript
 private var queuedSends: object[] =  []
 ```
-<small>*Defined in [bitskiprovider.ts:100](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L100)*</small>
+<small>*Defined in [bitskiprovider.ts:103](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L103)*</small>
 
 
 
@@ -297,7 +297,7 @@ private var queuedSends: object[] =  []
 ```typescript
 function didSignIn(user: User)
 ```
-<small>*Defined in [bitskiprovider.ts:181](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L181)*</small>
+<small>*Defined in [bitskiprovider.ts:184](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L184)*</small>
 
 
 
@@ -331,7 +331,7 @@ Flush all queued requests
 ```typescript
 private function flushQueuedSends(user: User)
 ```
-<small>*Defined in [bitskiprovider.ts:190](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L190)*</small>
+<small>*Defined in [bitskiprovider.ts:193](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L193)*</small>
 
 
 
@@ -365,7 +365,7 @@ Check whether we are connected to the server.
 ```typescript
 function isConnected(): boolean
 ```
-<small>*Defined in [bitskiprovider.ts:272](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L272)*</small>
+<small>*Defined in [bitskiprovider.ts:275](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L275)*</small>
 
 
 
@@ -398,7 +398,7 @@ Returns a boolean value that indicates whether the Web3 method can be executed w
 ```typescript
 function receiveMessage(event: MessageEvent)
 ```
-<small>*Defined in [bitskiprovider.ts:125](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L125)*</small>
+<small>*Defined in [bitskiprovider.ts:128](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L128)*</small>
 
 
 
@@ -433,7 +433,7 @@ boolean for if the method can be executed without being logged in.
 ```typescript
 private function requiresAuthentication(method: string): boolean
 ```
-<small>*Defined in [bitskiprovider.ts:153](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L153)*</small>
+<small>*Defined in [bitskiprovider.ts:156](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L156)*</small>
 
 
 
@@ -471,7 +471,7 @@ Returns a boolean value that indicates whether the Web3 method can be executed w
 ```typescript
 private function requiresAuthorization(method: string): boolean
 ```
-<small>*Defined in [bitskiprovider.ts:171](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L171)*</small>
+<small>*Defined in [bitskiprovider.ts:174](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L174)*</small>
 
 
 
@@ -510,7 +510,7 @@ Sends a Web3 request.
 ```typescript
 function send(payload: JsonRPCRequest, callback: function)
 ```
-<small>*Defined in [bitskiprovider.ts:202](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L202)*</small>
+<small>*Defined in [bitskiprovider.ts:205](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L205)*</small>
 
 
 
@@ -546,7 +546,7 @@ Sends a request with authentication headers.
 ```typescript
 function sendAuthenticated(payload: JsonRPCRequest, user: User, callback: function)
 ```
-<small>*Defined in [bitskiprovider.ts:221](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L221)*</small>
+<small>*Defined in [bitskiprovider.ts:224](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L224)*</small>
 
 
 
@@ -582,7 +582,7 @@ Presents an authorization request to the user.
 ```typescript
 function showAuthorization(payload: JsonRPCRequest, user: User, callback: function)
 ```
-<small>*Defined in [bitskiprovider.ts:234](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L234)*</small>
+<small>*Defined in [bitskiprovider.ts:237](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L237)*</small>
 
 
 
@@ -711,6 +711,15 @@ Flag to control if additional identity data is loaded from the user info endpoin
 var loadUserInfo: boolean = true
 ```
 <small>*Defined in [bitskiprovider.ts:68](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L68)*</small>
+
+
+<a id="_bitskiprovider_.bitskiprovidersettings.popupwindowfeatures"></a>
+
+#### popupWindowFeatures
+```javascript
+var popupWindowFeatures: string = "location=no,toolbar=no,width=360,height=340,left=100,top=100;"
+```
+<small>*Defined in [bitskiprovider.ts:70](https://github.com/OutThereLabs/bitski-js-sdk/blob/master/src/bitskiprovider.ts#L70)*</small>
 
 
 <a id="_bitskiprovider_.bitskiprovidersettings.popup_post_logout_redirect_uri"></a>

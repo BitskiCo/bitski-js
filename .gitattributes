@@ -1,0 +1,3 @@
+docs/* linguist-documentation
+docs/api/* linguist-generated
+lib/* linguist-generated
