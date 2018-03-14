@@ -5,7 +5,7 @@ export class Dialog {
     dialog: HTMLElement
     closeButton: HTMLElement
 
-    constructor(content: any) {        
+    constructor(content: any) {
         //check for an element passed as content or a selector corresponding to an element
         this.content = content.tagName ? content : document.querySelector(content);
         if (!this.content) {
@@ -54,7 +54,7 @@ export class Dialog {
         closeButton.style.cursor = "pointer";
         closeButton.style.borderRadius = "16px";
         closeButton.style.outline = "none";
-    
+
 
         var self = this;
         closeButton.addEventListener("click", () => {
@@ -68,7 +68,7 @@ export class Dialog {
         var dialog = document.createElement("div");
         dialog.className = "dialog";
 
-        dialog.style.width = "360px";
+        dialog.style.width = "400px";
         dialog.style.height = "1px";
         dialog.style.margin = "0 auto";
         dialog.style.position = "relative";
@@ -98,11 +98,11 @@ export class Dialog {
         body.className = "dialog-body";
 
         body.style.backgroundColor = "#fff";
-        body.style.maxHeight = "340px";
+        body.style.maxHeight = "380px";
         body.style.overflow = "hidden";
         body.style.borderRadius = "16px";
         body.style.boxShadow = "0px 0px 0px 1px rgba(0,0,0,0.1), 0px 10px 50px rgba(0,0,0,0.4)";
-    
+
         return body;
     }
 
