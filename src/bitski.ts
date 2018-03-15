@@ -16,8 +16,8 @@ import { User } from 'oidc-client';
  * @returns Web3 object configured for Bitski.
  */
 
-export function InitializeWeb3(client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
-    var provider = new BitskiProvider(client_id, redirect_uri, post_logout_redirect_uri);
+export function InitializeWeb3(client_id: string, network_name: String = "kovan", redirect_uri?: string, post_logout_redirect_uri?: string) {
+    var provider = new BitskiProvider(client_id, network_name, redirect_uri, post_logout_redirect_uri);
     var web3Client = new Web3(provider);
     return web3Client;
 };
@@ -28,12 +28,12 @@ export class LoginButton {
 
     public completion?: (web3: Web3, error?: Error, user?: User) => void;
     
-    constructor(client_id: string) {
+    constructor(client_id: string, network_name: String = "kovan") {
         this.element = document.createElement("button");
 
         this.setDefaultStyle();
 
-        var provider = new BitskiProvider(client_id);
+        var provider = new BitskiProvider(client_id, network_name);
         provider.authenticationIntegrationType = OAuthProviderIntegrationType.POPUP;
         this.provider = provider;
 

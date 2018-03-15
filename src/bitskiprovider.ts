@@ -115,8 +115,8 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param redirect_uri Redirect URL, defaults to window.location.href
      * @param post_logout_redirect_uri Post logout redirect URL, defaults to window.location.href
      */
-    constructor(client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
-        super('https://api.bitski.com/v1/web3/kovan', 0, new BitskiProviderSettings('https://account.bitski.com/', client_id, redirect_uri, post_logout_redirect_uri));
+    constructor(client_id: string, network_name: String, redirect_uri?: string, post_logout_redirect_uri?: string) {
+        super('https://api.bitski.com/v1/web3/' + network_name, 0, new BitskiProviderSettings('https://account.bitski.com/', client_id, redirect_uri, post_logout_redirect_uri));
     }
 
     /**

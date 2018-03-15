@@ -29,9 +29,6 @@ var outputFile = libraryName + '.js';
 var config = {
   devtool: 'source-map',
   entry: __dirname + '/src/bitski.ts',
-  externals: {
-    'oidc-client': 'Oidc'
-  },
   module: {
     loaders: [{
       test: /\.ts$/,
@@ -54,7 +51,7 @@ var config = {
       mode: 'modules',
       includeDeclarations: false,
       excludeExternals: true,
-      mdSourceRepo: 'https://github.com/OutThereLabs/bitski-js-sdk',
+      mdSourceRepo: 'https://github.com/BitskiCo/bitski-js-sdk',
       mdSourceBranch: 'master'
     }, './src')
   ],

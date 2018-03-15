@@ -3,7 +3,7 @@
   "description": "Bitski JavaScript SDK",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OutThereLabs/bitski-js-sdk"
+    "url": "https://github.com/BitskiCo/bitski-js-sdk"
   },
   "version": "0.0.1",
   "scripts": {
