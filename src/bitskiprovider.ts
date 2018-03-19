@@ -248,8 +248,8 @@ export class BitskiProvider extends OAuthHttpProvider {
                 this.pendingTransactions.push({ payload: payload, callback: callback });
 
                 var iframe = document.createElement("iframe");
-                iframe.width = "360px";
-                iframe.height = "340px";
+                iframe.width = "400px";
+                iframe.height = "380px";
                 iframe.frameBorder = "0";
                 iframe.src = "https://www.bitski.com/eth-send-transaction?network=kovan&payload=" + btoa(JSON.stringify(payload)) + "&accessToken=" + user.access_token;
 
