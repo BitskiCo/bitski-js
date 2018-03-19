@@ -98,8 +98,7 @@ export class OAuthHttpProvider extends HttpProvider {
       }
 
       if (user.expired) {
-        // TODO: We should attempt to refresh the token here.
-        throw Error("Not signed in");
+        return this.userManager.signinSilent();
       }
 
       return user;
