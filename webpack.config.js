@@ -23,16 +23,23 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
-var libraryName = 'bitski';
-var outputFile = libraryName + '.js';
+const libraryName = 'bitski';
+const outputFile = libraryName + '.js';
 
-var config = {
+const config = {
   devtool: 'source-map',
   entry: __dirname + '/src/bitski.ts',
   module: {
     loaders: [{
+        test: /\.ts$/,
+        enforce: 'pre',
+        loader: 'tslint-loader'
+    }, {
       test: /\.ts$/,
       loader: 'ts-loader'
+    }, {
+      test: /\.svg$/,
+      loader: 'raw-loader'
     }]
   },
   output: {
