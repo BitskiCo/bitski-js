@@ -197,7 +197,7 @@ export class BitskiProvider extends OAuthHttpProvider {
                 window.location.href = `${ethSendTransactionUrl}?${txnParams}`;
                 break;
             case OAuthProviderIntegrationType.POPUP:
-                const options = 'width=360,height=340,toolbar=0,menubar=0,location=0';
+                const options = 'width=400,height=380,toolbar=0,menubar=0,location=0';
                 const newWindow = window.open(`${ethSendTransactionUrl}?${txnParams}`, 'Bitski Authorization', options);
                 if (window.focus) { newWindow.focus(); }
 
