@@ -203,6 +203,8 @@ export class BitskiProvider extends OAuthHttpProvider {
 
                 this.currentTransactionWindow = newWindow;
                 break;
+            case OAuthProviderIntegrationType.SILENT:
+                throw new Error('Silent authorization requests are not allowed');
         }
     }
 
