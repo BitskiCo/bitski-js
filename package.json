@@ -34,7 +34,7 @@
     "tslint": "^5.9.1",
     "tslint-loader": "^3.6.0",
     "typedoc": "^0.11.1",
-    "typedoc-plugin-markdown": "OutThereLabs/typedoc-plugin-markdown",
+    "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
     "typedoc-webpack-plugin": "^1.1.4",
     "typescript": "^2.7.2",
     "webpack-cli": "^2.0.12"
