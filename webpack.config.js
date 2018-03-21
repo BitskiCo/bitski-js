@@ -30,16 +30,22 @@ const config = {
   devtool: 'source-map',
   entry: __dirname + '/src/bitski.ts',
   module: {
-    loaders: [{
+    rules: [{
         test: /\.ts$/,
         enforce: 'pre',
-        loader: 'tslint-loader'
+        use: {
+          loader: 'tslint-loader'
+        }
     }, {
       test: /\.ts$/,
-      loader: 'ts-loader'
+      use: {
+        loader: 'ts-loader'
+      }
     }, {
       test: /\.svg$/,
-      loader: 'raw-loader'
+      use: {
+        loader: 'raw-loader'
+      }
     }]
   },
   output: {
