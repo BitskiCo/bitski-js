@@ -30,6 +30,11 @@ export class BitskiProvider extends OAuthHttpProvider {
     public authorizationIntegrationType: OAuthProviderIntegrationType = OAuthProviderIntegrationType.IFRAME;
 
     /**
+     * Acts like metamask, won't try to auto sign in.
+     */
+    public locked: boolean = true;
+
+    /**
      * Queued requests to be sent upon logging in.
      */
     private queuedSends: JsonRPC[] = [];
@@ -100,7 +105,10 @@ export class BitskiProvider extends OAuthHttpProvider {
             this.sendAuthenticated(payload, this.currentUser, callback);
         } else if (this.requiresAuthentication(payload.method)) {
             this.queuedSends.push({ payload, callback });
-            this.signIn();
+
+            if (this.locked === false) {
+                this.signIn();
+            }
         } else {
             super.send(payload, callback);
         }
