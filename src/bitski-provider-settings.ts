@@ -12,7 +12,8 @@ export class BitskiProviderSettings implements UserManagerSettings {
     /**
      * Your client application's identifier as registered with Bitski.
      */
-    public clientId: string;
+    /* tslint:disable:variable-name */
+    public client_id: string;
 
     /**
      * The type of response desired from the provider.
@@ -86,14 +87,14 @@ export class BitskiProviderSettings implements UserManagerSettings {
     /**
      * Create new instance of BitskiProviderSettings
      * @param authority Bitski OAuth URL
-     * @param clientId Your application's Bitski client ID
+     * @param client_id Your application's Bitski client ID
      * @param redirect_uri URL to redirect to after log in
      * @param post_logout_redirect_uri URL to redirect to after log out
      */
     /* tslint:disable:variable-name */
-    constructor(authority: string, clientId: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
+    constructor(authority: string, client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
         this.authority = authority;
-        this.clientId = clientId;
+        this.client_id = client_id;
 
         this.redirect_uri = redirect_uri || window.location.href;
         this.popup_redirect_uri = redirect_uri || window.location.href;
