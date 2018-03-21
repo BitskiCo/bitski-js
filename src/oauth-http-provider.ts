@@ -9,6 +9,7 @@ export enum OAuthProviderIntegrationType {
   IFRAME,
   REDIRECT,
   POPUP,
+  SILENT,
 }
 
 /**
@@ -125,6 +126,8 @@ export class OAuthHttpProvider extends HttpProvider {
           });
         case OAuthProviderIntegrationType.POPUP:
           return this.userManager.signinPopup({ state: 'some data' });
+        case OAuthProviderIntegrationType.SILENT:
+          return this.userManager.signinSilent();
       }
     }).then((user: User) => {
       if (user) {
