@@ -28,28 +28,31 @@ export class BitskiProviderSettings implements UserManagerSettings {
      * The redirect URI of your client application to receive the OAuth response
      * from the Bitski.
      */
-    public redirectUri: string;
+    /* tslint:disable:variable-name */
+    public redirect_uri: string;
 
     /**
      * The post-logout redirect URI.
      */
-    public postLogoutRedirectUri: string;
+    /* tslint:disable:variable-name */
+    public post_logout_redirect_uri: string;
 
     /**
      * The URL for the page containing the call to `signinPopupCallback` to
      * handle the callback from Bitski.
      */
-    public popupRedirectUri: string = this.redirectUri;
+    /* tslint:disable:variable-name */
+    public popup_redirect_uri: string = this.redirect_uri;
 
     /**
      * The post-logout redirect URI for the popup method.
      */
-    public popupPostLogoutRedirectUri: string = this.popupPostLogoutRedirectUri;
+    public popup_post_logout_redirect_uri: string = this.popup_post_logout_redirect_uri;
 
     /**
      * The URL for the page containing the code handling the silent renew.
      */
-    public silentRedirectUri: string = this.silentRedirectUri;
+    public silent_redirect_uri: string = this.silent_redirect_uri;
 
     /**
      * Flag to indicate if there should be an automatic attempt to renew the
@@ -84,18 +87,19 @@ export class BitskiProviderSettings implements UserManagerSettings {
      * Create new instance of BitskiProviderSettings
      * @param authority Bitski OAuth URL
      * @param clientId Your application's Bitski client ID
-     * @param redirectUri URL to redirect to after log in
-     * @param postLogoutRedirectUri URL to redirect to after log out
+     * @param redirect_uri URL to redirect to after log in
+     * @param post_logout_redirect_uri URL to redirect to after log out
      */
-    constructor(authority: string, clientId: string, redirectUri?: string, postLogoutRedirectUri?: string) {
+    /* tslint:disable:variable-name */
+    constructor(authority: string, clientId: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
         this.authority = authority;
         this.clientId = clientId;
 
-        this.redirectUri = redirectUri || window.location.href;
-        this.popupRedirectUri = redirectUri || window.location.href;
-        this.silentRedirectUri = redirectUri || window.location.href;
+        this.redirect_uri = redirect_uri || window.location.href;
+        this.popup_redirect_uri = redirect_uri || window.location.href;
+        this.silent_redirect_uri = redirect_uri || window.location.href;
 
-        this.postLogoutRedirectUri = postLogoutRedirectUri || window.location.href;
-        this.popupPostLogoutRedirectUri = postLogoutRedirectUri || window.location.href;
+        this.post_logout_redirect_uri = post_logout_redirect_uri || window.location.href;
+        this.popup_post_logout_redirect_uri = post_logout_redirect_uri || window.location.href;
     }
 }
