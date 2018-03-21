@@ -18,7 +18,7 @@ export class BitskiProviderSettings implements UserManagerSettings {
     /**
      * The type of response desired from the provider.
      */
-    public responseType: string = 'token id_token';
+    public response_type: string = 'token id_token';
 
     /**
      * The OAuth scope being requested from Bitski.
