@@ -21,7 +21,6 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
  */
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
 const libraryName = 'bitski';
 const outputFile = libraryName + '.js';
@@ -54,20 +53,6 @@ const config = {
     library: libraryName,
     libraryTarget: 'umd'
   },
-  plugins: [
-    new TypedocWebpackPlugin({
-      out: '../docs/api',
-      module: 'commonjs',
-      readme: 'none',
-      theme: 'markdown',
-      name: 'Bitski.js',
-      mode: 'modules',
-      includeDeclarations: false,
-      excludeExternals: true,
-      mdSourceRepo: 'https://github.com/BitskiCo/bitski-js-sdk',
-      mdSourceBranch: 'master'
-    }, './src')
-  ],
   resolve: {
     extensions: ['.ts', '.js']
   }
