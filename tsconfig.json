@@ -13,5 +13,21 @@
     "node_modules"
   ],
   "typeRoots" : ["./typings"],
-  "types": ["web3-providers-http"]
+  "types": ["web3-providers-http"],
+  "typedocOptions": {
+    "module": "commonjs",
+    "target": "ES5",
+    "exclude": "**/node_modules/**/*.*",
+    "experimentalDecorators": true,
+    "excludeExternals": true,
+    "out": "docs/api",
+    "readme": "none",
+    "theme": "markdown",
+    "name": "Bitski.js",
+    "mode": "modules",
+    "includeDeclarations": false,
+    "mdSourceRepo": "https://github.com/BitskiCo/bitski-js-sdk",
+    "mdSourceBranch": "master",
+    "ignoreCompilerErrors": true
+  }
 }

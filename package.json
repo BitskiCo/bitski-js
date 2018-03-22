@@ -8,8 +8,9 @@
   },
   "version": "0.0.1",
   "scripts": {
-    "build": "webpack-cli --mode production",
-    "dev": "webpack-cli --mode development --progress --colors --watch"
+    "build": "webpack-cli --mode production && typedoc src/*",
+    "dev": "webpack-cli --mode development --progress --colors --watch",
+    "docs": "typedoc src/*"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
@@ -35,7 +36,6 @@
     "tslint-loader": "^3.6.0",
     "typedoc": "^0.11.1",
     "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
-    "typedoc-webpack-plugin": "^1.1.4",
     "typescript": "^2.7.2",
     "webpack-cli": "^2.0.12"
   }
