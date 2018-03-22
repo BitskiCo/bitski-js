@@ -32,7 +32,7 @@ export class BitskiProvider extends OAuthHttpProvider {
     /**
      * Acts like metamask, won't try to auto sign in.
      */
-    public locked: boolean = true;
+    public locked: boolean = false;
 
     /**
      * Queued requests to be sent upon logging in.
