@@ -23,8 +23,8 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.2",
     "uglifyjs-webpack-plugin": "^1.2.0",
-    "web3": "^1.0.0-beta.30",
-    "web3-providers-http": "^1.0.0-beta.30",
+    "web3": "^1.0.0-beta.33",
+    "web3-providers-http": "^1.0.0-beta.33",
     "webpack": "^4.2.0",
     "xhr2": "^0.1.4"
   },
