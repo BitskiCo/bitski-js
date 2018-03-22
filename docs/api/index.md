@@ -281,7 +281,7 @@ Acts like metamask, won't try to auto sign in.
 
 
 ```javascript
-var locked: boolean = true
+var locked: boolean = false
 ```
 <small>*Defined in [bitski-provider.ts:35](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski-provider.ts#L35)*</small>
 
