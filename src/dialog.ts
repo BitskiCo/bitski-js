@@ -70,7 +70,7 @@ export class Dialog {
         const dialog = document.createElement('div');
         dialog.className = 'dialog';
 
-        dialog.style.width = '400px';
+        dialog.style.width = '490px';
         dialog.style.height = '1px';
         dialog.style.margin = '0 auto';
         dialog.style.position = 'relative';
