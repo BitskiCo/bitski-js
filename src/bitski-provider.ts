@@ -14,7 +14,7 @@ interface JsonRPC {
     callback: (e: Error, val: JsonRPCResponse) => void;
 }
 
-type JsonRPCCallback = (e: Error, val: JsonRPCResponse) => void;
+export type JsonRPCCallback = (e: Error, val: JsonRPCResponse) => void;
 
 /**
  * A Web3 provider that connects to the Bitski service

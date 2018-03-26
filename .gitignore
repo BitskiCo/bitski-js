@@ -59,3 +59,5 @@ typings/
 
 # Jekyll
 _site/*
+
+.rpt2_cache
