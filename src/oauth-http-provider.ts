@@ -3,6 +3,7 @@ import 'xhr2';
 import { Dialog } from './dialog';
 
 import HttpProvider from 'web3-providers-http';
+import Web3 from 'web3';
 import { JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 
 export enum OAuthProviderIntegrationType {
@@ -11,6 +12,17 @@ export enum OAuthProviderIntegrationType {
   POPUP,
   SILENT,
 }
+
+
+/**
+ * Force window.web3
+ * We can delete this one we have defaultAccount set up better
+ */
+declare global {
+  interface Window { web3?: Web3; }
+}
+window.web3 = window.web3 || null;
+
 
 /**
  * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
@@ -146,6 +158,13 @@ export class OAuthHttpProvider extends HttpProvider {
     if (window.parent !== window) {
       // We are in an IFRAME
       parent.postMessage(user, '*');
+    }
+
+    if (window.web3) {
+      window.web3.eth.getAccounts().then(function(accounts){
+        if (!window.web3.eth.defaultAccount)
+          window.web3.eth.defaultAccount = accounts[0]
+      });
     }
 
     if (this.authenticationDialog) {

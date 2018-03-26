@@ -1576,6 +1576,41 @@ private function signin()
 <a id="_oauth_http_provider_"></a>
 
 
+<a id="_oauth_http_provider_.__global"></a>
+
+####  __global
+
+
+Force window.web3 We can delete this one we have defaultAccount set up better
+
+
+
+
+
+
+<a id="_oauth_http_provider_.__global.window"></a>
+
+####  Window
+
+
+
+
+
+### Properties
+<a id="_oauth_http_provider_.__global.window.web3"></a>
+
+#### web3
+```javascript
+var web3: Web3
+```
+<small>*Defined in [oauth-http-provider.ts:22](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L22)*</small>
+
+
+
+
+
+
+
 <a id="_oauth_http_provider_.oauthproviderintegrationtype"></a>
 
 ####  OAuthProviderIntegrationType
@@ -1592,7 +1627,7 @@ private function signin()
 ```javascript
 var IFRAME: 
 ```
-<small>*Defined in [oauth-http-provider.ts:9](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L9)*</small>
+<small>*Defined in [oauth-http-provider.ts:10](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L10)*</small>
 
 
 
@@ -1606,7 +1641,7 @@ var IFRAME:
 ```javascript
 var POPUP: 
 ```
-<small>*Defined in [oauth-http-provider.ts:11](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L11)*</small>
+<small>*Defined in [oauth-http-provider.ts:12](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L12)*</small>
 
 
 
@@ -1620,7 +1655,7 @@ var POPUP:
 ```javascript
 var REDIRECT: 
 ```
-<small>*Defined in [oauth-http-provider.ts:10](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L10)*</small>
+<small>*Defined in [oauth-http-provider.ts:11](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L11)*</small>
 
 
 
@@ -1634,7 +1669,7 @@ var REDIRECT:
 ```javascript
 var SILENT: 
 ```
-<small>*Defined in [oauth-http-provider.ts:12](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L12)*</small>
+<small>*Defined in [oauth-http-provider.ts:13](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L13)*</small>
 
 
 
@@ -1688,7 +1723,7 @@ The configured authentication dialog
 ```javascript
 private var authenticationDialog: Dialog
 ```
-<small>*Defined in [oauth-http-provider.ts:42](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L42)*</small>
+<small>*Defined in [oauth-http-provider.ts:54](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L54)*</small>
 
 
 <a id="_oauth_http_provider_.oauthhttpprovider.authenticationintegrationtype"></a>
@@ -1701,7 +1736,7 @@ Determines how the authentication modals show up.
 ```javascript
 var authenticationIntegrationType: OAuthProviderIntegrationType =  OAuthProviderIntegrationType.REDIRECT
 ```
-<small>*Defined in [oauth-http-provider.ts:32](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L32)*</small>
+<small>*Defined in [oauth-http-provider.ts:44](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L44)*</small>
 
 
 
@@ -1715,7 +1750,7 @@ Cached sign in promise.
 ```javascript
 private var currentSignInPromise: Promise<User> =  null
 ```
-<small>*Defined in [oauth-http-provider.ts:53](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L53)*</small>
+<small>*Defined in [oauth-http-provider.ts:65](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L65)*</small>
 
 
 <a id="_oauth_http_provider_.oauthhttpprovider.currentuser"></a>
@@ -1728,7 +1763,7 @@ The current logged in `User`
 ```javascript
 var currentUser: User =  null
 ```
-<small>*Defined in [oauth-http-provider.ts:27](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L27)*</small>
+<small>*Defined in [oauth-http-provider.ts:39](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L39)*</small>
 
 
 <a id="_oauth_http_provider_.oauthhttpprovider.host"></a>
@@ -1741,7 +1776,7 @@ The JSON-RPC endpoint
 ```javascript
 private var host: string
 ```
-<small>*Defined in [oauth-http-provider.ts:37](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L37)*</small>
+<small>*Defined in [oauth-http-provider.ts:49](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L49)*</small>
 
 
 
@@ -1756,7 +1791,7 @@ Object containing the OAuth settings. see [BitskiProviderSettings](#class-bitski
 ```javascript
 private var settings: UserManagerSettings
 ```
-<small>*Defined in [oauth-http-provider.ts:48](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L48)*</small>
+<small>*Defined in [oauth-http-provider.ts:60](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L60)*</small>
 
 
 <a id="_oauth_http_provider_.oauthhttpprovider.usermanager"></a>
@@ -1769,7 +1804,7 @@ Instance user manager object.
 ```javascript
 var userManager: UserManager
 ```
-<small>*Defined in [oauth-http-provider.ts:22](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L22)*</small>
+<small>*Defined in [oauth-http-provider.ts:34](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L34)*</small>
 
 
 
@@ -1794,7 +1829,7 @@ Prepares a new XMLHttpRequest with the proper headers
 ```typescript
 private function _prepareRequest(): XMLHttpRequest
 ```
-<small>*Defined in [oauth-http-provider.ts:160](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L160)*</small>
+<small>*Defined in [oauth-http-provider.ts:179](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L179)*</small>
 
 
 
@@ -1822,7 +1857,7 @@ Request object that is ready for a payload.
 ```typescript
 function didSignIn(user: User)
 ```
-<small>*Defined in [oauth-http-provider.ts:143](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L143)*</small>
+<small>*Defined in [oauth-http-provider.ts:155](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L155)*</small>
 
 
 
@@ -1853,7 +1888,7 @@ function didSignIn(user: User)
 ```typescript
 function receiveMessage(event: MessageEvent)
 ```
-<small>*Defined in [oauth-http-provider.ts:70](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L70)*</small>
+<small>*Defined in [oauth-http-provider.ts:82](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L82)*</small>
 
 
 
@@ -1891,7 +1926,7 @@ Send a web3 / JSON-RPC request asynchronously.
 ```typescript
 private function sendAsync(payload: JsonRPCRequest, callback: function)
 ```
-<small>*Defined in [oauth-http-provider.ts:175](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L175)*</small>
+<small>*Defined in [oauth-http-provider.ts:194](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L194)*</small>
 
 
 
@@ -1926,7 +1961,7 @@ Sign in using the current settings.
 ```typescript
 function signIn(): Promise<User>
 ```
-<small>*Defined in [oauth-http-provider.ts:83](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L83)*</small>
+<small>*Defined in [oauth-http-provider.ts:95](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/oauth-http-provider.ts#L95)*</small>
 
 
 
