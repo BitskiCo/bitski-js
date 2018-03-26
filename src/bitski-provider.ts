@@ -194,7 +194,7 @@ export class BitskiProvider extends OAuthHttpProvider {
                 this.pendingTransactions.push({ payload, callback });
 
                 const iframe = document.createElement('iframe');
-                iframe.width = '400px';
+                iframe.width = '490px';
                 iframe.height = '380px';
                 iframe.frameBorder = '0';
                 iframe.src = `${ethSendTransactionUrl}?${txnParams}`;
@@ -205,7 +205,7 @@ export class BitskiProvider extends OAuthHttpProvider {
                 window.location.href = `${ethSendTransactionUrl}?${txnParams}`;
                 break;
             case OAuthProviderIntegrationType.POPUP:
-                const options = 'width=400,height=380,toolbar=0,menubar=0,location=0';
+                const options = 'width=490,height=380,toolbar=0,menubar=0,location=0';
                 const newWindow = window.open(`${ethSendTransactionUrl}?${txnParams}`, 'Bitski Authorization', options);
                 if (window.focus) { newWindow.focus(); }
 
