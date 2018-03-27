@@ -1,9 +1,9 @@
 import { User } from 'oidc-client';
 import Web3 from 'web3';
-import { BitskiProvider } from './bitski-provider';
-import { ConnectButton } from './connect-button';
-import { LoginButton } from './login-button';
-import { OAuthProviderIntegrationType } from './oauth-http-provider';
+import { ConnectButton } from './components/connect-button';
+import { LoginButton } from './components/login-button';
+import { BitskiProvider } from './providers/bitski-provider';
+import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
 
 /**
  * Deprecated, use new Bitski(...) instead

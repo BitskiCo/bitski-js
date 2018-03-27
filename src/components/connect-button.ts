@@ -1,7 +1,7 @@
 import { User } from 'oidc-client';
 import Web3 from 'web3';
-import { BitskiProvider } from './bitski-provider';
-import { OAuthProviderIntegrationType } from './oauth-http-provider';
+import { BitskiProvider } from '../providers/bitski-provider';
+import { OAuthProviderIntegrationType } from '../providers/oauth-http-provider';
 
 /**
  * A buton used to connect to Bitski

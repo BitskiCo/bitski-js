@@ -1,9 +1,9 @@
 import { User } from 'oidc-client';
 import Web3 from 'web3';
 import { JsonRPCCallback, JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
+import { Dialog } from '../components/dialog';
+import { OAuthHttpProvider, OAuthProviderIntegrationType } from '../providers/oauth-http-provider';
 import { BitskiProviderSettings } from './bitski-provider-settings';
-import { Dialog } from './dialog';
-import { OAuthHttpProvider, OAuthProviderIntegrationType } from './oauth-http-provider';
 
 const BITSKI_API_V1_HOST = 'https://api.bitski.com/v1';
 const BITSKI_OAUTH_HOST = 'https://account.bitski.com';
