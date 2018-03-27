@@ -59,3 +59,9 @@ typings/
 
 # Jekyll
 _site/*
+
+# Compiled library
+dist/
+
+# Rollup
+.rpt2_cache/

@@ -1,18 +1,17 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "dist/lib",
+    "declarationDir": "dist/types",
     "sourceMap": true,
     "declaration": true,
     "noImplicitAny": false,
     "module": "es6",
     "strict": true,
-    "target": "es5",
+    "target": "es2017",
     "moduleResolution": "node"
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "typeRoots" : ["./typings"],
+  "include": ["src"],
+  "typeRoots" : ["node_modules/@types"],
   "types": ["web3-providers-http"],
   "typedocOptions": {
     "module": "commonjs",

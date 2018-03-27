@@ -2,13 +2,15 @@
   "name": "bitski",
   "description": "Bitski JavaScript SDK",
   "license": "MIT",
+  "main": "dist/bitski.umd.js",
+  "module": "dist/bitski.es5.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js-sdk"
   },
   "version": "0.0.1",
   "scripts": {
-    "build": "webpack-cli --mode production && typedoc src/*",
+    "build": "tsc && rollup -c rollup.config.ts && webpack --mode production && typedoc",
     "dev": "webpack-cli --mode development --progress --colors --watch",
     "docs": "typedoc src/*"
   },
@@ -31,6 +33,12 @@
   },
   "devDependencies": {
     "fsevents": "^1.1.3",
+    "rollup": "^0.57.1",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-svg": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.12.0",
     "ts-loader": "^4.1.0",
     "tslint": "^5.9.1",
     "tslint-loader": "^3.6.0",
