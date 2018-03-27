@@ -139,6 +139,18 @@ export class OAuthHttpProvider extends HttpProvider {
           return this.userManager.signinSilent();
       }
     }).then((user: User) => {
+      const web3 = window.web3;
+      if (web3) {
+        web3.eth.getAccounts().then((accounts) => {
+          if (!web3.eth.defaultAccount) {
+            web3.eth.defaultAccount = accounts[0];
+          }
+          return user;
+        })
+      }
+      
+      return user;
+    }).then((user: User) => {
       if (user) {
         this.didSignIn(user);
       }
@@ -155,15 +167,6 @@ export class OAuthHttpProvider extends HttpProvider {
     if (window.parent !== window) {
       // We are in an IFRAME
       parent.postMessage(user, '*');
-    }
-
-    const web3 = window.web3;
-    if (web3) {
-      web3.eth.getAccounts().then((accounts) => {
-        if (!web3.eth.defaultAccount) {
-          web3.eth.defaultAccount = accounts[0];
-        }
-      });
     }
 
     if (this.authenticationDialog) {
