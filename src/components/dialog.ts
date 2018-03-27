@@ -1,4 +1,4 @@
-import closeSVG from './assets/close-button.svg';
+import closeSVG from '../assets/close-button.svg';
 
 export class Dialog {
     private content: any;

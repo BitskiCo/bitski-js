@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import HttpProvider from 'web3-providers-http';
 import { JsonRPCCallback, JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 import 'xhr2';
-import { Dialog } from './dialog';
+import { Dialog } from '../components/dialog';
 
 export enum OAuthProviderIntegrationType {
   IFRAME,
