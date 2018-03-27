@@ -15,9 +15,12 @@ export class Dialog {
             this.content = document.createElement('div');
             this.content.innerText = content;
         }
-        this.create();
-        this.body.appendChild(this.content);
-        if (document.body) {
+        this.closeButton = this.createCloseButton();
+        this.body = this.createBody();
+        this.dialog = this.createDialog();
+        this.container = this.createContainer();
+        this.addChildren();
+        if (document && document.body) {
             this.render();
         } else {
             document.body.addEventListener('load', this.render.bind(this));
@@ -28,20 +31,11 @@ export class Dialog {
         this.container.remove();
     }
 
-    private create() {
-        this.closeButton = this.createCloseButton();
-
-        this.body = this.createBody();
+    private addChildren() {
         this.body.appendChild(this.content);
-
-        this.dialog = this.createDialog();
         this.dialog.appendChild(this.closeButton);
         this.dialog.appendChild(this.body);
-
-        this.container = this.createContainer();
         this.container.appendChild(this.dialog);
-
-        return this.container;
     }
 
     private createCloseButton(): HTMLElement {

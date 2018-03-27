@@ -2,12 +2,12 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "sourceMap": true,
-    "noImplicitAny": true,
+    "declaration": true,
+    "noImplicitAny": false,
     "module": "es6",
+    "strict": true,
     "target": "es5",
-    "moduleResolution": "node",
-    "jsx": "react",
-    "allowJs": true
+    "moduleResolution": "node"
   },
   "exclude": [
     "node_modules"
@@ -27,7 +27,6 @@
     "mode": "modules",
     "includeDeclarations": false,
     "mdSourceRepo": "https://github.com/BitskiCo/bitski-js-sdk",
-    "mdSourceBranch": "master",
-    "ignoreCompilerErrors": true
+    "mdSourceBranch": "master"
   }
 }

@@ -32,11 +32,11 @@ export class LoginButton {
     private signin() {
         this.provider.signIn().then((user: User) => {
             if (this.callback) {
-                this.callback(this.web3Client, null, user);
+                this.callback(this.web3Client, undefined, user);
             }
         }).catch((error: Error) => {
             if (this.callback) {
-                this.callback(this.web3Client, error, null);
+                this.callback(this.web3Client, error, undefined);
             }
         });
     }

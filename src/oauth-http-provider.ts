@@ -1,10 +1,9 @@
 import { Log, User, UserManager, UserManagerSettings } from 'oidc-client';
+import Web3 from 'web3';
+import HttpProvider from 'web3-providers-http';
+import { JsonRPCCallback, JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 import 'xhr2';
 import { Dialog } from './dialog';
-
-import HttpProvider from 'web3-providers-http';
-import Web3 from 'web3';
-import { JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 
 export enum OAuthProviderIntegrationType {
   IFRAME,
@@ -13,7 +12,6 @@ export enum OAuthProviderIntegrationType {
   SILENT,
 }
 
-
 /**
  * Force window.web3
  * We can delete this one we have defaultAccount set up better
@@ -21,8 +19,7 @@ export enum OAuthProviderIntegrationType {
 declare global {
   interface Window { web3?: Web3; }
 }
-window.web3 = window.web3 || null;
-
+window.web3 = window.web3 || undefined;
 
 /**
  * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
@@ -36,7 +33,7 @@ export class OAuthHttpProvider extends HttpProvider {
   /**
    * The current logged in `User`
    */
-  public currentUser: User = null;
+  public currentUser?: User = undefined;
 
   /**
    * Determines how the authentication modals show up.
@@ -62,7 +59,7 @@ export class OAuthHttpProvider extends HttpProvider {
   /**
    * Cached sign in promise.
    */
-  private currentSignInPromise: Promise<User> = null;
+  private currentSignInPromise?: Promise<User> = undefined;
 
   /**
    * @param host JSON-RPC endpoint
@@ -81,7 +78,7 @@ export class OAuthHttpProvider extends HttpProvider {
 
   public receiveMessage(event: MessageEvent): void {
     const originURL = new URL(event.origin);
-    const redirectURL = new URL(this.settings.redirect_uri);
+    const redirectURL = new URL(this.settings.redirect_uri || event.origin);
 
     if (originURL.hostname === redirectURL.hostname && this.currentUser === null) {
       this.didSignIn(event.data);
@@ -160,10 +157,12 @@ export class OAuthHttpProvider extends HttpProvider {
       parent.postMessage(user, '*');
     }
 
-    if (window.web3) {
-      window.web3.eth.getAccounts().then(function(accounts){
-        if (!window.web3.eth.defaultAccount)
-          window.web3.eth.defaultAccount = accounts[0]
+    const web3 = window.web3;
+    if (web3) {
+      web3.eth.getAccounts().then((accounts) => {
+        if (!web3.eth.defaultAccount) {
+          web3.eth.defaultAccount = accounts[0];
+        }
       });
     }
 
@@ -191,7 +190,7 @@ export class OAuthHttpProvider extends HttpProvider {
    * @param payload The JSON-RPC request object to send
    * @param callback Handler function invoked when the request has completed.
    */
-  private sendAsync(payload: JsonRPCRequest, callback: (e: Error, val: JsonRPCResponse) => void): void {
+  private sendAsync(payload: JsonRPCRequest, callback: JsonRPCCallback): void {
     return this.send(payload, callback);
   }
 
