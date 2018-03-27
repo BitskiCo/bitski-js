@@ -12,6 +12,8 @@ declare module 'web3-providers-http' {
         error?: string
     }
 
+    export type JsonRPCCallback = (e: Error, val: JsonRPCResponse) => void;
+
     export default class HttpProvider {
         responseCallbacks: undefined
         notificationCallbacks: undefined
@@ -21,9 +23,9 @@ declare module 'web3-providers-http' {
         removeListener(type: string, callback: () => any): undefined
         removeAllListeners(type: string): undefined
         reset(): undefined
-        
+
         constructor(host: string, timeout: number, headers: any);
-    
-        send(payload: JsonRPCRequest, callback: (e: Error, val: JsonRPCResponse) => void): void
+
+        send(payload: JsonRPCRequest, callback: JsonRPCCallback): void
     }
 }

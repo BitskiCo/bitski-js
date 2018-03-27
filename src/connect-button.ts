@@ -31,11 +31,11 @@ export class ConnectButton {
     private signin() {
         this.provider.signIn().then((user: User) => {
             if (this.callback) {
-                this.callback(null, user);
+                this.callback(undefined, user);
             }
         }).catch((error: Error) => {
             if (this.callback) {
-                this.callback(error, null);
+                this.callback(error, undefined);
             }
         });
     }

@@ -1,6 +1,6 @@
 import { User } from 'oidc-client';
 import Web3 from 'web3';
-import { JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
+import { JsonRPCCallback, JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 import { BitskiProviderSettings } from './bitski-provider-settings';
 import { Dialog } from './dialog';
 import { OAuthHttpProvider, OAuthProviderIntegrationType } from './oauth-http-provider';
@@ -11,10 +11,8 @@ const BITSKI_WEB_HOST = 'https://www.bitski.com';
 
 interface JsonRPC {
     payload: JsonRPCRequest;
-    callback: (e: Error, val: JsonRPCResponse) => void;
+    callback: JsonRPCCallback;
 }
-
-type JsonRPCCallback = (e: Error, val: JsonRPCResponse) => void;
 
 /**
  * A Web3 provider that connects to the Bitski service
@@ -40,8 +38,8 @@ export class BitskiProvider extends OAuthHttpProvider {
     private queuedSends: JsonRPC[] = [];
     private pendingTransactions: JsonRPC[] = [];
     private networkName: string;
-    private currentTransactionDialog?: Dialog = null;
-    private currentTransactionWindow?: Window = null;
+    private currentTransactionDialog?: Dialog = undefined;
+    private currentTransactionWindow?: Window = undefined;
 
     /**
      * @param clientId OAuth Client ID
@@ -86,11 +84,14 @@ export class BitskiProvider extends OAuthHttpProvider {
             .filter((pendingTransaction) => pendingTransaction.payload.id === response.id)
             .forEach((transaction, index) => {
                 this.pendingTransactions.splice(index, 1);
-                transaction.callback(null, response);
+                // Error is defined as not optional. ¯\_(ツ)_/¯
+                // https://github.com/ethereum/web3.js/blob/1.0/packages/web3/types.d.ts#L233
+                const error: any = null;
+                transaction.callback(error, response);
 
                 if (this.currentTransactionDialog) {
                     this.currentTransactionDialog.dismiss();
-                    this.currentTransactionDialog = null;
+                    this.currentTransactionDialog = undefined;
                 }
             });
     }
@@ -121,7 +122,9 @@ export class BitskiProvider extends OAuthHttpProvider {
     private flushQueuedSends(user: User): void {
         while (this.queuedSends.length > 0) {
             const queuedSend = this.queuedSends.pop();
-            this.sendAuthenticated(queuedSend.payload, user, queuedSend.callback);
+            if (queuedSend && queuedSend.payload) {
+                this.sendAuthenticated(queuedSend.payload, user, queuedSend.callback);
+            }
         }
     }
 
@@ -207,9 +210,9 @@ export class BitskiProvider extends OAuthHttpProvider {
             case OAuthProviderIntegrationType.POPUP:
                 const options = 'width=490,height=380,toolbar=0,menubar=0,location=0';
                 const newWindow = window.open(`${ethSendTransactionUrl}?${txnParams}`, 'Bitski Authorization', options);
-                if (window.focus) { newWindow.focus(); }
+                if (window.focus && newWindow) { newWindow.focus(); }
 
-                this.currentTransactionWindow = newWindow;
+                this.currentTransactionWindow = newWindow || undefined;
                 break;
             case OAuthProviderIntegrationType.SILENT:
                 throw new Error('Silent authorization requests are not allowed');
