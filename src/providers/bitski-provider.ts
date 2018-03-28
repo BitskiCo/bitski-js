@@ -30,7 +30,7 @@ export class BitskiProvider extends OAuthHttpProvider {
     /**
      * Acts like metamask, won't try to auto sign in.
      */
-    public locked: boolean = false;
+    public locked: boolean = true;
 
     /**
      * Queued requests to be sent upon logging in.
@@ -62,6 +62,7 @@ export class BitskiProvider extends OAuthHttpProvider {
      */
     public didSignIn(user: User) {
         super.didSignIn(user);
+        this.locked = false;
         this.flushQueuedSends(user);
     }
 
@@ -102,7 +103,7 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param callback Handler for send request. `function (e: Error, val: JSONRPCResponse) => void`
      */
     public send(payload: JsonRPCRequest, callback: JsonRPCCallback): void {
-        if (this.currentUser) {
+        if (this.currentUser && this.currentUser.expired === false) {
             this.sendAuthenticated(payload, this.currentUser, callback);
         } else if (this.requiresAuthentication(payload.method)) {
             this.queuedSends.push({ payload, callback });

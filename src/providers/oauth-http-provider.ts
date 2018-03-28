@@ -6,7 +6,7 @@ import 'xhr2';
 import { Dialog } from '../components/dialog';
 
 export enum OAuthProviderIntegrationType {
-  IFRAME,
+  IFRAME, // Not recommended for security reasons.
   REDIRECT,
   POPUP,
   SILENT,
@@ -109,11 +109,7 @@ export class OAuthHttpProvider extends HttpProvider {
         throw err;
       }
 
-      if (window.opener) {
-        return this.userManager.signinPopupCallback();
-      }
-
-      return this.userManager.signinRedirectCallback();
+      return this.signInCallback();
     }).catch((err: any) => {
       const noResponseState = 'Error: No state in response';
       const noStorageState = 'Error: No matching state found in storage';
@@ -148,7 +144,7 @@ export class OAuthHttpProvider extends HttpProvider {
           return user;
         })
       }
-      
+
       return user;
     }).then((user: User) => {
       if (user) {
@@ -159,6 +155,16 @@ export class OAuthHttpProvider extends HttpProvider {
     });
 
     return this.currentSignInPromise;
+  }
+
+  public signInCallback(type?: OAuthProviderIntegrationType): Promise<User> {
+    const resolvedType = type || this.authenticationIntegrationType;
+
+    if (resolvedType === OAuthProviderIntegrationType.POPUP) {
+      return this.userManager.signinPopupCallback();
+    }
+
+    return this.userManager.signinRedirectCallback();
   }
 
   public didSignIn(user: User): void {
@@ -172,6 +178,8 @@ export class OAuthHttpProvider extends HttpProvider {
     if (this.authenticationDialog) {
       this.authenticationDialog.dismiss();
     }
+
+    this.currentSignInPromise = undefined;
   }
 
   /**
