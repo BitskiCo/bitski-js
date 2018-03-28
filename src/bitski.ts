@@ -57,7 +57,23 @@ export class Bitski {
      */
     public getConnectButton(existingDiv?: HTMLElement): ConnectButton {
         this.provider.authenticationIntegrationType = OAuthProviderIntegrationType.POPUP;
-        this.provider.locked = true;
         return new ConnectButton(this.provider, existingDiv);
+    }
+
+    /**
+     * Starts sign in flow.
+     * @param type Optionally specify an integration type. Defaults to REDIRECT.
+     */
+    public signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
+        this.provider.authenticationIntegrationType = authenticationIntegrationType || OAuthProviderIntegrationType.REDIRECT;
+        return this.provider.signIn();
+    }
+
+    /**
+     * Called from your oauth redirect page.
+     * @param type Should match the method called when signing in.
+     */
+    public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
+        return this.provider.signInCallback(authenticationIntegrationType);
     }
 }
