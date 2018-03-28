@@ -105,7 +105,7 @@ export class OAuthHttpProvider extends HttpProvider {
 
       return user;
     }).catch((err: any) => {
-      if (err.toString() === 'Error: Not signed in' && this.authenticationIntegrationType == OAuthProviderIntegrationType.REDIRECT) {
+      if (err.toString() === 'Error: Not signed in' && this.authenticationIntegrationType === OAuthProviderIntegrationType.REDIRECT) {
         return this.userManager.signinRedirect();
       }
 

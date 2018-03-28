@@ -117,6 +117,17 @@ export class BitskiProvider extends OAuthHttpProvider {
     }
 
     /**
+     * Sign in using the current settings.
+     * @returns A promise for a user.
+     */
+    public signIn(): Promise<User> {
+        return super.signIn().catch((error) => {
+            this.locked = true;
+            throw error;
+        });
+    }
+
+    /**
      * Flush all queued requests
      * @param user User authentication object to send the requests through.
      */
