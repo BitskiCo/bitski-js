@@ -61,9 +61,12 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param user User authentication object to flush send queue.
      */
     public didSignIn(user: User) {
-        super.didSignIn(user);
-        this.locked = false;
-        this.flushQueuedSends(user);
+        return super.didSignIn(user).then((callbackUser) => {
+            this.locked = false;
+            this.flushQueuedSends(callbackUser);
+
+            return callbackUser;
+        });
     }
 
     /**
