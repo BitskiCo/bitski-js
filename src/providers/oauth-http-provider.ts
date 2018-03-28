@@ -146,9 +146,9 @@ export class OAuthHttpProvider extends HttpProvider {
             web3.eth.defaultAccount = accounts[0];
           }
           return user;
-        })
+        });
       }
-      
+
       return user;
     }).then((user: User) => {
       if (user) {
