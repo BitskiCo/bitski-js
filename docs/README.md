@@ -25,6 +25,7 @@ if (typeof web3 !== 'undefined') {
 } else {
   var bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
   web3 = bitskiInstance.getWeb3();
+  bitskiInstance.signIn();
 }
 ```
 
