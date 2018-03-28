@@ -105,15 +105,16 @@ export class OAuthHttpProvider extends HttpProvider {
 
       return user;
     }).catch((err: any) => {
-      if (err.toString() !== 'Error: Not signed in') {
-        throw err;
+      if (err.toString() === 'Error: Not signed in' && this.authenticationIntegrationType == OAuthProviderIntegrationType.REDIRECT) {
+        return this.userManager.signinRedirect();
       }
 
-      return this.signInCallback();
+      throw err;
     }).catch((err: any) => {
       const noResponseState = 'Error: No state in response';
       const noStorageState = 'Error: No matching state found in storage';
-      if (err.toString() !== noResponseState && err.toString() !== noStorageState) {
+      const notSignedIn = 'Error: Not signed in';
+      if (err.toString() !== noResponseState && err.toString() !== noStorageState && err.toString() !== notSignedIn) {
         throw err;
       }
       switch (this.authenticationIntegrationType) {
