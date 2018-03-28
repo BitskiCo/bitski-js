@@ -1830,7 +1830,7 @@ Prepares a new XMLHttpRequest with the proper headers
 ```typescript
 private function _prepareRequest(): XMLHttpRequest
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:189](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L189)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:190](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L190)*</small>
 
 
 
@@ -1858,7 +1858,7 @@ Request object that is ready for a payload.
 ```typescript
 function didSignIn(user: User)
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:170](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L170)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:171](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L171)*</small>
 
 
 
@@ -1927,7 +1927,7 @@ Send a web3 / JSON-RPC request asynchronously.
 ```typescript
 private function sendAsync(payload: JsonRPCRequest, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:204](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L204)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:205](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L205)*</small>
 
 
 
@@ -1990,7 +1990,7 @@ A promise for a user.
 ```typescript
 function signInCallback(type?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:160](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L160)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:161](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L161)*</small>
 
 
 
