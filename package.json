@@ -13,7 +13,7 @@
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
     "build": "tsc && rollup -c rollup.config.ts && webpack --mode production && typedoc",
-    "prepublishOnly": "npm run build",
+    "prepack": "npm run build",
     "dev": "rollup -c rollup.config.ts -w",
     "docs": "typedoc"
   },

@@ -8,7 +8,7 @@ import pkg from './package.json';
 const globals = { 'oidc-client': 'Oidc', 'web3-providers-http': 'HttpProvider', 'web3': 'Web3' };
 
 export default {
-  external: ['oidc-client', 'web3', 'web3-providers-http', 'xhr2'],
+  external: Object.keys(pkg.dependencies),
   input: 'src/bitski.ts',
   output: [
     { file: pkg.main, name: pkg.name, format: 'umd', sourcemap: true, globals },
