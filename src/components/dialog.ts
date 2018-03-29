@@ -40,7 +40,6 @@ export class Dialog {
 
     private createCloseButton(): HTMLElement {
         const closeButton = document.createElement('button');
-        closeButton.innerHTML = closeSVG;
         closeButton.title = 'Close';
         closeButton.setAttribute('type', 'button');
 
@@ -54,6 +53,10 @@ export class Dialog {
         closeButton.style.cursor = 'pointer';
         closeButton.style.borderRadius = '16px';
         closeButton.style.outline = 'none';
+
+        const closeButtonImage = document.createElement('image');
+        closeButtonImage.setAttribute('src', closeSVG);
+        closeButton.appendChild(closeButtonImage);
 
         closeButton.addEventListener('click', this.dismiss.bind(this));
 

@@ -15,6 +15,9 @@ export default {
     { file: pkg.module, format: 'es', sourcemap: true, globals },
   ],
   plugins: [
+    // Include images
+    image(),
+    
     // Compile TypeScript files
     typescript({ useTsconfigDeclarationDir: true, tsconfigOverride: { compilerOptions: { target: 'es5' } } }),
 
@@ -27,10 +30,7 @@ export default {
     resolve(),
 
     // Resolve source maps to the original source
-    sourceMaps(),
-
-    // Include images
-    image()
+    sourceMaps()
   ],
   watch: {
     include: 'src/**',
