@@ -1,8 +1,8 @@
 import commonjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import sourceMaps from 'rollup-plugin-sourcemaps';
-import svg from 'rollup-plugin-svg';
 import typescript from 'rollup-plugin-typescript2';
+import image from 'rollup-plugin-img';
 import pkg from './package.json';
 
 const globals = { 'oidc-client': 'Oidc', 'web3-providers-http': 'HttpProvider', 'web3': 'Web3' };
@@ -15,9 +15,6 @@ export default {
     { file: pkg.module, format: 'es', sourcemap: true, globals },
   ],
   plugins: [
-    // Allow svg resolution
-    svg(),
-
     // Compile TypeScript files
     typescript({ useTsconfigDeclarationDir: true, tsconfigOverride: { compilerOptions: { target: 'es5' } } }),
 
@@ -31,6 +28,9 @@ export default {
 
     // Resolve source maps to the original source
     sourceMaps(),
+
+    // Include images
+    image()
   ],
   watch: {
     include: 'src/**',
