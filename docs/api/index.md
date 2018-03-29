@@ -1516,7 +1516,7 @@ Features used to style and configure the popup window
 
 
 ```javascript
-var popupWindowFeatures: string = "location=no,toolbar=no,width=360,height=340,left=100,top=100;"
+var popupWindowFeatures: string = "location=no,toolbar=no,width=490,height=380,left=100,top=100;"
 ```
 <small>*Defined in [providers/bitski-provider-settings.ts:85](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L85)*</small>
 
