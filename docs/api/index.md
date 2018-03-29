@@ -540,7 +540,7 @@ private function addChildren()
 ```typescript
 private function createBody(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:92](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L92)*</small>
+<small>*Defined in [components/dialog.ts:95](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L95)*</small>
 
 
 
@@ -592,7 +592,7 @@ private function createCloseButton(): HTMLElement
 ```typescript
 private function createContainer(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:77](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L77)*</small>
+<small>*Defined in [components/dialog.ts:80](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L80)*</small>
 
 
 
@@ -618,7 +618,7 @@ private function createContainer(): HTMLElement
 ```typescript
 private function createDialog(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:63](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L63)*</small>
+<small>*Defined in [components/dialog.ts:66](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L66)*</small>
 
 
 
@@ -666,7 +666,7 @@ function dismiss()
 ```typescript
 private function render(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:105](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L105)*</small>
+<small>*Defined in [components/dialog.ts:108](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L108)*</small>
 
 
 
