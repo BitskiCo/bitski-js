@@ -86,15 +86,10 @@ export class OAuthHttpProvider extends HttpProvider {
   }
 
   /**
-   * Sign in using the current settings.
-   * @returns A promise for a user.
+   * Gets the current signed in user. Will return an error if we are not sigend in.
    */
-  public signIn(): Promise<User> {
-    if (this.currentSignInPromise) {
-      return this.currentSignInPromise;
-    }
-
-    this.currentSignInPromise = this.userManager.getUser().then((user: User) => {
+  public getSignedInUser(): Promise<User> {
+    return this.userManager.getUser().then((user: User) => {
       if (typeof (user) === 'undefined' || user === null) {
         throw Error('Not signed in');
       }
@@ -104,8 +99,22 @@ export class OAuthHttpProvider extends HttpProvider {
       }
 
       return user;
-    }).catch((err: any) => {
-      if (err.toString() === 'Error: Not signed in' && this.authenticationIntegrationType == OAuthProviderIntegrationType.REDIRECT) {
+    }).then((user) => {
+      return this.didSignIn(user);
+    });
+  }
+
+  /**
+   * Sign in using the current settings.
+   * @returns A promise for a user.
+   */
+  public signIn(): Promise<User> {
+    if (this.currentSignInPromise) {
+      return this.currentSignInPromise;
+    }
+
+    this.currentSignInPromise = this.getSignedInUser().catch((err: any) => {
+      if (err.toString() === 'Error: Not signed in' && this.authenticationIntegrationType === OAuthProviderIntegrationType.REDIRECT) {
         return this.userManager.signinRedirect();
       }
 
@@ -123,7 +132,7 @@ export class OAuthHttpProvider extends HttpProvider {
         case OAuthProviderIntegrationType.IFRAME:
           return this.userManager.createSigninRequest().then((signInRequest) => {
             const iframe = document.createElement('iframe');
-            iframe.width = '400px';
+            iframe.width = '490px';
             iframe.height = '380px';
             iframe.src = signInRequest.url;
             iframe.frameBorder = '0';
@@ -136,23 +145,13 @@ export class OAuthHttpProvider extends HttpProvider {
           return this.userManager.signinSilent();
       }
     }).then((user: User) => {
-      const web3 = window.web3;
-      if (web3) {
-        web3.eth.getAccounts().then((accounts) => {
-          if (!web3.eth.defaultAccount) {
-            web3.eth.defaultAccount = accounts[0];
-          }
-          return user;
-        });
-      }
+      this.currentSignInPromise = undefined;
 
-      return user;
-    }).then((user: User) => {
-      if (user) {
-        this.didSignIn(user);
-      }
+      return this.didSignIn(user);
+    }).catch((error) => {
+      this.currentSignInPromise = undefined;
 
-      return user;
+      throw error;
     });
 
     return this.currentSignInPromise;
@@ -168,7 +167,7 @@ export class OAuthHttpProvider extends HttpProvider {
     return this.userManager.signinRedirectCallback();
   }
 
-  public didSignIn(user: User): void {
+  public didSignIn(user: User): Promise<User> {
     this.currentUser = user;
 
     if (window.parent !== window) {
@@ -180,7 +179,20 @@ export class OAuthHttpProvider extends HttpProvider {
       this.authenticationDialog.dismiss();
     }
 
-    this.currentSignInPromise = undefined;
+    const web3 = window.web3;
+    if (web3) {
+      web3.eth.getAccounts().then((accounts) => {
+        if (!web3.eth.defaultAccount) {
+          web3.eth.defaultAccount = accounts[0];
+        }
+        return user;
+      });
+    }
+
+    // Do nothing!
+    return new Promise((resolve, reject) => {
+      resolve(user);
+    });
   }
 
   /**

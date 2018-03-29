@@ -53,6 +53,13 @@ export class Bitski {
     }
 
     /**
+     * Gets the current signed in user. Will return an error if we are not sigend in.
+     */
+    public getSignedInUser(): Promise<User> {
+        return this.provider.getSignedInUser();
+    }
+
+    /**
      * @param existingDiv Existing element to turn into a Bitski connect button
      */
     public getConnectButton(existingDiv?: HTMLElement): ConnectButton {

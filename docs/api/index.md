@@ -88,7 +88,7 @@ var provider: BitskiProvider
 ```typescript
 function getConnectButton(existingDiv?: HTMLElement): ConnectButton
 ```
-<small>*Defined in [bitski.ts:58](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L58)*</small>
+<small>*Defined in [bitski.ts:65](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L65)*</small>
 
 
 
@@ -102,6 +102,36 @@ function getConnectButton(existingDiv?: HTMLElement): ConnectButton
 
 ##### Return Value
 [ConnectButton](#_components_connect_button_.connectbutton)
+
+
+
+
+
+
+
+<a id="_bitski_.bitski.getsignedinuser"></a>
+
+#### getSignedInUser
+
+
+
+Gets the current signed in user. Will return an error if we are not sigend in.
+
+
+
+
+##### Declaration
+
+
+```typescript
+function getSignedInUser(): Promise<User>
+```
+<small>*Defined in [bitski.ts:58](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L58)*</small>
+
+
+
+##### Return Value
+`Promise<User>`
 
 
 
@@ -156,7 +186,7 @@ Starts sign in flow.
 ```typescript
 function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:67](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L67)*</small>
+<small>*Defined in [bitski.ts:74](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L74)*</small>
 
 
 
@@ -194,7 +224,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:76](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L76)*</small>
+<small>*Defined in [bitski.ts:83](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L83)*</small>
 
 
 
@@ -940,7 +970,7 @@ After sign in functionality
 
 
 ```typescript
-function didSignIn(user: User)
+function didSignIn(user: User): Promise<User>
 ```
 <small>*Defined in [providers/bitski-provider.ts:63](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L63)*</small>
 
@@ -952,6 +982,10 @@ function didSignIn(user: User)
 | ------ | ------ | ------ |
 | user | `User`   |  User authentication object to flush send queue. |
 
+
+
+##### Return Value
+`Promise<User>`
 
 
 
@@ -976,7 +1010,7 @@ Flush all queued requests
 ```typescript
 private function flushQueuedSends(user: User)
 ```
-<small>*Defined in [providers/bitski-provider.ts:123](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L123)*</small>
+<small>*Defined in [providers/bitski-provider.ts:137](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L137)*</small>
 
 
 
@@ -985,6 +1019,7 @@ private function flushQueuedSends(user: User)
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | user | `User`   |  User authentication object to send the requests through. |
+
 
 
 
@@ -1010,7 +1045,7 @@ Check whether we are connected to the server.
 ```typescript
 private function isConnected(): boolean
 ```
-<small>*Defined in [providers/bitski-provider.ts:227](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L227)*</small>
+<small>*Defined in [providers/bitski-provider.ts:241](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L241)*</small>
 
 
 
@@ -1043,7 +1078,7 @@ Returns a boolean value that indicates whether the Web3 method can be executed w
 ```typescript
 function receiveMessage(event: MessageEvent)
 ```
-<small>*Defined in [providers/bitski-provider.ts:75](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L75)*</small>
+<small>*Defined in [providers/bitski-provider.ts:78](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L78)*</small>
 
 
 
@@ -1082,7 +1117,7 @@ Determines if web3 method requires authentication
 ```typescript
 private function requiresAuthentication(method: string): boolean
 ```
-<small>*Defined in [providers/bitski-provider.ts:136](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L136)*</small>
+<small>*Defined in [providers/bitski-provider.ts:150](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L150)*</small>
 
 
 
@@ -1120,7 +1155,7 @@ Returns a boolean value that indicates whether the Web3 method can be executed w
 ```typescript
 private function requiresAuthorization(method: string): boolean
 ```
-<small>*Defined in [providers/bitski-provider.ts:154](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L154)*</small>
+<small>*Defined in [providers/bitski-provider.ts:168](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L168)*</small>
 
 
 
@@ -1159,7 +1194,7 @@ Sends a Web3 request.
 ```typescript
 function send(payload: JsonRPCRequest, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/bitski-provider.ts:105](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L105)*</small>
+<small>*Defined in [providers/bitski-provider.ts:108](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L108)*</small>
 
 
 
@@ -1194,7 +1229,7 @@ Sends a request with authentication headers.
 ```typescript
 private function sendAuthenticated(payload: JsonRPCRequest, user: User, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/bitski-provider.ts:170](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L170)*</small>
+<small>*Defined in [providers/bitski-provider.ts:184](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L184)*</small>
 
 
 
@@ -1230,7 +1265,7 @@ Presents an authorization request to the user.
 ```typescript
 private function showAuthorization(payload: JsonRPCRequest, user: User, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/bitski-provider.ts:183](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L183)*</small>
+<small>*Defined in [providers/bitski-provider.ts:197](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L197)*</small>
 
 
 
@@ -1244,6 +1279,37 @@ private function showAuthorization(payload: JsonRPCRequest, user: User, callback
 
 
 
+
+
+
+
+
+<a id="_providers_bitski_provider_.bitskiprovider.signin"></a>
+
+#### signIn
+
+
+
+Sign in using the current settings.
+
+
+
+
+##### Declaration
+
+
+```typescript
+function signIn(): Promise<User>
+```
+<small>*Defined in [providers/bitski-provider.ts:126](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L126)*</small>
+
+
+
+##### Return Value
+`Promise<User>`
+
+
+A promise for a user.
 
 
 
@@ -1450,7 +1516,7 @@ Features used to style and configure the popup window
 
 
 ```javascript
-var popupWindowFeatures: string = "location=no,toolbar=no,width=360,height=340,left=100,top=100;"
+var popupWindowFeatures: string = "location=no,toolbar=no,width=490,height=380,left=100,top=100;"
 ```
 <small>*Defined in [providers/bitski-provider-settings.ts:85](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L85)*</small>
 
@@ -1830,7 +1896,7 @@ Prepares a new XMLHttpRequest with the proper headers
 ```typescript
 private function _prepareRequest(): XMLHttpRequest
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:190](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L190)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:202](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L202)*</small>
 
 
 
@@ -1856,9 +1922,9 @@ Request object that is ready for a payload.
 
 
 ```typescript
-function didSignIn(user: User)
+function didSignIn(user: User): Promise<User>
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:171](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L171)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:170](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L170)*</small>
 
 
 
@@ -1868,6 +1934,40 @@ function didSignIn(user: User)
 | ------ | ------ | ------ |
 | user | `User`   |  - |
 
+
+
+##### Return Value
+`Promise<User>`
+
+
+
+
+
+
+
+<a id="_providers_oauth_http_provider_.oauthhttpprovider.getsignedinuser"></a>
+
+#### getSignedInUser
+
+
+
+Gets the current signed in user. Will return an error if we are not sigend in.
+
+
+
+
+##### Declaration
+
+
+```typescript
+function getSignedInUser(): Promise<User>
+```
+<small>*Defined in [providers/oauth-http-provider.ts:91](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L91)*</small>
+
+
+
+##### Return Value
+`Promise<User>`
 
 
 
@@ -1927,7 +2027,7 @@ Send a web3 / JSON-RPC request asynchronously.
 ```typescript
 private function sendAsync(payload: JsonRPCRequest, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:205](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L205)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:217](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L217)*</small>
 
 
 
@@ -1962,7 +2062,7 @@ Sign in using the current settings.
 ```typescript
 function signIn(): Promise<User>
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:92](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L92)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:111](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L111)*</small>
 
 
 
@@ -1990,7 +2090,7 @@ A promise for a user.
 ```typescript
 function signInCallback(type?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:161](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L161)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:160](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L160)*</small>
 
 
 
