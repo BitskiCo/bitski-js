@@ -82,7 +82,7 @@ export class BitskiProviderSettings implements UserManagerSettings {
     /**
      * Features used to style and configure the popup window
      */
-    public popupWindowFeatures: string = 'location=no,toolbar=no,width=360,height=340,left=100,top=100;';
+    public popupWindowFeatures: string = 'location=no,toolbar=no,width=490,height=380,left=100,top=100;';
 
     /**
      * Create new instance of BitskiProviderSettings

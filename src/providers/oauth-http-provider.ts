@@ -132,7 +132,7 @@ export class OAuthHttpProvider extends HttpProvider {
         case OAuthProviderIntegrationType.IFRAME:
           return this.userManager.createSigninRequest().then((signInRequest) => {
             const iframe = document.createElement('iframe');
-            iframe.width = '400px';
+            iframe.width = '490px';
             iframe.height = '380px';
             iframe.src = signInRequest.url;
             iframe.frameBorder = '0';
