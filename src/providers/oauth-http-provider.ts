@@ -6,7 +6,7 @@ import 'xhr2';
 import { Dialog } from '../components/dialog';
 
 export enum OAuthProviderIntegrationType {
-  IFRAME, // Not recommended for security reasons.
+  IFRAME,
   REDIRECT,
   POPUP,
   SILENT,
@@ -51,12 +51,6 @@ export class OAuthHttpProvider extends HttpProvider {
   private authenticationDialog?: Dialog;
 
   /**
-   * Object containing the OAuth settings. see {@link BitskiProviderSettings}
-   * Cached sign in promise.
-   */
-  private settings: UserManagerSettings;
-
-  /**
    * Cached sign in promise.
    */
   private currentSignInPromise?: Promise<User> = undefined;
@@ -64,25 +58,12 @@ export class OAuthHttpProvider extends HttpProvider {
   /**
    * @param host JSON-RPC endpoint
    * @param timeout Timeout in seconds
-   * @param settings settings object for configuring OAuth, see {@link BitskiProviderSettings}
    */
-  constructor(host: string, timeout: number, settings: UserManagerSettings) {
+  constructor(host: string, timeout: number, userManager: UserManager) {
     super(host, timeout, []);
 
-    this.userManager = new UserManager(settings);
+    this.userManager = userManager;
     this.host = host;
-    this.settings = settings;
-
-    window.addEventListener('message', this.receiveMessage.bind(this), false);
-  }
-
-  public receiveMessage(event: MessageEvent): void {
-    const originURL = new URL(event.origin);
-    const redirectURL = new URL(this.settings.redirect_uri || event.origin);
-
-    if (originURL.hostname === redirectURL.hostname && this.currentUser === null) {
-      this.didSignIn(event.data);
-    }
   }
 
   /**
