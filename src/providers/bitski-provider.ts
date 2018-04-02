@@ -1,12 +1,10 @@
-import { User } from 'oidc-client';
+import { User, UserManager } from 'oidc-client';
 import Web3 from 'web3';
 import { JsonRPCCallback, JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 import { Dialog } from '../components/dialog';
 import { OAuthHttpProvider, OAuthProviderIntegrationType } from '../providers/oauth-http-provider';
-import { BitskiProviderSettings } from './bitski-provider-settings';
 
 const BITSKI_API_V1_HOST = 'https://api.bitski.com/v1';
-const BITSKI_OAUTH_HOST = 'https://account.bitski.com';
 const BITSKI_WEB_HOST = 'https://www.bitski.com';
 
 interface JsonRPC {
@@ -42,18 +40,19 @@ export class BitskiProvider extends OAuthHttpProvider {
     private currentTransactionWindow?: Window = undefined;
 
     /**
-     * @param clientId OAuth Client ID
      * @param networkName Network name
-     * @param redirectUri Redirect URL, defaults to window.location.href
+     * @param userManager OpenID user manager used for auth
      * @param postLogoutRedirectUri Post logout redirect URL, defaults to window.location.href
      */
-    constructor(clientId: string, networkName: string = 'kovan', redirectUri?: string, postLogoutRedirectUri?: string) {
+    constructor(networkName: string = 'kovan', userManager: UserManager) {
         super(
             `${BITSKI_API_V1_HOST}/web3/${networkName}`,
             0,
-            new BitskiProviderSettings(BITSKI_OAUTH_HOST, clientId, redirectUri, postLogoutRedirectUri),
+            userManager
         );
         this.networkName = networkName;
+
+        window.addEventListener('message', this.receiveMessage.bind(this), false);
     }
 
     /**
@@ -69,15 +68,7 @@ export class BitskiProvider extends OAuthHttpProvider {
         });
     }
 
-    /**
-     * Returns a boolean value that indicates whether the Web3 method
-     * can be executed without being logged in.
-     * @param method A web3 method name (ex: 'eth_sign')
-     * @returns boolean for if the method can be executed without being logged in.
-     */
     public receiveMessage(event: MessageEvent): void {
-        super.receiveMessage(event);
-
         if (event.origin !== BITSKI_WEB_HOST) {
             return;
         }
