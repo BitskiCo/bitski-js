@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js-sdk"
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
     "build": "tsc && rollup -c rollup.config.ts && webpack --mode production && typedoc",
