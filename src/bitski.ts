@@ -100,7 +100,7 @@ export class Bitski {
         
         return signInPromise.then((user) => {
             this.providers.forEach((provider, _) => {
-                provider.currentUser = user;
+                provider.didSignIn(user);
             });
 
             return user;
