@@ -62,7 +62,13 @@ export class Bitski {
      * Gets the current signed in user. Will return an error if we are not sigend in.
      */
     public getUser(): Promise<User> {
-        return this.userManager.getUser();
+        return this.userManager.getUser().then((user) => {
+            this.providers.forEach((provider, _) => {
+                provider.didSignIn(user);
+            });
+
+            return user;
+        });
     }
 
     /**
@@ -94,7 +100,7 @@ export class Bitski {
         
         return signInPromise.then((user) => {
             this.providers.forEach((provider, _) => {
-                provider.currentUser = user;
+                provider.didSignIn(user);
             });
 
             return user;

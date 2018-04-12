@@ -95,7 +95,7 @@ var userManager: UserManager
 ```typescript
 function getConnectButton(existingDiv?: HTMLElement, networkName?: undefined | string): ConnectButton
 ```
-<small>*Defined in [bitski.ts:71](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L71)*</small>
+<small>*Defined in [bitski.ts:77](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L77)*</small>
 
 
 
@@ -240,7 +240,7 @@ Starts sign in flow.
 ```typescript
 function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:80](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L80)*</small>
+<small>*Defined in [bitski.ts:86](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L86)*</small>
 
 
 
@@ -278,7 +278,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:108](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L108)*</small>
+<small>*Defined in [bitski.ts:114](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L114)*</small>
 
 
 
