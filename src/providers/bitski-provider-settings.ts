@@ -77,12 +77,18 @@ export class BitskiProviderSettings implements UserManagerSettings {
      * Flag to control if additional identity data is loaded from the user
      * info endpoint in order to populate the user's profile.
      */
-    public loadUserInfo: boolean =  true;
+    public loadUserInfo: boolean = true;
 
     /**
      * Features used to style and configure the popup window
      */
     public popupWindowFeatures: string = 'location=no,toolbar=no,width=490,height=380,left=100,top=100;';
+
+    /**
+     * Flag to control whether or not to include id_token_hint as a parameter when refreshing your access token.
+     * id_token_hint is currently not supported by Bitski.
+     */
+    public includeIdTokenInSilentRenew: boolean = false;
 
     /**
      * Create new instance of BitskiProviderSettings
