@@ -23,7 +23,7 @@ Then, where you would normally check for Web3, you can run the Bitski SDK instea
 if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
 } else {
-  var bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
+  const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
   web3 = bitskiInstance.getWeb3();
   bitskiInstance.signIn();
 }
@@ -35,8 +35,8 @@ Alternatively you can use our connect button:
 if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
 } else {
-    var bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-    var connectButton = bitskiInstance.getConnectButton();
+    const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
+    const connectButton = bitskiInstance.getConnectButton();
     connectButton.completion = function(web3, error, user) {
       window.web3 = web3;
       document.body.removeChild(connectButton.element);
@@ -48,7 +48,7 @@ if (typeof web3 !== 'undefined') {
 You can also require your users to use a Bitski wallet & account by setting `window.web3` without the check, which should override any existing Metamask or DApp browser providers.
 
 ```javascript
-var bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
+const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
 web3 = bitskiInstance.getWeb3();
 ```
 
