@@ -1,4 +1,4 @@
-import { User, UserManager } from 'oidc-client';
+import { Log, User, UserManager } from 'oidc-client';
 import Web3 from 'web3';
 import { JsonRPCCallback, JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 import { Dialog } from '../components/dialog';
@@ -16,7 +16,7 @@ interface JsonRPC {
  * A Web3 provider that connects to the Bitski service
  * @example
  * ```javascript
- * var provider = new BitskiProvider('MY_CLIENT_ID');
+ * let provider = new BitskiProvider('MY_CLIENT_ID');
  * ```
  */
 export class BitskiProvider extends OAuthHttpProvider {
@@ -48,7 +48,7 @@ export class BitskiProvider extends OAuthHttpProvider {
         super(
             `${BITSKI_API_V1_HOST}/web3/${networkName}`,
             0,
-            userManager
+            userManager,
         );
         this.networkName = networkName;
 
@@ -103,7 +103,10 @@ export class BitskiProvider extends OAuthHttpProvider {
             this.queuedSends.push({ payload, callback });
 
             if (this.locked === false) {
-                this.signIn();
+                this.signIn().catch((error) => {
+                    Log.error(error);
+                    this.failQueuedSends(error);
+                });
             }
         } else {
             super.send(payload, callback);
@@ -130,6 +133,22 @@ export class BitskiProvider extends OAuthHttpProvider {
             const queuedSend = this.queuedSends.pop();
             if (queuedSend && queuedSend.payload) {
                 this.sendAuthenticated(queuedSend.payload, user, queuedSend.callback);
+            }
+        }
+    }
+
+    /**
+     * Fail queued requests
+     * @param error Error to send back
+     */
+    private failQueuedSends(error: Error): void {
+        while (this.queuedSends.length > 0) {
+            const queuedSend = this.queuedSends.pop();
+            if (queuedSend && queuedSend.callback) {
+                // JsonRPCResponse is defined as not optional. ¯\_(ツ)_/¯
+                // https://github.com/ethereum/web3.js/blob/1.0/packages/web3/types.d.ts#L233
+                const val: any = null;
+                queuedSend.callback(error, val);
             }
         }
     }

@@ -1,9 +1,9 @@
-import { User, UserManager } from 'oidc-client';
+import { Log, User, UserManager } from 'oidc-client';
 import Web3 from 'web3';
 import { ConnectButton } from './components/connect-button';
 import { BitskiProvider } from './providers/bitski-provider';
-import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
 import { BitskiProviderSettings } from './providers/bitski-provider-settings';
+import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
 
 const BITSKI_OAUTH_HOST = 'https://account.bitski.com';
 
@@ -40,12 +40,12 @@ export class Bitski {
      * @param networkName The name of the network to use. Defaults to mainnet.
      */
     public getProvider(networkName?: string): BitskiProvider {
-        let existingProvider = this.providers.get(networkName || 'mainnet');
+        const existingProvider = this.providers.get(networkName || 'mainnet');
         if (existingProvider) {
             return existingProvider;
         }
 
-        let provider = new BitskiProvider(networkName || 'mainnet', this.userManager);
+        const provider = new BitskiProvider(networkName || 'mainnet', this.userManager);
         this.providers.set(networkName || 'mainnet', provider);
         return provider;
     }
@@ -54,7 +54,7 @@ export class Bitski {
      * Returns an initialized web3 API
      */
     public getWeb3(networkName?: string): Web3 {
-        let provider = this.getProvider(networkName);
+        const provider = this.getProvider(networkName);
         return new Web3(provider);
     }
 
@@ -75,7 +75,7 @@ export class Bitski {
      * @param existingDiv Existing element to turn into a Bitski connect button
      */
     public getConnectButton(existingDiv?: HTMLElement, networkName?: string): ConnectButton {
-        let provider = this.getProvider(networkName);
+        const provider = this.getProvider(networkName);
         return new ConnectButton(provider, existingDiv);
     }
 
@@ -84,20 +84,20 @@ export class Bitski {
      * @param type Optionally specify an integration type. Defaults to REDIRECT.
      */
     public signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
-        var signInPromise: Promise<User>;
-        var type: OAuthProviderIntegrationType = authenticationIntegrationType || OAuthProviderIntegrationType.REDIRECT;
+        let signInPromise: Promise<User>;
+        const type: OAuthProviderIntegrationType = authenticationIntegrationType || OAuthProviderIntegrationType.REDIRECT;
         switch (type) {
             case 0:
                 const invalidRequestPromise: Promise<User> = Promise.reject("Can'd do this, not secure...");
                 signInPromise = invalidRequestPromise;
             case OAuthProviderIntegrationType.REDIRECT:
-                signInPromise = this.userManager.signinRedirect({'state': 'someData'});
+                signInPromise = this.userManager.signinRedirect({ state: 'someData' });
             case OAuthProviderIntegrationType.POPUP:
-                signInPromise = this.userManager.signinPopup({'state': 'someData'});
+                signInPromise = this.userManager.signinPopup({ state: 'someData' });
             default:
                 signInPromise = this.userManager.signinSilent();
         }
-        
+
         return signInPromise.then((user) => {
             this.providers.forEach((provider, _) => {
                 provider.didSignIn(user);
@@ -113,5 +113,18 @@ export class Bitski {
      */
     public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
         return this.signInCallback(authenticationIntegrationType);
+    }
+
+    /**
+     * Set logger and log level for debugging purposes
+     * @param logger The logger to use (i.e. console). Must support methods info(), warn(), and error().
+     * @param level The desired log level.
+     * Use 0 for none (the default), 1 for errors, 2 for warnings, 3 for info, and 4 for debug.
+     */
+    public setLogger(logger: any, level?: number) {
+        Log.logger = logger;
+        if (level) {
+            Log.level = level;
+        }
     }
 }
