@@ -1,6 +1,6 @@
 ## Bitski.js
 
-`Current version: 0.0.3`
+`Current version: 0.0.7`
 
 Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain (currently Kovan TestNet only).
 
@@ -10,12 +10,11 @@ You’ll first need a client id token from us. If you’re interested in getting
 
 ### Installation
 
-You can easily get started by adding these two script tags to your app’s `<head>`:
+You can easily get started by adding this script tag to your app’s `<head>`:
 
 ```html
-<script src="https://rawgit.com/OutThereLabs/bitski-js-sdk/master/lib/bitski.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.0.7/lib/bitski.js"></script>
 ```
-_Note: We will be moving to a dedicated CDN soon._
 
 Then, where you would normally check for Web3, you can run the Bitski SDK instead of falling back to displaying Metamask installation instructions:
 
