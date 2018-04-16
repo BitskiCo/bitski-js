@@ -151,23 +151,25 @@ export class OAuthHttpProvider extends HttpProvider {
   public didSignIn(user: User): Promise<User> {
     this.currentUser = user;
 
-    if (window.parent !== window) {
-      // We are in an IFRAME
-      parent.postMessage(user, '*');
-    }
+    if (user) {
+      if (window.parent !== window) {
+        // We are in an IFRAME
+        parent.postMessage(user, '*');
+      }
 
-    if (this.authenticationDialog) {
-      this.authenticationDialog.dismiss();
-    }
+      if (this.authenticationDialog) {
+        this.authenticationDialog.dismiss();
+      }
 
-    const web3 = window.web3;
-    if (web3) {
-      web3.eth.getAccounts().then((accounts) => {
-        if (!web3.eth.defaultAccount) {
-          web3.eth.defaultAccount = accounts[0];
-        }
-        return user;
-      });
+      const web3 = window.web3;
+      if (web3) {
+        web3.eth.getAccounts().then((accounts) => {
+          if (!web3.eth.defaultAccount) {
+            web3.eth.defaultAccount = accounts[0];
+          }
+          return user;
+        });
+      }
     }
 
     // Do nothing!
