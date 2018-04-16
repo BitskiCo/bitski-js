@@ -185,6 +185,44 @@ function getUser(): Promise<User>
 
 
 
+<a id="_bitski_.bitski.getuserorsignin"></a>
+
+#### getUserOrSignIn
+
+
+
+Gets the current user if it exists. If not, signs in. Unlike `getUser` this will never return an expired user or null.
+
+
+
+
+##### Declaration
+
+
+```typescript
+function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
+```
+<small>*Defined in [bitski.ts:115](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L115)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| authenticationIntegrationType _(Optional)_ | [OAuthProviderIntegrationType](#_providers_oauth_http_provider_.oauthproviderintegrationtype)   |  Optionally specify an integration type. Defaults to REDIRECT. |
+
+
+
+##### Return Value
+`Promise<User>`
+
+
+
+
+
+
+
 <a id="_bitski_.bitski.getweb3"></a>
 
 #### getWeb3
@@ -240,7 +278,7 @@ Set logger and log level for debugging purposes
 ```typescript
 function setLogger(logger: any, level?: undefined | number)
 ```
-<small>*Defined in [bitski.ts:124](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L124)*</small>
+<small>*Defined in [bitski.ts:141](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L141)*</small>
 
 
 
@@ -313,7 +351,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:114](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L114)*</small>
+<small>*Defined in [bitski.ts:131](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L131)*</small>
 
 
 

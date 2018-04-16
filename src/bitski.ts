@@ -108,6 +108,23 @@ export class Bitski {
     }
 
     /**
+     * Gets the current user if it exists. If not, signs in. Unlike `getUser` this will never return
+     * an expired user or null.
+     * @param authenticationIntegrationType Optionally specify an integration type. Defaults to REDIRECT.
+     */
+    public getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
+        return this.getUser().then((user) => {
+            if (user && !user.expired) {
+                return user;
+            }
+
+            return this.signIn();
+        }).catch((error) => {
+            return this.signIn();
+        });
+    }
+
+    /**
      * Called from your oauth redirect page.
      * @param type Should match the method called when signing in.
      */
