@@ -5,7 +5,7 @@ import { BitskiProvider } from './providers/bitski-provider';
 import { BitskiProviderSettings } from './providers/bitski-provider-settings';
 import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
 
-const BITSKI_OAUTH_HOST = 'https://account.bitski.com';
+const DEFAULT_BITSKI_OAUTH_HOST = 'https://account.bitski.com';
 
 /**
  * Bitski SDK
@@ -19,13 +19,20 @@ export class Bitski {
      * @param networkName Web3 network name, defaults to 'kovan'
      * @param redirectUri Redirect URL, defaults to window.URL
      * @param postLogoutRedirectUri Post logout redirect URL, defaults to window.URL
+     * @param otherSettings Other OAuth settings. Don't change these unless you know what you are doing.
      */
     constructor(
         clientId: string,
         redirectUri?: string,
         postLogoutRedirectUri?: string,
+        otherSettings?: object,
     ) {
-        const settings = new BitskiProviderSettings(BITSKI_OAUTH_HOST, clientId, redirectUri, postLogoutRedirectUri);
+        let settings = new BitskiProviderSettings(DEFAULT_BITSKI_OAUTH_HOST, clientId, redirectUri, postLogoutRedirectUri);
+
+        if (otherSettings) {
+            Object.assign(settings, otherSettings);
+        }
+
         this.userManager = new UserManager(settings);
 
         if (window.opener) {
