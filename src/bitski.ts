@@ -63,10 +63,11 @@ export class Bitski {
      */
     public getUser(): Promise<User> {
         return this.userManager.getUser().then((user) => {
-            this.providers.forEach((provider, _) => {
-                provider.didSignIn(user);
-            });
-
+            if (user) {
+                this.providers.forEach((provider, _) => {
+                    provider.didSignIn(user);
+                });
+            }
             return user;
         });
     }
