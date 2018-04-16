@@ -63,10 +63,11 @@ export class Bitski {
      */
     public getUser(): Promise<User> {
         return this.userManager.getUser().then((user) => {
-            this.providers.forEach((provider, _) => {
-                provider.didSignIn(user);
-            });
-
+            if (user) {
+                this.providers.forEach((provider, _) => {
+                    provider.didSignIn(user);
+                });
+            }
             return user;
         });
     }
@@ -104,6 +105,23 @@ export class Bitski {
             });
 
             return user;
+        });
+    }
+
+    /**
+     * Gets the current user if it exists. If not, signs in. Unlike `getUser` this will never return
+     * an expired user or null.
+     * @param authenticationIntegrationType Optionally specify an integration type. Defaults to REDIRECT.
+     */
+    public getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
+        return this.getUser().then((user) => {
+            if (user && !user.expired) {
+                return user;
+            }
+
+            return this.signIn();
+        }).catch((error) => {
+            return this.signIn();
         });
     }
 

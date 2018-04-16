@@ -61,8 +61,12 @@ export class BitskiProvider extends OAuthHttpProvider {
      */
     public didSignIn(user: User) {
         return super.didSignIn(user).then((callbackUser) => {
-            this.locked = false;
-            this.flushQueuedSends(callbackUser);
+            if (callbackUser) {
+                this.locked = false;
+                this.flushQueuedSends(callbackUser);
+            } else {
+                this.locked = true;
+            }
 
             return callbackUser;
         });
