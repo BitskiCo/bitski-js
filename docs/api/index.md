@@ -94,7 +94,7 @@ var userManager: UserManager
 
 
 ```typescript
-function getConnectButton(existingDiv?: HTMLElement, networkName?: undefined | string): ConnectButton
+function getConnectButton(existingDiv?: HTMLElement, networkName?: undefined | string, size?: ConnectButtonSize): ConnectButton
 ```
 <small>*Defined in [bitski.ts:85](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L85)*</small>
 
@@ -102,10 +102,11 @@ function getConnectButton(existingDiv?: HTMLElement, networkName?: undefined | s
 
 ##### Parameters
 
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| existingDiv _(Optional)_ | `HTMLElement`   |  Existing element to turn into a Bitski connect button |
-| networkName _(Optional)_ | `undefined          ⎮string`   |  - |
+| Param | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| existingDiv _(Optional)_ | `HTMLElement`  | - |   Existing element to turn into a Bitski connect button |
+| networkName _(Optional)_ | `undefined          ⎮string`  | - |   - |
+| size | [ConnectButtonSize](#_components_connect_button_.connectbuttonsize)  |  ConnectButtonSize.MEDIUM |   - |
 
 
 
@@ -403,26 +404,84 @@ var DEFAULT_BITSKI_OAUTH_HOST: "https://account.bitski.com" = "https://account.b
 <a id="_components_connect_button_"></a>
 
 
+<a id="_components_connect_button_.connectbuttonsize"></a>
+
+####  ConnectButtonSize
+
+
+Sizing options for the Bitski connect button.
+
+
+
+
+
+
+<a id="_components_connect_button_.connectbuttonsize.large"></a>
+
+####  LARGE
+
+
+```javascript
+var LARGE: 
+```
+<small>*Defined in [components/connect-button.ts:15](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L15)*</small>
+
+
+
+
+
+<a id="_components_connect_button_.connectbuttonsize.medium"></a>
+
+####  MEDIUM
+
+
+```javascript
+var MEDIUM: 
+```
+<small>*Defined in [components/connect-button.ts:14](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L14)*</small>
+
+
+
+
+
+<a id="_components_connect_button_.connectbuttonsize.small"></a>
+
+####  SMALL
+
+
+```javascript
+var SMALL: 
+```
+<small>*Defined in [components/connect-button.ts:13](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L13)*</small>
+
+
+
+
+
+
+
+
 <a id="_components_connect_button_.connectbutton"></a>
 
 ##  ConnectButton
 
 
-A buton used to connect to Bitski
+A button used to connect to Bitski.
 
 
 
 <a id="_components_connect_button_.connectbutton.constructor"></a>
 ### constructor
 ```typescript
-new ConnectButton(provider: BitskiProvider, existingDiv?: HTMLElement): ConnectButton
+new ConnectButton(provider: BitskiProvider, existingDiv?: HTMLElement, size?: ConnectButtonSize): ConnectButton
 ```
 ##### Parameters
 
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| provider | [BitskiProvider](#_providers_bitski_provider_.bitskiprovider)   |  The BitskiProvider that will be used to sign in |
-| existingDiv _(Optional)_ | `HTMLElement`   |  An existing div to turn into a connect button |
+| Param | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| provider | [BitskiProvider](#_providers_bitski_provider_.bitskiprovider)  | - |   The BitskiProvider that will be used to sign in |
+| existingDiv _(Optional)_ | `HTMLElement`  | - |   An existing div to turn into a connect button |
+| size | [ConnectButtonSize](#_components_connect_button_.connectbuttonsize)  |  ConnectButtonSize.MEDIUM |   - |
 
 
 
@@ -436,13 +495,31 @@ new ConnectButton(provider: BitskiProvider, existingDiv?: HTMLElement): ConnectB
 ---
 
 ### Properties
+<a id="_components_connect_button_.connectbutton.activecolor"></a>
+
+#### activeColor
+```javascript
+private var activeColor: string = "#1A7CE6"
+```
+<small>*Defined in [components/connect-button.ts:28](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L28)*</small>
+
+
 <a id="_components_connect_button_.connectbutton.callback"></a>
 
 #### callback
 ```javascript
 var callback: undefined | function
 ```
-<small>*Defined in [components/connect-button.ts:11](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L11)*</small>
+<small>*Defined in [components/connect-button.ts:24](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L24)*</small>
+
+
+<a id="_components_connect_button_.connectbutton.defaultcolor"></a>
+
+#### defaultColor
+```javascript
+private var defaultColor: string = "#298FFF"
+```
+<small>*Defined in [components/connect-button.ts:27](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L27)*</small>
 
 
 <a id="_components_connect_button_.connectbutton.element"></a>
@@ -451,7 +528,7 @@ var callback: undefined | function
 ```javascript
 var element: HTMLElement
 ```
-<small>*Defined in [components/connect-button.ts:10](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L10)*</small>
+<small>*Defined in [components/connect-button.ts:22](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L22)*</small>
 
 
 <a id="_components_connect_button_.connectbutton.provider"></a>
@@ -460,7 +537,16 @@ var element: HTMLElement
 ```javascript
 private var provider: BitskiProvider
 ```
-<small>*Defined in [components/connect-button.ts:12](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L12)*</small>
+<small>*Defined in [components/connect-button.ts:25](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L25)*</small>
+
+
+<a id="_components_connect_button_.connectbutton.size"></a>
+
+#### size
+```javascript
+var size: ConnectButtonSize
+```
+<small>*Defined in [components/connect-button.ts:23](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L23)*</small>
 
 
 
@@ -468,6 +554,116 @@ private var provider: BitskiProvider
 ---
 
 ### Methods
+<a id="_components_connect_button_.connectbutton.blur"></a>
+
+#### blur
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function blur()
+```
+<small>*Defined in [components/connect-button.ts:72](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L72)*</small>
+
+
+
+
+
+
+
+
+<a id="_components_connect_button_.connectbutton.configureforlarge"></a>
+
+#### configureForLarge
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function configureForLarge()
+```
+<small>*Defined in [components/connect-button.ts:142](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L142)*</small>
+
+
+
+
+
+
+
+
+<a id="_components_connect_button_.connectbutton.configureformedium"></a>
+
+#### configureForMedium
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function configureForMedium()
+```
+<small>*Defined in [components/connect-button.ts:123](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L123)*</small>
+
+
+
+
+
+
+
+
+<a id="_components_connect_button_.connectbutton.configureforsmall"></a>
+
+#### configureForSmall
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function configureForSmall()
+```
+<small>*Defined in [components/connect-button.ts:104](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L104)*</small>
+
+
+
+
+
+
+
+
+<a id="_components_connect_button_.connectbutton.focus"></a>
+
+#### focus
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function focus()
+```
+<small>*Defined in [components/connect-button.ts:68](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L68)*</small>
+
+
+
+
+
+
+
+
 <a id="_components_connect_button_.connectbutton.setdefaultstyle"></a>
 
 #### setDefaultStyle
@@ -481,7 +677,7 @@ private var provider: BitskiProvider
 ```typescript
 private function setDefaultStyle()
 ```
-<small>*Defined in [components/connect-button.ts:43](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L43)*</small>
+<small>*Defined in [components/connect-button.ts:76](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L76)*</small>
 
 
 
@@ -503,7 +699,7 @@ private function setDefaultStyle()
 ```typescript
 private function signin()
 ```
-<small>*Defined in [components/connect-button.ts:31](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L31)*</small>
+<small>*Defined in [components/connect-button.ts:56](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L56)*</small>
 
 
 

@@ -1,6 +1,6 @@
 import { Log, User, UserManager } from 'oidc-client';
 import Web3 from 'web3';
-import { ConnectButton } from './components/connect-button';
+import { ConnectButton, ConnectButtonSize } from './components/connect-button';
 import { BitskiProvider } from './providers/bitski-provider';
 import { BitskiProviderSettings } from './providers/bitski-provider-settings';
 import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
@@ -27,7 +27,7 @@ export class Bitski {
         postLogoutRedirectUri?: string,
         otherSettings?: object,
     ) {
-        let settings = new BitskiProviderSettings(DEFAULT_BITSKI_OAUTH_HOST, clientId, redirectUri, postLogoutRedirectUri);
+        const settings = new BitskiProviderSettings(DEFAULT_BITSKI_OAUTH_HOST, clientId, redirectUri, postLogoutRedirectUri);
 
         if (otherSettings) {
             Object.assign(settings, otherSettings);
@@ -82,9 +82,9 @@ export class Bitski {
     /**
      * @param existingDiv Existing element to turn into a Bitski connect button
      */
-    public getConnectButton(existingDiv?: HTMLElement, networkName?: string): ConnectButton {
+    public getConnectButton(existingDiv?: HTMLElement, networkName?: string, size: ConnectButtonSize = ConnectButtonSize.MEDIUM): ConnectButton {
         const provider = this.getProvider(networkName);
-        return new ConnectButton(provider, existingDiv);
+        return new ConnectButton(provider, existingDiv, size);
     }
 
     /**

@@ -6,7 +6,10 @@
     "jsRules": {},
     "rules": {
         "quotemark": [true, "single", "avoid-escape", "avoid-template"],
-        "interface-name": [true, "never-prefix"]
+        "interface-name": [true, "never-prefix"],
+        "max-line-length": {
+            "options": [160]
+        }
     },
     "rulesDirectory": []
 }
