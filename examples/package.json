@@ -1,0 +1,11 @@
+{
+    "scripts": {
+        "start:dev": "webpack-dev-server"
+    },
+    "dependencies": {
+        "bitski": "../"
+    },
+    "devDependencies": {
+        "webpack-dev-server": "^3.1.3"
+    }
+}
