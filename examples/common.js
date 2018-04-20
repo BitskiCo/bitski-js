@@ -1,3 +1,3 @@
 import { Bitski } from 'bitski';
 
-window.bitski = new Bitski('temo-client-id');
+window.bitski = new Bitski('demo-client-id');
