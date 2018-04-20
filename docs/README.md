@@ -2,7 +2,7 @@
 
 `Current version: 0.0.8`
 
-Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain (currently Kovan TestNet only).
+Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain (currently Kovan and Rinkeby test networks only).
 
 ### Getting Started
 
@@ -28,20 +28,30 @@ if (typeof web3 !== 'undefined') {
 }
 ```
 
-Alternatively you can use our connect button:
+Alternatively you can use our connect button.
+
+In your HTML, add a div element wherever you want your button:
+
+```html
+<div id="bitski-button"></div>
+```
+
+Then, in your Javascript:
 
 ```javascript
-if (typeof web3 !== 'undefined') {
-  web3 = new Web3(web3.currentProvider);
-} else {
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof web3 !== 'undefined') {
+    web3 = new Web3(web3.currentProvider);
+  } else {
     const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-    const connectButton = bitskiInstance.getConnectButton();
+    const containerElement = document.querySelector('#bitski-button');
+    const connectButton = bitskiInstance.getConnectButton(containerElement);
     connectButton.completion = function(web3, error, user) {
       window.web3 = web3;
-      document.body.removeChild(connectButton.element);
+      containerElement.removeChild(connectButton.element);
     }
-    document.body.appendChild(connectButton.element);
-}
+  }
+});
 ```
 
 You can also require your users to use a Bitski wallet & account by setting `window.web3` without the check, which should override any existing Metamask or DApp browser providers.
