@@ -54,6 +54,9 @@ export class Bitski {
 
         const provider = new BitskiProvider(networkName || 'mainnet', this.userManager);
         this.providers.set(networkName || 'mainnet', provider);
+        if (this.cachedUser) {
+            provider.didSignIn(this.cachedUser);
+        }
         return provider;
     }
 
@@ -71,9 +74,7 @@ export class Bitski {
     public getUser(): Promise<User> {
         return this.userManager.getUser().then((user) => {
             if (user) {
-                this.providers.forEach((provider, _) => {
-                    provider.didSignIn(user);
-                });
+                this.setUser(user);
             }
             return user;
         });
@@ -107,10 +108,7 @@ export class Bitski {
         }
 
         return signInPromise.then((user) => {
-            this.providers.forEach((provider, _) => {
-                provider.didSignIn(user);
-            });
-
+            this.setUser(user);
             return user;
         });
     }
@@ -151,5 +149,15 @@ export class Bitski {
         if (level) {
             Log.level = level;
         }
+    }
+
+    private cachedUser?: User;
+
+    private setUser(user: User) {
+        this.cachedUser = user;
+
+        this.providers.forEach((provider, _) => {
+            provider.didSignIn(user);
+        });
     }
 }
