@@ -13,10 +13,10 @@ const DEFAULT_BITSKI_OAUTH_HOST = 'https://account.bitski.com';
 export class Bitski {
     public userManager: UserManager;
     private providers: Map<string, BitskiProvider>;
+    private cachedUser?: User;
 
     /**
      * @param clientId OAuth Client ID
-     * @param networkName Web3 network name, defaults to 'kovan'
      * @param redirectUri Redirect URL, defaults to window.URL
      * @param postLogoutRedirectUri Post logout redirect URL, defaults to window.URL
      * @param otherSettings Other OAuth settings. Don't change these unless you know what you are doing.
@@ -34,6 +34,12 @@ export class Bitski {
         }
 
         this.userManager = new UserManager(settings);
+
+        this.userManager.events.addUserLoaded(this.didSetUser.bind(this));
+        this.userManager.events.addUserSignedOut(this.didUnsetUser.bind(this));
+        this.userManager.events.addAccessTokenExpired(this.didUnsetUser.bind(this));
+        this.userManager.events.addSilentRenewError(this.didUnsetUser.bind(this));
+        this.userManager.events.addUserUnloaded(this.didUnsetUser.bind(this));
 
         if (window.opener) {
             this.userManager.signinPopupCallback();
@@ -53,6 +59,9 @@ export class Bitski {
         }
 
         const provider = new BitskiProvider(networkName || 'mainnet', this.userManager);
+        if (this.cachedUser) {
+            provider.didSignIn(this.cachedUser);
+        }
         this.providers.set(networkName || 'mainnet', provider);
         if (this.cachedUser) {
             provider.didSignIn(this.cachedUser);
@@ -62,14 +71,21 @@ export class Bitski {
 
     /**
      * Returns an initialized web3 API
+     * @param networkName optional name of network to use. Defaults to mainnet.
      */
     public getWeb3(networkName?: string): Web3 {
         const provider = this.getProvider(networkName);
-        return new Web3(provider);
+        const web3 = new Web3(provider);
+        web3.eth.getAccounts().then((accounts) => {
+            if (!web3.eth.defaultAccount) {
+                web3.eth.defaultAccount = accounts[0];
+            }
+        });
+        return web3;
     }
 
     /**
-     * Gets the current signed in user. Will return an error if we are not sigend in.
+     * Gets the current signed in user. Will return an error if we are not signed in.
      */
     public getUser(): Promise<User> {
         return this.userManager.getUser().then((user) => {
@@ -81,11 +97,14 @@ export class Bitski {
     }
 
     /**
+     * Creates a sign in with bitski button to add to your app. If an HTML element is passed in as the
+     * first parameter, it will automatically add it to the DOM inside that element. Make sure to add
+     * a callback to get notified of login events.
      * @param existingDiv Existing element to turn into a Bitski connect button
+     * @param size Size of button to generate. Defaults to medium.
      */
-    public getConnectButton(existingDiv?: HTMLElement, networkName?: string, size: ConnectButtonSize = ConnectButtonSize.MEDIUM): ConnectButton {
-        const provider = this.getProvider(networkName);
-        return new ConnectButton(provider, existingDiv, size);
+    public getConnectButton(existingDiv?: HTMLElement, size: ConnectButtonSize = ConnectButtonSize.MEDIUM): ConnectButton {
+        return new ConnectButton(this, existingDiv, size);
     }
 
     /**
@@ -94,22 +113,36 @@ export class Bitski {
      */
     public signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
         let signInPromise: Promise<User>;
-        const type: OAuthProviderIntegrationType = authenticationIntegrationType || OAuthProviderIntegrationType.REDIRECT;
+        let type: OAuthProviderIntegrationType;
+        if (typeof authenticationIntegrationType !== 'undefined') {
+            type = authenticationIntegrationType;
+        } else {
+            type = OAuthProviderIntegrationType.REDIRECT;
+        }
         switch (type) {
-            case 0:
-                const invalidRequestPromise: Promise<User> = Promise.reject("Can'd do this, not secure...");
-                signInPromise = invalidRequestPromise;
-            case OAuthProviderIntegrationType.REDIRECT:
-                signInPromise = this.userManager.signinRedirect({ state: 'someData' });
-            case OAuthProviderIntegrationType.POPUP:
-                signInPromise = this.userManager.signinPopup({ state: 'someData' });
-            default:
-                signInPromise = this.userManager.signinSilent();
+        case 0:
+            const invalidRequestPromise: Promise<User> = Promise.reject('iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.');
+            signInPromise = invalidRequestPromise;
+            break;
+        case OAuthProviderIntegrationType.REDIRECT:
+            signInPromise = this.userManager.signinRedirect({ state: 'someData' });
+            break;
+        case OAuthProviderIntegrationType.POPUP:
+            signInPromise = this.userManager.signinPopup({ state: 'someData' });
+            break;
+        default:
+            signInPromise = this.userManager.signinSilent();
+            break;
         }
 
         return signInPromise.then((user) => {
             this.setUser(user);
             return user;
+        }).catch((error) => {
+            this.providers.forEach((provider, _) => {
+               provider.locked = true;
+            });
+            throw error;
         });
     }
 
@@ -132,10 +165,17 @@ export class Bitski {
 
     /**
      * Called from your oauth redirect page.
-     * @param type Should match the method called when signing in.
+     * @param authenticationIntegrationType Should match the method called when signing in.
      */
-    public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
-        return this.signInCallback(authenticationIntegrationType);
+    public signInCallback(authenticationIntegrationType: OAuthProviderIntegrationType): Promise<User> {
+        switch (authenticationIntegrationType) {
+        case OAuthProviderIntegrationType.POPUP:
+            return this.userManager.signinPopupCallback();
+        case OAuthProviderIntegrationType.REDIRECT:
+            return this.userManager.signinRedirectCallback();
+        default:
+            return this.userManager.signinSilentCallback();
+        }
     }
 
     /**
@@ -151,13 +191,34 @@ export class Bitski {
         }
     }
 
-    private cachedUser?: User;
-
+    /**
+     * Pass logged in user to all providers
+     * @param user User to send to cached providers
+     */
     private setUser(user: User) {
         this.cachedUser = user;
-
         this.providers.forEach((provider, _) => {
             provider.didSignIn(user);
+        });
+    }
+
+    /**
+     * Callback received from UserManager when the user has been set.
+     * Called in situations like access token refresh.
+     * @param user the User object that was loaded
+     */
+    private didSetUser(user: User) {
+        this.setUser(user);
+    }
+
+    /**
+     * Callback received from UserManager when the user has been revoked.
+     * Called in situations like access token expiration.
+     */
+    private didUnsetUser() {
+        this.cachedUser = undefined;
+        this.providers.forEach((provider, _) => {
+            provider.locked = true;
         });
     }
 }

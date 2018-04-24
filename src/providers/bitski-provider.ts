@@ -60,16 +60,13 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param user User authentication object to flush send queue.
      */
     public didSignIn(user: User) {
-        return super.didSignIn(user).then((callbackUser) => {
-            if (callbackUser) {
-                this.locked = false;
-                this.flushQueuedSends(callbackUser);
-            } else {
-                this.locked = true;
-            }
-
-            return callbackUser;
-        });
+        super.didSignIn(user);
+        if (user) {
+            this.locked = false;
+            this.flushQueuedSends(user);
+        } else {
+            this.locked = true;
+        }
     }
 
     public receiveMessage(event: MessageEvent): void {
@@ -105,27 +102,9 @@ export class BitskiProvider extends OAuthHttpProvider {
             this.sendAuthenticated(payload, this.currentUser, callback);
         } else if (this.requiresAuthentication(payload.method)) {
             this.queuedSends.push({ payload, callback });
-
-            if (this.locked === false) {
-                this.signIn().catch((error) => {
-                    Log.error(error);
-                    this.failQueuedSends(error);
-                });
-            }
         } else {
             super.send(payload, callback);
         }
-    }
-
-    /**
-     * Sign in using the current settings.
-     * @returns A promise for a user.
-     */
-    public signIn(): Promise<User> {
-        return super.signIn().catch((error) => {
-            this.locked = true;
-            throw error;
-        });
     }
 
     /**
@@ -142,29 +121,12 @@ export class BitskiProvider extends OAuthHttpProvider {
     }
 
     /**
-     * Fail queued requests
-     * @param error Error to send back
-     */
-    private failQueuedSends(error: Error): void {
-        while (this.queuedSends.length > 0) {
-            const queuedSend = this.queuedSends.pop();
-            if (queuedSend && queuedSend.callback) {
-                // JsonRPCResponse is defined as not optional. ¯\_(ツ)_/¯
-                // https://github.com/ethereum/web3.js/blob/1.0/packages/web3/types.d.ts#L233
-                const val: any = null;
-                queuedSend.callback(error, val);
-            }
-        }
-    }
-
-    /**
      * Determines if web3 method requires authentication
      * @param method a web3 method name (ex: 'eth_sign')
      */
     private requiresAuthentication(method: string): boolean {
         switch (method) {
             case 'eth_coinbase':
-            case 'eth_accounts':
             case 'eth_accounts':
             case 'eth_sign':
             case 'eth_sendTransaction':
@@ -234,7 +196,7 @@ export class BitskiProvider extends OAuthHttpProvider {
                 this.currentTransactionDialog = new Dialog(iframe);
                 break;
             case OAuthProviderIntegrationType.REDIRECT:
-                window.location.href = `${ethSendTransactionUrl}?${txnParams}`;
+                window.location.assign(`${ethSendTransactionUrl}?${txnParams}`);
                 break;
             case OAuthProviderIntegrationType.POPUP:
                 const options = 'width=490,height=380,toolbar=0,menubar=0,location=0';
@@ -244,15 +206,9 @@ export class BitskiProvider extends OAuthHttpProvider {
                 this.currentTransactionWindow = newWindow || undefined;
                 break;
             case OAuthProviderIntegrationType.SILENT:
-                throw new Error('Silent authorization requests are not allowed');
+                const val: any = null;
+                callback(new Error('Silent authorization requests are not allowed'), val);
+                break;
         }
-    }
-
-    /**
-     * Check whether we are connected to the server.
-     * @returns boolean if we are connected.
-     */
-    private isConnected(): boolean {
-        return true;
     }
 }
