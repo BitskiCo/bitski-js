@@ -5,7 +5,7 @@ permalink: /usage/
 
 # Usage
 
-Bitski is easy to use. Here's how ya do it.
+Usage information is coming soon.
 
 ### More Info
 * [Home](README.md)
