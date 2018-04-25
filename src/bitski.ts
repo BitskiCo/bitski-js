@@ -157,9 +157,9 @@ export class Bitski {
                 return user;
             }
 
-            return this.signIn();
+            return this.signIn(authenticationIntegrationType);
         }).catch((error) => {
-            return this.signIn();
+            return this.signIn(authenticationIntegrationType);
         });
     }
 
