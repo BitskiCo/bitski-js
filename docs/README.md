@@ -6,14 +6,16 @@ Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wal
 
 ### Getting Started
 
-You’ll first need a client id token from us. If you’re interested in getting one, please [Contact Us](https://bitski.co).
+In order to use Bitski you will need an account. You can set one up here: [https://www.bitski.com/account](https://www.bitski.com/account).
+
+Then you will also need a client id token from us. If you’re interested in getting one, please [Contact Us](https://www.bitski.com).
 
 ### Installation
 
 You can easily get started by adding this script tag to your app’s `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.0.8/lib/bitski.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.0/lib/bitski.js"></script>
 ```
 
 Then, where you would normally check for Web3, you can run the Bitski SDK instead of falling back to displaying Metamask installation instructions:
