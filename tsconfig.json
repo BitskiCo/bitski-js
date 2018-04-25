@@ -9,7 +9,8 @@
     "strict": true,
     "target": "es2017",
     "moduleResolution": "node",
-    "lib": ["es2017", "dom"]
+    "lib": ["es2017", "dom"],
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
   "typeRoots" : ["node_modules/@types"],
