@@ -107,7 +107,7 @@ Callback received from UserManager when the user has been set. Called in situati
 ```typescript
 private function didSetUser(user: User)
 ```
-<small>*Defined in [bitski.ts:210](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L210)*</small>
+<small>*Defined in [bitski.ts:208](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L208)*</small>
 
 
 
@@ -141,7 +141,7 @@ Callback received from UserManager when the user has been revoked. Called in sit
 ```typescript
 private function didUnsetUser()
 ```
-<small>*Defined in [bitski.ts:218](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L218)*</small>
+<small>*Defined in [bitski.ts:216](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L216)*</small>
 
 
 
@@ -350,7 +350,7 @@ Set logger and log level for debugging purposes
 ```typescript
 function setLogger(logger: any, level?: undefined | number)
 ```
-<small>*Defined in [bitski.ts:187](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L187)*</small>
+<small>*Defined in [bitski.ts:185](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L185)*</small>
 
 
 
@@ -385,7 +385,7 @@ Pass logged in user to all providers
 ```typescript
 private function setUser(user: User)
 ```
-<small>*Defined in [bitski.ts:198](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L198)*</small>
+<small>*Defined in [bitski.ts:196](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L196)*</small>
 
 
 
