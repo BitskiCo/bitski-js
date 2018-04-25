@@ -169,12 +169,10 @@ export class Bitski {
      */
     public signInCallback(authenticationIntegrationType: OAuthProviderIntegrationType): Promise<User> {
         switch (authenticationIntegrationType) {
-        case OAuthProviderIntegrationType.POPUP:
-            return this.userManager.signinPopupCallback();
-        case OAuthProviderIntegrationType.REDIRECT:
-            return this.userManager.signinRedirectCallback();
-        default:
+        case OAuthProviderIntegrationType.SILENT:
             return this.userManager.signinSilentCallback();
+        default:
+            return this.userManager.signinRedirectCallback();
         }
     }
 
