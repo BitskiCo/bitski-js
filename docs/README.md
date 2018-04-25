@@ -12,7 +12,13 @@ Then you will also need a client id token from us. If you’re interested in get
 
 ### Installation
 
-You can easily get started by adding this script tag to your app’s `<head>`:
+To use Bitski in your app you will need to install our npm package:
+
+```bash
+npm install --save bitski
+```
+
+Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/bitski@0.1.0/lib/bitski.js"></script>
