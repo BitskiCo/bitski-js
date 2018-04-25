@@ -51,7 +51,7 @@ export class ConnectButton {
     }
 
     private signin() {
-        this.bitskiInstance.signIn().then((user: User) => {
+        this.bitskiInstance.signIn(OAuthProviderIntegrationType.POPUP).then((user: User) => {
             if (this.callback) {
                 this.callback(undefined, user);
             }
