@@ -14,6 +14,7 @@ export class Bitski {
     public userManager: UserManager;
     private providers: Map<string, BitskiProvider>;
     private cachedUser?: User;
+    private clientId: string;
 
     /**
      * @param clientId OAuth Client ID
@@ -33,6 +34,7 @@ export class Bitski {
             Object.assign(settings, otherSettings);
         }
 
+        this.clientId = clientId;
         this.userManager = new UserManager(settings);
 
         this.userManager.events.addUserLoaded(this.didSetUser.bind(this));
@@ -58,7 +60,7 @@ export class Bitski {
             return existingProvider;
         }
 
-        const provider = new BitskiProvider(networkName || 'mainnet', this.userManager);
+        const provider = new BitskiProvider(networkName || 'mainnet', this.userManager, [{name: "X-Client-Id", value: this.clientId}]);
         if (this.cachedUser) {
             provider.didSignIn(this.cachedUser);
         }
