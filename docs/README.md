@@ -1,6 +1,6 @@
 ## Bitski.js
 
-`Current version: 0.0.8`
+`Current version: 0.1.0`
 
 Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain (currently Kovan and Rinkeby test networks only).
 
