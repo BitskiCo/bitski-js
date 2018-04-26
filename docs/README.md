@@ -1,12 +1,12 @@
 ## Bitski.js
 
-`Current version: 0.1.2`
+`Current version: 0.1.3`
 
 Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain (currently Kovan and Rinkeby test networks only).
 
 ### Getting Started
 
-In order to use Bitski you will need an account. You can set one up here: [https://www.bitski.com/signup](https://www.bitski.com/signup).
+In order to use Bitski you will need an account. You can set one up here: [https://developer.bitski.com](https://developer.bitski.com).
 
 Then you will also need a client id token from us. If you’re interested in getting one, fill out the form [here](https://www.bitski.com). We will follow up with you via email.
 
@@ -21,7 +21,7 @@ npm install --save bitski
 Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.2/lib/bitski.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.3/lib/bitski.js"></script>
 ```
 
 ### Starting the SDK

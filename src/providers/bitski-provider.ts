@@ -16,7 +16,7 @@ interface JsonRPC {
  * A Web3 provider that connects to the Bitski service
  * @example
  * ```javascript
- * let provider = new BitskiProvider('MY_CLIENT_ID');
+ * let provider = new BitskiProvider('kovan', userManager);
  * ```
  */
 export class BitskiProvider extends OAuthHttpProvider {
@@ -44,11 +44,12 @@ export class BitskiProvider extends OAuthHttpProvider {
      * @param userManager OpenID user manager used for auth
      * @param postLogoutRedirectUri Post logout redirect URL, defaults to window.location.href
      */
-    constructor(networkName: string = 'kovan', userManager: UserManager) {
+    constructor(networkName: string = 'kovan', userManager: UserManager, additionalHeaders?: [any]) {
         super(
             `${BITSKI_API_V1_HOST}/web3/${networkName}`,
             0,
             userManager,
+            additionalHeaders,
         );
         this.networkName = networkName;
 
