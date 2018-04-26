@@ -6,7 +6,7 @@ Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wal
 
 ### Getting Started
 
-In order to use Bitski you will need an account. You can set one up here: [https://www.bitski.com/signup](https://www.bitski.com/signup).
+In order to use Bitski you will need an account. You can set one up here: [https://developer.bitski.com](https://developer.bitski.com).
 
 Then you will also need a client id token from us. If you’re interested in getting one, fill out the form [here](https://www.bitski.com). We will follow up with you via email.
 
