@@ -35,8 +35,8 @@ export class OAuthHttpProvider extends HttpProvider {
    * @param host JSON-RPC endpoint
    * @param timeout Timeout in seconds
    */
-  constructor(host: string, timeout: number, userManager: UserManager) {
-    super(host, timeout, []);
+  constructor(host: string, timeout: number, userManager: UserManager, additionalHeaders?: [any]) {
+    super(host, timeout, additionalHeaders);
 
     this.userManager = userManager;
     this.host = host;
@@ -82,9 +82,18 @@ export class OAuthHttpProvider extends HttpProvider {
     const request = new XMLHttpRequest();
     request.open('POST', this.host, true);
     request.setRequestHeader('Content-Type', 'application/json');
+
+    const headers = this['headers'];
+    if (headers) {
+      headers.forEach(function(header) {
+          request.setRequestHeader(header.name, header.value);
+      });
+    }
+
     if (typeof (this.currentUser) !== 'undefined' && this.currentUser !== null) {
       request.setRequestHeader('Authorization', `Bearer ${this.currentUser.access_token}`);
     }
+
     return request;
   }
 }
