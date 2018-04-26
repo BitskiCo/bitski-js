@@ -107,7 +107,7 @@ Callback received from UserManager when the user has been set. Called in situati
 ```typescript
 private function didSetUser(user: User)
 ```
-<small>*Defined in [bitski.ts:208](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L208)*</small>
+<small>*Defined in [bitski.ts:211](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L211)*</small>
 
 
 
@@ -141,7 +141,7 @@ Callback received from UserManager when the user has been revoked. Called in sit
 ```typescript
 private function didUnsetUser()
 ```
-<small>*Defined in [bitski.ts:216](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L216)*</small>
+<small>*Defined in [bitski.ts:219](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L219)*</small>
 
 
 
@@ -167,7 +167,7 @@ Creates a sign in with bitski button to add to your app. If an HTML element is p
 ```typescript
 function getConnectButton(existingDiv?: HTMLElement, size?: ConnectButtonSize): ConnectButton
 ```
-<small>*Defined in [bitski.ts:106](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L106)*</small>
+<small>*Defined in [bitski.ts:109](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L109)*</small>
 
 
 
@@ -244,7 +244,7 @@ Gets the current signed in user. Will return an error if we are not signed in.
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [bitski.ts:90](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L90)*</small>
+<small>*Defined in [bitski.ts:93](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L93)*</small>
 
 
 
@@ -274,7 +274,7 @@ Gets the current user if it exists. If not, signs in. Unlike `getUser` this will
 ```typescript
 function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:154](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L154)*</small>
+<small>*Defined in [bitski.ts:157](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L157)*</small>
 
 
 
@@ -350,7 +350,7 @@ Set logger and log level for debugging purposes
 ```typescript
 function setLogger(logger: any, level?: undefined | number)
 ```
-<small>*Defined in [bitski.ts:185](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L185)*</small>
+<small>*Defined in [bitski.ts:188](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L188)*</small>
 
 
 
@@ -385,7 +385,7 @@ Pass logged in user to all providers
 ```typescript
 private function setUser(user: User)
 ```
-<small>*Defined in [bitski.ts:196](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L196)*</small>
+<small>*Defined in [bitski.ts:199](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L199)*</small>
 
 
 
@@ -419,7 +419,7 @@ Starts sign in flow.
 ```typescript
 function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:114](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L114)*</small>
+<small>*Defined in [bitski.ts:117](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L117)*</small>
 
 
 
@@ -457,7 +457,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:170](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L170)*</small>
+<small>*Defined in [bitski.ts:173](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L173)*</small>
 
 
 
