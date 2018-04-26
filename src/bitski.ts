@@ -76,9 +76,12 @@ export class Bitski {
     public getWeb3(networkName?: string): Web3 {
         const provider = this.getProvider(networkName);
         const web3 = new Web3(provider);
-        web3.eth.getAccounts().then((accounts) => {
-            if (!web3.eth.defaultAccount) {
+        web3.eth.getAccounts((error, accounts) => {
+            if (accounts && !web3.eth.defaultAccount) {
                 web3.eth.defaultAccount = accounts[0];
+            } else if (error) {
+                Log.info('Received an error while getting accounts');
+                Log.error(error);
             }
         });
         return web3;

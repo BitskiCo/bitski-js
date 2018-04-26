@@ -228,18 +228,37 @@ test('should be able to create connect button', () => {
   expect(connectButton.element.onclick).toBeDefined();
 });
 
-test('should be able to create web3', () => {
-  const bitski = createInstance();
+describe('setting up web3', () => {
+  test('should be able to create web3', () => {
+    const bitski = createInstance();
 
-  mock.post('https://api.bitski.com/v1/web3/mainnet', (req, res) => {
-    return res.status(200).body('{ "jsonrpc": "2.0", "id": 1, "result": ["0xD11Aa575f9C6f30bEDF392872726b2B157C83131"] }');
+    mock.post('https://api.bitski.com/v1/web3/mainnet', (req, res) => {
+      return res.status(200).body('{ "jsonrpc": "2.0", "id": 1, "result": ["0xD11Aa575f9C6f30bEDF392872726b2B157C83131"] }');
+    });
+
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(user => {
+      const web3 = bitski.getWeb3();
+      expect(web3.currentProvider).toBeInstanceOf(BitskiProvider);
+    });
   });
 
-  jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+  test('should catch errors when trying to set defaultAccount', () => {
+    const bitski = createInstance();
 
-  return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(user => {
-    const web3 = bitski.getWeb3();
-    expect(web3.currentProvider).toBeInstanceOf(BitskiProvider);
+    mock.post('https://api.bitski.com/v1/web3/mainnet', (req, res) => {
+      return res.status(422).body('{ "error": "Not authorized" }');
+    });
+
+    jest.spyOn(bitski.userManager, 'signinSilent').mockResolvedValue(dummyUser);
+
+    return bitski.signIn(OAuthProviderIntegrationType.SILENT).then(user => {
+      let web3 = null;
+      expect(() => { web3 = bitski.getWeb3() }).not.toThrow();
+      expect(web3).not.toBeNull();
+      expect(web3.eth.defaultAccount).toBeNull();
+    });
   });
 });
 
@@ -247,7 +266,6 @@ test('should be able to set logger and log level', () => {
   const bitski = createInstance();
   bitski.setLogger(console);
   expect(Log.logger).toBe(console);
-  expect(Log.level).toBe(Log.INFO);
 
   bitski.setLogger(console, Log.DEBUG);
   expect(Log.level).toBe(Log.DEBUG);
