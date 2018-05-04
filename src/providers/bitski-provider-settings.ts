@@ -60,7 +60,7 @@ export class BitskiProviderSettings implements UserManagerSettings {
      * access token prior to its expiration. The attempt is made as a result
      * of the `accessTokenExpiring` event being raised.
      */
-    public automaticSilentRenew: boolean =  true;
+    public automaticSilentRenew: boolean = true;
 
     /**
      * Number of milliseconds to wait for the silent renew to return before
@@ -91,14 +91,20 @@ export class BitskiProviderSettings implements UserManagerSettings {
     public includeIdTokenInSilentRenew: boolean = false;
 
     /**
+     * Pre populated metata so that we don't need an extra API call
+     */
+    public metadata?: { [key: string]: any; };
+
+    /**
      * Create new instance of BitskiProviderSettings
      * @param authority Bitski OAuth URL
      * @param client_id Your application's Bitski client ID
      * @param redirect_uri URL to redirect to after log in
      * @param post_logout_redirect_uri URL to redirect to after log out
+     * @param metadata Metadata to use instead of making a request to /.well-known/openid-configuration
      */
     /* tslint:disable:variable-name */
-    constructor(authority: string, client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string) {
+    constructor(authority: string, client_id: string, redirect_uri?: string, post_logout_redirect_uri?: string, metadata?: { [key: string]: any; }) {
         this.authority = authority;
         this.client_id = client_id;
 
@@ -108,5 +114,7 @@ export class BitskiProviderSettings implements UserManagerSettings {
 
         this.post_logout_redirect_uri = post_logout_redirect_uri || window.location.href;
         this.popup_post_logout_redirect_uri = post_logout_redirect_uri || window.location.href;
+
+        this.metadata = metadata;
     }
 }
