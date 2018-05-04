@@ -7,6 +7,20 @@ import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
 
 const DEFAULT_BITSKI_OAUTH_HOST = 'https://account.bitski.com';
 
+const DEFAULT_BITSKI_METADATA: {[key:string]: any;} = {
+    issuer: 'https://account.bitski.com',
+    authorization_endpoint: 'https://account.bitski.com/oauth2/auth',
+    token_endpoint: 'https://account.bitski.com/oauth2/token',
+    jwks_uri: 'https://account.bitski.com/.well-known/jwks.json',
+    subject_types_supported: ['pairwise', 'public'],
+    response_types_supported: ['code', 'code id_token', 'id_token', 'token id_token', 'token', 'token id_token code'],
+    claims_supported: ['sub'],
+    userinfo_endpoint: 'https://account.bitski.com/userinfo',
+    scopes_supported: ['offline', 'openid'],
+    token_endpoint_auth_methods_supported: ['client_secret_post', 'client_secret_basic'],
+    id_token_signing_alg_values_supported: ['RS256'],
+};
+
 /**
  * Bitski SDK
  */
@@ -28,7 +42,7 @@ export class Bitski {
         postLogoutRedirectUri?: string,
         otherSettings?: object,
     ) {
-        const settings = new BitskiProviderSettings(DEFAULT_BITSKI_OAUTH_HOST, clientId, redirectUri, postLogoutRedirectUri);
+        const settings = new BitskiProviderSettings(DEFAULT_BITSKI_OAUTH_HOST, clientId, redirectUri, postLogoutRedirectUri, DEFAULT_BITSKI_METADATA);
 
         if (otherSettings) {
             Object.assign(settings, otherSettings);
@@ -60,7 +74,7 @@ export class Bitski {
             return existingProvider;
         }
 
-        const provider = new BitskiProvider(networkName || 'mainnet', this.userManager, [{name: "X-Client-Id", value: this.clientId}]);
+        const provider = new BitskiProvider(networkName || 'mainnet', this.userManager, [{name: 'X-Client-Id', value: this.clientId}]);
         if (this.cachedUser) {
             provider.didSignIn(this.cachedUser);
         }
