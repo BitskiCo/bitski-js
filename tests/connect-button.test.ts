@@ -1,6 +1,7 @@
 import { Bitski } from '../src/bitski';
 import { UserManager, InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
 import { ConnectButton, ConnectButtonSize } from '../src/components/connect-button';
+import { OAuthProviderIntegrationType } from '../src/providers/oauth-http-provider';
 
 function createInstance(): Bitski {
   const store = new InMemoryWebStorage();
@@ -87,4 +88,16 @@ test('it sets focus and blur states', () => {
   //test blur
   button.element.dispatchEvent(new Event('blur'));
   expect(button.element.style.backgroundColor).toBe(defaultColor);
+});
+
+test('it uses provided authentication mode', done => {
+  expect.assertions(1);
+  const instance = createInstance();
+  const button = new ConnectButton(instance, undefined, undefined, OAuthProviderIntegrationType.REDIRECT);
+  jest.spyOn(instance, 'signIn').mockImplementation((method) => {
+    expect(method).toBe(OAuthProviderIntegrationType.REDIRECT);
+    done();
+    return Promise.resolve();
+  });
+  button['signin']();
 });
