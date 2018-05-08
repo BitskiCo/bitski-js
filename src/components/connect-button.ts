@@ -20,7 +20,7 @@ export class ConnectButton {
     public size: ConnectButtonSize;
     public callback?: (error?: Error, user?: User) => void;
     private bitskiInstance: Bitski;
-
+    private authenticationMode: OAuthProviderIntegrationType;
     private defaultColor: string = '#298FFF';
     private activeColor: string = '#1A7CE6';
 
@@ -32,10 +32,12 @@ export class ConnectButton {
         bitskiInstance: Bitski,
         existingDiv?: HTMLElement,
         size: ConnectButtonSize = ConnectButtonSize.MEDIUM,
+        authenticationMode: OAuthProviderIntegrationType = OAuthProviderIntegrationType.POPUP,
     ) {
         this.size = size;
         this.element = document.createElement('button');
         this.bitskiInstance = bitskiInstance;
+        this.authenticationMode = authenticationMode;
         this.setDefaultStyle();
 
         this.element.addEventListener('click', this.signin.bind(this));
@@ -51,7 +53,7 @@ export class ConnectButton {
     }
 
     private signin() {
-        this.bitskiInstance.signIn(OAuthProviderIntegrationType.POPUP).then((user: User) => {
+        this.bitskiInstance.signIn(this.authenticationMode).then((user: User) => {
             if (this.callback) {
                 this.callback(undefined, user);
             }
