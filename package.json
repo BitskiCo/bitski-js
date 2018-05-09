@@ -29,6 +29,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
+    "find": "^0.2.9",
     "jest": "^22.4.3",
     "jest-junit": "^3.6.0",
     "raw-loader": "^0.5.1",

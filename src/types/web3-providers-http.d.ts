@@ -19,6 +19,7 @@ declare module 'web3-providers-http' {
         public notificationCallbacks: undefined;
         public connection: undefined;
         public addDefaultEvents: undefined;
+        public headers: any[];
 
         constructor(host: string, timeout: number, headers: any);
 

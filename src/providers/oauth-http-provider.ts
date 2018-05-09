@@ -83,10 +83,10 @@ export class OAuthHttpProvider extends HttpProvider {
     request.open('POST', this.host, true);
     request.setRequestHeader('Content-Type', 'application/json');
 
-    const headers = this['headers'];
+    const headers = this.headers;
     if (headers) {
-      headers.forEach(function(header) {
-          request.setRequestHeader(header.name, header.value);
+      headers.forEach((header) => {
+        request.setRequestHeader(header.name, header.value);
       });
     }
 
