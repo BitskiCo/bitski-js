@@ -1,9 +1,8 @@
-import { Log, User, UserManager, UserManagerSettings } from 'oidc-client';
 import Web3 from 'web3';
 import HttpProvider from 'web3-providers-http';
 import { JsonRPCCallback, JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 import 'xhr2';
-import { Dialog } from '../components/dialog';
+import { AccessToken } from '../access-token';
 
 export enum OAuthProviderIntegrationType {
   IFRAME,
@@ -13,18 +12,13 @@ export enum OAuthProviderIntegrationType {
 }
 
 /**
- * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls
+ * A class that extends Web3's HTTPProvider by adding OAuth to JSON-RPC calls.
  */
 export class OAuthHttpProvider extends HttpProvider {
   /**
-   * Instance user manager object.
+   * The access token for the current logged in user
    */
-  public userManager: UserManager;
-
-  /**
-   * The current logged in `User`
-   */
-  public currentUser?: User = undefined;
+  public accessToken?: AccessToken = undefined;
 
   /**
    * The JSON-RPC endpoint
@@ -34,27 +28,15 @@ export class OAuthHttpProvider extends HttpProvider {
   /**
    * @param host JSON-RPC endpoint
    * @param timeout Timeout in seconds
+   * @param additionalHeaders Optional headers to include with every request
    */
-  constructor(host: string, timeout: number, userManager: UserManager, additionalHeaders?: [any]) {
+  constructor(host: string, timeout: number, additionalHeaders?: [any]) {
     super(host, timeout, additionalHeaders);
-
-    this.userManager = userManager;
     this.host = host;
   }
 
-  public didSignIn(user: User): void {
-    this.currentUser = user;
-
-    if (user) {
-      if (this.isInFrame() === true) {
-        // We are in an IFRAME
-        parent.postMessage(user, '*');
-      }
-    }
-  }
-
-  public isInFrame(): boolean {
-    return window.parent !== window;
+  public setAccessToken(accessToken?: AccessToken): void {
+    this.accessToken = accessToken;
   }
 
   /**
@@ -76,6 +58,7 @@ export class OAuthHttpProvider extends HttpProvider {
 
   /**
    * Prepares a new XMLHttpRequest with the proper headers
+   * Does not require an access token for every request, but adds one if available.
    * @returns Request object that is ready for a payload.
    */
   public _prepareRequest(): XMLHttpRequest {
@@ -90,8 +73,8 @@ export class OAuthHttpProvider extends HttpProvider {
       });
     }
 
-    if (typeof (this.currentUser) !== 'undefined' && this.currentUser !== null) {
-      request.setRequestHeader('Authorization', `Bearer ${this.currentUser.access_token}`);
+    if (this.accessToken && !this.accessToken.expired) {
+      request.setRequestHeader('Authorization', `Bearer ${this.accessToken.token}`);
     }
 
     return request;

@@ -46,12 +46,6 @@ describe('initializing the sdk', () => {
     expect(bitski.userManager['_settings'].client_id).toBe(clientID);
   });
 
-  test('locked when not signed in', () => {
-    const bitski = createInstance();
-    const provider = bitski.getProvider();
-    expect(provider.locked).toBe(true);
-  });
-
   test('should call signinpopupCallback when window.opener exists', () => {
     Object.defineProperty(global, 'opener', { writable: true, value: {}});
     const bitski = createInstance();
@@ -115,6 +109,15 @@ describe('signing in', () => {
     const expectedError = 'iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.';
     return expect(bitski.signIn(OAuthProviderIntegrationType.IFRAME)).rejects.toMatch(expectedError);
   });
+
+  test('should post message to parent when didSignIn when in iframe', () => {
+    const bitski = createInstance();
+    const spy = jest.spyOn(bitski, 'isInFrame').mockReturnValue(true);
+    const parentSpy = jest.spyOn(window.parent, 'postMessage');
+    bitski['setUser'].call(bitski, dummyUser);
+    expect(spy).toHaveBeenCalled();
+    expect(parentSpy).toHaveBeenCalledWith(dummyUser, '*');
+  });
 });
 
 describe('receives events from user manager', () => {
@@ -124,17 +127,18 @@ describe('receives events from user manager', () => {
     jest.spyOn(bitski.userManager, 'getUser').mockResolvedValue(dummyUser);
     bitski.userManager.events.load(dummyUser);
     expect(bitski['cachedUser']).toMatchObject(dummyUser);
-    expect(provider.locked).toBe(false);
+    expect(provider.isAuthenticated).toBe(true);
   });
 
   test('didUnsetUser should be called when access token is revoked', () => {
-    expect.assertions(2);
+    expect.assertions(3);
     const bitski = createInstance();
     const provider = bitski.getProvider();
-    provider.locked = false;
+    const accessTokenSpy = jest.spyOn(provider, 'setAccessToken');
     return bitski.userManager.removeUser().then(() => {
       expect(bitski['cachedUser']).toBeUndefined();
-      expect(provider.locked).toBe(true);
+      expect(accessTokenSpy).toBeCalledWith(undefined);
+      expect(provider.isAuthenticated).toBe(false);
     });
   });
 });
@@ -157,25 +161,25 @@ describe('managing providers', () => {
 
   test('should not create a new provider if one already exists for that network', () => {
     const bitski = createInstance();
-    const mockProvider = new BitskiProvider('foo', bitski.userManager);
+    const mockProvider = new BitskiProvider('foo');
     bitski['providers'].set('kovan', mockProvider);
     const provider = bitski.getProvider('kovan');
     expect(provider['networkName']).toBe('foo');
   });
 
-  test('should call didSignIn on all providers after getting the user', () => {
+  test('should set access token on all providers after getting the user', () => {
     expect.assertions(6);
     const bitski = createInstance();
     const getUserMock = jest.spyOn(bitski.userManager, 'getUser').mockResolvedValue(dummyUser);
     const provider = bitski.getProvider();
-    expect(provider.locked).toBe(true);
-    const didSignInSpy = jest.spyOn(provider, 'didSignIn');
+    expect(provider.isAuthenticated).toBe(false);
+    const didSignInSpy = jest.spyOn(provider, 'setAccessToken');
     return bitski.getUser().then(user => {
       expect(user).toMatchObject(dummyUser);
       expect(getUserMock).toHaveBeenCalled();
       expect(didSignInSpy).toHaveBeenCalled();
-      expect(provider.locked).toBe(false);
-      expect(provider.currentUser).toMatchObject(dummyUser);
+      expect(provider.isAuthenticated).toBe(true);
+      expect(provider.accessToken.token).toMatch(dummyUser.access_token);
     });
   });
 
@@ -187,18 +191,19 @@ describe('managing providers', () => {
       expect(bitski['providers'].size).toBe(0);
       expect(bitski['cachedUser']).toMatchObject(dummyUser);
       const provider = bitski.getProvider();
-      expect(provider.currentUser).toMatchObject(dummyUser);
-      expect(provider.locked).toBe(false);
+      expect(provider.accessToken.token).toMatch(dummyUser.access_token);
+      expect(provider.isAuthenticated).toBe(true);
     });
   });
 
   test('should lock existing providers when signin fails', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
-    provider.locked = false;
+    const accessTokenSpy = jest.spyOn(provider, 'setAccessToken');
     jest.spyOn(bitski.userManager, 'signinRedirect').mockRejectedValue('foo');
     return bitski.signIn().catch(() => {
-      expect(provider.locked).toBe(true);
+      expect(accessTokenSpy).toBeCalledWith(undefined);
+      expect(provider.isAuthenticated).toBe(false);
     });
   });
 });

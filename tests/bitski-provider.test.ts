@@ -1,17 +1,10 @@
+import { AccessToken } from '../src/access-token';
 import { BitskiProvider } from '../src/providers/bitski-provider';
 import { OAuthProviderIntegrationType } from '../src/providers/oauth-http-provider';
-import { UserManager, InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
 import mock from 'xhr-mock';
 
 function createProvider(networkName?: string): BitskiProvider {
-  const store = new InMemoryWebStorage();
-  const stateStore = new WebStorageStateStore({ prefix: 'bitski.', store: store});
-  const settings = {
-    userStore: stateStore,
-    stateStore: stateStore,
-  }
-  const userManager = new UserManager(settings);
-  return new BitskiProvider(networkName, userManager);
+  return new BitskiProvider(networkName);
 }
 
 function createRequest(method: string, params: any[]): any {
@@ -23,20 +16,8 @@ function createRequest(method: string, params: any[]): any {
   };
 }
 
-const mockUser = {
-  id_token: 'test-id-token',
-  session_state: 'test-session-state',
-  access_token: 'test-access-token',
-  scope: 'openid',
-  profile: null,
-  expires_at: 0,
-  expires_in: null,
-  expired: false,
-  token_type: '',
-  state: null,
-  toStorageString: jest.fn(),
-  scopes: []
-};
+const mockAccessToken = new AccessToken('test-access-token', Math.floor(Date.now() / 1000) + 60);
+const mockExpiredAccessToken = new AccessToken('test-access-token', Math.floor(Date.now() / 1000));
 
 beforeEach(() => {
   mock.setup();
@@ -46,13 +27,21 @@ afterEach(() => {
   mock.teardown();
 });
 
-describe('should handle sign in state', () => {
-  test('should lock when calling didSignIn without a user', () => {
+describe('should handle signed in state', () => {
+  test('should lock when setting null access token', () => {
+    expect.assertions(2);
+    const provider = createProvider();
+    provider.setAccessToken(mockAccessToken);
+    expect(provider.isAuthenticated).toBe(true);
+    provider.setAccessToken(null);
+    expect(provider.isAuthenticated).toBe(false);
+  });
+
+  test('should lock when setting an expired access token', () => {
     expect.assertions(1);
     const provider = createProvider();
-    provider.locked = false;
-    provider.didSignIn(null);
-    expect(provider.locked).toBe(true);
+    provider.setAccessToken(mockExpiredAccessToken);
+    expect(provider.isAuthenticated).toBe(false);
   });
 });
 
@@ -61,16 +50,15 @@ describe('handles authenticated sends', () => {
     expect.assertions(5);
 
     const provider = createProvider();
-    jest.spyOn(provider.userManager, 'getUser').mockResolvedValue(mockUser);
 
     mock.post('https://api.bitski.com/v1/web3/kovan', (req, res) => {
       expect(req.header('Authorization')).toBe('Bearer test-access-token');
       return res.status(200).body('{ "jsonrpc": "2.0", "id": 0, "result": "foo" }');
     });
 
-    provider.didSignIn(mockUser);
-    expect(provider.locked).toBe(false);
-    expect(provider.currentUser).toBeDefined();
+    provider.setAccessToken(mockAccessToken);
+    expect(provider.isAuthenticated).toBe(true);
+    expect(provider.accessToken).toBeDefined();
     const request = createRequest('eth_accounts', ['0x0']);
     return provider.sendAsync(request, (error, value) => {
       expect(error).toBeNull();
@@ -92,14 +80,12 @@ describe('handles authenticated sends', () => {
     });
     expect(provider['queuedSends'].length).toBe(1);
 
-    jest.spyOn(provider.userManager, 'getUser').mockResolvedValue(mockUser);
-
     mock.post('https://api.bitski.com/v1/web3/kovan', (req, res) => {
       expect(req.header('Authorization')).toBe('Bearer test-access-token');
       return res.status(200).body('{ "jsonrpc": "2.0", "id": 0, "result": "foo" }');
     });
 
-    provider.didSignIn(mockUser);
+    provider.setAccessToken(mockAccessToken);
   });
 
   test('sends that dont require authentication should work without a user', done => {
@@ -139,9 +125,8 @@ describe('it handles sends with authorization', () => {
 
     const provider = createProvider();
     const request = createRequest('eth_sendTransaction', []);
-    jest.spyOn(provider.userManager, 'getUser').mockResolvedValue(mockUser);
 
-    provider.didSignIn(mockUser);
+    provider.setAccessToken(mockAccessToken);
     provider.send(request, (error, value) => {
       expect(value.result).toBe('foo');
       done();
@@ -163,7 +148,7 @@ describe('it handles sends with authorization', () => {
     const provider = createProvider();
     const mock = jest.fn();
     const request = createRequest('eth_sendTransaction', []);
-    provider.didSignIn(mockUser);
+    provider.setAccessToken(mockAccessToken);
     provider.send(request, (error, value) => {
       mock();
     });
@@ -184,8 +169,7 @@ describe('it handles sends with authorization', () => {
 
     const provider = createProvider();
     const request = createRequest('eth_sendTransaction', []);
-    jest.spyOn(provider.userManager, 'getUser').mockResolvedValue(mockUser);
-    provider.didSignIn(mockUser)
+    provider.setAccessToken(mockAccessToken);
     provider.send(request, () => {});
     const dismissMock = provider['currentTransactionDialog'].dismiss = jest.fn();
     provider.send(request, () => {});
@@ -198,12 +182,11 @@ describe('it handles sends with authorization', () => {
     const provider = createProvider();
     provider.authorizationIntegrationType = OAuthProviderIntegrationType.POPUP;
     const request = createRequest('eth_sendTransaction', []);
-    jest.spyOn(provider.userManager, 'getUser').mockResolvedValue(mockUser);
 
     const mockWindow = { focus: function() {} };
     jest.spyOn(window, 'open').mockImplementation(() => { return mockWindow });
 
-    provider.didSignIn(mockUser);
+    provider.setAccessToken(mockAccessToken);
     provider.send(request, (error, value) => {});
     expect(provider['currentTransactionWindow']).toMatchObject(mockWindow);
   });
@@ -214,12 +197,11 @@ describe('it handles sends with authorization', () => {
     const provider = createProvider();
     provider.authorizationIntegrationType = OAuthProviderIntegrationType.POPUP;
     const request = createRequest('eth_sign', []);
-    jest.spyOn(provider.userManager, 'getUser').mockResolvedValue(mockUser);
 
     const mockWindow = { focus: function() {} };
     jest.spyOn(window, 'open').mockImplementation(() => { return mockWindow });
 
-    provider.didSignIn(mockUser)
+    provider.setAccessToken(mockAccessToken);
     provider.send(request, (error, value) => {});
     const closeMock = provider['currentTransactionWindow'].close = jest.fn();
     provider.send(request, (error, value) => {});
@@ -232,11 +214,10 @@ describe('it handles sends with authorization', () => {
     const provider = createProvider();
     provider.authorizationIntegrationType = OAuthProviderIntegrationType.REDIRECT;
     const request = createRequest('eth_sendTransaction', []);
-    jest.spyOn(provider.userManager, 'getUser').mockResolvedValue(mockUser);
 
     const locationMock = window.location.assign = jest.fn();
 
-    provider.didSignIn(mockUser);
+    provider.setAccessToken(mockAccessToken);
     provider.send(request, (error, value) => {});
     expect(locationMock).toHaveBeenCalledTimes(1);
     expect(locationMock.mock.calls[0][0]).toMatch(/eth-send-transaction\?/);
@@ -247,7 +228,7 @@ describe('it handles sends with authorization', () => {
     const provider = createProvider();
     provider.authorizationIntegrationType = OAuthProviderIntegrationType.SILENT;
     const request = createRequest('eth_sendTransaction', []);
-    provider.didSignIn(mockUser)
+    provider.setAccessToken(mockAccessToken);
     provider.send(request, (error, value) => {
       expect(error).toBeDefined();
       expect(error.message).toMatch('Silent authorization requests are not allowed');
