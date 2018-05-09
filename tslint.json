@@ -9,7 +9,8 @@
         "interface-name": [true, "never-prefix"],
         "max-line-length": {
             "options": [160]
-        }
+        },
+        "indent": [true, "spaces", 2]
     },
     "rulesDirectory": []
 }

@@ -1,5 +1,5 @@
+import { AccessToken } from '../src/access-token';
 import { OAuthHttpProvider } from '../src/providers/oauth-http-provider';
-import { InMemoryWebStorage, WebStorageStateStore, UserManager } from 'oidc-client';
 
 const mockUser = {
   id_token: 'test-id-token',
@@ -17,14 +17,7 @@ const mockUser = {
 };
 
 function createProvider(networkName?: string): OAuthHttpProvider {
-  const store = new InMemoryWebStorage();
-  const stateStore = new WebStorageStateStore({ prefix: 'bitski.', store: store});
-  const settings = {
-    userStore: stateStore,
-    stateStore: stateStore,
-  }
-  const userManager = new UserManager(settings);
-  return new OAuthHttpProvider('my-host', 1000, userManager);
+  return new OAuthHttpProvider('my-host', 1000);
 }
 
 test('should always be connected', () => {
@@ -32,11 +25,7 @@ test('should always be connected', () => {
   return expect(provider.isConnected()).toBe(true);
 });
 
-test('should post message to parent when didSignIn when in iframe', () => {
-  const provider = createProvider();
-  const spy = jest.spyOn(provider, 'isInFrame').mockReturnValue(true);
-  const parentSpy = jest.spyOn(window.parent, 'postMessage');
-  provider.didSignIn(mockUser);
-  expect(spy).toHaveBeenCalled();
-  expect(parentSpy).toHaveBeenCalledWith(mockUser, '*');
+test('access tokens without expiration date should never be expired', () => {
+  const mockNeverExpiredAccessToken = new AccessToken('test-access-token');
+  expect(mockNeverExpiredAccessToken.expired).toBe(false);
 });
