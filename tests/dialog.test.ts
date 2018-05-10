@@ -23,3 +23,18 @@ test('it does not render if document is not loaded', () => {
   const dialog = new MockDialog('.foo');
   expect(mockFn).not.toHaveBeenCalled();
 });
+
+test('it should apply full screen attributes when necessary', () => {
+  let fullScreen = true;
+  class MockDialog extends Dialog {
+    public shouldRenderFullScreen(): boolean {
+      return fullScreen;
+    }
+  }
+  const dialog = new MockDialog('.foo');
+  expect(dialog['body'].style.top).toBe('0px');
+  expect(dialog['dialog'].style.position).toBe('absolute');
+  fullScreen = false;
+  document.body.dispatchEvent(new Event('resize'));
+  expect(dialog['body'].style.top).not.toBe('0px');
+});

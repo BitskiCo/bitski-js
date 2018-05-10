@@ -4,6 +4,7 @@ export class Dialog {
   private body: HTMLElement;
   private dialog: HTMLElement;
   private closeButton: HTMLElement;
+  private resizeListener: any;
 
   constructor(content: any) {
     // check for an element passed as content or a selector corresponding to an element
@@ -23,14 +24,21 @@ export class Dialog {
     } else {
       document.body.addEventListener('load', this.render.bind(this));
     }
+    this.resizeListener = this.resize.bind(this);
+    document.body.addEventListener('resize', this.resizeListener);
   }
 
   public isDocumentLoaded(): boolean {
     return typeof document !== 'undefined' && typeof document.body !== 'undefined';
   }
 
+  public shouldRenderFullScreen(): boolean {
+    return window.innerWidth < 500;
+  }
+
   public dismiss() {
     this.container.remove();
+    document.body.removeEventListener('resize', this.resizeListener);
   }
 
   private addChildren() {
@@ -70,15 +78,26 @@ export class Dialog {
   private createDialog(): HTMLElement {
     const dialog = document.createElement('div');
     dialog.className = 'dialog';
-
-    dialog.style.width = '490px';
-    dialog.style.height = '1px';
-    dialog.style.margin = '0 auto';
-    dialog.style.position = 'relative';
-    dialog.style.top = '50%';
-    dialog.style.marginTop = '-170px';
-
+    this.styleDialog(dialog);
     return dialog;
+  }
+
+  private styleDialog(dialog: HTMLElement) {
+    dialog.style.cssText = '';
+    if (!this.shouldRenderFullScreen()) {
+      dialog.style.width = '490px';
+      dialog.style.height = '1px';
+      dialog.style.margin = '0 auto';
+      dialog.style.position = 'relative';
+      dialog.style.top = '50%';
+      dialog.style.marginTop = '-170px';
+    } else {
+      dialog.style.position = 'absolute';
+      dialog.style.left = '0';
+      dialog.style.right = '0';
+      dialog.style.bottom = '0';
+      dialog.style.top = '0';
+    }
   }
 
   private createContainer(): HTMLElement {
@@ -99,19 +118,37 @@ export class Dialog {
   private createBody(): HTMLElement {
     const body = document.createElement('div');
     body.className = 'dialog-body';
-
-    body.style.backgroundColor = '#fff';
-    body.style.maxHeight = '380px';
-    body.style.overflow = 'hidden';
-    body.style.borderRadius = '16px';
-    body.style.boxShadow = '0px 0px 0px 1px rgba(0,0,0,0.1), 0px 10px 50px rgba(0,0,0,0.4)';
-
+    this.styleBody(body);
     return body;
+  }
+
+  private styleBody(body: HTMLElement) {
+    body.style.cssText = '';
+    if (!this.shouldRenderFullScreen()) {
+      body.style.backgroundColor = '#fff';
+      body.style.height = '380px';
+      body.style.overflow = 'hidden';
+      body.style.borderRadius = '16px';
+      body.style.boxShadow = '0px 0px 0px 1px rgba(0,0,0,0.1), 0px 10px 50px rgba(0,0,0,0.4)';
+      body.style.position = 'relative';
+    } else {
+      body.style.position = 'absolute';
+      body.style.top = '0';
+      body.style.left = '0';
+      body.style.right = '0';
+      body.style.bottom = '0';
+      body.style.backgroundColor = '#fff';
+    }
   }
 
   private render(): HTMLElement {
     document.body.appendChild(this.container);
     return this.dialog;
+  }
+
+  private resize(): void {
+    this.styleDialog(this.dialog);
+    this.styleBody(this.body);
   }
 
 }

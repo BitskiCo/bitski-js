@@ -196,8 +196,11 @@ export class BitskiProvider extends OAuthHttpProvider {
         this.pendingTransactions.push({ payload, callback });
 
         const iframe = document.createElement('iframe');
-        iframe.width = '490px';
-        iframe.height = '380px';
+        iframe.style.position = 'absolute';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
         iframe.frameBorder = '0';
         iframe.src = `${ethSendTransactionUrl}?${txnParams}`;
 
