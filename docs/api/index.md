@@ -1222,6 +1222,15 @@ private var dialog: HTMLElement
 <small>*Defined in [components/dialog.ts:5](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L5)*</small>
 
 
+<a id="_components_dialog_.dialog.resizelistener"></a>
+
+#### resizeListener
+```javascript
+private var resizeListener: any
+```
+<small>*Defined in [components/dialog.ts:7](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L7)*</small>
+
+
 
 
 ---
@@ -1240,7 +1249,7 @@ private var dialog: HTMLElement
 ```typescript
 private function addChildren()
 ```
-<small>*Defined in [components/dialog.ts:36](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L36)*</small>
+<small>*Defined in [components/dialog.ts:44](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L44)*</small>
 
 
 
@@ -1262,7 +1271,7 @@ private function addChildren()
 ```typescript
 private function createBody(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:99](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L99)*</small>
+<small>*Defined in [components/dialog.ts:118](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L118)*</small>
 
 
 
@@ -1288,7 +1297,7 @@ private function createBody(): HTMLElement
 ```typescript
 private function createCloseButton(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:43](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L43)*</small>
+<small>*Defined in [components/dialog.ts:51](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L51)*</small>
 
 
 
@@ -1314,7 +1323,7 @@ private function createCloseButton(): HTMLElement
 ```typescript
 private function createContainer(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:84](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L84)*</small>
+<small>*Defined in [components/dialog.ts:103](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L103)*</small>
 
 
 
@@ -1340,7 +1349,7 @@ private function createContainer(): HTMLElement
 ```typescript
 private function createDialog(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:70](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L70)*</small>
+<small>*Defined in [components/dialog.ts:78](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L78)*</small>
 
 
 
@@ -1366,7 +1375,7 @@ private function createDialog(): HTMLElement
 ```typescript
 function dismiss()
 ```
-<small>*Defined in [components/dialog.ts:32](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L32)*</small>
+<small>*Defined in [components/dialog.ts:39](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L39)*</small>
 
 
 
@@ -1388,7 +1397,7 @@ function dismiss()
 ```typescript
 function isDocumentLoaded(): boolean
 ```
-<small>*Defined in [components/dialog.ts:28](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L28)*</small>
+<small>*Defined in [components/dialog.ts:31](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L31)*</small>
 
 
 
@@ -1414,12 +1423,120 @@ function isDocumentLoaded(): boolean
 ```typescript
 private function render(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:112](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L112)*</small>
+<small>*Defined in [components/dialog.ts:144](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L144)*</small>
 
 
 
 ##### Return Value
 `HTMLElement`
+
+
+
+
+
+
+
+<a id="_components_dialog_.dialog.resize"></a>
+
+#### resize
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function resize()
+```
+<small>*Defined in [components/dialog.ts:149](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L149)*</small>
+
+
+
+
+
+
+
+
+<a id="_components_dialog_.dialog.shouldrenderfullscreen"></a>
+
+#### shouldRenderFullScreen
+
+
+
+
+##### Declaration
+
+
+```typescript
+function shouldRenderFullScreen(): boolean
+```
+<small>*Defined in [components/dialog.ts:35](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L35)*</small>
+
+
+
+##### Return Value
+`boolean`
+
+
+
+
+
+
+
+<a id="_components_dialog_.dialog.stylebody"></a>
+
+#### styleBody
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function styleBody(body: HTMLElement)
+```
+<small>*Defined in [components/dialog.ts:125](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L125)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| body | `HTMLElement`   |  - |
+
+
+
+
+
+
+
+
+<a id="_components_dialog_.dialog.styledialog"></a>
+
+#### styleDialog
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function styleDialog(dialog: HTMLElement)
+```
+<small>*Defined in [components/dialog.ts:85](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L85)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| dialog | `HTMLElement`   |  - |
+
 
 
 
