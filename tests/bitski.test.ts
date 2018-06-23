@@ -3,6 +3,7 @@ import { BitskiProvider } from '../src/providers/bitski-provider';
 import { OAuthProviderIntegrationType } from '../src/providers/oauth-http-provider';
 import { InMemoryWebStorage, WebStorageStateStore } from '../node_modules/oidc-client';
 import { UserManager, User, Log } from 'oidc-client';
+import HttpProvider from 'web3-providers-http';
 import mock from 'xhr-mock';
 
 const dummyUser = {
@@ -154,9 +155,9 @@ describe('managing providers', () => {
   test('should create new provider if one doesnt yet exist', () => {
     const bitski = createInstance();
     expect(bitski['providers'].size).toBe(0);
-    const provider = bitski.getProvider('foo');
+    const provider = bitski.getProvider('kovan');
     expect(bitski['providers'].size).toBe(1);
-    expect(provider['networkName']).toBe('foo');
+    expect(provider['networkName']).toBe('kovan');
   });
 
   test('should not create a new provider if one already exists for that network', () => {
@@ -165,6 +166,13 @@ describe('managing providers', () => {
     bitski['providers'].set('kovan', mockProvider);
     const provider = bitski.getProvider('kovan');
     expect(provider['networkName']).toBe('foo');
+  });
+
+  test('should create regular HTTPProvider when passing host string', () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider('http://localhost:7545');
+    expect(provider).toBeInstanceOf(HttpProvider);
+    expect(provider.host).toBe('http://localhost:7545');
   });
 
   test('should set access token on all providers after getting the user', () => {

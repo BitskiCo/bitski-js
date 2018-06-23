@@ -1,5 +1,6 @@
 import { Log, User, UserManager } from 'oidc-client';
 import Web3 from 'web3';
+import HttpProvider from 'web3-providers-http';
 import { AccessToken } from './access-token';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
 import { BitskiProvider } from './providers/bitski-provider';
@@ -27,7 +28,7 @@ const DEFAULT_BITSKI_METADATA: { [key: string]: any; } = {
  */
 export class Bitski {
   public userManager: UserManager;
-  private providers: Map<string, BitskiProvider>;
+  private providers: Map<string, HttpProvider>;
   private cachedUser?: User;
   private clientId: string;
 
@@ -57,23 +58,30 @@ export class Bitski {
       this.userManager.signinPopupCallback();
     }
 
-    this.providers = new Map<string, BitskiProvider>();
+    this.providers = new Map<string, HttpProvider>();
   }
 
   /**
    * Returns a new web3 provider for a given network.
-   * @param networkName The name of the network to use. Defaults to mainnet.
+   * @param networkName optional name of the network to use, or host for a local provider. Defaults to mainnet.
    */
-  public getProvider(networkName?: string): BitskiProvider {
+  public getProvider(networkName?: string): HttpProvider {
     const existingProvider = this.providers.get(networkName || 'mainnet');
     if (existingProvider) {
       return existingProvider;
     }
+    let provider: HttpProvider;
+    switch (networkName) {
+      case 'mainnet':
+      case 'rinkeby':
+      case 'kovan':
+      case undefined:
+        provider = this.createProvider(networkName);
+        break;
 
-    const provider = new BitskiProvider(networkName || 'mainnet', [{ name: 'X-Client-Id', value: this.clientId }]);
-    if (this.cachedUser) {
-      const accessToken = new AccessToken(this.cachedUser.access_token, this.cachedUser.expires_at);
-      provider.setAccessToken(accessToken);
+      default:
+        provider = new HttpProvider(networkName!, 0, undefined);
+        break;
     }
     this.providers.set(networkName || 'mainnet', provider);
     return provider;
@@ -81,7 +89,7 @@ export class Bitski {
 
   /**
    * Returns an initialized web3 API
-   * @param networkName optional name of network to use. Defaults to mainnet.
+   * @param networkName optional name of the network to use, or host for a local provider. Defaults to mainnet.
    */
   public getWeb3(networkName?: string): Web3 {
     const provider = this.getProvider(networkName);
@@ -155,7 +163,9 @@ export class Bitski {
       return user;
     }).catch((error) => {
       this.providers.forEach((provider, _) => {
-        provider.setAccessToken(undefined);
+        if (provider instanceof BitskiProvider) {
+          provider.setAccessToken(undefined);
+        }
       });
       throw error;
     });
@@ -208,6 +218,15 @@ export class Bitski {
     return window.parent !== window;
   }
 
+  private createProvider(networkName?: string): BitskiProvider {
+    const provider = new BitskiProvider(networkName || 'mainnet', [{ name: 'X-Client-Id', value: this.clientId }]);
+    if (this.cachedUser) {
+      const accessToken = new AccessToken(this.cachedUser.access_token, this.cachedUser.expires_at);
+      provider.setAccessToken(accessToken);
+    }
+    return provider;
+  }
+
   /**
    * Pass logged in user to all providers
    * @param user User to send to cached providers
@@ -220,7 +239,9 @@ export class Bitski {
     }
     const accessToken = new AccessToken(user.access_token, user.expires_at);
     this.providers.forEach((provider, _) => {
-      provider.setAccessToken(accessToken);
+      if (provider instanceof BitskiProvider) {
+        provider.setAccessToken(accessToken);
+      }
     });
   }
 
@@ -240,7 +261,9 @@ export class Bitski {
   private didUnsetUser() {
     this.cachedUser = undefined;
     this.providers.forEach((provider, _) => {
-      provider.setAccessToken(undefined);
+      if (provider instanceof BitskiProvider) {
+        provider.setAccessToken(undefined);
+      }
     });
   }
 }
