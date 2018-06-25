@@ -157,7 +157,6 @@ window.web3 = bitskiInstance.getWeb3('kovan');
 Check out a full demo app using our SDK [here](https://example-dapp-1.bitski.com) and view the source code [here](https://github.com/BitskiCo/example-dapp-game).
 
 ### More Info
-* [Usage](usage.md)
-* [Examples](examples.md)
+* [Bitski Documentation](https://docs.bitski.com)
 * [API Reference](api/index.md)
 * [Contact Us](http://bitski.co)
