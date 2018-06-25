@@ -53,6 +53,8 @@ Once the SDK is initialized, you can request a Web3 object. Bitski will automati
 web3 = bitskiInstance.getWeb3();
 //rinkeby
 web3 = bitskiInstance.getWeb3('rinkeby');
+//local dev (ganache / truffle develop)
+web3 = bitskiInstance.getWeb3('http://localhost:9545');
 ```
 
 Note: our CDN version bundles the full web3 library just like Metamask and other dapp browsers. There is no need to also bundle web3.
