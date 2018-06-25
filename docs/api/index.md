@@ -149,7 +149,7 @@ new Bitski(clientId: string, redirectUri?: undefined | string, postLogoutRedirec
 ```javascript
 private var cachedUser: User
 ```
-<small>*Defined in [bitski.ts:31](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L31)*</small>
+<small>*Defined in [bitski.ts:32](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L32)*</small>
 
 
 <a id="_bitski_.bitski.clientid"></a>
@@ -158,16 +158,16 @@ private var cachedUser: User
 ```javascript
 private var clientId: string
 ```
-<small>*Defined in [bitski.ts:32](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L32)*</small>
+<small>*Defined in [bitski.ts:33](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L33)*</small>
 
 
 <a id="_bitski_.bitski.providers"></a>
 
 #### providers
 ```javascript
-private var providers: Map<string, BitskiProvider>
+private var providers: Map<string, HttpProvider>
 ```
-<small>*Defined in [bitski.ts:30](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L30)*</small>
+<small>*Defined in [bitski.ts:31](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L31)*</small>
 
 
 <a id="_bitski_.bitski.usermanager"></a>
@@ -176,7 +176,7 @@ private var providers: Map<string, BitskiProvider>
 ```javascript
 var userManager: UserManager
 ```
-<small>*Defined in [bitski.ts:29](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L29)*</small>
+<small>*Defined in [bitski.ts:30](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L30)*</small>
 
 
 
@@ -184,6 +184,40 @@ var userManager: UserManager
 ---
 
 ### Methods
+<a id="_bitski_.bitski.createprovider"></a>
+
+#### createProvider
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function createProvider(networkName?: undefined | string): BitskiProvider
+```
+<small>*Defined in [bitski.ts:221](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L221)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| networkName _(Optional)_ | `undefined          ⎮string`   |  - |
+
+
+
+##### Return Value
+[BitskiProvider](#_providers_bitski_provider_.bitskiprovider)
+
+
+
+
+
+
+
 <a id="_bitski_.bitski.didsetuser"></a>
 
 #### didSetUser
@@ -201,7 +235,7 @@ Callback received from UserManager when the user has been set. Called in situati
 ```typescript
 private function didSetUser(user: User)
 ```
-<small>*Defined in [bitski.ts:232](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L232)*</small>
+<small>*Defined in [bitski.ts:253](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L253)*</small>
 
 
 
@@ -235,7 +269,7 @@ Callback received from UserManager when the user has been revoked. Called in sit
 ```typescript
 private function didUnsetUser()
 ```
-<small>*Defined in [bitski.ts:240](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L240)*</small>
+<small>*Defined in [bitski.ts:261](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L261)*</small>
 
 
 
@@ -261,7 +295,7 @@ Creates a sign in with bitski button to add to your app. If an HTML element is p
 ```typescript
 function getConnectButton(existingDiv?: HTMLElement, size?: ConnectButtonSize): ConnectButton
 ```
-<small>*Defined in [bitski.ts:119](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L119)*</small>
+<small>*Defined in [bitski.ts:127](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L127)*</small>
 
 
 
@@ -298,9 +332,9 @@ Returns a new web3 provider for a given network.
 
 
 ```typescript
-function getProvider(networkName?: undefined | string): BitskiProvider
+function getProvider(networkName?: undefined | string): HttpProvider
 ```
-<small>*Defined in [bitski.ts:67](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L67)*</small>
+<small>*Defined in [bitski.ts:68](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L68)*</small>
 
 
 
@@ -308,12 +342,12 @@ function getProvider(networkName?: undefined | string): BitskiProvider
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| networkName _(Optional)_ | `undefined          ⎮string`   |  The name of the network to use. Defaults to mainnet. |
+| networkName _(Optional)_ | `undefined          ⎮string`   |  optional name of the network to use, or host for a local provider. Defaults to mainnet. |
 
 
 
 ##### Return Value
-[BitskiProvider](#_providers_bitski_provider_.bitskiprovider)
+`HttpProvider`
 
 
 
@@ -338,7 +372,7 @@ Gets the current signed in user. Will return an error if we are not signed in.
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [bitski.ts:103](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L103)*</small>
+<small>*Defined in [bitski.ts:111](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L111)*</small>
 
 
 
@@ -368,7 +402,7 @@ Gets the current user if it exists. If not, signs in. Unlike `getUser` this will
 ```typescript
 function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:169](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L169)*</small>
+<small>*Defined in [bitski.ts:179](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L179)*</small>
 
 
 
@@ -406,7 +440,7 @@ Returns an initialized web3 API
 ```typescript
 function getWeb3(networkName?: undefined | string): Web3
 ```
-<small>*Defined in [bitski.ts:86](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L86)*</small>
+<small>*Defined in [bitski.ts:94](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L94)*</small>
 
 
 
@@ -414,7 +448,7 @@ function getWeb3(networkName?: undefined | string): Web3
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| networkName _(Optional)_ | `undefined          ⎮string`   |  optional name of network to use. Defaults to mainnet. |
+| networkName _(Optional)_ | `undefined          ⎮string`   |  optional name of the network to use, or host for a local provider. Defaults to mainnet. |
 
 
 
@@ -440,7 +474,7 @@ function getWeb3(networkName?: undefined | string): Web3
 ```typescript
 function isInFrame(): boolean
 ```
-<small>*Defined in [bitski.ts:207](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L207)*</small>
+<small>*Defined in [bitski.ts:217](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L217)*</small>
 
 
 
@@ -470,7 +504,7 @@ Set logger and log level for debugging purposes
 ```typescript
 function setLogger(logger: any, level?: undefined | number)
 ```
-<small>*Defined in [bitski.ts:200](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L200)*</small>
+<small>*Defined in [bitski.ts:210](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L210)*</small>
 
 
 
@@ -505,7 +539,7 @@ Pass logged in user to all providers
 ```typescript
 private function setUser(user: User)
 ```
-<small>*Defined in [bitski.ts:215](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L215)*</small>
+<small>*Defined in [bitski.ts:234](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L234)*</small>
 
 
 
@@ -539,7 +573,7 @@ Starts sign in flow.
 ```typescript
 function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:127](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L127)*</small>
+<small>*Defined in [bitski.ts:135](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L135)*</small>
 
 
 
@@ -577,7 +611,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:185](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L185)*</small>
+<small>*Defined in [bitski.ts:195](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L195)*</small>
 
 
 
@@ -615,7 +649,7 @@ function signInCallback(authenticationIntegrationType: OAuthProviderIntegrationT
 ```javascript
 var DEFAULT_BITSKI_OAUTH_HOST: "https://account.bitski.com" = "https://account.bitski.com"
 ```
-<small>*Defined in [bitski.ts:9](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L9)*</small>
+<small>*Defined in [bitski.ts:10](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L10)*</small>
 
 
 
@@ -635,7 +669,7 @@ var DEFAULT_BITSKI_OAUTH_HOST: "https://account.bitski.com" = "https://account.b
 ```javascript
 var authorization_endpoint: string = "https://account.bitski.com/oauth2/auth"
 ```
-<small>*Defined in [bitski.ts:12](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L12)*</small>
+<small>*Defined in [bitski.ts:13](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L13)*</small>
 
 
 
@@ -649,7 +683,7 @@ var authorization_endpoint: string = "https://account.bitski.com/oauth2/auth"
 ```javascript
 var claims_supported: string[] =  ['sub']
 ```
-<small>*Defined in [bitski.ts:13](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L13)*</small>
+<small>*Defined in [bitski.ts:14](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L14)*</small>
 
 
 
@@ -663,7 +697,7 @@ var claims_supported: string[] =  ['sub']
 ```javascript
 var id_token_signing_alg_values_supported: string[] =  ['RS256']
 ```
-<small>*Defined in [bitski.ts:14](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L14)*</small>
+<small>*Defined in [bitski.ts:15](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L15)*</small>
 
 
 
@@ -677,7 +711,7 @@ var id_token_signing_alg_values_supported: string[] =  ['RS256']
 ```javascript
 var issuer: string = "https://account.bitski.com"
 ```
-<small>*Defined in [bitski.ts:15](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L15)*</small>
+<small>*Defined in [bitski.ts:16](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L16)*</small>
 
 
 
@@ -691,7 +725,7 @@ var issuer: string = "https://account.bitski.com"
 ```javascript
 var jwks_uri: string = "https://account.bitski.com/.well-known/jwks.json"
 ```
-<small>*Defined in [bitski.ts:16](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L16)*</small>
+<small>*Defined in [bitski.ts:17](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L17)*</small>
 
 
 
@@ -705,7 +739,7 @@ var jwks_uri: string = "https://account.bitski.com/.well-known/jwks.json"
 ```javascript
 var response_types_supported: string[] =  ['code', 'code id_token', 'id_token', 'token id_token', 'token', 'token id_token code']
 ```
-<small>*Defined in [bitski.ts:17](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L17)*</small>
+<small>*Defined in [bitski.ts:18](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L18)*</small>
 
 
 
@@ -719,7 +753,7 @@ var response_types_supported: string[] =  ['code', 'code id_token', 'id_token', 
 ```javascript
 var scopes_supported: string[] =  ['offline', 'openid']
 ```
-<small>*Defined in [bitski.ts:18](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L18)*</small>
+<small>*Defined in [bitski.ts:19](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L19)*</small>
 
 
 
@@ -733,7 +767,7 @@ var scopes_supported: string[] =  ['offline', 'openid']
 ```javascript
 var subject_types_supported: string[] =  ['pairwise', 'public']
 ```
-<small>*Defined in [bitski.ts:19](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L19)*</small>
+<small>*Defined in [bitski.ts:20](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L20)*</small>
 
 
 
@@ -747,7 +781,7 @@ var subject_types_supported: string[] =  ['pairwise', 'public']
 ```javascript
 var token_endpoint: string = "https://account.bitski.com/oauth2/token"
 ```
-<small>*Defined in [bitski.ts:20](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L20)*</small>
+<small>*Defined in [bitski.ts:21](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L21)*</small>
 
 
 
@@ -761,7 +795,7 @@ var token_endpoint: string = "https://account.bitski.com/oauth2/token"
 ```javascript
 var token_endpoint_auth_methods_supported: string[] =  ['client_secret_post', 'client_secret_basic']
 ```
-<small>*Defined in [bitski.ts:21](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L21)*</small>
+<small>*Defined in [bitski.ts:22](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L22)*</small>
 
 
 
@@ -775,7 +809,7 @@ var token_endpoint_auth_methods_supported: string[] =  ['client_secret_post', 'c
 ```javascript
 var userinfo_endpoint: string = "https://account.bitski.com/userinfo"
 ```
-<small>*Defined in [bitski.ts:22](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L22)*</small>
+<small>*Defined in [bitski.ts:23](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L23)*</small>
 
 
 
