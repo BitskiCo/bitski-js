@@ -7,7 +7,7 @@
   "typings": "dist/types/bitski.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BitskiCo/bitski-js-sdk"
+    "url": "https://github.com/BitskiCo/bitski-js"
   },
   "version": "0.1.7",
   "scripts": {
