@@ -1,15 +1,15 @@
 # Add pages to the navigation here
 
 - title: Documentation
-- items:
+  items:
   - title: Home
-    url: /
+    url: /bitski-js/
 
   - title: API Reference
-    url: /api/
+    url: /bitski-js/api/
 
 - title: Resources
-- items:
+  items:
   - title: View on Github
     url: https://github.com/BitskiCo/bitski-js
 
