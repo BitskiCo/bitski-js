@@ -1,14 +1,16 @@
-## Bitski.js
+## Bitski JS SDK
 
-`Current version: 0.1.6`
+[![npm](https://img.shields.io/npm/v/bitski.svg)](https://www.npmjs.com/package/bitski)
 
-Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain (currently Kovan and Rinkeby test networks only).
+The official Javascript SDK for Bitski. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain.
+
+We currently support Kovan and Rinkeby networks, but are working towards launching on mainnet in the near future.
 
 ### Getting Started
 
 In order to use Bitski you will need an account. You can set one up here: [https://developer.bitski.com](https://developer.bitski.com).
 
-Then you will also need a client id token from us. If you’re interested in getting one, fill out the form [here](https://www.bitski.com). We will follow up with you via email.
+Then you will also need a client id token from us. If you’re interested in getting one, fill out the form [here](https://www.bitski.com). We will follow up with you via email. [Learn More](https://docs.bitski.com/getting-started/).
 
 ### Installation
 
@@ -21,7 +23,7 @@ npm install --save bitski
 Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.6/lib/bitski.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.7/lib/bitski.js"></script>
 ```
 
 ### Starting the SDK
@@ -154,9 +156,4 @@ window.web3 = bitskiInstance.getWeb3('kovan');
 
 ### Example App
 
-Check out a full demo app using our SDK [here](https://example-dapp-1.bitski.com) and view the source code [here](https://github.com/BitskiCo/example-dapp-game).
-
-### More Info
-* [Bitski Documentation](https://docs.bitski.com)
-* [API Reference](api/index.md)
-* [Contact Us](http://bitski.co)
+Want to see Bitski in action? You can check out a [full demo app using our SDK](https://example-dapp-1.bitski.com) and [view the demo's source code](https://github.com/BitskiCo/example-dapp-game).
