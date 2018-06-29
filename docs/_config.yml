@@ -13,13 +13,14 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Bitski.js
+title: Bitski JS
+subtitle: JS
+copyright: © 2018 Out There Labs, Inc
 email: support@bitski.com
-repository: 'OutThereLabs/bitski-js-sdk'
+repository: 'BitskiCo/bitski-js-sdk'
 description:
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-#theme: "bitski-docs-jekyll-theme"
+baseurl: "/bitski-js" # the subpath of your site, e.g. /blog
+url: "https://bitskico.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 remote_theme: OutThereLabs/bitski-docs-jekyll-theme
 
 defaults:

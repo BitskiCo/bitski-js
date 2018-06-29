@@ -1,7 +1,26 @@
 # Add pages to the navigation here
 
-- title: Home
-  url: /
+- title: Documentation
+- items:
+  - title: Home
+    url: /
 
-- title: API Reference
-  url: /api/
+  - title: API Reference
+    url: /api/
+
+- title: Resources
+- items:
+  - title: View on Github
+    url: https://github.com/BitskiCo/bitski-js
+
+  - title: Bitski Documentation
+    url: https://docs.bitski.com
+
+  - title: Developer Portal
+    url: https://developer.bitski.com
+
+  - title: Truffle SDK
+    url: https://github.com/BitskiCo/bitski-truffle-provider
+
+  - title: Web3 Documentation
+    url: https://web3js.readthedocs.io/en/1.0/index.html
