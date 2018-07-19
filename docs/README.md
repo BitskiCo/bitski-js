@@ -51,7 +51,7 @@ const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
 Once the SDK is initialized, you can request a Web3 object. Bitski will automatically configure the Web3 object to work with our servers. You can also pass a network name as a parameter to access test networks (rinkeby or kovan).
 
 ```javascript
-//mainnet (coming soon)
+//mainnet
 web3 = bitskiInstance.getWeb3();
 //rinkeby
 web3 = bitskiInstance.getWeb3('rinkeby');
