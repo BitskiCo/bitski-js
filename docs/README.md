@@ -4,13 +4,13 @@
 
 The official Javascript SDK for Bitski. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain.
 
-We currently support Kovan and Rinkeby networks, but are working towards launching on mainnet in the near future.
+We currently support mainnet, as well as Kovan and Rinkeby test networks.
 
 ### Getting Started
 
-In order to use Bitski you will need an account. You can set one up here: [https://developer.bitski.com](https://developer.bitski.com).
+In order to use Bitski you will need a client id. You can set one up by visiting the [Developer Portal](https://developer.bitski.com) and creating an app.
 
-Then you will also need a client id token from us. If you’re interested in getting one, fill out the form [here](https://www.bitski.com). We will follow up with you via email. [Learn More](https://docs.bitski.com/getting-started/).
+Note: While we're in beta, your app will need to be approved before you can actually use your client id to sign in.
 
 ### Installation
 
@@ -48,7 +48,7 @@ const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
 
 #### Getting a Web3 instance
 
-Once the SDK is initialized, you can request a Web3 object. Bitski will automatically configure the Web3 object to work with our servers. You can also pass a network name as a parameter to access test networks.
+Once the SDK is initialized, you can request a Web3 object. Bitski will automatically configure the Web3 object to work with our servers. You can also pass a network name as a parameter to access test networks (rinkeby or kovan).
 
 ```javascript
 //mainnet (coming soon)
@@ -63,7 +63,7 @@ Note: our CDN version bundles the full web3 library just like Metamask and other
 
 ### Signing in
 
-In order to do anything with your web3 instance you'll need the user to be signed in with Bitski via OpenID. We support 2 primary methods for signing in with Bitski: redirect, and popup.
+In order to do anything with your web3 instance you'll need the user to be signed in with Bitski via OAuth. We support two primary methods for signing in with Bitski: redirect, and popup.
 
 #### Signing in with redirect
 
@@ -72,7 +72,7 @@ For the redirect flow, the browser will redirect to the bitski login page where 
 ```javascript
 // my-app.js
 const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-window.web3 = bitskiInstance.getWeb3('kovan');
+window.web3 = bitskiInstance.getWeb3();
 //This will only redirect you if you're not already logged in
 bitskiInstance.getUserOrSignIn();
 ```
@@ -114,8 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 ```
 
-Note: There is no need to call any callbacks for this sign in method.
-
 #### Manually triggering sign in
 
 You can also manually trigger log in via popup or redirect by calling `signIn()` directly:
@@ -124,7 +122,7 @@ You can also manually trigger log in via popup or redirect by calling `signIn()`
 import { Bitski, OAuthProviderIntegrationType } from 'bitski';
 
 const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>');
-web3 = bitskiInstance.getWeb3('kovan');
+web3 = bitskiInstance.getWeb3();
 
 // later in your code…
 bitskiInstance.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
@@ -143,7 +141,7 @@ if (typeof web3 !== 'undefined') {
 } else {
   // initialize Bitski
   const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-  web3 = bitskiInstance.getWeb3('rinkeby');
+  web3 = bitskiInstance.getWeb3();
 }
 ```
 
@@ -151,7 +149,7 @@ You can also require your users to use a Bitski wallet & account by storing your
 
 ```javascript
 const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-window.web3 = bitskiInstance.getWeb3('kovan');
+window.web3 = bitskiInstance.getWeb3();
 ```
 
 ### Example App

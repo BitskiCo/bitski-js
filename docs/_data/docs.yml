@@ -19,6 +19,9 @@
   - title: Developer Portal
     url: https://developer.bitski.com
 
+  - title: Quickstart / Truffle Box
+    url: https://github.com/BitskiCo/quickstart
+
   - title: Truffle SDK
     url: https://github.com/BitskiCo/bitski-truffle-provider
 
