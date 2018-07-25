@@ -21,6 +21,7 @@ const DEFAULT_BITSKI_METADATA: { [key: string]: any; } = {
   token_endpoint: 'https://account.bitski.com/oauth2/token',
   token_endpoint_auth_methods_supported: ['client_secret_post', 'client_secret_basic'],
   userinfo_endpoint: 'https://account.bitski.com/userinfo',
+  end_session_endpoint: 'https://account.bitski.com/oauth2/revoke',
 };
 
 /**
