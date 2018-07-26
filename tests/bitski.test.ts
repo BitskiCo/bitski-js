@@ -234,6 +234,35 @@ describe('sign in callback', () => {
   });
 });
 
+describe('sign out', () => {
+  test('should clear user on bitski instance', () => {
+    const bitski = createInstance();
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      return bitski.signOut().then(() => {
+        expect(bitski['cachedUser']).toBeUndefined();
+      });
+    });
+  });
+
+  test('should clear access token from providers', () => {
+    const bitski = createInstance();
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      const mainnetProvider = bitski.getProvider('mainnet');
+      const kovanProvider = bitski.getProvider('kovan');
+
+      expect(mainnetProvider.accessToken).toBeDefined();
+      expect(kovanProvider.accessToken).toBeDefined();
+
+      return bitski.signOut().then(() => {
+        expect(mainnetProvider.accessToken).toBeUndefined();
+        expect(kovanProvider.accessToken).toBeUndefined();
+      });
+    });
+  });
+});
+
 test('should be able to create connect button', () => {
   const bitski = createInstance();
   const connectButton = bitski.getConnectButton();

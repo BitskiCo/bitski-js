@@ -202,6 +202,15 @@ export class Bitski {
   }
 
   /**
+   * Sign the current user out of your application.
+   */
+  public signOut() {
+    return this.userManager.removeUser().then(() => {
+      this.setUser(undefined);
+    });
+  }
+
+  /**
    * Set logger and log level for debugging purposes
    * @param logger The logger to use (i.e. console). Must support methods info(), warn(), and error().
    * @param level The desired log level.
@@ -231,13 +240,16 @@ export class Bitski {
    * Pass logged in user to all providers
    * @param user User to send to cached providers
    */
-  private setUser(user: User) {
+  private setUser(user?: User) {
     this.cachedUser = user;
     if (this.isInFrame() === true) {
       // We are in an IFRAME
       parent.postMessage(user, '*');
     }
-    const accessToken = new AccessToken(user.access_token, user.expires_at);
+    let accessToken;
+    if (user) {
+      accessToken = new AccessToken(user.access_token, user.expires_at);
+    }
     this.providers.forEach((provider, _) => {
       if (provider instanceof BitskiProvider) {
         provider.setAccessToken(accessToken);
