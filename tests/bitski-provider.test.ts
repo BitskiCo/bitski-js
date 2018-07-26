@@ -2,9 +2,11 @@ import { AccessToken } from '../src/access-token';
 import { BitskiProvider } from '../src/providers/bitski-provider';
 import { OAuthProviderIntegrationType } from '../src/providers/oauth-http-provider';
 import mock from 'xhr-mock';
+import { BitskiProviderSettings } from '../src/providers/bitski-provider-settings';
 
 function createProvider(networkName?: string): BitskiProvider {
-  return new BitskiProvider(networkName);
+  const settings = new BitskiProviderSettings('test', 'test-client-id');
+  return new BitskiProvider(networkName, settings);
 }
 
 function createRequest(method: string, params: any[]): any {

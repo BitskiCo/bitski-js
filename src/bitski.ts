@@ -31,6 +31,7 @@ export class Bitski {
   private providers: Map<string, HttpProvider>;
   private cachedUser?: User;
   private clientId: string;
+  private settings: BitskiProviderSettings;
 
   /**
    * @param clientId OAuth Client ID
@@ -47,6 +48,7 @@ export class Bitski {
 
     this.clientId = clientId;
     this.userManager = new UserManager(settings);
+    this.settings = settings;
 
     this.userManager.events.addUserLoaded(this.didSetUser.bind(this));
     this.userManager.events.addUserSignedOut(this.didUnsetUser.bind(this));
@@ -219,7 +221,7 @@ export class Bitski {
   }
 
   private createProvider(networkName?: string): BitskiProvider {
-    const provider = new BitskiProvider(networkName || 'mainnet', [{ name: 'X-Client-Id', value: this.clientId }]);
+    const provider = new BitskiProvider(networkName || 'mainnet', this.settings, [{ name: 'X-Client-Id', value: this.clientId }]);
     if (this.cachedUser) {
       const accessToken = new AccessToken(this.cachedUser.access_token, this.cachedUser.expires_at);
       provider.setAccessToken(accessToken);
