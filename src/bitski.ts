@@ -1,11 +1,14 @@
 import { Log, User, UserManager } from 'oidc-client';
 import Web3 from 'web3';
 import HttpProvider from 'web3-providers-http';
+import 'xhr2';
 import { AccessToken } from './access-token';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
 import { BitskiProvider } from './providers/bitski-provider';
 import { BitskiProviderSettings } from './providers/bitski-provider-settings';
 import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
+
+const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
 
 const DEFAULT_BITSKI_OAUTH_HOST = 'https://account.bitski.com';
 
@@ -183,7 +186,6 @@ export class Bitski {
       if (user && !user.expired) {
         return user;
       }
-
       return this.signIn(authenticationIntegrationType);
     }).catch((error) => {
       return this.signIn(authenticationIntegrationType);
@@ -206,10 +208,15 @@ export class Bitski {
   /**
    * Sign the current user out of your application.
    */
-  public signOut() {
-    return this.userManager.removeUser().then(() => {
-      this.setUser(undefined);
-    });
+  public signOut(): Promise<any> {
+    if (this.cachedUser && this.cachedUser.access_token) {
+      return this.requestSignOut(this.cachedUser.access_token).then(() => {
+        return this.userManager.removeUser().then(() => {
+          this.setUser(undefined);
+        });
+      });
+    }
+    return Promise.reject(new Error('Not signed in.'));
   }
 
   /**
@@ -227,6 +234,45 @@ export class Bitski {
 
   public isInFrame(): boolean {
     return window.parent !== window;
+  }
+
+  private requestSignOut(accessToken): Promise<any> {
+    const request = new XMLHttpRequest();
+    request.open('POST', `${BITSKI_USER_API_HOST}/logout`, true);
+    request.withCredentials = true;
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('Accept', 'application/json');
+    request.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+    request.timeout = 1000;
+    return this.sendRequest(request);
+  }
+
+  private sendRequest(request): Promise<any> {
+    return new Promise((fulfill, reject) => {
+      request.onload = () => {
+        if (request.status >= 200 && request.status <= 299) {
+          return fulfill(request.responseText);
+        } else {
+          let result;
+          try {
+            result = JSON.parse(request.responseText);
+          } catch (error) {
+            return reject(new Error('Unknown error. Could not parse error response.'));
+          }
+          if (result && result.error && result.error.message) {
+            return reject(new Error(result.error.message));
+          } else if (result && result.error) {
+            return reject(new Error(result.error));
+          } else {
+            return reject(new Error('Unknown error.'));
+          }
+        }
+      };
+      request.ontimeout = () => {
+        return reject(new Error('Connection timed out.'));
+      };
+      request.send();
+    });
   }
 
   private createProvider(networkName?: string): BitskiProvider {
