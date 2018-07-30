@@ -27,7 +27,7 @@
     "name": "Bitski.js",
     "mode": "modules",
     "includeDeclarations": false,
-    "mdSourceRepo": "https://github.com/BitskiCo/bitski-js-sdk",
+    "mdSourceRepo": "https://github.com/BitskiCo/bitski-js",
     "mdSourceBranch": "master"
   }
 }
