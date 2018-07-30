@@ -1,3 +1,6 @@
+const DEFAULT_DIALOG_WIDTH = 490;
+const DEFAULT_DIALOG_HEIGHT = 420;
+
 export class Dialog {
   private content: any;
   private container: HTMLElement;
@@ -5,10 +8,14 @@ export class Dialog {
   private dialog: HTMLElement;
   private closeButton: HTMLElement;
   private resizeListener: any;
+  private width: number;
+  private height: number;
 
-  constructor(content: any) {
+  constructor(content: any, width?: number, height?: number) {
     // check for an element passed as content or a selector corresponding to an element
     this.content = content.tagName ? content : document.querySelector(content);
+    this.width = width || DEFAULT_DIALOG_WIDTH;
+    this.height = height || DEFAULT_DIALOG_HEIGHT;
     if (!this.content) {
       // otherwise content is text to be appended to the dialog body
       this.content = document.createElement('div');
@@ -85,12 +92,12 @@ export class Dialog {
   private styleDialog(dialog: HTMLElement) {
     dialog.style.cssText = '';
     if (!this.shouldRenderFullScreen()) {
-      dialog.style.width = '490px';
+      dialog.style.width = `${this.width}px`;
       dialog.style.height = '1px';
       dialog.style.margin = '0 auto';
       dialog.style.position = 'relative';
       dialog.style.top = '50%';
-      dialog.style.marginTop = '-170px';
+      dialog.style.marginTop = `-${Math.floor(this.height / 2)}px`;
     } else {
       dialog.style.position = 'absolute';
       dialog.style.left = '0';
@@ -126,7 +133,7 @@ export class Dialog {
     body.style.cssText = '';
     if (!this.shouldRenderFullScreen()) {
       body.style.backgroundColor = '#fff';
-      body.style.height = '380px';
+      body.style.height = `${this.height}px`;
       body.style.overflow = 'hidden';
       body.style.borderRadius = '16px';
       body.style.boxShadow = '0px 0px 0px 1px rgba(0,0,0,0.1), 0px 10px 50px rgba(0,0,0,0.4)';
