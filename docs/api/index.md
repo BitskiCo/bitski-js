@@ -63,7 +63,7 @@ new AccessToken(token: string, expiresAt?: undefined | number): AccessToken
 ```javascript
 var expiresAt: undefined | number =  undefined
 ```
-<small>*Defined in [access-token.ts:6](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/access-token.ts#L6)*</small>
+<small>*Defined in [access-token.ts:6](https://github.com/BitskiCo/bitski-js/blob/master/src/access-token.ts#L6)*</small>
 
 
 <a id="_access_token_.accesstoken.token"></a>
@@ -72,7 +72,7 @@ var expiresAt: undefined | number =  undefined
 ```javascript
 var token: string
 ```
-<small>*Defined in [access-token.ts:5](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/access-token.ts#L5)*</small>
+<small>*Defined in [access-token.ts:5](https://github.com/BitskiCo/bitski-js/blob/master/src/access-token.ts#L5)*</small>
 
 
 
@@ -149,7 +149,7 @@ new Bitski(clientId: string, redirectUri?: undefined | string, postLogoutRedirec
 ```javascript
 private var cachedUser: User
 ```
-<small>*Defined in [bitski.ts:32](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L32)*</small>
+<small>*Defined in [bitski.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L32)*</small>
 
 
 <a id="_bitski_.bitski.clientid"></a>
@@ -158,7 +158,7 @@ private var cachedUser: User
 ```javascript
 private var clientId: string
 ```
-<small>*Defined in [bitski.ts:33](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L33)*</small>
+<small>*Defined in [bitski.ts:33](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L33)*</small>
 
 
 <a id="_bitski_.bitski.providers"></a>
@@ -167,7 +167,16 @@ private var clientId: string
 ```javascript
 private var providers: Map<string, HttpProvider>
 ```
-<small>*Defined in [bitski.ts:31](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L31)*</small>
+<small>*Defined in [bitski.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L31)*</small>
+
+
+<a id="_bitski_.bitski.settings"></a>
+
+#### settings
+```javascript
+private var settings: BitskiProviderSettings
+```
+<small>*Defined in [bitski.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L34)*</small>
 
 
 <a id="_bitski_.bitski.usermanager"></a>
@@ -176,7 +185,7 @@ private var providers: Map<string, HttpProvider>
 ```javascript
 var userManager: UserManager
 ```
-<small>*Defined in [bitski.ts:30](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L30)*</small>
+<small>*Defined in [bitski.ts:30](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L30)*</small>
 
 
 
@@ -197,7 +206,7 @@ var userManager: UserManager
 ```typescript
 private function createProvider(networkName?: undefined | string): BitskiProvider
 ```
-<small>*Defined in [bitski.ts:221](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L221)*</small>
+<small>*Defined in [bitski.ts:232](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L232)*</small>
 
 
 
@@ -235,7 +244,7 @@ Callback received from UserManager when the user has been set. Called in situati
 ```typescript
 private function didSetUser(user: User)
 ```
-<small>*Defined in [bitski.ts:253](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L253)*</small>
+<small>*Defined in [bitski.ts:267](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L267)*</small>
 
 
 
@@ -269,7 +278,7 @@ Callback received from UserManager when the user has been revoked. Called in sit
 ```typescript
 private function didUnsetUser()
 ```
-<small>*Defined in [bitski.ts:261](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L261)*</small>
+<small>*Defined in [bitski.ts:275](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L275)*</small>
 
 
 
@@ -295,7 +304,7 @@ Creates a sign in with bitski button to add to your app. If an HTML element is p
 ```typescript
 function getConnectButton(existingDiv?: HTMLElement, size?: ConnectButtonSize): ConnectButton
 ```
-<small>*Defined in [bitski.ts:127](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L127)*</small>
+<small>*Defined in [bitski.ts:129](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L129)*</small>
 
 
 
@@ -334,7 +343,7 @@ Returns a new web3 provider for a given network.
 ```typescript
 function getProvider(networkName?: undefined | string): HttpProvider
 ```
-<small>*Defined in [bitski.ts:68](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L68)*</small>
+<small>*Defined in [bitski.ts:70](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L70)*</small>
 
 
 
@@ -372,7 +381,7 @@ Gets the current signed in user. Will return an error if we are not signed in.
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [bitski.ts:111](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L111)*</small>
+<small>*Defined in [bitski.ts:113](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L113)*</small>
 
 
 
@@ -402,7 +411,7 @@ Gets the current user if it exists. If not, signs in. Unlike `getUser` this will
 ```typescript
 function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:179](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L179)*</small>
+<small>*Defined in [bitski.ts:181](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L181)*</small>
 
 
 
@@ -440,7 +449,7 @@ Returns an initialized web3 API
 ```typescript
 function getWeb3(networkName?: undefined | string): Web3
 ```
-<small>*Defined in [bitski.ts:94](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L94)*</small>
+<small>*Defined in [bitski.ts:96](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L96)*</small>
 
 
 
@@ -474,7 +483,7 @@ function getWeb3(networkName?: undefined | string): Web3
 ```typescript
 function isInFrame(): boolean
 ```
-<small>*Defined in [bitski.ts:217](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L217)*</small>
+<small>*Defined in [bitski.ts:228](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L228)*</small>
 
 
 
@@ -504,7 +513,7 @@ Set logger and log level for debugging purposes
 ```typescript
 function setLogger(logger: any, level?: undefined | number)
 ```
-<small>*Defined in [bitski.ts:210](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L210)*</small>
+<small>*Defined in [bitski.ts:221](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L221)*</small>
 
 
 
@@ -537,9 +546,9 @@ Pass logged in user to all providers
 
 
 ```typescript
-private function setUser(user: User)
+private function setUser(user?: User)
 ```
-<small>*Defined in [bitski.ts:234](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L234)*</small>
+<small>*Defined in [bitski.ts:245](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L245)*</small>
 
 
 
@@ -547,7 +556,7 @@ private function setUser(user: User)
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| user | `User`   |  User to send to cached providers |
+| user _(Optional)_ | `User`   |  User to send to cached providers |
 
 
 
@@ -573,7 +582,7 @@ Starts sign in flow.
 ```typescript
 function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:135](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L135)*</small>
+<small>*Defined in [bitski.ts:137](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L137)*</small>
 
 
 
@@ -611,7 +620,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:195](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L195)*</small>
+<small>*Defined in [bitski.ts:197](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L197)*</small>
 
 
 
@@ -625,6 +634,36 @@ function signInCallback(authenticationIntegrationType: OAuthProviderIntegrationT
 
 ##### Return Value
 `Promise<User>`
+
+
+
+
+
+
+
+<a id="_bitski_.bitski.signout"></a>
+
+#### signOut
+
+
+
+Sign the current user out of your application.
+
+
+
+
+##### Declaration
+
+
+```typescript
+function signOut(): Promise<void>
+```
+<small>*Defined in [bitski.ts:209](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L209)*</small>
+
+
+
+##### Return Value
+`Promise<void>`
 
 
 
@@ -649,7 +688,7 @@ function signInCallback(authenticationIntegrationType: OAuthProviderIntegrationT
 ```javascript
 var DEFAULT_BITSKI_OAUTH_HOST: "https://account.bitski.com" = "https://account.bitski.com"
 ```
-<small>*Defined in [bitski.ts:10](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L10)*</small>
+<small>*Defined in [bitski.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L10)*</small>
 
 
 
@@ -669,7 +708,7 @@ var DEFAULT_BITSKI_OAUTH_HOST: "https://account.bitski.com" = "https://account.b
 ```javascript
 var authorization_endpoint: string = "https://account.bitski.com/oauth2/auth"
 ```
-<small>*Defined in [bitski.ts:13](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L13)*</small>
+<small>*Defined in [bitski.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L13)*</small>
 
 
 
@@ -683,7 +722,7 @@ var authorization_endpoint: string = "https://account.bitski.com/oauth2/auth"
 ```javascript
 var claims_supported: string[] =  ['sub']
 ```
-<small>*Defined in [bitski.ts:14](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L14)*</small>
+<small>*Defined in [bitski.ts:14](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L14)*</small>
 
 
 
@@ -697,7 +736,7 @@ var claims_supported: string[] =  ['sub']
 ```javascript
 var id_token_signing_alg_values_supported: string[] =  ['RS256']
 ```
-<small>*Defined in [bitski.ts:15](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L15)*</small>
+<small>*Defined in [bitski.ts:15](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L15)*</small>
 
 
 
@@ -711,7 +750,7 @@ var id_token_signing_alg_values_supported: string[] =  ['RS256']
 ```javascript
 var issuer: string = "https://account.bitski.com"
 ```
-<small>*Defined in [bitski.ts:16](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L16)*</small>
+<small>*Defined in [bitski.ts:16](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L16)*</small>
 
 
 
@@ -725,7 +764,7 @@ var issuer: string = "https://account.bitski.com"
 ```javascript
 var jwks_uri: string = "https://account.bitski.com/.well-known/jwks.json"
 ```
-<small>*Defined in [bitski.ts:17](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L17)*</small>
+<small>*Defined in [bitski.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L17)*</small>
 
 
 
@@ -739,7 +778,7 @@ var jwks_uri: string = "https://account.bitski.com/.well-known/jwks.json"
 ```javascript
 var response_types_supported: string[] =  ['code', 'code id_token', 'id_token', 'token id_token', 'token', 'token id_token code']
 ```
-<small>*Defined in [bitski.ts:18](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L18)*</small>
+<small>*Defined in [bitski.ts:18](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L18)*</small>
 
 
 
@@ -753,7 +792,7 @@ var response_types_supported: string[] =  ['code', 'code id_token', 'id_token', 
 ```javascript
 var scopes_supported: string[] =  ['offline', 'openid']
 ```
-<small>*Defined in [bitski.ts:19](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L19)*</small>
+<small>*Defined in [bitski.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L19)*</small>
 
 
 
@@ -767,7 +806,7 @@ var scopes_supported: string[] =  ['offline', 'openid']
 ```javascript
 var subject_types_supported: string[] =  ['pairwise', 'public']
 ```
-<small>*Defined in [bitski.ts:20](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L20)*</small>
+<small>*Defined in [bitski.ts:20](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L20)*</small>
 
 
 
@@ -781,7 +820,7 @@ var subject_types_supported: string[] =  ['pairwise', 'public']
 ```javascript
 var token_endpoint: string = "https://account.bitski.com/oauth2/token"
 ```
-<small>*Defined in [bitski.ts:21](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L21)*</small>
+<small>*Defined in [bitski.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L21)*</small>
 
 
 
@@ -795,7 +834,7 @@ var token_endpoint: string = "https://account.bitski.com/oauth2/token"
 ```javascript
 var token_endpoint_auth_methods_supported: string[] =  ['client_secret_post', 'client_secret_basic']
 ```
-<small>*Defined in [bitski.ts:22](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L22)*</small>
+<small>*Defined in [bitski.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L22)*</small>
 
 
 
@@ -809,7 +848,7 @@ var token_endpoint_auth_methods_supported: string[] =  ['client_secret_post', 'c
 ```javascript
 var userinfo_endpoint: string = "https://account.bitski.com/userinfo"
 ```
-<small>*Defined in [bitski.ts:23](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/bitski.ts#L23)*</small>
+<small>*Defined in [bitski.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L23)*</small>
 
 
 
@@ -844,7 +883,7 @@ Sizing options for the Bitski connect button.
 ```javascript
 var LARGE: 
 ```
-<small>*Defined in [components/connect-button.ts:12](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L12)*</small>
+<small>*Defined in [components/connect-button.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L12)*</small>
 
 
 
@@ -858,7 +897,7 @@ var LARGE:
 ```javascript
 var MEDIUM: 
 ```
-<small>*Defined in [components/connect-button.ts:11](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L11)*</small>
+<small>*Defined in [components/connect-button.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L11)*</small>
 
 
 
@@ -872,7 +911,7 @@ var MEDIUM:
 ```javascript
 var SMALL: 
 ```
-<small>*Defined in [components/connect-button.ts:10](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L10)*</small>
+<small>*Defined in [components/connect-button.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L10)*</small>
 
 
 
@@ -922,7 +961,7 @@ new ConnectButton(bitskiInstance: Bitski, existingDiv?: HTMLElement, size?: Conn
 ```javascript
 private var activeColor: string = "#1A7CE6"
 ```
-<small>*Defined in [components/connect-button.ts:25](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L25)*</small>
+<small>*Defined in [components/connect-button.ts:25](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L25)*</small>
 
 
 <a id="_components_connect_button_.connectbutton.authenticationmode"></a>
@@ -931,7 +970,7 @@ private var activeColor: string = "#1A7CE6"
 ```javascript
 private var authenticationMode: OAuthProviderIntegrationType
 ```
-<small>*Defined in [components/connect-button.ts:23](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L23)*</small>
+<small>*Defined in [components/connect-button.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L23)*</small>
 
 
 <a id="_components_connect_button_.connectbutton.bitskiinstance"></a>
@@ -940,7 +979,7 @@ private var authenticationMode: OAuthProviderIntegrationType
 ```javascript
 private var bitskiInstance: Bitski
 ```
-<small>*Defined in [components/connect-button.ts:22](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L22)*</small>
+<small>*Defined in [components/connect-button.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L22)*</small>
 
 
 <a id="_components_connect_button_.connectbutton.callback"></a>
@@ -949,7 +988,7 @@ private var bitskiInstance: Bitski
 ```javascript
 var callback: undefined | function
 ```
-<small>*Defined in [components/connect-button.ts:21](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L21)*</small>
+<small>*Defined in [components/connect-button.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L21)*</small>
 
 
 <a id="_components_connect_button_.connectbutton.defaultcolor"></a>
@@ -958,7 +997,7 @@ var callback: undefined | function
 ```javascript
 private var defaultColor: string = "#298FFF"
 ```
-<small>*Defined in [components/connect-button.ts:24](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L24)*</small>
+<small>*Defined in [components/connect-button.ts:24](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L24)*</small>
 
 
 <a id="_components_connect_button_.connectbutton.element"></a>
@@ -967,7 +1006,7 @@ private var defaultColor: string = "#298FFF"
 ```javascript
 var element: HTMLElement
 ```
-<small>*Defined in [components/connect-button.ts:19](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L19)*</small>
+<small>*Defined in [components/connect-button.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L19)*</small>
 
 
 <a id="_components_connect_button_.connectbutton.size"></a>
@@ -976,7 +1015,7 @@ var element: HTMLElement
 ```javascript
 var size: ConnectButtonSize
 ```
-<small>*Defined in [components/connect-button.ts:20](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L20)*</small>
+<small>*Defined in [components/connect-button.ts:20](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L20)*</small>
 
 
 
@@ -997,7 +1036,7 @@ var size: ConnectButtonSize
 ```typescript
 private function blur()
 ```
-<small>*Defined in [components/connect-button.ts:71](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L71)*</small>
+<small>*Defined in [components/connect-button.ts:71](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L71)*</small>
 
 
 
@@ -1019,7 +1058,7 @@ private function blur()
 ```typescript
 private function configureForLarge()
 ```
-<small>*Defined in [components/connect-button.ts:143](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L143)*</small>
+<small>*Defined in [components/connect-button.ts:143](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L143)*</small>
 
 
 
@@ -1041,7 +1080,7 @@ private function configureForLarge()
 ```typescript
 private function configureForMedium()
 ```
-<small>*Defined in [components/connect-button.ts:127](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L127)*</small>
+<small>*Defined in [components/connect-button.ts:127](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L127)*</small>
 
 
 
@@ -1063,7 +1102,7 @@ private function configureForMedium()
 ```typescript
 private function configureForSmall()
 ```
-<small>*Defined in [components/connect-button.ts:111](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L111)*</small>
+<small>*Defined in [components/connect-button.ts:111](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L111)*</small>
 
 
 
@@ -1085,7 +1124,7 @@ private function configureForSmall()
 ```typescript
 private function focus()
 ```
-<small>*Defined in [components/connect-button.ts:67](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L67)*</small>
+<small>*Defined in [components/connect-button.ts:67](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L67)*</small>
 
 
 
@@ -1107,7 +1146,7 @@ private function focus()
 ```typescript
 private function setAttributes(attributes: object)
 ```
-<small>*Defined in [components/connect-button.ts:103](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L103)*</small>
+<small>*Defined in [components/connect-button.ts:103](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L103)*</small>
 
 
 
@@ -1137,7 +1176,7 @@ private function setAttributes(attributes: object)
 ```typescript
 private function setDefaultStyle()
 ```
-<small>*Defined in [components/connect-button.ts:75](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L75)*</small>
+<small>*Defined in [components/connect-button.ts:75](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L75)*</small>
 
 
 
@@ -1159,7 +1198,7 @@ private function setDefaultStyle()
 ```typescript
 private function signin()
 ```
-<small>*Defined in [components/connect-button.ts:55](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/connect-button.ts#L55)*</small>
+<small>*Defined in [components/connect-button.ts:55](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L55)*</small>
 
 
 
@@ -1191,13 +1230,15 @@ private function signin()
 <a id="_components_dialog_.dialog.constructor"></a>
 ### constructor
 ```typescript
-new Dialog(content: any): Dialog
+new Dialog(content: any, width?: undefined | number, height?: undefined | number): Dialog
 ```
 ##### Parameters
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | content | `any`   |  - |
+| width _(Optional)_ | `undefined          ⎮number`   |  - |
+| height _(Optional)_ | `undefined          ⎮number`   |  - |
 
 
 
@@ -1217,7 +1258,7 @@ new Dialog(content: any): Dialog
 ```javascript
 private var body: HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:4](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L4)*</small>
+<small>*Defined in [components/dialog.ts:7](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L7)*</small>
 
 
 <a id="_components_dialog_.dialog.closebutton"></a>
@@ -1226,7 +1267,7 @@ private var body: HTMLElement
 ```javascript
 private var closeButton: HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:6](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L6)*</small>
+<small>*Defined in [components/dialog.ts:9](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L9)*</small>
 
 
 <a id="_components_dialog_.dialog.container"></a>
@@ -1235,7 +1276,7 @@ private var closeButton: HTMLElement
 ```javascript
 private var container: HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:3](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L3)*</small>
+<small>*Defined in [components/dialog.ts:6](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L6)*</small>
 
 
 <a id="_components_dialog_.dialog.content"></a>
@@ -1244,7 +1285,7 @@ private var container: HTMLElement
 ```javascript
 private var content: any
 ```
-<small>*Defined in [components/dialog.ts:2](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L2)*</small>
+<small>*Defined in [components/dialog.ts:5](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L5)*</small>
 
 
 <a id="_components_dialog_.dialog.dialog-1"></a>
@@ -1253,7 +1294,16 @@ private var content: any
 ```javascript
 private var dialog: HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:5](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L5)*</small>
+<small>*Defined in [components/dialog.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L8)*</small>
+
+
+<a id="_components_dialog_.dialog.height"></a>
+
+#### height
+```javascript
+private var height: number
+```
+<small>*Defined in [components/dialog.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L12)*</small>
 
 
 <a id="_components_dialog_.dialog.resizelistener"></a>
@@ -1262,7 +1312,16 @@ private var dialog: HTMLElement
 ```javascript
 private var resizeListener: any
 ```
-<small>*Defined in [components/dialog.ts:7](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L7)*</small>
+<small>*Defined in [components/dialog.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L10)*</small>
+
+
+<a id="_components_dialog_.dialog.width"></a>
+
+#### width
+```javascript
+private var width: number
+```
+<small>*Defined in [components/dialog.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L11)*</small>
 
 
 
@@ -1283,7 +1342,7 @@ private var resizeListener: any
 ```typescript
 private function addChildren()
 ```
-<small>*Defined in [components/dialog.ts:44](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L44)*</small>
+<small>*Defined in [components/dialog.ts:51](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L51)*</small>
 
 
 
@@ -1305,7 +1364,7 @@ private function addChildren()
 ```typescript
 private function createBody(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:118](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L118)*</small>
+<small>*Defined in [components/dialog.ts:125](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L125)*</small>
 
 
 
@@ -1331,7 +1390,7 @@ private function createBody(): HTMLElement
 ```typescript
 private function createCloseButton(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:51](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L51)*</small>
+<small>*Defined in [components/dialog.ts:58](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L58)*</small>
 
 
 
@@ -1357,7 +1416,7 @@ private function createCloseButton(): HTMLElement
 ```typescript
 private function createContainer(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:103](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L103)*</small>
+<small>*Defined in [components/dialog.ts:110](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L110)*</small>
 
 
 
@@ -1383,7 +1442,7 @@ private function createContainer(): HTMLElement
 ```typescript
 private function createDialog(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:78](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L78)*</small>
+<small>*Defined in [components/dialog.ts:85](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L85)*</small>
 
 
 
@@ -1409,7 +1468,7 @@ private function createDialog(): HTMLElement
 ```typescript
 function dismiss()
 ```
-<small>*Defined in [components/dialog.ts:39](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L39)*</small>
+<small>*Defined in [components/dialog.ts:46](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L46)*</small>
 
 
 
@@ -1431,7 +1490,7 @@ function dismiss()
 ```typescript
 function isDocumentLoaded(): boolean
 ```
-<small>*Defined in [components/dialog.ts:31](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L31)*</small>
+<small>*Defined in [components/dialog.ts:38](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L38)*</small>
 
 
 
@@ -1457,7 +1516,7 @@ function isDocumentLoaded(): boolean
 ```typescript
 private function render(): HTMLElement
 ```
-<small>*Defined in [components/dialog.ts:144](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L144)*</small>
+<small>*Defined in [components/dialog.ts:151](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L151)*</small>
 
 
 
@@ -1483,7 +1542,7 @@ private function render(): HTMLElement
 ```typescript
 private function resize()
 ```
-<small>*Defined in [components/dialog.ts:149](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L149)*</small>
+<small>*Defined in [components/dialog.ts:156](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L156)*</small>
 
 
 
@@ -1505,7 +1564,7 @@ private function resize()
 ```typescript
 function shouldRenderFullScreen(): boolean
 ```
-<small>*Defined in [components/dialog.ts:35](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L35)*</small>
+<small>*Defined in [components/dialog.ts:42](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L42)*</small>
 
 
 
@@ -1531,7 +1590,7 @@ function shouldRenderFullScreen(): boolean
 ```typescript
 private function styleBody(body: HTMLElement)
 ```
-<small>*Defined in [components/dialog.ts:125](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L125)*</small>
+<small>*Defined in [components/dialog.ts:132](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L132)*</small>
 
 
 
@@ -1561,7 +1620,7 @@ private function styleBody(body: HTMLElement)
 ```typescript
 private function styleDialog(dialog: HTMLElement)
 ```
-<small>*Defined in [components/dialog.ts:85](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/components/dialog.ts#L85)*</small>
+<small>*Defined in [components/dialog.ts:92](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L92)*</small>
 
 
 
@@ -1585,6 +1644,35 @@ private function styleDialog(dialog: HTMLElement)
 
 
 ---
+
+
+<a id="_components_dialog_.default_dialog_height"></a>
+
+#### «Const» DEFAULT_DIALOG_HEIGHT
+
+
+```javascript
+var DEFAULT_DIALOG_HEIGHT: 420 = 420
+```
+<small>*Defined in [components/dialog.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L2)*</small>
+
+
+
+
+
+<a id="_components_dialog_.default_dialog_width"></a>
+
+#### «Const» DEFAULT_DIALOG_WIDTH
+
+
+```javascript
+var DEFAULT_DIALOG_WIDTH: 490 = 490
+```
+<small>*Defined in [components/dialog.ts:1](https://github.com/BitskiCo/bitski-js/blob/master/src/components/dialog.ts#L1)*</small>
+
+
+
+
 
 
 
@@ -1612,13 +1700,14 @@ window.web3 = new Web3(provider);
 <a id="_providers_bitski_provider_.bitskiprovider.constructor"></a>
 ### constructor
 ```typescript
-new BitskiProvider(networkName?: string, additionalHeaders?: [any]): BitskiProvider
+new BitskiProvider(networkName?: string, settings: BitskiProviderSettings, additionalHeaders?: [any]): BitskiProvider
 ```
 ##### Parameters
 
 | Param | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | networkName | `string`  | &quot;kovan&quot; |   Network name |
+| settings | [BitskiProviderSettings](#_providers_bitski_provider_settings_.bitskiprovidersettings)  | - |   - |
 | additionalHeaders _(Optional)_ | `[any]`  | - |   - |
 
 
@@ -1645,7 +1734,7 @@ Determines how the authorization modals show up for eth_call and eth_sendTransac
 ```javascript
 var authorizationIntegrationType: OAuthProviderIntegrationType =  OAuthProviderIntegrationType.IFRAME
 ```
-<small>*Defined in [providers/bitski-provider.ts:28](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L28)*</small>
+<small>*Defined in [providers/bitski-provider.ts:27](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L27)*</small>
 
 
 
@@ -1655,7 +1744,7 @@ var authorizationIntegrationType: OAuthProviderIntegrationType =  OAuthProviderI
 ```javascript
 private var currentTransactionDialog: Dialog =  undefined
 ```
-<small>*Defined in [providers/bitski-provider.ts:46](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L46)*</small>
+<small>*Defined in [providers/bitski-provider.ts:45](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L45)*</small>
 
 
 <a id="_providers_bitski_provider_.bitskiprovider.currenttransactionwindow"></a>
@@ -1664,7 +1753,7 @@ private var currentTransactionDialog: Dialog =  undefined
 ```javascript
 private var currentTransactionWindow: Window =  undefined
 ```
-<small>*Defined in [providers/bitski-provider.ts:47](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L47)*</small>
+<small>*Defined in [providers/bitski-provider.ts:46](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L46)*</small>
 
 
 
@@ -1674,7 +1763,7 @@ private var currentTransactionWindow: Window =  undefined
 ```javascript
 private var networkName: string
 ```
-<small>*Defined in [providers/bitski-provider.ts:45](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L45)*</small>
+<small>*Defined in [providers/bitski-provider.ts:44](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L44)*</small>
 
 
 
@@ -1684,7 +1773,7 @@ private var networkName: string
 ```javascript
 private var pendingTransactions: JsonRPC[] =  []
 ```
-<small>*Defined in [providers/bitski-provider.ts:44](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L44)*</small>
+<small>*Defined in [providers/bitski-provider.ts:43](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L43)*</small>
 
 
 <a id="_providers_bitski_provider_.bitskiprovider.queuedsends"></a>
@@ -1697,8 +1786,17 @@ Queued requests to be sent upon logging in.
 ```javascript
 private var queuedSends: JsonRPC[] =  []
 ```
-<small>*Defined in [providers/bitski-provider.ts:43](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L43)*</small>
+<small>*Defined in [providers/bitski-provider.ts:42](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L42)*</small>
 
+
+
+<a id="_providers_bitski_provider_.bitskiprovider.settings"></a>
+
+#### settings
+```javascript
+private var settings: BitskiProviderSettings
+```
+<small>*Defined in [providers/bitski-provider.ts:47](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L47)*</small>
 
 
 
@@ -1746,7 +1844,7 @@ Flush all queued requests. Will be ignored if the access token is not valid.
 ```typescript
 private function flushQueuedSends()
 ```
-<small>*Defined in [providers/bitski-provider.ts:119](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L119)*</small>
+<small>*Defined in [providers/bitski-provider.ts:119](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L119)*</small>
 
 
 
@@ -1774,7 +1872,7 @@ Handles messages sent from popup windows or iframes
 ```typescript
 function receiveMessage(event: MessageEvent)
 ```
-<small>*Defined in [providers/bitski-provider.ts:78](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L78)*</small>
+<small>*Defined in [providers/bitski-provider.ts:78](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L78)*</small>
 
 
 
@@ -1810,7 +1908,7 @@ Determines if web3 method requires authentication
 ```typescript
 private function requiresAuthentication(method: string): boolean
 ```
-<small>*Defined in [providers/bitski-provider.ts:134](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L134)*</small>
+<small>*Defined in [providers/bitski-provider.ts:134](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L134)*</small>
 
 
 
@@ -1848,7 +1946,7 @@ Returns a boolean value that indicates whether the Web3 method can be executed w
 ```typescript
 private function requiresAuthorization(method: string): boolean
 ```
-<small>*Defined in [providers/bitski-provider.ts:151](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L151)*</small>
+<small>*Defined in [providers/bitski-provider.ts:151](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L151)*</small>
 
 
 
@@ -1887,7 +1985,7 @@ Sends a Web3 request. Will be deferred if authentication is requied and we're no
 ```typescript
 function send(payload: JsonRPCRequest, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/bitski-provider.ts:106](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L106)*</small>
+<small>*Defined in [providers/bitski-provider.ts:106](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L106)*</small>
 
 
 
@@ -1923,7 +2021,7 @@ Sends a request with authentication headers.
 ```typescript
 private function sendAuthenticated(payload: JsonRPCRequest, accessToken: string, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/bitski-provider.ts:167](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L167)*</small>
+<small>*Defined in [providers/bitski-provider.ts:167](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L167)*</small>
 
 
 
@@ -1959,7 +2057,7 @@ Set the current access token
 ```typescript
 function setAccessToken(accessToken?: AccessToken)
 ```
-<small>*Defined in [providers/bitski-provider.ts:69](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L69)*</small>
+<small>*Defined in [providers/bitski-provider.ts:69](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L69)*</small>
 
 
 
@@ -1993,7 +2091,7 @@ Presents an authorization request to the user.
 ```typescript
 private function showAuthorization(payload: JsonRPCRequest, accessToken: string, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/bitski-provider.ts:181](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L181)*</small>
+<small>*Defined in [providers/bitski-provider.ts:181](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L181)*</small>
 
 
 
@@ -2039,7 +2137,7 @@ private function showAuthorization(payload: JsonRPCRequest, accessToken: string,
 ```javascript
 var callback: JsonRPCCallback
 ```
-<small>*Defined in [providers/bitski-provider.ts:13](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L13)*</small>
+<small>*Defined in [providers/bitski-provider.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L12)*</small>
 
 
 <a id="_providers_bitski_provider_.jsonrpc.payload"></a>
@@ -2048,7 +2146,7 @@ var callback: JsonRPCCallback
 ```javascript
 var payload: JsonRPCRequest
 ```
-<small>*Defined in [providers/bitski-provider.ts:12](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L12)*</small>
+<small>*Defined in [providers/bitski-provider.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L11)*</small>
 
 
 
@@ -2062,7 +2160,7 @@ var payload: JsonRPCRequest
 ```javascript
 var BITSKI_API_V1_HOST: "https://api.bitski.com/v1" = "https://api.bitski.com/v1"
 ```
-<small>*Defined in [providers/bitski-provider.ts:8](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L8)*</small>
+<small>*Defined in [providers/bitski-provider.ts:7](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L7)*</small>
 
 
 
@@ -2076,7 +2174,7 @@ var BITSKI_API_V1_HOST: "https://api.bitski.com/v1" = "https://api.bitski.com/v1
 ```javascript
 var BITSKI_WEB_HOST: "https://www.bitski.com" = "https://www.bitski.com"
 ```
-<small>*Defined in [providers/bitski-provider.ts:9](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider.ts#L9)*</small>
+<small>*Defined in [providers/bitski-provider.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider.ts#L8)*</small>
 
 
 
@@ -2135,7 +2233,7 @@ OAuth provider URL
 ```javascript
 var authority: string
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:10](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L10)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L13)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.automaticsilentrenew"></a>
@@ -2148,7 +2246,7 @@ Flag to indicate if there should be an automatic attempt to renew the access tok
 ```javascript
 var automaticSilentRenew: boolean = true
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:63](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L63)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:66](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L66)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.client_id"></a>
@@ -2161,7 +2259,7 @@ Your client application's identifier as registered with Bitski.
 ```javascript
 var client_id: string
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:16](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L16)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L19)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.filterprotocolclaims"></a>
@@ -2174,7 +2272,7 @@ Should OIDC protocol claims be removed from profile.
 ```javascript
 var filterProtocolClaims: boolean = true
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:74](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L74)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:77](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L77)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.includeidtokeninsilentrenew"></a>
@@ -2187,7 +2285,7 @@ Flag to control whether or not to include id_token_hint as a parameter when refr
 ```javascript
 var includeIdTokenInSilentRenew: boolean = false
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:91](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L91)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:94](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L94)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.loaduserinfo"></a>
@@ -2200,7 +2298,7 @@ Flag to control if additional identity data is loaded from the user info endpoin
 ```javascript
 var loadUserInfo: boolean = true
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:80](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L80)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:83](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L83)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.metadata"></a>
@@ -2213,7 +2311,7 @@ Pre populated metata so that we don't need an extra API call
 ```javascript
 var metadata: undefined | object
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:96](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L96)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:99](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L99)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.popupwindowfeatures"></a>
@@ -2224,9 +2322,9 @@ Features used to style and configure the popup window
 
 
 ```javascript
-var popupWindowFeatures: string = "location=no,toolbar=no,width=490,height=380,left=100,top=100;"
+var popupWindowFeatures: string =  `location=no,toolbar=no,width=${DEFAULT_WINDOW_WIDTH},height=${DEFAULT_WINDOW_HEIGHT},left=100,top=100,resizable=yes;`
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:85](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L85)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:88](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L88)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.popup_post_logout_redirect_uri"></a>
@@ -2239,7 +2337,7 @@ The post-logout redirect URI for the popup method.
 ```javascript
 var popup_post_logout_redirect_uri: string =  this.popup_post_logout_redirect_uri
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:51](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L51)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:54](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L54)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.popup_redirect_uri"></a>
@@ -2252,7 +2350,7 @@ The URL for the page containing the call to `signinPopupCallback` to handle the 
 ```javascript
 var popup_redirect_uri: string =  this.redirect_uri
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:46](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L46)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:49](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L49)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.post_logout_redirect_uri"></a>
@@ -2265,7 +2363,7 @@ The post-logout redirect URI.
 ```javascript
 var post_logout_redirect_uri: string
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:39](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L39)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:42](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L42)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.redirect_uri"></a>
@@ -2278,7 +2376,7 @@ The redirect URI of your client application to receive the OAuth response from t
 ```javascript
 var redirect_uri: string
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:33](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L33)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:36](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L36)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.response_type"></a>
@@ -2291,7 +2389,7 @@ The type of response desired from the provider.
 ```javascript
 var response_type: string = "token id_token"
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:21](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L21)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:24](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L24)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.scope"></a>
@@ -2304,7 +2402,7 @@ The OAuth scope being requested from Bitski.
 ```javascript
 var scope: string = "openid"
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:26](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L26)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:29](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L29)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.silentrequesttimeout"></a>
@@ -2317,7 +2415,7 @@ Number of milliseconds to wait for the silent renew to return before assuming it
 ```javascript
 var silentRequestTimeout: number = 10000
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:69](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L69)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:72](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L72)*</small>
 
 
 <a id="_providers_bitski_provider_settings_.bitskiprovidersettings.silent_redirect_uri"></a>
@@ -2330,7 +2428,7 @@ The URL for the page containing the code handling the silent renew.
 ```javascript
 var silent_redirect_uri: string =  this.silent_redirect_uri
 ```
-<small>*Defined in [providers/bitski-provider-settings.ts:56](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/bitski-provider-settings.ts#L56)*</small>
+<small>*Defined in [providers/bitski-provider-settings.ts:59](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L59)*</small>
 
 
 
@@ -2343,6 +2441,35 @@ var silent_redirect_uri: string =  this.silent_redirect_uri
 * UserManagerSettings
 
 ---
+
+
+<a id="_providers_bitski_provider_settings_.default_window_height"></a>
+
+#### «Const» DEFAULT_WINDOW_HEIGHT
+
+
+```javascript
+var DEFAULT_WINDOW_HEIGHT: 420 = 420
+```
+<small>*Defined in [providers/bitski-provider-settings.ts:4](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L4)*</small>
+
+
+
+
+
+<a id="_providers_bitski_provider_settings_.default_window_width"></a>
+
+#### «Const» DEFAULT_WINDOW_WIDTH
+
+
+```javascript
+var DEFAULT_WINDOW_WIDTH: 490 = 490
+```
+<small>*Defined in [providers/bitski-provider-settings.ts:3](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/bitski-provider-settings.ts#L3)*</small>
+
+
+
+
 
 
 
@@ -2367,7 +2494,7 @@ var silent_redirect_uri: string =  this.silent_redirect_uri
 ```javascript
 var IFRAME: 
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:8](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L8)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L8)*</small>
 
 
 
@@ -2381,7 +2508,7 @@ var IFRAME:
 ```javascript
 var POPUP: 
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:10](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L10)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L10)*</small>
 
 
 
@@ -2395,7 +2522,7 @@ var POPUP:
 ```javascript
 var REDIRECT: 
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:9](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L9)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:9](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L9)*</small>
 
 
 
@@ -2409,7 +2536,7 @@ var REDIRECT:
 ```javascript
 var SILENT: 
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:11](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L11)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L11)*</small>
 
 
 
@@ -2462,7 +2589,7 @@ The access token for the current logged in user
 ```javascript
 var accessToken: AccessToken =  undefined
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:21](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L21)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L21)*</small>
 
 
 
@@ -2478,7 +2605,7 @@ The JSON-RPC endpoint
 ```javascript
 private var host: string
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:26](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L26)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L26)*</small>
 
 
 
@@ -2505,7 +2632,7 @@ Prepares a new XMLHttpRequest with the proper headers Does not require an access
 ```typescript
 function _prepareRequest(): XMLHttpRequest
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:64](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L64)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:64](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L64)*</small>
 
 
 
@@ -2537,7 +2664,7 @@ Check whether we are connected to the server.
 ```typescript
 function isConnected(): boolean
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:55](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L55)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:55](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L55)*</small>
 
 
 
@@ -2574,7 +2701,7 @@ Send a web3 / JSON-RPC request asynchronously.
 ```typescript
 function sendAsync(payload: JsonRPCRequest, callback: JsonRPCCallback)
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:47](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L47)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:47](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L47)*</small>
 
 
 
@@ -2605,7 +2732,7 @@ function sendAsync(payload: JsonRPCRequest, callback: JsonRPCCallback)
 ```typescript
 function setAccessToken(accessToken?: AccessToken)
 ```
-<small>*Defined in [providers/oauth-http-provider.ts:38](https://github.com/BitskiCo/bitski-js-sdk/blob/master/src/providers/oauth-http-provider.ts#L38)*</small>
+<small>*Defined in [providers/oauth-http-provider.ts:38](https://github.com/BitskiCo/bitski-js/blob/master/src/providers/oauth-http-provider.ts#L38)*</small>
 
 
 
