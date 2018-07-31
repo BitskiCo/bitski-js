@@ -1,5 +1,8 @@
 import { UserManagerSettings } from 'oidc-client';
 
+const DEFAULT_WINDOW_WIDTH = 490;
+const DEFAULT_WINDOW_HEIGHT = 420;
+
 /**
  * Settings for configuring Bitski.
  */
@@ -82,7 +85,7 @@ export class BitskiProviderSettings implements UserManagerSettings {
   /**
    * Features used to style and configure the popup window
    */
-  public popupWindowFeatures: string = 'location=no,toolbar=no,width=490,height=380,left=100,top=100;';
+  public popupWindowFeatures: string = `location=no,toolbar=no,width=${DEFAULT_WINDOW_WIDTH},height=${DEFAULT_WINDOW_HEIGHT},left=100,top=100,resizable=yes;`;
 
   /**
    * Flag to control whether or not to include id_token_hint as a parameter when refreshing your access token.

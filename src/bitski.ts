@@ -1,11 +1,14 @@
 import { Log, User, UserManager } from 'oidc-client';
 import Web3 from 'web3';
 import HttpProvider from 'web3-providers-http';
+import 'xhr2';
 import { AccessToken } from './access-token';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
 import { BitskiProvider } from './providers/bitski-provider';
 import { BitskiProviderSettings } from './providers/bitski-provider-settings';
 import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
+
+const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
 
 const DEFAULT_BITSKI_OAUTH_HOST = 'https://account.bitski.com';
 
@@ -28,9 +31,11 @@ const DEFAULT_BITSKI_METADATA: { [key: string]: any; } = {
  */
 export class Bitski {
   public userManager: UserManager;
+  public timeout: number = 5000;
   private providers: Map<string, HttpProvider>;
   private cachedUser?: User;
   private clientId: string;
+  private settings: BitskiProviderSettings;
 
   /**
    * @param clientId OAuth Client ID
@@ -47,6 +52,7 @@ export class Bitski {
 
     this.clientId = clientId;
     this.userManager = new UserManager(settings);
+    this.settings = settings;
 
     this.userManager.events.addUserLoaded(this.didSetUser.bind(this));
     this.userManager.events.addUserSignedOut(this.didUnsetUser.bind(this));
@@ -181,7 +187,6 @@ export class Bitski {
       if (user && !user.expired) {
         return user;
       }
-
       return this.signIn(authenticationIntegrationType);
     }).catch((error) => {
       return this.signIn(authenticationIntegrationType);
@@ -202,6 +207,20 @@ export class Bitski {
   }
 
   /**
+   * Sign the current user out of your application.
+   */
+  public signOut(): Promise<any> {
+    if (this.cachedUser && this.cachedUser.access_token) {
+      return this.requestSignOut(this.cachedUser.access_token).then(() => {
+        return this.userManager.removeUser().then(() => {
+          this.setUser(undefined);
+        });
+      });
+    }
+    return Promise.reject(new Error('Not signed in.'));
+  }
+
+  /**
    * Set logger and log level for debugging purposes
    * @param logger The logger to use (i.e. console). Must support methods info(), warn(), and error().
    * @param level The desired log level.
@@ -218,8 +237,46 @@ export class Bitski {
     return window.parent !== window;
   }
 
+  private requestSignOut(accessToken): Promise<any> {
+    const request = new XMLHttpRequest();
+    request.open('POST', `${BITSKI_USER_API_HOST}/logout`, true);
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.setRequestHeader('Accept', 'application/json');
+    request.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+    request.timeout = this.timeout;
+    return this.sendRequest(request);
+  }
+
+  private sendRequest(request): Promise<any> {
+    return new Promise((fulfill, reject) => {
+      request.onload = () => {
+        if (request.status >= 200 && request.status <= 299) {
+          return fulfill(request.responseText);
+        } else {
+          let result;
+          try {
+            result = JSON.parse(request.responseText);
+          } catch (error) {
+            return reject(new Error('Unknown error. Could not parse error response.'));
+          }
+          if (result && result.error && result.error.message) {
+            return reject(new Error(result.error.message));
+          } else if (result && result.error) {
+            return reject(new Error(result.error));
+          } else {
+            return reject(new Error('Unknown error.'));
+          }
+        }
+      };
+      request.ontimeout = () => {
+        return reject(new Error('Connection timed out.'));
+      };
+      request.send();
+    });
+  }
+
   private createProvider(networkName?: string): BitskiProvider {
-    const provider = new BitskiProvider(networkName || 'mainnet', [{ name: 'X-Client-Id', value: this.clientId }]);
+    const provider = new BitskiProvider(networkName || 'mainnet', this.settings, [{ name: 'X-Client-Id', value: this.clientId }]);
     if (this.cachedUser) {
       const accessToken = new AccessToken(this.cachedUser.access_token, this.cachedUser.expires_at);
       provider.setAccessToken(accessToken);
@@ -231,13 +288,16 @@ export class Bitski {
    * Pass logged in user to all providers
    * @param user User to send to cached providers
    */
-  private setUser(user: User) {
+  private setUser(user?: User) {
     this.cachedUser = user;
     if (this.isInFrame() === true) {
       // We are in an IFRAME
       parent.postMessage(user, '*');
     }
-    const accessToken = new AccessToken(user.access_token, user.expires_at);
+    let accessToken;
+    if (user) {
+      accessToken = new AccessToken(user.access_token, user.expires_at);
+    }
     this.providers.forEach((provider, _) => {
       if (provider instanceof BitskiProvider) {
         provider.setAccessToken(accessToken);

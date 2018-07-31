@@ -1,9 +1,8 @@
-import { Log, User, UserManager } from 'oidc-client';
-import Web3 from 'web3';
 import { JsonRPCCallback, JsonRPCRequest, JsonRPCResponse } from 'web3-providers-http';
 import { AccessToken } from '../access-token';
 import { Dialog } from '../components/dialog';
 import { OAuthHttpProvider, OAuthProviderIntegrationType } from '../providers/oauth-http-provider';
+import { BitskiProviderSettings } from './bitski-provider-settings';
 
 const BITSKI_API_V1_HOST = 'https://api.bitski.com/v1';
 const BITSKI_WEB_HOST = 'https://www.bitski.com';
@@ -45,20 +44,21 @@ export class BitskiProvider extends OAuthHttpProvider {
   private networkName: string;
   private currentTransactionDialog?: Dialog = undefined;
   private currentTransactionWindow?: Window = undefined;
+  private settings: BitskiProviderSettings;
 
   /**
    * @param networkName Network name
    * @param userManager OpenID user manager used for auth
    * @param postLogoutRedirectUri Post logout redirect URL, defaults to window.location.href
    */
-  constructor(networkName: string = 'kovan', additionalHeaders?: [any]) {
+  constructor(networkName: string = 'kovan', settings: BitskiProviderSettings, additionalHeaders?: [any]) {
     super(
       `${BITSKI_API_V1_HOST}/web3/${networkName}`,
       0,
       additionalHeaders,
     );
     this.networkName = networkName;
-
+    this.settings = settings;
     window.addEventListener('message', this.receiveMessage.bind(this), false);
   }
 
@@ -210,10 +210,8 @@ export class BitskiProvider extends OAuthHttpProvider {
         window.location.assign(`${ethSendTransactionUrl}?${txnParams}`);
         break;
       case OAuthProviderIntegrationType.POPUP:
-        const options = 'width=490,height=380,toolbar=0,menubar=0,location=0';
-        const newWindow = window.open(`${ethSendTransactionUrl}?${txnParams}`, 'Bitski Authorization', options);
+        const newWindow = window.open(`${ethSendTransactionUrl}?${txnParams}`, 'Bitski Authorization', this.settings.popupWindowFeatures);
         if (window.focus && newWindow) { newWindow.focus(); }
-
         this.currentTransactionWindow = newWindow || undefined;
         break;
       case OAuthProviderIntegrationType.SILENT:

@@ -5,6 +5,8 @@ import { InMemoryWebStorage, WebStorageStateStore } from '../node_modules/oidc-c
 import { UserManager, User, Log } from 'oidc-client';
 import HttpProvider from 'web3-providers-http';
 import mock from 'xhr-mock';
+import { BitskiProviderSettings } from '../src/providers/bitski-provider-settings';
+import { rejects } from 'assert';
 
 const dummyUser = {
   id_token: 'test-id-token',
@@ -29,8 +31,8 @@ function createInstance(): Bitski {
     const otherSettings = {
       userStore: stateStore,
       stateStore: stateStore,
-    }
-    return new Bitski(clientID, undefined, undefined, otherSettings);;
+    };
+    return new Bitski(clientID, undefined, undefined, otherSettings);
 }
 
 beforeEach(() => {
@@ -162,7 +164,7 @@ describe('managing providers', () => {
 
   test('should not create a new provider if one already exists for that network', () => {
     const bitski = createInstance();
-    const mockProvider = new BitskiProvider('foo');
+    const mockProvider = new BitskiProvider('foo', new BitskiProviderSettings('foo', 'foo'));
     bitski['providers'].set('kovan', mockProvider);
     const provider = bitski.getProvider('kovan');
     expect(provider['networkName']).toBe('foo');
@@ -230,6 +232,107 @@ describe('sign in callback', () => {
     const mock = jest.spyOn(bitski.userManager, 'signinSilentCallback').mockResolvedValue(dummyUser);
     return bitski.signInCallback(OAuthProviderIntegrationType.SILENT).then(() => {
       expect(mock).toBeCalled();
+    });
+  });
+});
+
+describe('sign out', () => {
+
+  test('sign out should reject when not signed in', () => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    return expect(bitski.signOut()).rejects.toEqual(new Error('Not signed in.'));
+  });
+
+  test('sign out should reject when receiving an error', () => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    mock.post('https://www.bitski.com/v1/logout', (req, res) => {
+      return res.status(401).body('{ "error": { "message": "Not authorized." }}');
+    });
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      return expect(bitski.signOut()).rejects.toEqual(new Error('Not authorized.'));
+    });
+  });
+
+  test('sign out should reject when receiving an error without a message', () => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    mock.post('https://www.bitski.com/v1/logout', (req, res) => {
+      return res.status(401).body('{ "error": "Not authorized." }');
+    });
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      return expect(bitski.signOut()).rejects.toEqual(new Error('Not authorized.'));
+    });
+  });
+
+  test('sign out should reject when receiving non json response', () => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    mock.post('https://www.bitski.com/v1/logout', (req, res) => {
+      return res.status(500).body('Something went wrong.');
+    });
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      return expect(bitski.signOut()).rejects.toEqual(new Error('Unknown error. Could not parse error response.'));
+    });
+  });
+
+  test('sign out should reject when receiving empty response', () => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    mock.post('https://www.bitski.com/v1/logout', (req, res) => {
+      return res.status(500).body('{}');
+    });
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      return expect(bitski.signOut()).rejects.toEqual(new Error('Unknown error.'));
+    });
+  });
+
+  test('sign out should reject on timeout', () => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    bitski.timeout = 100;
+    mock.post('https://www.bitski.com/v1/logout', () => new Promise(() => {}));
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      return expect(bitski.signOut()).rejects.toEqual(new Error('Connection timed out.'));
+    });
+  });
+
+  test('should clear user on bitski instance', () => {
+    const bitski = createInstance();
+    mock.post('https://www.bitski.com/v1/logout', (req, res) => {
+      return res.status(204);
+    });
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      return bitski.signOut().then(() => {
+        expect(bitski['cachedUser']).toBeUndefined();
+      });
+    });
+  });
+
+  test('should clear access token from providers', () => {
+    const bitski = createInstance();
+    mock.post('https://www.bitski.com/v1/logout', (req, res) => {
+      return res.status(204);
+    });
+    jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
+      const mainnetProvider = bitski.getProvider('mainnet');
+      const kovanProvider = bitski.getProvider('kovan');
+
+      expect(mainnetProvider.accessToken).toBeDefined();
+      expect(kovanProvider.accessToken).toBeDefined();
+
+      return bitski.signOut().then(() => {
+        expect(mainnetProvider.accessToken).toBeUndefined();
+        expect(kovanProvider.accessToken).toBeUndefined();
+      });
     });
   });
 });

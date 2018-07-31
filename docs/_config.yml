@@ -17,7 +17,7 @@ title: Bitski JS
 subtitle: JS
 copyright: © 2018 Out There Labs, Inc
 email: support@bitski.com
-repository: 'BitskiCo/bitski-js-sdk'
+repository: 'BitskiCo/bitski-js'
 description:
 baseurl: "/bitski-js" # the subpath of your site, e.g. /blog
 url: "https://bitskico.github.io" # the base hostname & protocol for your site, e.g. http://example.com
