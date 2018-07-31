@@ -31,8 +31,8 @@ function createInstance(): Bitski {
     const otherSettings = {
       userStore: stateStore,
       stateStore: stateStore,
-    }
-    return new Bitski(clientID, undefined, undefined, otherSettings);;
+    };
+    return new Bitski(clientID, undefined, undefined, otherSettings);
 }
 
 beforeEach(() => {
@@ -295,6 +295,7 @@ describe('sign out', () => {
   test('sign out should reject on timeout', () => {
     expect.assertions(1);
     const bitski = createInstance();
+    bitski.timeout = 100;
     mock.post('https://www.bitski.com/v1/logout', () => new Promise(() => {}));
     jest.spyOn(bitski.userManager, 'signinPopup').mockResolvedValue(dummyUser);
     return bitski.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
