@@ -1,14 +1,16 @@
-## Bitski.js
+## Bitski JS SDK
 
-`Current version: 0.1.6`
+[![npm](https://img.shields.io/npm/v/bitski.svg)](https://www.npmjs.com/package/bitski)
 
-Bitski JS SDK is a JavaScript library that connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain (currently Kovan and Rinkeby test networks only).
+The official Javascript SDK for Bitski. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain.
+
+We currently support mainnet, as well as Kovan and Rinkeby test networks.
 
 ### Getting Started
 
-In order to use Bitski you will need an account. You can set one up here: [https://developer.bitski.com](https://developer.bitski.com).
+In order to use Bitski you will need a client id. You can set one up by visiting the [Developer Portal](https://developer.bitski.com) and creating an app.
 
-Then you will also need a client id token from us. If you’re interested in getting one, fill out the form [here](https://www.bitski.com). We will follow up with you via email.
+Note: While we're in beta, your app will need to be approved before you can actually use your client id to sign in.
 
 ### Installation
 
@@ -21,7 +23,7 @@ npm install --save bitski
 Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.6/lib/bitski.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.7/lib/bitski.js"></script>
 ```
 
 ### Starting the SDK
@@ -46,10 +48,10 @@ const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
 
 #### Getting a Web3 instance
 
-Once the SDK is initialized, you can request a Web3 object. Bitski will automatically configure the Web3 object to work with our servers. You can also pass a network name as a parameter to access test networks.
+Once the SDK is initialized, you can request a Web3 object. Bitski will automatically configure the Web3 object to work with our servers. You can also pass a network name as a parameter to access test networks (rinkeby or kovan).
 
 ```javascript
-//mainnet (coming soon)
+//mainnet
 web3 = bitskiInstance.getWeb3();
 //rinkeby
 web3 = bitskiInstance.getWeb3('rinkeby');
@@ -61,7 +63,7 @@ Note: our CDN version bundles the full web3 library just like Metamask and other
 
 ### Signing in
 
-In order to do anything with your web3 instance you'll need the user to be signed in with Bitski via OpenID. We support 2 primary methods for signing in with Bitski: redirect, and popup.
+In order to do anything with your web3 instance you'll need the user to be signed in with Bitski via OAuth. We support two primary methods for signing in with Bitski: redirect, and popup.
 
 #### Signing in with redirect
 
@@ -70,7 +72,7 @@ For the redirect flow, the browser will redirect to the bitski login page where 
 ```javascript
 // my-app.js
 const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-window.web3 = bitskiInstance.getWeb3('kovan');
+window.web3 = bitskiInstance.getWeb3();
 //This will only redirect you if you're not already logged in
 bitskiInstance.getUserOrSignIn();
 ```
@@ -112,8 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 ```
 
-Note: There is no need to call any callbacks for this sign in method.
-
 #### Manually triggering sign in
 
 You can also manually trigger log in via popup or redirect by calling `signIn()` directly:
@@ -122,7 +122,7 @@ You can also manually trigger log in via popup or redirect by calling `signIn()`
 import { Bitski, OAuthProviderIntegrationType } from 'bitski';
 
 const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>');
-web3 = bitskiInstance.getWeb3('kovan');
+web3 = bitskiInstance.getWeb3();
 
 // later in your code…
 bitskiInstance.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
@@ -141,7 +141,7 @@ if (typeof web3 !== 'undefined') {
 } else {
   // initialize Bitski
   const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-  web3 = bitskiInstance.getWeb3('rinkeby');
+  web3 = bitskiInstance.getWeb3();
 }
 ```
 
@@ -149,15 +149,9 @@ You can also require your users to use a Bitski wallet & account by storing your
 
 ```javascript
 const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-window.web3 = bitskiInstance.getWeb3('kovan');
+window.web3 = bitskiInstance.getWeb3();
 ```
 
 ### Example App
 
-Check out a full demo app using our SDK [here](https://github.com/BitskiCo/example-dapp-game).
-
-### More Info
-* [Usage](usage.md)
-* [Examples](examples.md)
-* [API Reference](api/index.md)
-* [Contact Us](http://bitski.co)
+Want to see Bitski in action? You can check out a [full demo app using our SDK](https://example-dapp-1.bitski.com) and [view the demo's source code](https://github.com/BitskiCo/example-dapp-game).

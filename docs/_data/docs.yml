@@ -1,13 +1,29 @@
 # Add pages to the navigation here
 
-- title: Home
-  url: /
+- title: Documentation
+  items:
+  - title: Home
+    url: /bitski-js/
 
-- title: Usage
-  url: /usage
+  - title: API Reference
+    url: /bitski-js/api/
 
-- title: Examples
-  url: /examples
+- title: Resources
+  items:
+  - title: View on Github
+    url: https://github.com/BitskiCo/bitski-js
 
-- title: API Reference
-  url: /api/
+  - title: Bitski Documentation
+    url: https://docs.bitski.com
+
+  - title: Developer Portal
+    url: https://developer.bitski.com
+
+  - title: Quickstart / Truffle Box
+    url: https://github.com/BitskiCo/quickstart
+
+  - title: Truffle SDK
+    url: https://github.com/BitskiCo/bitski-truffle-provider
+
+  - title: Web3 Documentation
+    url: https://web3js.readthedocs.io/en/1.0/index.html
