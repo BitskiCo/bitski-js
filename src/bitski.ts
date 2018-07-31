@@ -31,6 +31,7 @@ const DEFAULT_BITSKI_METADATA: { [key: string]: any; } = {
  */
 export class Bitski {
   public userManager: UserManager;
+  public timeout: number = 5000;
   private providers: Map<string, HttpProvider>;
   private cachedUser?: User;
   private clientId: string;
@@ -239,11 +240,10 @@ export class Bitski {
   private requestSignOut(accessToken): Promise<any> {
     const request = new XMLHttpRequest();
     request.open('POST', `${BITSKI_USER_API_HOST}/logout`, true);
-    request.withCredentials = true;
     request.setRequestHeader('Content-Type', 'application/json');
     request.setRequestHeader('Accept', 'application/json');
     request.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-    request.timeout = 1000;
+    request.timeout = this.timeout;
     return this.sendRequest(request);
   }
 
