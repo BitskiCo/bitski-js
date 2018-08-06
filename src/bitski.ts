@@ -209,7 +209,7 @@ export class Bitski {
   /**
    * Sign the current user out of your application.
    */
-  public signOut(): Promise<any> {
+  public signOut(): Promise<void> {
     if (this.cachedUser && this.cachedUser.access_token) {
       return this.requestSignOut(this.cachedUser.access_token).then(() => {
         return this.userManager.removeUser().then(() => {
@@ -217,7 +217,7 @@ export class Bitski {
         });
       });
     }
-    return Promise.reject(new Error('Not signed in.'));
+    return Promise.resolve();
   }
 
   /**
