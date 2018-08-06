@@ -23,7 +23,7 @@ npm install --save bitski
 Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.7/lib/bitski.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.9/lib/bitski.js"></script>
 ```
 
 ### Starting the SDK
