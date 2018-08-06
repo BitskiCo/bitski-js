@@ -241,7 +241,7 @@ describe('sign out', () => {
   test('sign out should reject when not signed in', () => {
     expect.assertions(1);
     const bitski = createInstance();
-    return expect(bitski.signOut()).rejects.toEqual(new Error('Not signed in.'));
+    return expect(bitski.signOut()).resolves.toBeUndefined();
   });
 
   test('sign out should reject when receiving an error', () => {
