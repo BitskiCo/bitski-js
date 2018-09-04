@@ -177,6 +177,15 @@ describe('managing providers', () => {
     expect(provider.host).toBe('http://localhost:7545');
   });
 
+  test('should be able to create provider for an alternate chain', () => {
+    const bitski = createInstance();
+    expect(bitski['providers'].size).toBe(0);
+    const provider = bitski.getProvider('springrole');
+    expect(bitski['providers'].size).toBe(1);
+    expect(provider['networkName']).toBe('springrole');
+    expect(provider['host']).toBe('https://api.bitski.com/v1/web3/springrole');
+  });
+
   test('should set access token on all providers after getting the user', () => {
     expect.assertions(6);
     const bitski = createInstance();

@@ -215,7 +215,7 @@ var userManager: UserManager
 ```typescript
 private function createProvider(networkName?: undefined | string): BitskiProvider
 ```
-<small>*Defined in [bitski.ts:278](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L278)*</small>
+<small>*Defined in [bitski.ts:271](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L271)*</small>
 
 
 
@@ -253,7 +253,7 @@ Callback received from UserManager when the user has been set. Called in situati
 ```typescript
 private function didSetUser(user: User)
 ```
-<small>*Defined in [bitski.ts:313](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L313)*</small>
+<small>*Defined in [bitski.ts:306](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L306)*</small>
 
 
 
@@ -287,7 +287,7 @@ Callback received from UserManager when the user has been revoked. Called in sit
 ```typescript
 private function didUnsetUser()
 ```
-<small>*Defined in [bitski.ts:321](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L321)*</small>
+<small>*Defined in [bitski.ts:314](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L314)*</small>
 
 
 
@@ -313,7 +313,7 @@ Creates a sign in with bitski button to add to your app. If an HTML element is p
 ```typescript
 function getConnectButton(existingDiv?: HTMLElement, size?: ConnectButtonSize): ConnectButton
 ```
-<small>*Defined in [bitski.ts:133](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L133)*</small>
+<small>*Defined in [bitski.ts:126](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L126)*</small>
 
 
 
@@ -390,7 +390,7 @@ Gets the current signed in user. Will return an error if we are not signed in.
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [bitski.ts:117](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L117)*</small>
+<small>*Defined in [bitski.ts:110](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L110)*</small>
 
 
 
@@ -420,7 +420,7 @@ Gets the current user if it exists. If not, signs in. Unlike `getUser` this will
 ```typescript
 function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:185](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L185)*</small>
+<small>*Defined in [bitski.ts:178](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L178)*</small>
 
 
 
@@ -458,7 +458,7 @@ Returns an initialized web3 API
 ```typescript
 function getWeb3(networkName?: undefined | string): Web3
 ```
-<small>*Defined in [bitski.ts:100](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L100)*</small>
+<small>*Defined in [bitski.ts:93](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L93)*</small>
 
 
 
@@ -492,7 +492,7 @@ function getWeb3(networkName?: undefined | string): Web3
 ```typescript
 function isInFrame(): boolean
 ```
-<small>*Defined in [bitski.ts:236](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L236)*</small>
+<small>*Defined in [bitski.ts:229](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L229)*</small>
 
 
 
@@ -518,7 +518,7 @@ function isInFrame(): boolean
 ```typescript
 private function requestSignOut(accessToken: any): Promise<any>
 ```
-<small>*Defined in [bitski.ts:240](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L240)*</small>
+<small>*Defined in [bitski.ts:233](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L233)*</small>
 
 
 
@@ -552,7 +552,7 @@ private function requestSignOut(accessToken: any): Promise<any>
 ```typescript
 private function sendRequest(request: any): Promise<any>
 ```
-<small>*Defined in [bitski.ts:250](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L250)*</small>
+<small>*Defined in [bitski.ts:243](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L243)*</small>
 
 
 
@@ -590,7 +590,7 @@ Set logger and log level for debugging purposes
 ```typescript
 function setLogger(logger: any, level?: undefined | number)
 ```
-<small>*Defined in [bitski.ts:229](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L229)*</small>
+<small>*Defined in [bitski.ts:222](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L222)*</small>
 
 
 
@@ -625,7 +625,7 @@ Pass logged in user to all providers
 ```typescript
 private function setUser(user?: User)
 ```
-<small>*Defined in [bitski.ts:291](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L291)*</small>
+<small>*Defined in [bitski.ts:284](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L284)*</small>
 
 
 
@@ -659,7 +659,7 @@ Starts sign in flow.
 ```typescript
 function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:141](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L141)*</small>
+<small>*Defined in [bitski.ts:134](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L134)*</small>
 
 
 
@@ -697,7 +697,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:200](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L200)*</small>
+<small>*Defined in [bitski.ts:193](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L193)*</small>
 
 
 
@@ -733,14 +733,14 @@ Sign the current user out of your application.
 
 
 ```typescript
-function signOut(): Promise<any>
+function signOut(): Promise<void>
 ```
-<small>*Defined in [bitski.ts:212](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L212)*</small>
+<small>*Defined in [bitski.ts:205](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L205)*</small>
 
 
 
 ##### Return Value
-`Promise<any>`
+`Promise<void>`
 
 
 
@@ -1797,7 +1797,7 @@ new BitskiProvider(networkName?: string, settings: BitskiProviderSettings, addit
 
 | Param | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| networkName | `string`  | &quot;kovan&quot; |   Network name |
+| networkName | `string`  | &quot;mainnet&quot; |   Network name |
 | settings | [BitskiProviderSettings](#_providers_bitski_provider_settings_.bitskiprovidersettings)  | - |   - |
 | additionalHeaders _(Optional)_ | `[any]`  | - |   - |
 
