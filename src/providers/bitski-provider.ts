@@ -51,7 +51,7 @@ export class BitskiProvider extends OAuthHttpProvider {
    * @param userManager OpenID user manager used for auth
    * @param postLogoutRedirectUri Post logout redirect URL, defaults to window.location.href
    */
-  constructor(networkName: string = 'kovan', settings: BitskiProviderSettings, additionalHeaders?: [any]) {
+  constructor(networkName: string = 'mainnet', settings: BitskiProviderSettings, additionalHeaders?: [any]) {
     super(
       `${BITSKI_API_V1_HOST}/web3/${networkName}`,
       0,

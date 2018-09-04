@@ -53,7 +53,7 @@ describe('handles authenticated sends', () => {
 
     const provider = createProvider();
 
-    mock.post('https://api.bitski.com/v1/web3/kovan', (req, res) => {
+    mock.post('https://api.bitski.com/v1/web3/mainnet', (req, res) => {
       expect(req.header('Authorization')).toBe('Bearer test-access-token');
       return res.status(200).body('{ "jsonrpc": "2.0", "id": 0, "result": "foo" }');
     });
@@ -82,7 +82,7 @@ describe('handles authenticated sends', () => {
     });
     expect(provider['queuedSends'].length).toBe(1);
 
-    mock.post('https://api.bitski.com/v1/web3/kovan', (req, res) => {
+    mock.post('https://api.bitski.com/v1/web3/mainnet', (req, res) => {
       expect(req.header('Authorization')).toBe('Bearer test-access-token');
       return res.status(200).body('{ "jsonrpc": "2.0", "id": 0, "result": "foo" }');
     });
@@ -98,7 +98,7 @@ describe('handles authenticated sends', () => {
     const request = createRequest('eth_peerCount', ['0x0']);
     provider['requiresAuthentication'] = jest.fn().mockReturnValue(false);
 
-    mock.post('https://api.bitski.com/v1/web3/kovan', (req, res) => {
+    mock.post('https://api.bitski.com/v1/web3/mainnet', (req, res) => {
       expect(req.header('Authorization')).toBeNull();
       return res.status(200).body('{ "jsonrpc": "2.0", "id": 0, "result": "foo" }');
     });
