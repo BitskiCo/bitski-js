@@ -77,17 +77,10 @@ export class Bitski {
       return existingProvider;
     }
     let provider: HttpProvider;
-    switch (networkName) {
-      case 'mainnet':
-      case 'rinkeby':
-      case 'kovan':
-      case undefined:
-        provider = this.createProvider(networkName);
-        break;
-
-      default:
-        provider = new HttpProvider(networkName!, 0, undefined);
-        break;
+    if (networkName && networkName.includes('http')) {
+      provider = new HttpProvider(networkName!, 0, undefined);
+    } else {
+      provider = this.createProvider(networkName);
     }
     this.providers.set(networkName || 'mainnet', provider);
     return provider;
