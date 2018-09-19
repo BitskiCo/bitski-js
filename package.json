@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.1.10",
+  "version": "0.1.11",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
     "build": "tsc && rollup -c rollup.config.ts && webpack --mode production && typedoc",
@@ -19,7 +19,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "oidc-client": "^1.4.1",
+    "oidc-client": "^1.5.2",
     "web3": "1.0.0-beta.33",
     "web3-providers-http": "1.0.0-beta.33",
     "xhr2": "^0.1.4"
