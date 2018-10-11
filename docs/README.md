@@ -23,7 +23,8 @@ npm install --save bitski
 Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.11/lib/bitski.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.11/dist/lib/bitski.js"></script>
 ```
 
 ### Starting the SDK
@@ -52,14 +53,14 @@ Once the SDK is initialized, you can request a Web3 object. Bitski will automati
 
 ```javascript
 //mainnet
-web3 = bitskiInstance.getWeb3();
+var bitskiProvider = bitskiInstance.getProvider();
 //rinkeby
-web3 = bitskiInstance.getWeb3('rinkeby');
+var bitskiProvider = bitskiInstance.getProvider('rinkeby');
 //local dev (ganache / truffle develop)
-web3 = bitskiInstance.getWeb3('http://localhost:9545');
-```
+var bitskiProvider = bitskiInstance.getProvider('http://localhost:9545');
 
-Note: our CDN version bundles the full web3 library just like Metamask and other dapp browsers. There is no need to also bundle web3.
+web3 = new Web3(bitskiProvider);
+```
 
 ### Signing in
 
@@ -72,7 +73,8 @@ For the redirect flow, the browser will redirect to the bitski login page where 
 ```javascript
 // my-app.js
 const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-window.web3 = bitskiInstance.getWeb3();
+var bitskiProvider = bitskiInstance.getProvider();
+window.web3 = new Web3(bitskiProvider);
 //This will only redirect you if you're not already logged in
 bitskiInstance.getUserOrSignIn();
 ```
@@ -98,7 +100,8 @@ For the popup flow, the browser will open a small popup window where the user ca
 // my-app.js
 import { Bitski } from 'bitski';
 const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>');
-window.web3 = bitskiInstance.getWeb3('kovan');
+var bitskiProvider = bitskiInstance.getProvider('kovan');
+window.web3 = new Web3(bitskiProvider);
 document.addEventListener('DOMContentLoaded', function() {
   bitskiInstance.getUser().then(user => {
     if (user && !user.expired) {
@@ -122,7 +125,8 @@ You can also manually trigger log in via popup or redirect by calling `signIn()`
 import { Bitski, OAuthProviderIntegrationType } from 'bitski';
 
 const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>');
-web3 = bitskiInstance.getWeb3();
+var bitskiProvider = bitskiInstance.getProvider();
+web3 = new Web3(bitskiProvider);
 
 // later in your code…
 bitskiInstance.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
@@ -141,7 +145,8 @@ if (typeof web3 !== 'undefined') {
 } else {
   // initialize Bitski
   const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-  web3 = bitskiInstance.getWeb3();
+  var bitskiProvider = bitskiInstance.getProvider();
+  web3 = new Web3(bitskiProvider);
 }
 ```
 
@@ -149,7 +154,8 @@ You can also require your users to use a Bitski wallet & account by storing your
 
 ```javascript
 const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>');
-window.web3 = bitskiInstance.getWeb3();
+var bitskiProvider = bitskiInstance.getProvider();
+window.web3 = new Web3(bitskiProvider);
 ```
 
 ### Example App

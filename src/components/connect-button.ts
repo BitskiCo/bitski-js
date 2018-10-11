@@ -1,7 +1,5 @@
 import { User } from 'oidc-client';
-import Web3 from 'web3';
-import { Bitski } from '../bitski';
-import { OAuthProviderIntegrationType } from '../providers/oauth-http-provider';
+import { AuthProvider, OAuthProviderIntegrationType } from '../auth/auth-provider';
 
 /**
  * Sizing options for the Bitski connect button.
@@ -19,8 +17,8 @@ export class ConnectButton {
   public element: HTMLElement;
   public size: ConnectButtonSize;
   public callback?: (error?: Error, user?: User) => void;
-  private bitskiInstance: Bitski;
-  private authenticationMode: OAuthProviderIntegrationType;
+  private authProvider: AuthProvider;
+  private authIntegrationType: OAuthProviderIntegrationType;
   private defaultColor: string = '#298FFF';
   private activeColor: string = '#1A7CE6';
 
@@ -29,15 +27,15 @@ export class ConnectButton {
    * @param existingDiv An existing div to turn into a connect button
    */
   constructor(
-    bitskiInstance: Bitski,
+    authProvider: AuthProvider,
     existingDiv?: HTMLElement,
     size: ConnectButtonSize = ConnectButtonSize.MEDIUM,
-    authenticationMode: OAuthProviderIntegrationType = OAuthProviderIntegrationType.POPUP,
+    authIntegrationType: OAuthProviderIntegrationType= OAuthProviderIntegrationType.POPUP,
   ) {
+    this.authProvider = authProvider;
     this.size = size;
+    this.authIntegrationType = authIntegrationType;
     this.element = document.createElement('button');
-    this.bitskiInstance = bitskiInstance;
-    this.authenticationMode = authenticationMode;
     this.setDefaultStyle();
 
     this.element.addEventListener('click', this.signin.bind(this));
@@ -53,7 +51,7 @@ export class ConnectButton {
   }
 
   private signin() {
-    this.bitskiInstance.signIn(this.authenticationMode).then((user: User) => {
+    this.authProvider.signIn(this.authIntegrationType).then((user: User) => {
       if (this.callback) {
         this.callback(undefined, user);
       }
