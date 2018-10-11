@@ -2,56 +2,44 @@
   "name": "bitski",
   "description": "Bitski JavaScript SDK",
   "license": "MIT",
-  "main": "dist/bitski.umd.js",
-  "module": "dist/bitski.es5.js",
+  "main": "dist/lib/bitski.js",
   "typings": "dist/types/bitski.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.1.11",
+  "version": "0.2.0-beta.1",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
-    "build": "tsc && rollup -c rollup.config.ts && webpack --mode production && typedoc",
-    "prepack": "npm run build",
-    "dev": "rollup -c rollup.config.ts -w",
+    "build": "tsc && typedoc",
+    "prepack": "tsc",
     "docs": "typedoc",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit"
   },
   "dependencies": {
+    "@types/ethereum-protocol": "^1.0.0",
+    "@types/events": "^1.2.0",
+    "json-rpc-error": "^2.0.0",
     "oidc-client": "^1.5.2",
-    "web3": "1.0.0-beta.33",
-    "web3-providers-http": "1.0.0-beta.33",
-    "xhr2": "^0.1.4"
+    "web3-provider-engine": "^14.0.6"
   },
   "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
+    "@types/jest": "^23.3.2",
     "find": "^0.2.9",
-    "jest": "^22.4.3",
-    "jest-junit": "^3.6.0",
-    "raw-loader": "^0.5.1",
-    "rollup": "^0.60.2",
-    "rollup-plugin-commonjs": "^9.1.0",
-    "rollup-plugin-img": "^1.1.0",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-typescript2": "^0.14.0",
-    "ts-jest": "^22.4.4",
-    "ts-loader": "^4.1.1",
-    "tslint": "^5.10.0",
+    "jest": "^23.6.0",
+    "jest-fetch-mock": "^1.6.6",
+    "jest-junit": "^5.1.0",
+    "ts-jest": "^23.10.0",
+    "tslint": "^5.11.0",
     "tslint-loader": "^3.6.0",
-    "typedoc": "^0.11.1",
+    "typedoc": "^0.12.0",
     "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
-    "typescript": "^2.9.1",
-    "uglifyjs-webpack-plugin": "^1.2.5",
-    "webpack": "^4.12.0",
-    "webpack-cli": "^3.0.4",
-    "xhr-mock": "^2.4.0"
+    "typescript": "^3.0.3",
+    "xhr-mock": "^2.4.1"
   },
   "jest": {
+    "automock": false,
     "coverageDirectory": "coverage",
     "coverageReporters": [
       "json",
@@ -59,18 +47,16 @@
       "html",
       "cobertura"
     ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "testResultsProcessor": "jest-junit",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "setupFiles": [
+      "./tests/util/setup-jest.js"
+    ],
+    "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": {
+          "warnOnly": true
+        }
+      }
+    }
   }
 }

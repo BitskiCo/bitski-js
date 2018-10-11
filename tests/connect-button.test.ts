@@ -1,18 +1,19 @@
-import { Bitski } from '../src/bitski';
-import { UserManager, InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
+import { InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
+import { OAuthProviderIntegrationType } from '../src/auth/auth-provider';
+import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { ConnectButton, ConnectButtonSize } from '../src/components/connect-button';
-import { OAuthProviderIntegrationType } from '../src/providers/oauth-http-provider';
 
-function createInstance(): Bitski {
+const clientID = 'test-client-id';
+
+function createInstance(): OpenidAuthProvider {
   const store = new InMemoryWebStorage();
-  const stateStore = new WebStorageStateStore({ prefix: 'bitski.', store: store});
-  const settings = {
+  const stateStore = new WebStorageStateStore({ prefix: 'bitski.', store });
+  const otherSettings = {
+    stateStore,
     userStore: stateStore,
-    stateStore: stateStore,
-  }
-  return new Bitski('test-client-id', undefined, undefined, settings);
+  };
+  return new OpenidAuthProvider(clientID, undefined, undefined, otherSettings);
 }
-
 test('it sets small attributes', () => {
   const instance = createInstance();
   const button = new ConnectButton(instance, undefined, ConnectButtonSize.SMALL);
@@ -42,38 +43,38 @@ test('it does not throw when no callback', () => {
   const instance = createInstance();
   const button = new ConnectButton(instance);
   jest.spyOn(instance, 'signIn').mockResolvedValue({});
-  expect(() => { button['signin']() }).not.toThrow();
+  expect(() => { button['signin'](); }).not.toThrow();
 });
 
 test('it does not throw when received error and no callback', () => {
   const instance = createInstance();
   const button = new ConnectButton(instance);
   jest.spyOn(instance, 'signIn').mockRejectedValue('foo');
-  expect(() => { button['signin']() }).not.toThrow();
+  expect(() => { button['signin'](); }).not.toThrow();
 });
 
 test('it calls the callback on success', done => {
   const instance = createInstance();
   const button = new ConnectButton(instance);
   jest.spyOn(instance, 'signIn').mockResolvedValue({});
-  const callback = function(error, user) {
+  const callback = (error, user) => {
     expect(error).toBeUndefined();
     expect(user).toBeDefined();
     done();
-  }
+  };
   button.callback = callback;
   button['signin']();
 });
 
-test('it calls the callback on error', done => {
+test('it calls the callback on error', (done) => {
   const instance = createInstance();
   const button = new ConnectButton(instance);
   jest.spyOn(instance, 'signIn').mockRejectedValue(new Error('foo error'));
-  const callback = function(error, user) {
+  const callback = (error, user) => {
     expect(error).toBeDefined();
     expect(user).toBeUndefined();
     done();
-  }
+  };
   button.callback = callback;
   button['signin']();
 });
@@ -82,15 +83,15 @@ test('it sets focus and blur states', () => {
   const instance = createInstance();
   const button = new ConnectButton(instance);
   const defaultColor = button.element.style.backgroundColor;
-  //test focus
+  // test focus
   button.element.dispatchEvent(new Event('focus'));
   expect(button.element.style.backgroundColor).not.toBe(defaultColor);
-  //test blur
+  // test blur
   button.element.dispatchEvent(new Event('blur'));
   expect(button.element.style.backgroundColor).toBe(defaultColor);
 });
 
-test('it uses provided authentication mode', done => {
+test('it uses provided authentication mode', (done) => {
   expect.assertions(1);
   const instance = createInstance();
   const button = new ConnectButton(instance, undefined, undefined, OAuthProviderIntegrationType.REDIRECT);

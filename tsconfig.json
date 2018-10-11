@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "dist/lib",
-    "declarationDir": "dist/types",
     "sourceMap": true,
     "declaration": true,
     "noImplicitAny": false,
@@ -10,11 +9,12 @@
     "target": "es2017",
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
-  "typeRoots" : ["node_modules/@types"],
-  "types": ["web3-providers-http"],
+  "typeRoots" : ["src/types", "node_modules/@types"],
+  "types": ["web3-provider-engine"],
   "typedocOptions": {
     "module": "commonjs",
     "target": "ES5",

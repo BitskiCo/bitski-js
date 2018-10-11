@@ -1,41 +1,29 @@
-import { Log, User, UserManager } from 'oidc-client';
-import Web3 from 'web3';
-import HttpProvider from 'web3-providers-http';
-import 'xhr2';
-import { AccessToken } from './access-token';
+import { Log, User } from 'oidc-client';
+import ProviderEngine from 'web3-provider-engine';
+import CacheSubprovider from 'web3-provider-engine/subproviders/cache';
+import DefaultFixtures from 'web3-provider-engine/subproviders/default-fixture';
+import RpcSource from 'web3-provider-engine/subproviders/fetch';
+import InflightCacheSubprovider from 'web3-provider-engine/subproviders/inflight-cache';
+import NonceTrackerSubprovider from 'web3-provider-engine/subproviders/nonce-tracker';
+import SanitizingSubprovider from 'web3-provider-engine/subproviders/sanitizer';
+import Subprovider from 'web3-provider-engine/subproviders/subprovider';
+import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
+import VmSubprovider from 'web3-provider-engine/subproviders/vm';
+import { AuthProvider, OAuthProviderIntegrationType } from './auth/auth-provider';
+import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
-import { BitskiProvider } from './providers/bitski-provider';
-import { BitskiProviderSettings } from './providers/bitski-provider-settings';
-import { OAuthProviderIntegrationType } from './providers/oauth-http-provider';
+import { AuthenticatedFetchSubprovider } from './subproviders/authenticated-fetch';
+import { IFrameSubprovider } from './subproviders/iframe';
 
-const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
-
-const DEFAULT_BITSKI_OAUTH_HOST = 'https://account.bitski.com';
-
-const DEFAULT_BITSKI_METADATA: { [key: string]: any; } = {
-  authorization_endpoint: 'https://account.bitski.com/oauth2/auth',
-  claims_supported: ['sub'],
-  id_token_signing_alg_values_supported: ['RS256'],
-  issuer: 'https://account.bitski.com',
-  jwks_uri: 'https://account.bitski.com/.well-known/jwks.json',
-  response_types_supported: ['code', 'code id_token', 'id_token', 'token id_token', 'token', 'token id_token code'],
-  scopes_supported: ['offline', 'openid'],
-  subject_types_supported: ['pairwise', 'public'],
-  token_endpoint: 'https://account.bitski.com/oauth2/token',
-  token_endpoint_auth_methods_supported: ['client_secret_post', 'client_secret_basic'],
-  userinfo_endpoint: 'https://account.bitski.com/userinfo',
-};
+const ENABLE_CACHE = true;
 
 /**
  * Bitski SDK
  */
 export class Bitski {
-  public userManager: UserManager;
-  public timeout: number = 5000;
-  private providers: Map<string, HttpProvider>;
-  private cachedUser?: User;
+  private engines = new Map<string, ProviderEngine>();
   private clientId: string;
-  private settings: BitskiProviderSettings;
+  private authProvider: AuthProvider;
 
   /**
    * @param clientId OAuth Client ID
@@ -44,76 +32,42 @@ export class Bitski {
    * @param otherSettings Other OAuth settings. Don't change these unless you know what you are doing.
    */
   constructor(clientId: string, redirectUri?: string, postLogoutRedirectUri?: string, otherSettings?: object) {
-    const settings = new BitskiProviderSettings(DEFAULT_BITSKI_OAUTH_HOST, clientId, redirectUri, postLogoutRedirectUri, DEFAULT_BITSKI_METADATA);
-
-    if (otherSettings) {
-      Object.assign(settings, otherSettings);
-    }
-
     this.clientId = clientId;
-    this.userManager = new UserManager(settings);
-    this.settings = settings;
 
-    this.userManager.events.addUserLoaded(this.didSetUser.bind(this));
-    this.userManager.events.addUserSignedOut(this.didUnsetUser.bind(this));
-    this.userManager.events.addAccessTokenExpired(this.didUnsetUser.bind(this));
-    this.userManager.events.addSilentRenewError(this.didUnsetUser.bind(this));
-    this.userManager.events.addUserUnloaded(this.didUnsetUser.bind(this));
-
-    if (window.opener) {
-      this.userManager.signinPopupCallback();
-    }
-
-    this.providers = new Map<string, HttpProvider>();
+    this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, postLogoutRedirectUri || window.location.href, otherSettings);
   }
 
   /**
    * Returns a new web3 provider for a given network.
    * @param networkName optional name of the network to use, or host for a local provider. Defaults to mainnet.
    */
-  public getProvider(networkName?: string): HttpProvider {
-    const existingProvider = this.providers.get(networkName || 'mainnet');
+  public getProvider(networkName?: string): ProviderEngine {
+    const existingProvider = this.engines.get(networkName || 'mainnet');
     if (existingProvider) {
       return existingProvider;
     }
-    let provider: HttpProvider;
-    if (networkName && networkName.includes('http')) {
-      provider = new HttpProvider(networkName!, 0, undefined);
-    } else {
-      provider = this.createProvider(networkName);
-    }
-    this.providers.set(networkName || 'mainnet', provider);
-    return provider;
-  }
+    let provider: ProviderEngine;
+    switch (networkName) {
+      case 'mainnet':
+      case 'rinkeby':
+      case 'kovan':
+      case undefined:
+        provider = this.createBitskiEngine(networkName);
+        break;
 
-  /**
-   * Returns an initialized web3 API
-   * @param networkName optional name of the network to use, or host for a local provider. Defaults to mainnet.
-   */
-  public getWeb3(networkName?: string): Web3 {
-    const provider = this.getProvider(networkName);
-    const web3 = new Web3(provider);
-    web3.eth.getAccounts((error, accounts) => {
-      if (accounts && !web3.eth.defaultAccount) {
-        web3.eth.defaultAccount = accounts[0];
-      } else if (error) {
-        Log.info('Received an error while getting accounts');
-        Log.error(error);
-      }
-    });
-    return web3;
+      default:
+        provider = this.createThirdPartyEngine(networkName);
+        break;
+    }
+    this.engines.set(networkName || 'mainnet', provider);
+    return provider;
   }
 
   /**
    * Gets the current signed in user. Will return an error if we are not signed in.
    */
   public getUser(): Promise<User> {
-    return this.userManager.getUser().then((user) => {
-      if (user) {
-        this.setUser(user);
-      }
-      return user;
-    });
+    return this.authProvider.getUser();
   }
 
   /**
@@ -124,7 +78,7 @@ export class Bitski {
    * @param size Size of button to generate. Defaults to medium.
    */
   public getConnectButton(existingDiv?: HTMLElement, size: ConnectButtonSize = ConnectButtonSize.MEDIUM): ConnectButton {
-    return new ConnectButton(this, existingDiv, size);
+    return new ConnectButton(this.authProvider, existingDiv, size);
   }
 
   /**
@@ -132,42 +86,7 @@ export class Bitski {
    * @param type Optionally specify an integration type. Defaults to REDIRECT.
    */
   public signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
-    let signInPromise: Promise<User>;
-    let type: OAuthProviderIntegrationType;
-    if (typeof authenticationIntegrationType !== 'undefined') {
-      type = authenticationIntegrationType;
-    } else {
-      type = OAuthProviderIntegrationType.REDIRECT;
-    }
-    switch (type) {
-      case 0:
-        const errorMessage =
-          'iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.';
-        const invalidRequestPromise: Promise<User> = Promise.reject(errorMessage);
-        signInPromise = invalidRequestPromise;
-        break;
-      case OAuthProviderIntegrationType.REDIRECT:
-        signInPromise = this.userManager.signinRedirect({ state: 'someData' });
-        break;
-      case OAuthProviderIntegrationType.POPUP:
-        signInPromise = this.userManager.signinPopup({ state: 'someData' });
-        break;
-      default:
-        signInPromise = this.userManager.signinSilent();
-        break;
-    }
-
-    return signInPromise.then((user) => {
-      this.setUser(user);
-      return user;
-    }).catch((error) => {
-      this.providers.forEach((provider, _) => {
-        if (provider instanceof BitskiProvider) {
-          provider.setAccessToken(undefined);
-        }
-      });
-      throw error;
-    });
+    return this.authProvider.signIn(authenticationIntegrationType);
   }
 
   /**
@@ -176,41 +95,23 @@ export class Bitski {
    * @param authenticationIntegrationType Optionally specify an integration type. Defaults to REDIRECT.
    */
   public getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
-    return this.getUser().then((user) => {
-      if (user && !user.expired) {
-        return user;
-      }
-      return this.signIn(authenticationIntegrationType);
-    }).catch((error) => {
-      return this.signIn(authenticationIntegrationType);
-    });
+    return this.authProvider.getUserOrSignIn(authenticationIntegrationType);
   }
 
   /**
    * Called from your oauth redirect page.
    * @param authenticationIntegrationType Should match the method called when signing in.
    */
-  public signInCallback(authenticationIntegrationType: OAuthProviderIntegrationType): Promise<User> {
-    switch (authenticationIntegrationType) {
-      case OAuthProviderIntegrationType.SILENT:
-        return this.userManager.signinSilentCallback();
-      default:
-        return this.userManager.signinRedirectCallback();
-    }
+  public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
+    const assumedCallbackType = authenticationIntegrationType || OAuthProviderIntegrationType.POPUP;
+    return this.authProvider.signInCallback(assumedCallbackType);
   }
 
   /**
    * Sign the current user out of your application.
    */
   public signOut(): Promise<void> {
-    if (this.cachedUser && this.cachedUser.access_token) {
-      return this.requestSignOut(this.cachedUser.access_token).then(() => {
-        return this.userManager.removeUser().then(() => {
-          this.setUser(undefined);
-        });
-      });
-    }
-    return Promise.resolve();
+    return this.authProvider.signOut();
   }
 
   /**
@@ -230,93 +131,62 @@ export class Bitski {
     return window.parent !== window;
   }
 
-  private requestSignOut(accessToken): Promise<any> {
-    const request = new XMLHttpRequest();
-    request.open('POST', `${BITSKI_USER_API_HOST}/logout`, true);
-    request.setRequestHeader('Content-Type', 'application/json');
-    request.setRequestHeader('Accept', 'application/json');
-    request.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-    request.timeout = this.timeout;
-    return this.sendRequest(request);
+  private createEngine(fetchSubprovider: Subprovider, networkName: string): ProviderEngine {
+    const engine = new ProviderEngine();
+
+    this.addDefaultSubproviders(engine);
+
+    const iframeSubprovider = new IFrameSubprovider('https://www.bitski.com', networkName || 'mainnet', this.authProvider);
+
+    engine.addProvider(iframeSubprovider);
+
+    engine.addProvider(fetchSubprovider);
+
+    engine.start();
+
+    return engine;
   }
 
-  private sendRequest(request): Promise<any> {
-    return new Promise((fulfill, reject) => {
-      request.onload = () => {
-        if (request.status >= 200 && request.status <= 299) {
-          return fulfill(request.responseText);
-        } else {
-          let result;
-          try {
-            result = JSON.parse(request.responseText);
-          } catch (error) {
-            return reject(new Error('Unknown error. Could not parse error response.'));
-          }
-          if (result && result.error && result.error.message) {
-            return reject(new Error(result.error.message));
-          } else if (result && result.error) {
-            return reject(new Error(result.error));
-          } else {
-            return reject(new Error('Unknown error.'));
-          }
-        }
-      };
-      request.ontimeout = () => {
-        return reject(new Error('Connection timed out.'));
-      };
-      request.send();
-    });
-  }
+  private addDefaultSubproviders(engine: ProviderEngine, enableCache = ENABLE_CACHE) {
+    engine.addProvider(new DefaultFixtures());
 
-  private createProvider(networkName?: string): BitskiProvider {
-    const provider = new BitskiProvider(networkName || 'mainnet', this.settings, [{ name: 'X-Client-Id', value: this.clientId }]);
-    if (this.cachedUser) {
-      const accessToken = new AccessToken(this.cachedUser.access_token, this.cachedUser.expires_at);
-      provider.setAccessToken(accessToken);
+    engine.addProvider(new NonceTrackerSubprovider());
+
+    const sanitizer = new SanitizingSubprovider();
+    engine.addProvider(sanitizer);
+
+    if (enableCache) {
+      const cacheSubprovider = new CacheSubprovider();
+      engine.addProvider(cacheSubprovider);
     }
-    return provider;
-  }
 
-  /**
-   * Pass logged in user to all providers
-   * @param user User to send to cached providers
-   */
-  private setUser(user?: User) {
-    this.cachedUser = user;
-    if (this.isInFrame() === true) {
-      // We are in an IFRAME
-      parent.postMessage(user, '*');
-    }
-    let accessToken;
-    if (user) {
-      accessToken = new AccessToken(user.access_token, user.expires_at);
-    }
-    this.providers.forEach((provider, _) => {
-      if (provider instanceof BitskiProvider) {
-        provider.setAccessToken(accessToken);
-      }
+    const filterAndSubsSubprovider = new SubscriptionSubprovider();
+    filterAndSubsSubprovider.on('data', (err, notification) => {
+      engine.emit('data', err, notification);
     });
+    engine.addProvider(filterAndSubsSubprovider);
+
+    if (enableCache) {
+      const inflightCache = new InflightCacheSubprovider();
+      engine.addProvider(inflightCache);
+    }
   }
 
-  /**
-   * Callback received from UserManager when the user has been set.
-   * Called in situations like access token refresh.
-   * @param user the User object that was loaded
-   */
-  private didSetUser(user: User) {
-    this.setUser(user);
+  private createBitskiEngine(networkName?: string): ProviderEngine {
+    const network = networkName || 'mainnet';
+    const fetchSubprovider = new AuthenticatedFetchSubprovider(
+      `https://api.bitski.com/v1/web3/${network}`,
+      false,
+      this.authProvider,
+      {'X-API-KEY': this.clientId, 'X-CLIENT-ID': this.clientId},
+    );
+    return this.createEngine(fetchSubprovider, networkName || 'mainnet');
   }
 
-  /**
-   * Callback received from UserManager when the user has been revoked.
-   * Called in situations like access token expiration.
-   */
-  private didUnsetUser() {
-    this.cachedUser = undefined;
-    this.providers.forEach((provider, _) => {
-      if (provider instanceof BitskiProvider) {
-        provider.setAccessToken(undefined);
-      }
-    });
+  private createThirdPartyEngine(networkName: string): ProviderEngine {
+    const debug = false;
+    const fetchSubprovider = new RpcSource({ networkName, debug });
+
+    return this.createEngine(fetchSubprovider, networkName || 'mainnet');
   }
 }
