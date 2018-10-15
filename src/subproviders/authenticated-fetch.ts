@@ -1,6 +1,6 @@
-import * as retry from 'async/retry';
-import * as FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
-import * as createPayload from 'web3-provider-engine/util/create-payload';
+import retry from 'async/retry';
+import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
+import createPayload from 'web3-provider-engine/util/create-payload';
 
 import { AuthProvider } from '../auth/auth-provider';
 

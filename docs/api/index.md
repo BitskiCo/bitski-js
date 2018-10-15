@@ -467,7 +467,7 @@ function getAccessToken(): Promise<string>
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:65](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L65)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:78](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L78)*</small>
 
 
 
@@ -493,7 +493,7 @@ function getUser(): Promise<User>
 ```typescript
 function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:69](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L69)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:96](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L96)*</small>
 
 
 
@@ -527,7 +527,7 @@ function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegratio
 ```typescript
 private function requestSignOut(accessToken: string): Promise<any>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:112](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L112)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:143](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L143)*</small>
 
 
 
@@ -561,7 +561,7 @@ private function requestSignOut(accessToken: string): Promise<any>
 ```typescript
 private function sendRequest(request: any): Promise<any>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:122](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L122)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:153](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L153)*</small>
 
 
 
@@ -629,7 +629,7 @@ function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): P
 ```typescript
 function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:80](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L80)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:107](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L107)*</small>
 
 
 
@@ -663,7 +663,7 @@ function signInCallback(authenticationIntegrationType?: OAuthProviderIntegration
 ```typescript
 function signOut(): Promise<any>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:102](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L102)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:129](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L129)*</small>
 
 
 
