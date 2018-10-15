@@ -31,10 +31,16 @@ function createInstance(): OpenidAuthProvider {
 }
 
 beforeEach(() => {
+  if(localStorage) {
+    localStorage.removeItem('bitski.isSignedIn');
+  }
   mock.setup();
 });
 
 afterEach(() => {
+  if(localStorage) {
+    localStorage.removeItem('bitski.isSignedIn');
+  }
   mock.teardown();
 });
 
@@ -50,7 +56,7 @@ describe('initializing the sdk', () => {
   });
 });
 
-describe('getUser', () => {
+describe('getUserOrSignIn', () => {
   test('getUserOrSignIn should get user when signed in', () => {
     expect.assertions(1);
     const authProvider = createInstance();
@@ -78,6 +84,26 @@ describe('getUser', () => {
     return authProvider.getUserOrSignIn(OAuthProviderIntegrationType.SILENT).then((user) => {
       expect(signInSilentMock).toHaveBeenCalled();
       expect(user).toMatchObject(dummyUser);
+    });
+  });
+});
+
+describe('getUser', () => {
+  test('getUser should sign in silent if previously signed in', () => {
+    const authProvider = createInstance();
+    const signingPopupMock = jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+      const signinSilentMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockResolvedValue(dummyUser);
+      return authProvider.getUser();
+    }).then((user) => {
+      expect(user).toMatchObject(dummyUser);
+    });
+  });
+
+  test('getUser should return null if we haven\'nt signed in previously', () => {
+    const authProvider = createInstance();
+    return authProvider.getUser().then((user) => {
+      expect(user).toBeNull();
     });
   });
 });
