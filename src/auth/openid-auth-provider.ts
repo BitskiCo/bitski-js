@@ -50,20 +50,47 @@ export class OpenidAuthProvider implements AuthProvider {
             signInAuthenticationIntegrationType = authenticationIntegrationType;
         }
 
+        let promise: Promise<User>;
         switch (signInAuthenticationIntegrationType) {
             default:
-                return Promise.reject(new Error('iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.'));
+                promise =  Promise.reject(new Error('iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.'));
+                break;
             case OAuthProviderIntegrationType.REDIRECT:
-                return this.userManager.signinRedirect({ state: 'someData' });
+                promise =  this.userManager.signinRedirect({ state: 'someData' });
+                break;
             case OAuthProviderIntegrationType.POPUP:
-                return this.userManager.signinPopup({ state: 'someData' });
+                promise =  this.userManager.signinPopup({ state: 'someData' });
+                break;
             case OAuthProviderIntegrationType.SILENT:
-                return this.userManager.signinSilent({ state: 'someData' });
+                promise = this.userManager.signinSilent({ state: 'someData' });
+                break;
         }
+
+        return promise.then((user) => {
+            if (user && localStorage) {
+                localStorage.setItem('bitski.isSignedIn', 'true');
+            }
+
+            return user;
+        });
     }
 
     public getUser(): Promise<User> {
-        return this.userManager.getUser();
+        return this.userManager.getUser().then((user) => {
+            if (localStorage) {
+                if (user == null && localStorage.getItem('bitski.isSignedIn') === 'true') {
+                    return this.signIn(OAuthProviderIntegrationType.SILENT).then((newUser) => {
+                        if (!newUser && localStorage) {
+                            localStorage.removeItem('bitski.isSignedIn');
+                        }
+
+                        return newUser;
+                    });
+                }
+            }
+
+            return user;
+        });
     }
 
     public getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
@@ -100,6 +127,10 @@ export class OpenidAuthProvider implements AuthProvider {
     }
 
     public signOut(): Promise<any> {
+        if (localStorage) {
+            localStorage.removeItem('bitski.isSignedIn');
+        }
+
         return this.userManager.getUser().then((user) => {
             if (user) {
                 return this.requestSignOut(user.access_token);
