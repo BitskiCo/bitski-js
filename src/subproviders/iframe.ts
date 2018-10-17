@@ -76,7 +76,7 @@ export class IFrameSubprovider extends Subprovider {
         }
 
         if (this.currentTransaction) {
-            const oldTransactionEnd = this.currentTransaction[2];
+            const oldTransactionEnd = this.currentTransaction[1];
             oldTransactionEnd(new JsonRpcError.InternalError(), undefined);
         }
 
