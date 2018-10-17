@@ -37,6 +37,22 @@ describe('managing providers', () => {
     expect(bitski['engines'].size).toBe(1);
   });
 
+  test('should stop all engines when signing out', () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider('kovan');
+    expect(provider._blockTracker._isRunning).toBe(true);
+    bitski.signOut();
+    expect(provider._blockTracker._isRunning).toBe(false);
+  });
+
+  test('should stop engine when force logged out', () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider('kovan');
+    const spy = jest.spyOn(provider, 'stop');
+    provider.emit('error', new Error('Not signed in'));
+    expect(spy).toHaveBeenCalled();
+  });
+
   test('should create regular HTTPProvider when passing host string', () => {
     const bitski = createInstance();
     const providerEngine = bitski.getProvider('http://localhost:7545');
