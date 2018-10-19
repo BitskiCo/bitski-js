@@ -104,7 +104,7 @@ export class OpenidAuthProvider implements AuthProvider {
           });
     }
 
-    public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
+    public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: string): Promise<User> {
         let signInAuthenticationIntegrationType = OAuthProviderIntegrationType.REDIRECT;
         if (window.opener) {
             signInAuthenticationIntegrationType = OAuthProviderIntegrationType.POPUP;
@@ -118,11 +118,11 @@ export class OpenidAuthProvider implements AuthProvider {
             default:
                 return Promise.reject(new Error('iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.'));
             case OAuthProviderIntegrationType.REDIRECT:
-                return this.userManager.signinRedirectCallback();
+                return this.userManager.signinRedirectCallback(url || window.location.href);
             case OAuthProviderIntegrationType.POPUP:
-                return this.userManager.signinPopupCallback();
+                return this.userManager.signinPopupCallback(url || window.location.href);
             case OAuthProviderIntegrationType.SILENT:
-                return this.userManager.signinSilentCallback();
+                return this.userManager.signinSilentCallback(url || window.location.href);
         }
     }
 

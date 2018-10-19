@@ -11,7 +11,7 @@ export interface AuthProvider {
     getAccessToken(): Promise<string>;
     signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>;
     getUser(): Promise<User>;
-    signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>;
+    signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: string): Promise<User>;
     signOut(): Promise<any>;
     getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>;
 }
