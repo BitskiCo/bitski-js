@@ -44,6 +44,7 @@ export class Bitski {
   public getProvider(networkName?: string): ProviderEngine {
     const existingProvider = this.engines.get(networkName || 'mainnet');
     if (existingProvider) {
+      existingProvider.start();
       return existingProvider;
     }
     let provider: ProviderEngine;
@@ -102,15 +103,16 @@ export class Bitski {
    * Called from your oauth redirect page.
    * @param authenticationIntegrationType Should match the method called when signing in.
    */
-  public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
+  public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: string): Promise<User> {
     const assumedCallbackType = authenticationIntegrationType || OAuthProviderIntegrationType.POPUP;
-    return this.authProvider.signInCallback(assumedCallbackType);
+    return this.authProvider.signInCallback(assumedCallbackType, url);
   }
 
   /**
    * Sign the current user out of your application.
    */
   public signOut(): Promise<void> {
+    this.engines.forEach(engine => engine.stop());
     return this.authProvider.signOut();
   }
 
@@ -141,6 +143,12 @@ export class Bitski {
     engine.addProvider(iframeSubprovider);
 
     engine.addProvider(fetchSubprovider);
+
+    engine.on('error', error => {
+      if (error.message === 'Not signed in') {
+        engine.stop();
+      }
+    });
 
     engine.start();
 
