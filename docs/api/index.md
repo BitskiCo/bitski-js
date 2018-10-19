@@ -316,7 +316,7 @@ function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): P
 
 
 ```typescript
-function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
+function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: undefined | string): Promise<User>
 ```
 <small>*Defined in [auth/auth-provider.ts:14](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/auth-provider.ts#L14)*</small>
 
@@ -327,6 +327,7 @@ function signInCallback(authenticationIntegrationType?: OAuthProviderIntegration
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | authenticationIntegrationType _(Optional)_ | [OAuthProviderIntegrationType](#_auth_auth_provider_.oauthproviderintegrationtype)   |  - |
+| url _(Optional)_ | `undefined          ⎮string`   |  - |
 
 
 
@@ -627,7 +628,7 @@ function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): P
 
 
 ```typescript
-function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
+function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: undefined | string): Promise<User>
 ```
 <small>*Defined in [auth/openid-auth-provider.ts:107](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L107)*</small>
 
@@ -638,6 +639,7 @@ function signInCallback(authenticationIntegrationType?: OAuthProviderIntegration
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | authenticationIntegrationType _(Optional)_ | [OAuthProviderIntegrationType](#_auth_auth_provider_.oauthproviderintegrationtype)   |  - |
+| url _(Optional)_ | `undefined          ⎮string`   |  - |
 
 
 
@@ -1169,7 +1171,7 @@ Called from your oauth redirect page.
 
 
 ```typescript
-function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
+function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: undefined | string): Promise<User>
 ```
 <small>*Defined in [bitski.ts:106](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L106)*</small>
 
@@ -1180,6 +1182,7 @@ function signInCallback(authenticationIntegrationType?: OAuthProviderIntegration
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | authenticationIntegrationType _(Optional)_ | [OAuthProviderIntegrationType](#_auth_auth_provider_.oauthproviderintegrationtype)   |  Should match the method called when signing in. |
+| url _(Optional)_ | `undefined          ⎮string`   |  - |
 
 
 
