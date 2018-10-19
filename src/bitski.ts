@@ -103,9 +103,9 @@ export class Bitski {
    * Called from your oauth redirect page.
    * @param authenticationIntegrationType Should match the method called when signing in.
    */
-  public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
+  public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: string): Promise<User> {
     const assumedCallbackType = authenticationIntegrationType || OAuthProviderIntegrationType.POPUP;
-    return this.authProvider.signInCallback(assumedCallbackType);
+    return this.authProvider.signInCallback(assumedCallbackType, url);
   }
 
   /**
