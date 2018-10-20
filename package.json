@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.2.0-beta.3",
+  "version": "0.2.0-beta.4",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
     "build": "tsc && typedoc",
@@ -21,7 +21,7 @@
     "@types/ethereum-protocol": "^1.0.0",
     "@types/events": "^1.2.0",
     "json-rpc-error": "^2.0.0",
-    "oidc-client": "^1.5.2",
+    "oidc-client": ">=1.5.2",
     "web3-provider-engine": "^14.0.6"
   },
   "devDependencies": {
