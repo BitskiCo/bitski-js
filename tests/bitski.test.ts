@@ -21,6 +21,12 @@ describe('managing providers', () => {
     expect(provider).toBeDefined();
   });
 
+  test('should pass settings to provider-engine', () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider('mainnet', { pollingInterval: 10000000 });
+    expect(provider._blockTracker._pollingInterval).toBe(10000000);
+  });
+
   test('should create new provider if one doesnt yet exist', () => {
     const bitski = createInstance();
     expect(bitski['engines'].size).toBe(0);
