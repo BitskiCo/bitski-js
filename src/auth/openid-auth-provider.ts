@@ -19,7 +19,7 @@ export class OpenidAuthProvider implements AuthProvider {
 
             popup_post_logout_redirect_uri: postLogoutRedirectUri,
             popup_redirect_uri: redirectUri,
-
+            includeIdTokenInSilentRenew: false,
             automaticSilentRenew: true,
             silent_redirect_uri: redirectUri,
 

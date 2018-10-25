@@ -40,8 +40,10 @@ export class Bitski {
   /**
    * Returns a new web3 provider for a given network.
    * @param networkName optional name of the network to use, or host for a local provider. Defaults to mainnet.
+   * @param options options for the provider
+   * @param options.pollingInterval minimum interval in milliseconds to poll for new blocks. default is 4000.
    */
-  public getProvider(networkName?: string): ProviderEngine {
+  public getProvider(networkName?: string, options?: any): ProviderEngine {
     const existingProvider = this.engines.get(networkName || 'mainnet');
     if (existingProvider) {
       existingProvider.start();
@@ -53,11 +55,11 @@ export class Bitski {
       case 'rinkeby':
       case 'kovan':
       case undefined:
-        provider = this.createBitskiEngine(networkName);
+        provider = this.createBitskiEngine(networkName, options);
         break;
 
       default:
-        provider = this.createThirdPartyEngine(networkName);
+        provider = this.createThirdPartyEngine(networkName, options);
         break;
     }
     this.engines.set(networkName || 'mainnet', provider);
@@ -133,8 +135,8 @@ export class Bitski {
     return window.parent !== window;
   }
 
-  private createEngine(fetchSubprovider: Subprovider, networkName: string): ProviderEngine {
-    const engine = new ProviderEngine();
+  private createEngine(fetchSubprovider: Subprovider, networkName: string, options?: any): ProviderEngine {
+    const engine = new ProviderEngine(options);
 
     this.addDefaultSubproviders(engine);
 
@@ -180,7 +182,7 @@ export class Bitski {
     }
   }
 
-  private createBitskiEngine(networkName?: string): ProviderEngine {
+  private createBitskiEngine(networkName?: string, options?: any): ProviderEngine {
     const network = networkName || 'mainnet';
     const fetchSubprovider = new AuthenticatedFetchSubprovider(
       `https://api.bitski.com/v1/web3/${network}`,
@@ -188,13 +190,13 @@ export class Bitski {
       this.authProvider,
       {'X-API-KEY': this.clientId, 'X-CLIENT-ID': this.clientId},
     );
-    return this.createEngine(fetchSubprovider, networkName || 'mainnet');
+    return this.createEngine(fetchSubprovider, networkName || 'mainnet', options);
   }
 
-  private createThirdPartyEngine(networkName: string): ProviderEngine {
+  private createThirdPartyEngine(networkName: string, options?: any): ProviderEngine {
     const debug = false;
     const fetchSubprovider = new RpcSource({ networkName, debug });
 
-    return this.createEngine(fetchSubprovider, networkName || 'mainnet');
+    return this.createEngine(fetchSubprovider, networkName || 'mainnet', options);
   }
 }
