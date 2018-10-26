@@ -59,10 +59,11 @@ describe('managing providers', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  test('should create regular HTTPProvider when passing host string', () => {
+  test('should create regular RPCProvider when passing host string', () => {
     const bitski = createInstance();
     const providerEngine = bitski.getProvider('http://localhost:7545');
     expect(providerEngine !== undefined);
+    expect(providerEngine.rpcUrl == 'http://localhost:7545');
   });
 });
 

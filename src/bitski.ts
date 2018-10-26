@@ -193,10 +193,9 @@ export class Bitski {
     return this.createEngine(fetchSubprovider, networkName || 'mainnet', options);
   }
 
-  private createThirdPartyEngine(networkName: string, options?: any): ProviderEngine {
-    const debug = false;
-    const fetchSubprovider = new RpcSource({ networkName, debug });
+  private createThirdPartyEngine(rpcUrl: string, options?: any): ProviderEngine {
+    const fetchSubprovider = new RpcSource({ rpcUrl });
 
-    return this.createEngine(fetchSubprovider, networkName || 'mainnet', options);
+    return this.createEngine(fetchSubprovider, rpcUrl, options);
   }
 }
