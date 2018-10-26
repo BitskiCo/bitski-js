@@ -1,43 +1,31 @@
 import JsonRpcError from 'json-rpc-error';
-import Subprovider from 'web3-provider-engine/subproviders/subprovider';
 import { AuthProvider } from '../auth/auth-provider';
 import { Dialog } from '../components/dialog';
+import { AuthorizationHandler } from './authorization-handler';
 
-type Transaction = [any, any];
+type Request = [any, any];
 
-export class IFrameSubprovider extends Subprovider {
-    public currentTransactionDialog?: Dialog;
+export class IFrameSubprovider extends AuthorizationHandler {
+    public currentRequestDialog?: Dialog;
     private webBaseUrl: string;
     private networkName: string;
     private authProvider: AuthProvider;
-    private currentTransaction?: Transaction;
+    private currentRequest?: Request;
 
     constructor(webBaseUrl: string, networkName: string, authProvider: AuthProvider) {
         super();
         this.webBaseUrl = webBaseUrl;
         this.networkName = networkName;
         this.authProvider = authProvider;
-
         window.addEventListener('message', this.receiveMessage.bind(this), false);
     }
 
-    public handleRequest(payload, next, end): void {
-        switch (payload.method) {
-            // TODO: Other methods
-            case 'eth_sendTransaction': {
-                this.authProvider.getAccessToken().then((accessToken) => {
-                    this.showTransactionModal(accessToken, payload, end);
-                }).catch((error) => {
-                    end(error, undefined);
-                });
-                break;
-            }
-
-            default: {
-                next();
-                break;
-            }
-        }
+    public handleAuthorization(payload, _, end): void {
+        this.authProvider.getAccessToken().then((accessToken) => {
+            this.showBitskiModal(accessToken, payload, end);
+        }).catch((error) => {
+            end(error, undefined);
+        });
     }
 
     public receiveMessage(event: MessageEvent): void {
@@ -51,39 +39,43 @@ export class IFrameSubprovider extends Subprovider {
             return;
         }
 
-        if (this.currentTransaction === undefined) {
+        if (this.currentRequest === undefined) {
             return;
         }
 
-        const payload = this.currentTransaction[0];
+        const payload = this.currentRequest[0];
 
         if (payload.id !== data.id) {
             return;
         }
 
-        if (this.currentTransactionDialog) {
-            this.currentTransactionDialog.dismiss();
-            this.currentTransactionDialog = undefined;
+        if (this.currentRequestDialog) {
+            this.currentRequestDialog.dismiss();
+            this.currentRequestDialog = undefined;
         }
 
-        const end = this.currentTransaction[1];
+        const end = this.currentRequest[1];
         end(data.error, data.result);
     }
 
-    private showTransactionModal(accessToken, payload, end) {
-        if (this.currentTransactionDialog) {
-            this.currentTransactionDialog.dismiss();
-        }
-
-        if (this.currentTransaction) {
-            const oldTransactionEnd = this.currentTransaction[1];
-            oldTransactionEnd(new JsonRpcError.InternalError(), undefined);
-        }
-
-        this.currentTransaction = [payload, end];
-
+    private urlForMethod(method: string): string | undefined {
         // TODO: Other methods
-        const ethSendTransactionUrl = this.webBaseUrl + '/eth-send-transaction';
+        switch (method) {
+        case 'eth_sendTransaction':
+            return this.webBaseUrl + '/eth-send-transaction';
+        default:
+            return undefined;
+        }
+    }
+
+    // Show the real transaction modal when using a bitski wallet
+    private showBitskiModal(accessToken, payload, end) {
+        const authorizationUrl = this.urlForMethod(payload.method);
+
+        if (authorizationUrl === undefined) {
+            end(new JsonRpcError.InternalError(), undefined);
+            return;
+        }
 
         const encodedPayload = btoa(JSON.stringify(payload));
         const txnParams = `network=${this.networkName}&payload=${encodedPayload}&referrerAccessToken=${accessToken}`;
@@ -95,8 +87,22 @@ export class IFrameSubprovider extends Subprovider {
         iframe.style.width = '100%';
         iframe.style.height = '100%';
         iframe.frameBorder = '0';
-        iframe.src = `${ethSendTransactionUrl}?${txnParams}`;
+        iframe.src = `${authorizationUrl}?${txnParams}`;
 
-        this.currentTransactionDialog = new Dialog(iframe);
+        this.showAuthorizationModal(iframe, payload, end);
+    }
+
+    private showAuthorizationModal(element, payload, end) {
+        if (this.currentRequestDialog) {
+            this.currentRequestDialog.dismiss();
+        }
+
+        if (this.currentRequest) {
+            const oldTransactionEnd = this.currentRequest[1];
+            oldTransactionEnd(new JsonRpcError.InternalError(), undefined);
+        }
+
+        this.currentRequest = [payload, end];
+        this.currentRequestDialog = new Dialog(element);
     }
 }
