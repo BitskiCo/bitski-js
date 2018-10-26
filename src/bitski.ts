@@ -13,7 +13,9 @@ import { AuthProvider, OAuthProviderIntegrationType } from './auth/auth-provider
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
 import { AuthenticatedFetchSubprovider } from './subproviders/authenticated-fetch';
+import { AuthorizationHandler } from './subproviders/authorization-handler';
 import { IFrameSubprovider } from './subproviders/iframe';
+import { LocalDialogSubprovider } from './subproviders/local-dialog';
 
 const ENABLE_CACHE = true;
 
@@ -135,14 +137,12 @@ export class Bitski {
     return window.parent !== window;
   }
 
-  private createEngine(fetchSubprovider: Subprovider, networkName: string, options?: any): ProviderEngine {
+  private createEngine(fetchSubprovider: Subprovider, authorizationSubprovider: AuthorizationHandler, options?: any): ProviderEngine {
     const engine = new ProviderEngine(options);
 
     this.addDefaultSubproviders(engine);
 
-    const iframeSubprovider = new IFrameSubprovider('https://www.bitski.com', networkName || 'mainnet', this.authProvider);
-
-    engine.addProvider(iframeSubprovider);
+    engine.addProvider(authorizationSubprovider);
 
     engine.addProvider(fetchSubprovider);
 
@@ -190,13 +190,13 @@ export class Bitski {
       this.authProvider,
       {'X-API-KEY': this.clientId, 'X-CLIENT-ID': this.clientId},
     );
-    return this.createEngine(fetchSubprovider, networkName || 'mainnet', options);
+    const iframeSubprovider = new IFrameSubprovider('https://www.bitski.com', networkName || 'mainnet', this.authProvider);
+    return this.createEngine(fetchSubprovider, iframeSubprovider, options);
   }
 
-  private createThirdPartyEngine(networkName: string, options?: any): ProviderEngine {
-    const debug = false;
-    const fetchSubprovider = new RpcSource({ networkName, debug });
-
-    return this.createEngine(fetchSubprovider, networkName || 'mainnet', options);
+  private createThirdPartyEngine(rpcUrl: string, options?: any): ProviderEngine {
+    const fetchSubprovider = new RpcSource({ rpcUrl });
+    const authorizationProvider = new LocalDialogSubprovider();
+    return this.createEngine(fetchSubprovider, authorizationProvider, options);
   }
 }
