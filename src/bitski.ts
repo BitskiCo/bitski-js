@@ -105,11 +105,11 @@ export class Bitski {
 
   /**
    * Called from your oauth redirect page.
-   * @param authenticationIntegrationType Should match the method called when signing in.
+   * @param authenticationIntegrationType Log in method used. Must match the method actually used when logging in.
+   * @param url Optionally provide the full callback url including the query params in cases when it cannot be automatically detected
    */
   public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: string): Promise<User> {
-    const assumedCallbackType = authenticationIntegrationType || OAuthProviderIntegrationType.POPUP;
-    return this.authProvider.signInCallback(assumedCallbackType, url);
+    return this.authProvider.signInCallback(authenticationIntegrationType || this.assumedCallbackType(window), url);
   }
 
   /**
@@ -133,8 +133,13 @@ export class Bitski {
     }
   }
 
-  public isInFrame(): boolean {
-    return window.parent !== window;
+  private assumedCallbackType(w: Window): OAuthProviderIntegrationType {
+    if (w.parent !== w) {
+      return OAuthProviderIntegrationType.SILENT;
+    } else if (w.opener) {
+      return OAuthProviderIntegrationType.POPUP;
+    }
+    return OAuthProviderIntegrationType.REDIRECT;
   }
 
   private createEngine(fetchSubprovider: Subprovider, authorizationSubprovider: AuthorizationHandler, options?: any): ProviderEngine {

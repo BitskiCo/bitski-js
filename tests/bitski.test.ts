@@ -1,4 +1,5 @@
 import { Log } from 'oidc-client';
+import { OAuthProviderIntegrationType } from '../src/auth/auth-provider';
 import { InMemoryWebStorage, WebStorageStateStore } from '../node_modules/oidc-client';
 import { Bitski } from '../src/bitski';
 
@@ -64,6 +65,43 @@ describe('managing providers', () => {
     const providerEngine = bitski.getProvider('http://localhost:7545');
     expect(providerEngine !== undefined);
     expect(providerEngine.rpcUrl == 'http://localhost:7545');
+  });
+});
+
+describe('when handling callbacks', () => {
+  test('should forward oauth login method if provided', () => {
+    const bitski = createInstance();
+    const spy = jest.spyOn(bitski.authProvider, 'signInCallback');
+    bitski.signInCallback(OAuthProviderIntegrationType.REDIRECT);
+    expect(spy).toHaveBeenCalledWith(OAuthProviderIntegrationType.REDIRECT, undefined);
+  });
+
+  test('should forward url when provided', () => {
+    const bitski = createInstance();
+    const spy = jest.spyOn(bitski.authProvider, 'signInCallback');
+    bitski.signInCallback(OAuthProviderIntegrationType.REDIRECT, 'http://foo.bar/callback');
+    expect(spy).toHaveBeenCalledWith(OAuthProviderIntegrationType.REDIRECT, 'http://foo.bar/callback');
+  });
+
+  test('should default to redirect login method', () => {
+    const bitski = createInstance();
+    const spy = jest.spyOn(bitski.authProvider, 'signInCallback');
+    bitski.signInCallback();
+    expect(spy).toHaveBeenCalledWith(OAuthProviderIntegrationType.REDIRECT, undefined);
+  });
+
+  test('should default to silent login method when window.parent is not the same as window', () => {
+    const bitski = createInstance();
+    const assumedValue = bitski.assumedCallbackType({ parent: 'foo' });
+    expect(assumedValue).toBe(OAuthProviderIntegrationType.SILENT);
+  });
+
+  test('should default to popup login method when window.opener is defined', () => {
+    const bitski = createInstance();
+    let w: any = { opener: 'foo' };
+    w.parent = w;
+    const assumedValue = bitski.assumedCallbackType(w);
+    expect(assumedValue).toBe(OAuthProviderIntegrationType.POPUP);
   });
 });
 
