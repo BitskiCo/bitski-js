@@ -22,7 +22,7 @@
     "@types/events": "^1.2.0",
     "json-rpc-error": "^2.0.0",
     "oidc-client": ">=1.5.2",
-    "web3-provider-engine": "^14.0.6"
+    "web3-provider-engine": "github:BitskiCo/provider-engine#fix/kovan-subscriptions"
   },
   "devDependencies": {
     "@types/jest": "^23.3.2",
