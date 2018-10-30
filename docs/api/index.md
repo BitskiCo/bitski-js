@@ -793,7 +793,7 @@ private var engines: Map<string, any> =  new Map<string, ProviderEngine>()
 ```typescript
 private function addDefaultSubproviders(engine: ProviderEngine, enableCache?: boolean)
 ```
-<small>*Defined in [bitski.ts:160](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L160)*</small>
+<small>*Defined in [bitski.ts:165](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L165)*</small>
 
 
 
@@ -804,6 +804,40 @@ private function addDefaultSubproviders(engine: ProviderEngine, enableCache?: bo
 | engine | `ProviderEngine`  | - |   - |
 | enableCache | `boolean`  |  ENABLE_CACHE |   - |
 
+
+
+
+
+
+
+
+<a id="_bitski_.bitski.assumedcallbacktype"></a>
+
+#### assumedCallbackType
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function assumedCallbackType(w: Window): OAuthProviderIntegrationType
+```
+<small>*Defined in [bitski.ts:136](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L136)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| w | `Window`   |  - |
+
+
+
+##### Return Value
+[OAuthProviderIntegrationType](#_auth_auth_provider_.oauthproviderintegrationtype)
 
 
 
@@ -824,7 +858,7 @@ private function addDefaultSubproviders(engine: ProviderEngine, enableCache?: bo
 ```typescript
 private function createBitskiEngine(networkName?: undefined | string, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:185](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L185)*</small>
+<small>*Defined in [bitski.ts:190](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L190)*</small>
 
 
 
@@ -859,7 +893,7 @@ private function createBitskiEngine(networkName?: undefined | string, options?: 
 ```typescript
 private function createEngine(fetchSubprovider: Subprovider, authorizationSubprovider: AuthorizationHandler, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:140](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L140)*</small>
+<small>*Defined in [bitski.ts:145](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L145)*</small>
 
 
 
@@ -895,7 +929,7 @@ private function createEngine(fetchSubprovider: Subprovider, authorizationSubpro
 ```typescript
 private function createThirdPartyEngine(rpcUrl: string, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:197](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L197)*</small>
+<small>*Defined in [bitski.ts:202](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L202)*</small>
 
 
 
@@ -1063,32 +1097,6 @@ function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegratio
 
 
 
-<a id="_bitski_.bitski.isinframe"></a>
-
-#### isInFrame
-
-
-
-
-##### Declaration
-
-
-```typescript
-function isInFrame(): boolean
-```
-<small>*Defined in [bitski.ts:136](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L136)*</small>
-
-
-
-##### Return Value
-`boolean`
-
-
-
-
-
-
-
 <a id="_bitski_.bitski.setlogger"></a>
 
 #### setLogger
@@ -1179,7 +1187,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: undefined | string): Promise<User>
 ```
-<small>*Defined in [bitski.ts:110](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L110)*</small>
+<small>*Defined in [bitski.ts:111](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L111)*</small>
 
 
 
@@ -1187,8 +1195,8 @@ function signInCallback(authenticationIntegrationType?: OAuthProviderIntegration
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| authenticationIntegrationType _(Optional)_ | [OAuthProviderIntegrationType](#_auth_auth_provider_.oauthproviderintegrationtype)   |  Should match the method called when signing in. |
-| url _(Optional)_ | `undefined          ⎮string`   |  - |
+| authenticationIntegrationType _(Optional)_ | [OAuthProviderIntegrationType](#_auth_auth_provider_.oauthproviderintegrationtype)   |  Log in method used. Must match the method actually used when logging in. |
+| url _(Optional)_ | `undefined          ⎮string`   |  Optionally provide the full callback url including the query params in cases when it cannot be automatically detected |
 
 
 
