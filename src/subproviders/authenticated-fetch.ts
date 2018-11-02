@@ -36,13 +36,13 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
 
     public handleRequest(payload, next, end) {
         if (this.requiresAuthentication(payload)) {
-            return this.handleAthenticatedRequest(payload, next, end);
+            return this.handleAuthenticatedRequest(payload, next, end);
         } else {
             return this.handleUnauthenticatedRequest(payload, next, end);
         }
     }
 
-    public handleAthenticatedRequest(payload, next, end) {
+    public handleAuthenticatedRequest(payload, next, end) {
         this.authProvider.getAccessToken().then((accessToken) => {
             const parameters = this.generateParameters(payload, accessToken);
             return this.sendRequest(parameters, next, end);

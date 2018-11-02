@@ -223,16 +223,19 @@ describe('sign out', () => {
     });
   });
 
-  test('should clear user on bitski instance', () => {
+  test('should clear user on bitski instance', (done) => {
+    expect.assertions(2);
     const authProvider = createInstance();
     mock.post('https://www.bitski.com/v1/logout', (req, res) => {
       return res.status(204);
     });
-    jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then(() => {
-      return authProvider.signOut().then(() => {
-        return authProvider.getUser().then((user) => {
+    authProvider.userManager.storeUser(dummyUser);
+    authProvider.getUser().then(user => {
+      expect(user).toBeDefined();
+      authProvider.signOut().then(() => {
+        authProvider.getUser().then((user) => {
           expect(user).toBeNull();
+          done();
         });
       });
     });
