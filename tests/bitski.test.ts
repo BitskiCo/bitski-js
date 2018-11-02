@@ -112,6 +112,13 @@ test('should be able to create connect button', () => {
   expect(connectButton.element.onclick).toBeDefined();
 });
 
+test('should be able to pass callback to connect button', () => {
+  const bitski = createInstance();
+  const callback = jest.fn();
+  const connectButton = bitski.getConnectButton(undefined, undefined, undefined, callback);
+  expect(connectButton.callback).toBe(callback);
+});
+
 test('should be able to set logger and log level', () => {
   const bitski = createInstance();
   bitski.setLogger(console);

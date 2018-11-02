@@ -30,12 +30,14 @@ export class ConnectButton {
     authProvider: AuthProvider,
     existingDiv?: HTMLElement,
     size: ConnectButtonSize = ConnectButtonSize.MEDIUM,
-    authIntegrationType: OAuthProviderIntegrationType= OAuthProviderIntegrationType.POPUP,
+    authIntegrationType: OAuthProviderIntegrationType = OAuthProviderIntegrationType.POPUP,
+    callback?: (error?: Error, user?: User) => void
   ) {
     this.authProvider = authProvider;
     this.size = size;
     this.authIntegrationType = authIntegrationType;
     this.element = document.createElement('button');
+    this.callback = callback;
     this.setDefaultStyle();
 
     this.element.addEventListener('click', this.signin.bind(this));
@@ -47,6 +49,15 @@ export class ConnectButton {
 
     if (existingDiv) {
       existingDiv.appendChild(this.element);
+    }
+  }
+
+  /**
+   * Removes the button from the page
+   */
+  public remove() {
+    if (this.element.parentNode) {
+      this.element.parentNode.removeChild(this.element);
     }
   }
 

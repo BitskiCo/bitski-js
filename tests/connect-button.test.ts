@@ -5,7 +5,7 @@ import { ConnectButton, ConnectButtonSize } from '../src/components/connect-butt
 
 const clientID = 'test-client-id';
 
-function createInstance(): OpenidAuthProvider {
+function createAuthProvider(): OpenidAuthProvider {
   const store = new InMemoryWebStorage();
   const stateStore = new WebStorageStateStore({ prefix: 'bitski.', store });
   const otherSettings = {
@@ -15,61 +15,60 @@ function createInstance(): OpenidAuthProvider {
   return new OpenidAuthProvider(clientID, undefined, undefined, otherSettings);
 }
 test('it sets small attributes', () => {
-  const instance = createInstance();
-  const button = new ConnectButton(instance, undefined, ConnectButtonSize.SMALL);
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.SMALL);
   expect(button.element.style.height).toBe('20px');
 });
 
 test('it sets large attributes', () => {
-  const instance = createInstance();
-  const button = new ConnectButton(instance, undefined, ConnectButtonSize.LARGE);
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.LARGE);
   expect(button.element.style.height).toBe('40px');
 });
 
 test('it defaults to medium', () => {
-  const instance = createInstance();
-  const button = new ConnectButton(instance);
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider);
   expect(button.size).toBe(ConnectButtonSize.MEDIUM);
 });
 
 test('it inserts itself into an existing HTMLElement', () => {
   const element = document.createElement('div');
-  const instance = createInstance();
-  const button = new ConnectButton(instance, element);
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider, element);
   expect(element.firstChild).toBe(button.element);
 });
 
 test('it does not throw when no callback', () => {
-  const instance = createInstance();
-  const button = new ConnectButton(instance);
-  jest.spyOn(instance, 'signIn').mockResolvedValue({});
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider);
+  jest.spyOn(authProvider, 'signIn').mockResolvedValue({});
   expect(() => { button['signin'](); }).not.toThrow();
 });
 
 test('it does not throw when received error and no callback', () => {
-  const instance = createInstance();
-  const button = new ConnectButton(instance);
-  jest.spyOn(instance, 'signIn').mockRejectedValue('foo');
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider);
+  jest.spyOn(authProvider, 'signIn').mockRejectedValue('foo');
   expect(() => { button['signin'](); }).not.toThrow();
 });
 
 test('it calls the callback on success', done => {
-  const instance = createInstance();
-  const button = new ConnectButton(instance);
-  jest.spyOn(instance, 'signIn').mockResolvedValue({});
+  const authProvider = createAuthProvider();
+  jest.spyOn(authProvider, 'signIn').mockResolvedValue({});
   const callback = (error, user) => {
     expect(error).toBeUndefined();
     expect(user).toBeDefined();
     done();
   };
-  button.callback = callback;
+  const button = new ConnectButton(authProvider, undefined, undefined, undefined, callback);
   button['signin']();
 });
 
 test('it calls the callback on error', (done) => {
-  const instance = createInstance();
-  const button = new ConnectButton(instance);
-  jest.spyOn(instance, 'signIn').mockRejectedValue(new Error('foo error'));
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider);
+  jest.spyOn(authProvider, 'signIn').mockRejectedValue(new Error('foo error'));
   const callback = (error, user) => {
     expect(error).toBeDefined();
     expect(user).toBeUndefined();
@@ -80,8 +79,8 @@ test('it calls the callback on error', (done) => {
 });
 
 test('it sets focus and blur states', () => {
-  const instance = createInstance();
-  const button = new ConnectButton(instance);
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider);
   const defaultColor = button.element.style.backgroundColor;
   // test focus
   button.element.dispatchEvent(new Event('focus'));
@@ -93,12 +92,23 @@ test('it sets focus and blur states', () => {
 
 test('it uses provided authentication mode', (done) => {
   expect.assertions(1);
-  const instance = createInstance();
-  const button = new ConnectButton(instance, undefined, undefined, OAuthProviderIntegrationType.REDIRECT);
-  jest.spyOn(instance, 'signIn').mockImplementation((method) => {
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider, undefined, undefined, OAuthProviderIntegrationType.REDIRECT);
+  jest.spyOn(authProvider, 'signIn').mockImplementation((method) => {
     expect(method).toBe(OAuthProviderIntegrationType.REDIRECT);
     done();
     return Promise.resolve();
   });
   button['signin']();
+});
+
+test('it can remove itself from the DOM', () => {
+  expect.assertions(2);
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider);
+  const parent = document.createElement('div');
+  parent.appendChild(button.element);
+  expect(button.element.parentElement).toBe(parent);
+  button.remove();
+  expect(button.element.parentElement).toBeNull();
 });
