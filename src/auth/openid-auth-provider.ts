@@ -133,6 +133,7 @@ export class OpenidAuthProvider implements AuthProvider {
 
         return this.userManager.getUser().then((user) => {
             if (user) {
+                this.userManager.removeUser();
                 return this.requestSignOut(user.access_token);
             } else {
                 return Promise.resolve();

@@ -530,7 +530,7 @@ function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegratio
 ```typescript
 private function requestSignOut(accessToken: string): Promise<any>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:143](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L143)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:144](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L144)*</small>
 
 
 
@@ -564,7 +564,7 @@ private function requestSignOut(accessToken: string): Promise<any>
 ```typescript
 private function sendRequest(request: any): Promise<any>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:153](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L153)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:154](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L154)*</small>
 
 
 
@@ -793,7 +793,7 @@ private var engines: Map<string, any> =  new Map<string, ProviderEngine>()
 ```typescript
 private function addDefaultSubproviders(engine: ProviderEngine, enableCache?: boolean)
 ```
-<small>*Defined in [bitski.ts:165](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L165)*</small>
+<small>*Defined in [bitski.ts:167](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L167)*</small>
 
 
 
@@ -824,7 +824,7 @@ private function addDefaultSubproviders(engine: ProviderEngine, enableCache?: bo
 ```typescript
 private function assumedCallbackType(w: Window): OAuthProviderIntegrationType
 ```
-<small>*Defined in [bitski.ts:136](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L136)*</small>
+<small>*Defined in [bitski.ts:138](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L138)*</small>
 
 
 
@@ -858,7 +858,7 @@ private function assumedCallbackType(w: Window): OAuthProviderIntegrationType
 ```typescript
 private function createBitskiEngine(networkName?: undefined | string, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:190](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L190)*</small>
+<small>*Defined in [bitski.ts:192](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L192)*</small>
 
 
 
@@ -893,7 +893,7 @@ private function createBitskiEngine(networkName?: undefined | string, options?: 
 ```typescript
 private function createEngine(fetchSubprovider: Subprovider, authorizationSubprovider: AuthorizationHandler, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:145](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L145)*</small>
+<small>*Defined in [bitski.ts:147](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L147)*</small>
 
 
 
@@ -929,7 +929,7 @@ private function createEngine(fetchSubprovider: Subprovider, authorizationSubpro
 ```typescript
 private function createThirdPartyEngine(rpcUrl: string, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:202](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L202)*</small>
+<small>*Defined in [bitski.ts:204](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L204)*</small>
 
 
 
@@ -966,9 +966,9 @@ Creates a sign in with bitski button to add to your app. If an HTML element is p
 
 
 ```typescript
-function getConnectButton(existingDiv?: HTMLElement, size?: ConnectButtonSize): ConnectButton
+function getConnectButton(existingDiv?: HTMLElement, size?: ConnectButtonSize, authMethod?: OAuthProviderIntegrationType, callback?: undefined | function): ConnectButton
 ```
-<small>*Defined in [bitski.ts:85](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L85)*</small>
+<small>*Defined in [bitski.ts:87](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L87)*</small>
 
 
 
@@ -978,6 +978,8 @@ function getConnectButton(existingDiv?: HTMLElement, size?: ConnectButtonSize): 
 | ------ | ------ | ------ | ------ |
 | existingDiv _(Optional)_ | `HTMLElement`  | - |   Existing element to turn into a Bitski connect button |
 | size | [ConnectButtonSize](#_components_connect_button_.connectbuttonsize)  |  ConnectButtonSize.MEDIUM |   Size of button to generate. Defaults to medium. |
+| authMethod | [OAuthProviderIntegrationType](#_auth_auth_provider_.oauthproviderintegrationtype)  |  OAuthProviderIntegrationType.POPUP |   Login method to use. Defaults to popup. |
+| callback _(Optional)_ | `undefined          ⎮function`  | - |   Post-login callback. Called when sign in is complete. Not applicable for redirect login method. |
 
 
 
@@ -1076,7 +1078,7 @@ Gets the current user if it exists. If not, signs in. Unlike `getUser` this will
 ```typescript
 function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:102](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L102)*</small>
+<small>*Defined in [bitski.ts:104](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L104)*</small>
 
 
 
@@ -1114,7 +1116,7 @@ Set logger and log level for debugging purposes
 ```typescript
 function setLogger(logger: any, level?: undefined | number)
 ```
-<small>*Defined in [bitski.ts:129](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L129)*</small>
+<small>*Defined in [bitski.ts:131](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L131)*</small>
 
 
 
@@ -1149,7 +1151,7 @@ Starts sign in flow.
 ```typescript
 function signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>
 ```
-<small>*Defined in [bitski.ts:93](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L93)*</small>
+<small>*Defined in [bitski.ts:95](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L95)*</small>
 
 
 
@@ -1187,7 +1189,7 @@ Called from your oauth redirect page.
 ```typescript
 function signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: undefined | string): Promise<User>
 ```
-<small>*Defined in [bitski.ts:111](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L111)*</small>
+<small>*Defined in [bitski.ts:113](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L113)*</small>
 
 
 
@@ -1226,7 +1228,7 @@ Sign the current user out of your application.
 ```typescript
 function signOut(): Promise<void>
 ```
-<small>*Defined in [bitski.ts:118](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L118)*</small>
+<small>*Defined in [bitski.ts:120](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L120)*</small>
 
 
 
@@ -1338,7 +1340,7 @@ A button used to connect to Bitski.
 <a id="_components_connect_button_.connectbutton.constructor"></a>
 ### constructor
 ```typescript
-new ConnectButton(authProvider: AuthProvider, existingDiv?: HTMLElement, size?: ConnectButtonSize, authIntegrationType?: OAuthProviderIntegrationType): ConnectButton
+new ConnectButton(authProvider: AuthProvider, existingDiv?: HTMLElement, size?: ConnectButtonSize, authIntegrationType?: OAuthProviderIntegrationType, callback?: undefined | function): ConnectButton
 ```
 ##### Parameters
 
@@ -1348,6 +1350,7 @@ new ConnectButton(authProvider: AuthProvider, existingDiv?: HTMLElement, size?: 
 | existingDiv _(Optional)_ | `HTMLElement`  | - |   An existing div to turn into a connect button |
 | size | [ConnectButtonSize](#_components_connect_button_.connectbuttonsize)  |  ConnectButtonSize.MEDIUM |   - |
 | authIntegrationType | [OAuthProviderIntegrationType](#_auth_auth_provider_.oauthproviderintegrationtype)  |  OAuthProviderIntegrationType.POPUP |   - |
+| callback _(Optional)_ | `undefined          ⎮function`  | - |   - |
 
 
 
@@ -1442,7 +1445,7 @@ var size: ConnectButtonSize
 ```typescript
 private function blur()
 ```
-<small>*Defined in [components/connect-button.ts:69](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L69)*</small>
+<small>*Defined in [components/connect-button.ts:80](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L80)*</small>
 
 
 
@@ -1464,7 +1467,7 @@ private function blur()
 ```typescript
 private function configureForLarge()
 ```
-<small>*Defined in [components/connect-button.ts:141](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L141)*</small>
+<small>*Defined in [components/connect-button.ts:152](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L152)*</small>
 
 
 
@@ -1486,7 +1489,7 @@ private function configureForLarge()
 ```typescript
 private function configureForMedium()
 ```
-<small>*Defined in [components/connect-button.ts:125](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L125)*</small>
+<small>*Defined in [components/connect-button.ts:136](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L136)*</small>
 
 
 
@@ -1508,7 +1511,7 @@ private function configureForMedium()
 ```typescript
 private function configureForSmall()
 ```
-<small>*Defined in [components/connect-button.ts:109](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L109)*</small>
+<small>*Defined in [components/connect-button.ts:120](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L120)*</small>
 
 
 
@@ -1530,7 +1533,33 @@ private function configureForSmall()
 ```typescript
 private function focus()
 ```
-<small>*Defined in [components/connect-button.ts:65](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L65)*</small>
+<small>*Defined in [components/connect-button.ts:76](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L76)*</small>
+
+
+
+
+
+
+
+
+<a id="_components_connect_button_.connectbutton.remove"></a>
+
+#### remove
+
+
+
+Removes the button from the page
+
+
+
+
+##### Declaration
+
+
+```typescript
+function remove()
+```
+<small>*Defined in [components/connect-button.ts:58](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L58)*</small>
 
 
 
@@ -1552,7 +1581,7 @@ private function focus()
 ```typescript
 private function setAttributes(attributes: object)
 ```
-<small>*Defined in [components/connect-button.ts:101](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L101)*</small>
+<small>*Defined in [components/connect-button.ts:112](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L112)*</small>
 
 
 
@@ -1582,7 +1611,7 @@ private function setAttributes(attributes: object)
 ```typescript
 private function setDefaultStyle()
 ```
-<small>*Defined in [components/connect-button.ts:73](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L73)*</small>
+<small>*Defined in [components/connect-button.ts:84](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L84)*</small>
 
 
 
@@ -1604,7 +1633,7 @@ private function setDefaultStyle()
 ```typescript
 private function signin()
 ```
-<small>*Defined in [components/connect-button.ts:53](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L53)*</small>
+<small>*Defined in [components/connect-button.ts:64](https://github.com/BitskiCo/bitski-js/blob/master/src/components/connect-button.ts#L64)*</small>
 
 
 
@@ -2176,9 +2205,9 @@ private function generateParameters(payload: any, accessToken?: undefined | stri
 
 
 
-<a id="_subproviders_authenticated_fetch_.authenticatedfetchsubprovider.handleathenticatedrequest"></a>
+<a id="_subproviders_authenticated_fetch_.authenticatedfetchsubprovider.handleauthenticatedrequest"></a>
 
-#### handleAthenticatedRequest
+#### handleAuthenticatedRequest
 
 
 
@@ -2187,7 +2216,7 @@ private function generateParameters(payload: any, accessToken?: undefined | stri
 
 
 ```typescript
-function handleAthenticatedRequest(payload: any, next: any, end: any)
+function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```
 <small>*Defined in [subproviders/authenticated-fetch.ts:45](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L45)*</small>
 
