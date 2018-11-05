@@ -81,9 +81,11 @@ export class Bitski {
    * a callback to get notified of login events.
    * @param existingDiv Existing element to turn into a Bitski connect button
    * @param size Size of button to generate. Defaults to medium.
+   * @param authMethod Login method to use. Defaults to popup.
+   * @param callback Post-login callback. Called when sign in is complete. Not applicable for redirect login method.
    */
-  public getConnectButton(existingDiv?: HTMLElement, size: ConnectButtonSize = ConnectButtonSize.MEDIUM): ConnectButton {
-    return new ConnectButton(this.authProvider, existingDiv, size);
+  public getConnectButton(existingDiv?: HTMLElement, size: ConnectButtonSize = ConnectButtonSize.MEDIUM, authMethod: OAuthProviderIntegrationType = OAuthProviderIntegrationType.POPUP, callback?: (error?: Error, user?: User) => void): ConnectButton {
+    return new ConnectButton(this.authProvider, existingDiv, size, authMethod, callback);
   }
 
   /**
