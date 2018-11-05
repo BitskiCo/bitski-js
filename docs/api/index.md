@@ -530,7 +530,7 @@ function getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegratio
 ```typescript
 private function requestSignOut(accessToken: string): Promise<any>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:143](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L143)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:144](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L144)*</small>
 
 
 
@@ -564,7 +564,7 @@ private function requestSignOut(accessToken: string): Promise<any>
 ```typescript
 private function sendRequest(request: any): Promise<any>
 ```
-<small>*Defined in [auth/openid-auth-provider.ts:153](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L153)*</small>
+<small>*Defined in [auth/openid-auth-provider.ts:154](https://github.com/BitskiCo/bitski-js/blob/master/src/auth/openid-auth-provider.ts#L154)*</small>
 
 
 
@@ -2205,9 +2205,9 @@ private function generateParameters(payload: any, accessToken?: undefined | stri
 
 
 
-<a id="_subproviders_authenticated_fetch_.authenticatedfetchsubprovider.handleathenticatedrequest"></a>
+<a id="_subproviders_authenticated_fetch_.authenticatedfetchsubprovider.handleauthenticatedrequest"></a>
 
-#### handleAthenticatedRequest
+#### handleAuthenticatedRequest
 
 
 
@@ -2216,7 +2216,7 @@ private function generateParameters(payload: any, accessToken?: undefined | stri
 
 
 ```typescript
-function handleAthenticatedRequest(payload: any, next: any, end: any)
+function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```
 <small>*Defined in [subproviders/authenticated-fetch.ts:45](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L45)*</small>
 
