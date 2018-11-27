@@ -5,6 +5,9 @@ import { AuthorizationHandler } from './authorization-handler';
 
 type Request = [any, any];
 
+/*
+ * An AuthorizationHandler Subprovider that uses an iframe to get authorization from the user.
+ */
 export class IFrameSubprovider extends AuthorizationHandler {
     public currentRequestDialog?: Dialog;
     private webBaseUrl: string;
