@@ -16,6 +16,7 @@ import { AuthenticatedFetchSubprovider } from './subproviders/authenticated-fetc
 import { AuthorizationHandler } from './subproviders/authorization-handler';
 import { IFrameSubprovider } from './subproviders/iframe';
 import { LocalDialogSubprovider } from './subproviders/local-dialog';
+import { AuthenticatedCacheSubprovider } from './subproviders/authenticated-cache';
 
 const ENABLE_CACHE = true;
 
@@ -35,7 +36,6 @@ export class Bitski {
    */
   constructor(clientId: string, redirectUri?: string, postLogoutRedirectUri?: string, otherSettings?: object) {
     this.clientId = clientId;
-
     this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, postLogoutRedirectUri || window.location.href, otherSettings);
   }
 
@@ -144,14 +144,12 @@ export class Bitski {
     return OAuthProviderIntegrationType.REDIRECT;
   }
 
-  private createEngine(fetchSubprovider: Subprovider, authorizationSubprovider: AuthorizationHandler, options?: any): ProviderEngine {
+  private createEngine(subproviders: Subprovider[], options?: any): ProviderEngine {
     const engine = new ProviderEngine(options);
 
     this.addDefaultSubproviders(engine);
 
-    engine.addProvider(authorizationSubprovider);
-
-    engine.addProvider(fetchSubprovider);
+    subproviders.forEach(provider => engine.addProvider(provider));
 
     engine.on('error', error => {
       if (error.message === 'Not signed in') {
@@ -198,12 +196,13 @@ export class Bitski {
       {'X-API-KEY': this.clientId, 'X-CLIENT-ID': this.clientId},
     );
     const iframeSubprovider = new IFrameSubprovider('https://www.bitski.com', networkName || 'mainnet', this.authProvider);
-    return this.createEngine(fetchSubprovider, iframeSubprovider, options);
+    const cacheSubprovider = new AuthenticatedCacheSubprovider(this.authProvider);
+    return this.createEngine([cacheSubprovider, iframeSubprovider, fetchSubprovider], options);
   }
 
   private createThirdPartyEngine(rpcUrl: string, options?: any): ProviderEngine {
     const fetchSubprovider = new RpcSource({ rpcUrl });
     const authorizationProvider = new LocalDialogSubprovider();
-    return this.createEngine(fetchSubprovider, authorizationProvider, options);
+    return this.createEngine([authorizationProvider, fetchSubprovider], options);
   }
 }

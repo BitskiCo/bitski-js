@@ -3,6 +3,9 @@ import Subprovider from 'web3-provider-engine/subproviders/subprovider';
 
 const DEFAULT_AUTHORIZED_METHODS = ['eth_sendTransaction', 'eth_sign', 'eth_signTypedData', 'personal_sign'];
 
+/*
+ * Base Subprovider that requests authorization for specific methods. Meant to be extended.
+ */
 export class AuthorizationHandler extends Subprovider {
 
   private authorizedMethods: [string];
@@ -22,7 +25,7 @@ export class AuthorizationHandler extends Subprovider {
 
   public handleAuthorization(payload, next, end): void {
     //Default implementation
-    end(new JsonRpcError.InternalError(), undefined);
+    end(new JsonRpcError.InternalError());
   }
 
   private requiresAuthorization(method: string): boolean {

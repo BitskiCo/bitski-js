@@ -24,6 +24,9 @@ function isErrorRetriable(err) {
     return RETRIABLE_ERRORS.some((phrase) => errMsg.includes(phrase));
 }
 
+/*
+ * Subprovider that fetches over HTTP and manages authentication headers
+ */
 export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     private authProvider: AuthProvider;
     private defaultHeaders: object;
@@ -57,26 +60,21 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     }
 
     private requiresAuthentication(payload) {
-        return true;
-
-        // TODO: Allow unauthenticated requests (requires backend change)
-        // return AUTHENTICATED_METHODS.some((method) => (payload['method'] === method));
+        return AUTHENTICATED_METHODS.includes(payload.method);
     }
 
     private generateParameters(payload, accessToken?: string): object {
-        const self = this;
-
         // overwrite id to not conflict with other concurrent users
         const newPayload = createPayload(payload);
         // remove extra parameter from request
         delete newPayload.origin;
 
-        const headers: object = {
+        let headers: object = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         };
 
-        Object.assign(headers, this.defaultHeaders);
+        headers = Object.assign({}, headers, this.defaultHeaders);
 
         const originDomain = payload['origin'];
         if (super.originHttpHeaderKey && originDomain) {

@@ -18,7 +18,7 @@
   "typedocOptions": {
     "module": "commonjs",
     "target": "ES5",
-    "exclude": "**/node_modules/**/*.*",
+    "exclude": ["**/node_modules/**/*.*", "**/src/utils/callback.*"],
     "experimentalDecorators": true,
     "excludeExternals": true,
     "out": "docs/api",

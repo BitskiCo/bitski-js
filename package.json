@@ -8,10 +8,10 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.2.0-beta.8",
+  "version": "0.2.0-beta.9",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
-    "build": "tsc && typedoc",
+    "build": "tsc && browserify -s Bitski -e dist/lib/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.js && npm run docs",
     "prepack": "tsc",
     "docs": "typedoc",
     "test": "jest --coverage",
@@ -26,6 +26,8 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.2",
+    "babel-preset-es2015": "^6.24.1",
+    "browserify": "^16.2.3",
     "find": "^0.2.9",
     "jest": "^23.6.0",
     "jest-fetch-mock": "^1.6.6",
@@ -35,7 +37,7 @@
     "tslint-loader": "^3.6.0",
     "typedoc": "^0.12.0",
     "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
-    "typescript": "^3.0.3",
+    "typescript": "^3.1.6",
     "xhr-mock": "^2.4.1"
   },
   "jest": {
