@@ -4,18 +4,21 @@ describe('authorization handler', () => {
 
   test('it sets default options', () => {
     const handler = new AuthorizationHandler();
+    //@ts-ignore
     expect(handler.authorizedMethods).toContain('eth_sendTransaction');
   });
 
   test('it sets options when provided', () => {
     const opts = { authorizedMethods: ['foo_bar'] };
     const handler = new AuthorizationHandler(opts);
+    //@ts-ignore
     expect(handler.authorizedMethods).toBe(opts.authorizedMethods);
   });
 
   test('it ignores options when invalid', () => {
     const opts = {};
     const handler = new AuthorizationHandler(opts);
+    //@ts-ignore
     expect(handler.authorizedMethods).toContain('eth_sendTransaction');
   });
 

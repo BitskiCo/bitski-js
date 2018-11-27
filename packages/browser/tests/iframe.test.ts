@@ -1,6 +1,6 @@
 import { InMemoryWebStorage, User, WebStorageStateStore } from 'oidc-client';
 import mock from 'xhr-mock';
-import { OAuthProviderIntegrationType } from '../src/auth/auth-provider';
+import { OAuthSignInMethod } from '../src/auth/auth-provider';
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { IFrameSubprovider } from '../src/subproviders/iframe';
 import { MockEngine } from './util/mock-engine';
@@ -46,7 +46,8 @@ function createAuthProvider(): OpenidAuthProvider {
         stateStore,
         userStore: stateStore,
     };
-    return new OpenidAuthProvider(clientID, 'http://localhost/callback', 'http://localhost/callback', otherSettings);
+
+    return new OpenidAuthProvider(clientID, 'http://localhost/callback', otherSettings);
 }
 
 function createInstance(authProvider: OpenidAuthProvider): IFrameSubprovider {
@@ -64,7 +65,7 @@ function createRequest(method: string, params: any[]): any {
 
 function prepareAuthenticatedSession(authProvider: OpenidAuthProvider): Promise<User> {
     jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValueOnce(mockUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+    return authProvider.signIn(OAuthSignInMethod.Popup).then((user) => {
         jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
         return user;
     });
@@ -79,7 +80,7 @@ afterEach(() => {
 });
 
 describe('it handles sends with authorization', () => {
-    test('IFrame: should show approval dialog by default', (done) => {
+    test('iframe: should show approval dialog by default', (done) => {
         const authProvider = createAuthProvider();
         const instance = createInstance(authProvider);
         const engine = new MockEngine();
@@ -111,7 +112,7 @@ describe('it handles sends with authorization', () => {
         });
     });
 
-    test('IFrame: should ignore messages when from another host', () => {
+    test('iframe: should ignore messages when from another host', () => {
         const authProvider = createAuthProvider();
         const instance = createInstance(authProvider);
         const engine = new MockEngine();
@@ -139,7 +140,7 @@ describe('it handles sends with authorization', () => {
         });
     });
 
-    test('IFrame: should ignore messages when they don\'t have IDs that match the current request', (done) => {
+    test('iframe: should ignore messages when they don\'t have IDs that match the current request', (done) => {
         const authProvider = createAuthProvider();
         const instance = createInstance(authProvider);
         const engine = new MockEngine();
@@ -168,7 +169,7 @@ describe('it handles sends with authorization', () => {
         });
     });
 
-    test('Iframe: should close existing dialog if one is already open', (done) => {
+    test('iframe: should close existing dialog if one is already open', (done) => {
         const authProvider = createAuthProvider();
         const instance = createInstance(authProvider);
         const engine = new MockEngine();
@@ -181,11 +182,13 @@ describe('it handles sends with authorization', () => {
             });
 
             setTimeout(() => {
+                //@ts-ignore
                 if (instance.currentTransactionDialog) {
+                    //@ts-ignore
                     const dismissMock = instance.currentTransactionDialog.dismiss = jest.fn();
 
                     engine.sendAsync(request, () => {});
-    
+
                     setTimeout(() => {
                         expect(dismissMock).toHaveBeenCalled();
                         done();

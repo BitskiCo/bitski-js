@@ -1,16 +1,17 @@
 import { User } from 'oidc-client';
+import { AuthenticationStatus } from '../bitski';
 
-export enum OAuthProviderIntegrationType {
-    IFRAME,
-    REDIRECT,
-    POPUP,
-    SILENT,
+export enum OAuthSignInMethod {
+    Redirect = 'REDIRECT',
+    Popup = 'POPUP',
+    Silent = 'SILENT',
 }
 
 export interface AuthProvider {
-    signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>;
+    getAuthStatus(): Promise<AuthenticationStatus>;
+    signIn(method: OAuthSignInMethod, opts?: any): Promise<User>;
+    signInOrConnect(signInMethod?: OAuthSignInMethod): Promise<User>;
     getUser(): Promise<User>;
-    signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: string): Promise<User>;
+    signInCallback(method: OAuthSignInMethod, url?: string): Promise<User>;
     signOut(): Promise<any>;
-    getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User>;
 }

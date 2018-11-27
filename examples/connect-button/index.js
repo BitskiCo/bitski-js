@@ -1,16 +1,19 @@
-document.addEventListener("DOMContentLoaded", function(){
-  window.bitski.getConnectButton(document.querySelector('#small-button-container'), undefined, 0);
-  window.bitski.getConnectButton(document.querySelector('#medium-button-container'), undefined, 1);
-  window.bitski.getConnectButton(document.querySelector('#large-button-container'), undefined, 2);
-  
-  if (window.opener) {
-    window.bitski.signInCallback(2).then(console.log).catch(console.error);
-  }
+window.addEventListener("load", function(){
+  // Create small button
+  window.bitski.getConnectButton({ container: document.querySelector('#small-button-container'), size: 'SMALL' });
+
+  // Create medium button
+  window.bitski.getConnectButton({ container: document.querySelector('#medium-button-container'), size: 'MEDIUM' });
+
+  // Create large button
+  window.bitski.getConnectButton({ container: document.querySelector('#large-button-container'), size: 'LARGE' });
 
   var defaultButton = window.bitski.getConnectButton();
+
   defaultButton.callback = function(error, user){
     if(user) {
-      console.log("Signed in!: " + JSON.stringify(user.access_token));
+      console.log("Signed in!");
+      console.log(user.profile);
       window.web3.eth.getAccounts().then((accounts) => {
         var account = accounts[0];
         console.log("Getting balance for " + account);
@@ -26,5 +29,6 @@ document.addEventListener("DOMContentLoaded", function(){
       console.error("Error signing in: " + error);
     }
   };
-  document.body.appendChild(defaultButton.element);
+
+  document.querySelector('#default-button').appendChild(defaultButton.element);
 });

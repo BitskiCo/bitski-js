@@ -1,35 +1,55 @@
 import { AccessTokenProvider } from 'bitski-provider';
 import { User, UserManager } from 'oidc-client';
-import { AuthProvider, OAuthProviderIntegrationType } from './auth-provider';
+import { AuthenticationStatus } from '../bitski';
+import { AuthProvider, OAuthSignInMethod } from './auth-provider';
 
 const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
+const BITSKI_IS_SIGNED_IN_KEY = 'bitski.isSignedIn';
+
+const DEFAULT_SETTINGS = {
+    authority: 'https://account.bitski.com',
+    automaticSilentRenew: true,
+    filterProtocolClaims: true,
+    includeIdTokenInSilentRenew: false,
+    loadUserInfo: true,
+    response_type: 'id_token token',
+    scope: 'openid',
+};
 
 export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
-    public timeout: number = 5000;
 
+    public timeout: number = 5000;
     public userManager: UserManager;
 
-    constructor(clientId: string, redirectUri?: string, postLogoutRedirectUri?: string, otherSettings?: object) {
-        const settings = {
-            authority: 'https://account.bitski.com',
-            automaticSilentRenew: true,
+    private get hasSignedIn(): boolean {
+        if (localStorage) {
+            return localStorage.getItem(BITSKI_IS_SIGNED_IN_KEY) === 'true';
+        }
+        return false;
+    }
+
+    private set hasSignedIn(newValue: boolean) {
+        if (localStorage) {
+            if (newValue) {
+                localStorage.setItem(BITSKI_IS_SIGNED_IN_KEY, 'true');
+            } else {
+                localStorage.removeItem(BITSKI_IS_SIGNED_IN_KEY);
+            }
+        }
+    }
+
+    constructor(clientId: string, redirectUri: string, opts?: any) {
+        let settings = {
             client_id: clientId,
-            includeIdTokenInSilentRenew: false,
-            post_logout_redirect_uri: postLogoutRedirectUri,
-            redirect_uri: redirectUri,
-            response_type: 'id_token token',
-            scope: 'openid',
-
-            popup_post_logout_redirect_uri: postLogoutRedirectUri,
             popup_redirect_uri: redirectUri,
+            redirect_uri: redirectUri,
             silent_redirect_uri: redirectUri,
-
-            filterProtocolClaims: true,
-            loadUserInfo: true,
         };
 
-        if (otherSettings) {
-            Object.assign(settings, otherSettings);
+        settings = Object.assign(settings, DEFAULT_SETTINGS);
+
+        if (opts) {
+            settings = Object.assign(settings, opts);
         }
 
         this.userManager = new UserManager(settings);
@@ -37,7 +57,7 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
 
     public getAccessToken(): Promise<string> {
         return this.getUser().then((user) => {
-            if (user) {
+            if (user && !user.expired) {
                 return user.access_token;
             } else {
                 throw new Error('Not signed in');
@@ -45,92 +65,77 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         });
     }
 
-    public signIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
-        let signInAuthenticationIntegrationType = OAuthProviderIntegrationType.REDIRECT;
-        if (authenticationIntegrationType !== undefined && authenticationIntegrationType != null) {
-            signInAuthenticationIntegrationType = authenticationIntegrationType;
-        }
+    public getAuthStatus(): Promise<AuthenticationStatus> {
+        return this.userManager.getUser().then((user) => {
+            if (user && !user.expired) {
+                return AuthenticationStatus.Connected;
+            } else if (this.hasSignedIn) {
+                return AuthenticationStatus.Approved;
+            } else {
+                return AuthenticationStatus.NotConnected;
+            }
+        });
+    }
 
+    public signIn(method: OAuthSignInMethod, opts?: any): Promise<User> {
+        let options = {
+            state: 'someData',
+        };
+        options = Object.assign({}, options, opts);
         let promise: Promise<User>;
-        switch (signInAuthenticationIntegrationType) {
+        switch (method) {
+            case OAuthSignInMethod.Redirect:
+                promise = this.userManager.signinRedirect(options);
+                break;
+            case OAuthSignInMethod.Silent:
+                promise = this.userManager.signinSilent(options);
+                break;
             default:
-                promise =  Promise.reject(new Error('iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.'));
-                break;
-            case OAuthProviderIntegrationType.REDIRECT:
-                promise =  this.userManager.signinRedirect({ state: 'someData' });
-                break;
-            case OAuthProviderIntegrationType.POPUP:
-                promise =  this.userManager.signinPopup({ state: 'someData' });
-                break;
-            case OAuthProviderIntegrationType.SILENT:
-                promise = this.userManager.signinSilent({ state: 'someData' });
+                promise = this.userManager.signinPopup(options);
                 break;
         }
 
         return promise.then((user) => {
-            if (user && localStorage) {
-                localStorage.setItem('bitski.isSignedIn', 'true');
+            if (user) {
+                this.hasSignedIn = true;
             }
-
             return user;
         });
     }
 
     public getUser(): Promise<User> {
-        return this.userManager.getUser().then((user) => {
-            if (localStorage) {
-                if (user == null && localStorage.getItem('bitski.isSignedIn') === 'true') {
-                    return this.signIn(OAuthProviderIntegrationType.SILENT).then((newUser) => {
-                        if (!newUser && localStorage) {
-                            localStorage.removeItem('bitski.isSignedIn');
-                        }
+        return this.userManager.getUser();
+    }
 
-                        return newUser;
-                    });
-                }
-            }
-
-            return user;
+    public signInOrConnect(signInMethod?: OAuthSignInMethod): Promise<User> {
+        return this.getAuthStatus().then((authStatus) => {
+            const method = signInMethod || OAuthSignInMethod.Popup;
+            switch (authStatus) {
+            case AuthenticationStatus.Connected:
+                return this.userManager.getUser();
+            case AuthenticationStatus.Approved:
+                return this.signIn(OAuthSignInMethod.Silent).catch(() => {
+                    return this.signIn(method);
+                });
+            case AuthenticationStatus.NotConnected:
+                return this.signIn(method);
+           }
         });
     }
 
-    public getUserOrSignIn(authenticationIntegrationType?: OAuthProviderIntegrationType): Promise<User> {
-        return this.getUser().then((user) => {
-            if (user && !user.expired) {
-              return user;
-            }
-            return this.signIn(authenticationIntegrationType);
-          }).catch((error) => {
-            return this.signIn(authenticationIntegrationType);
-          });
-    }
-
-    public signInCallback(authenticationIntegrationType?: OAuthProviderIntegrationType, url?: string): Promise<User> {
-        let signInAuthenticationIntegrationType = OAuthProviderIntegrationType.REDIRECT;
-        if (window.opener) {
-            signInAuthenticationIntegrationType = OAuthProviderIntegrationType.POPUP;
-        }
-
-        if (authenticationIntegrationType !== undefined && authenticationIntegrationType != null) {
-            signInAuthenticationIntegrationType = authenticationIntegrationType;
-        }
-
-        switch (signInAuthenticationIntegrationType) {
-            default:
-                return Promise.reject(new Error('iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.'));
-            case OAuthProviderIntegrationType.REDIRECT:
-                return this.userManager.signinRedirectCallback(url || window.location.href);
-            case OAuthProviderIntegrationType.POPUP:
-                return this.userManager.signinPopupCallback(url || window.location.href);
-            case OAuthProviderIntegrationType.SILENT:
-                return this.userManager.signinSilentCallback(url || window.location.href);
+    public signInCallback(method: OAuthSignInMethod, url?: string): Promise<User> {
+        switch (method) {
+        case OAuthSignInMethod.Redirect:
+            return this.userManager.signinRedirectCallback(url || window.location.href);
+        case OAuthSignInMethod.Popup:
+            return this.userManager.signinPopupCallback(url || window.location.href);
+        case OAuthSignInMethod.Silent:
+            return this.userManager.signinSilentCallback(url || window.location.href);
         }
     }
 
     public signOut(): Promise<any> {
-        if (localStorage) {
-            localStorage.removeItem('bitski.isSignedIn');
-        }
+        this.hasSignedIn = false;
 
         return this.userManager.getUser().then((user) => {
             if (user) {
