@@ -15,6 +15,7 @@
 * ["bitski"](#_bitski_)
 * ["components/connect-button"](#_components_connect_button_)
 * ["components/dialog"](#_components_dialog_)
+* ["subproviders/authenticated-cache"](#_subproviders_authenticated_cache_)
 * ["subproviders/authenticated-fetch"](#_subproviders_authenticated_fetch_)
 * ["subproviders/authorization-handler"](#_subproviders_authorization_handler_)
 * ["subproviders/iframe"](#_subproviders_iframe_)
@@ -754,7 +755,7 @@ new Bitski(clientId: string, redirectUri?: undefined | string, postLogoutRedirec
 ```javascript
 private var authProvider: AuthProvider
 ```
-<small>*Defined in [bitski.ts:28](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L28)*</small>
+<small>*Defined in [bitski.ts:29](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L29)*</small>
 
 
 <a id="_bitski_.bitski.clientid"></a>
@@ -763,7 +764,7 @@ private var authProvider: AuthProvider
 ```javascript
 private var clientId: string
 ```
-<small>*Defined in [bitski.ts:27](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L27)*</small>
+<small>*Defined in [bitski.ts:28](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L28)*</small>
 
 
 <a id="_bitski_.bitski.engines"></a>
@@ -772,7 +773,7 @@ private var clientId: string
 ```javascript
 private var engines: Map<string, any> =  new Map<string, ProviderEngine>()
 ```
-<small>*Defined in [bitski.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L26)*</small>
+<small>*Defined in [bitski.ts:27](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L27)*</small>
 
 
 
@@ -891,7 +892,7 @@ private function createBitskiEngine(networkName?: undefined | string, options?: 
 
 
 ```typescript
-private function createEngine(fetchSubprovider: Subprovider, authorizationSubprovider: AuthorizationHandler, options?: any): ProviderEngine
+private function createEngine(subproviders: Subprovider[], options?: any): ProviderEngine
 ```
 <small>*Defined in [bitski.ts:147](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L147)*</small>
 
@@ -901,8 +902,7 @@ private function createEngine(fetchSubprovider: Subprovider, authorizationSubpro
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| fetchSubprovider | `Subprovider`   |  - |
-| authorizationSubprovider | [AuthorizationHandler](#_subproviders_authorization_handler_.authorizationhandler)   |  - |
+| subproviders | `Subprovider[]`   |  - |
 | options _(Optional)_ | `any`   |  - |
 
 
@@ -929,7 +929,7 @@ private function createEngine(fetchSubprovider: Subprovider, authorizationSubpro
 ```typescript
 private function createThirdPartyEngine(rpcUrl: string, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:204](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L204)*</small>
+<small>*Defined in [bitski.ts:205](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L205)*</small>
 
 
 
@@ -1258,7 +1258,7 @@ function signOut(): Promise<void>
 ```javascript
 var ENABLE_CACHE: true = true
 ```
-<small>*Defined in [bitski.ts:20](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L20)*</small>
+<small>*Defined in [bitski.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L21)*</small>
 
 
 
@@ -2113,6 +2113,220 @@ var DEFAULT_DIALOG_WIDTH: 490 = 490
 
 ---
 
+<a id="_subproviders_authenticated_cache_"></a>
+
+
+<a id="_subproviders_authenticated_cache_.authenticatedcachesubprovider"></a>
+
+##  AuthenticatedCacheSubprovider
+
+
+<a id="_subproviders_authenticated_cache_.authenticatedcachesubprovider.constructor"></a>
+### constructor
+```typescript
+new AuthenticatedCacheSubprovider(authProvider: any): AuthenticatedCacheSubprovider
+```
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| authProvider | `any`   |  - |
+
+
+
+##### Return Value
+[AuthenticatedCacheSubprovider](#_subproviders_authenticated_cache_.authenticatedcachesubprovider)
+
+
+
+
+
+---
+
+### Properties
+<a id="_subproviders_authenticated_cache_.authenticatedcachesubprovider.authprovider"></a>
+
+#### authProvider
+```javascript
+private var authProvider: AuthProvider
+```
+<small>*Defined in [subproviders/authenticated-cache.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-cache.ts#L10)*</small>
+
+
+<a id="_subproviders_authenticated_cache_.authenticatedcachesubprovider.cachedvalues"></a>
+
+#### cachedValues
+```javascript
+private var cachedValues: Map<string, any>
+```
+<small>*Defined in [subproviders/authenticated-cache.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-cache.ts#L11)*</small>
+
+
+
+
+---
+
+### Methods
+<a id="_subproviders_authenticated_cache_.authenticatedcachesubprovider.checkcachedvalues"></a>
+
+#### checkCachedValues
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function checkCachedValues(methodName: string): Promise<any>
+```
+<small>*Defined in [subproviders/authenticated-cache.ts:49](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-cache.ts#L49)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| methodName | `string`   |  - |
+
+
+
+##### Return Value
+`Promise<any>`
+
+
+
+
+
+
+
+<a id="_subproviders_authenticated_cache_.authenticatedcachesubprovider.getaccounts"></a>
+
+#### getAccounts
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function getAccounts(): Promise<[string]>
+```
+<small>*Defined in [subproviders/authenticated-cache.ts:63](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-cache.ts#L63)*</small>
+
+
+
+##### Return Value
+`Promise<[string]>`
+
+
+
+
+
+
+
+<a id="_subproviders_authenticated_cache_.authenticatedcachesubprovider.handlerequest"></a>
+
+#### handleRequest
+
+
+
+
+##### Declaration
+
+
+```typescript
+function handleRequest(payload: any, next: any, end: any): any
+```
+<small>*Defined in [subproviders/authenticated-cache.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-cache.ts#L19)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| payload | `any`   |  - |
+| next | `any`   |  - |
+| end | `any`   |  - |
+
+
+
+##### Return Value
+`any`
+
+
+
+
+
+
+
+<a id="_subproviders_authenticated_cache_.authenticatedcachesubprovider.supportscache"></a>
+
+#### supportsCache
+
+
+
+
+##### Declaration
+
+
+```typescript
+private function supportsCache(methodName: string): boolean
+```
+<small>*Defined in [subproviders/authenticated-cache.ts:45](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-cache.ts#L45)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| methodName | `string`   |  - |
+
+
+
+##### Return Value
+`boolean`
+
+
+
+
+
+
+
+
+
+---
+
+
+### Relationships
+##### Extends
+* [&quot;subproviders/authenticated-cache&quot;](#_subproviders_authenticated_cache_).[AuthenticatedCacheSubprovider](#_subproviders_authenticated_cache_.authenticatedcachesubprovider)
+
+---
+
+
+<a id="_subproviders_authenticated_cache_.cached_methods"></a>
+
+#### «Const» CACHED_METHODS
+
+
+```javascript
+var CACHED_METHODS: string[] =  ['eth_accounts']
+```
+<small>*Defined in [subproviders/authenticated-cache.ts:4](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-cache.ts#L4)*</small>
+
+
+
+
+
+
+
+---
+
 <a id="_subproviders_authenticated_fetch_"></a>
 
 
@@ -2153,7 +2367,7 @@ new AuthenticatedFetchSubprovider(rpcUrl: string, debug: boolean, authProvider: 
 ```javascript
 private var authProvider: AuthProvider
 ```
-<small>*Defined in [subproviders/authenticated-fetch.ts:28](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L28)*</small>
+<small>*Defined in [subproviders/authenticated-fetch.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L31)*</small>
 
 
 <a id="_subproviders_authenticated_fetch_.authenticatedfetchsubprovider.defaultheaders"></a>
@@ -2162,7 +2376,7 @@ private var authProvider: AuthProvider
 ```javascript
 private var defaultHeaders: object
 ```
-<small>*Defined in [subproviders/authenticated-fetch.ts:29](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L29)*</small>
+<small>*Defined in [subproviders/authenticated-fetch.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L32)*</small>
 
 
 
@@ -2218,7 +2432,7 @@ private function generateParameters(payload: any, accessToken?: undefined | stri
 ```typescript
 function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [subproviders/authenticated-fetch.ts:45](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L45)*</small>
+<small>*Defined in [subproviders/authenticated-fetch.ts:48](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L48)*</small>
 
 
 
@@ -2250,7 +2464,7 @@ function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```typescript
 function handleRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [subproviders/authenticated-fetch.ts:37](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L37)*</small>
+<small>*Defined in [subproviders/authenticated-fetch.ts:40](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L40)*</small>
 
 
 
@@ -2282,7 +2496,7 @@ function handleRequest(payload: any, next: any, end: any)
 ```typescript
 function handleUnauthenticatedRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [subproviders/authenticated-fetch.ts:54](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L54)*</small>
+<small>*Defined in [subproviders/authenticated-fetch.ts:57](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L57)*</small>
 
 
 
@@ -2314,7 +2528,7 @@ function handleUnauthenticatedRequest(payload: any, next: any, end: any)
 ```typescript
 private function requiresAuthentication(payload: any): boolean
 ```
-<small>*Defined in [subproviders/authenticated-fetch.ts:59](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L59)*</small>
+<small>*Defined in [subproviders/authenticated-fetch.ts:62](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L62)*</small>
 
 
 
@@ -2348,7 +2562,7 @@ private function requiresAuthentication(payload: any): boolean
 ```typescript
 private function sendRequest(parameters: object, next: any, end: any)
 ```
-<small>*Defined in [subproviders/authenticated-fetch.ts:99](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L99)*</small>
+<small>*Defined in [subproviders/authenticated-fetch.ts:97](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authenticated-fetch.ts#L97)*</small>
 
 
 
@@ -2495,7 +2709,7 @@ new AuthorizationHandler(opts?: any): AuthorizationHandler
 ```javascript
 private var authorizedMethods: [string]
 ```
-<small>*Defined in [subproviders/authorization-handler.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authorization-handler.ts#L8)*</small>
+<small>*Defined in [subproviders/authorization-handler.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authorization-handler.ts#L11)*</small>
 
 
 
@@ -2516,7 +2730,7 @@ private var authorizedMethods: [string]
 ```typescript
 function handleAuthorization(payload: any, next: any, end: any)
 ```
-<small>*Defined in [subproviders/authorization-handler.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authorization-handler.ts#L23)*</small>
+<small>*Defined in [subproviders/authorization-handler.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authorization-handler.ts#L26)*</small>
 
 
 
@@ -2548,7 +2762,7 @@ function handleAuthorization(payload: any, next: any, end: any)
 ```typescript
 function handleRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [subproviders/authorization-handler.ts:15](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authorization-handler.ts#L15)*</small>
+<small>*Defined in [subproviders/authorization-handler.ts:18](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authorization-handler.ts#L18)*</small>
 
 
 
@@ -2580,7 +2794,7 @@ function handleRequest(payload: any, next: any, end: any)
 ```typescript
 private function requiresAuthorization(method: string): boolean
 ```
-<small>*Defined in [subproviders/authorization-handler.ts:28](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authorization-handler.ts#L28)*</small>
+<small>*Defined in [subproviders/authorization-handler.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/authorization-handler.ts#L31)*</small>
 
 
 
@@ -2670,7 +2884,7 @@ new IFrameSubprovider(webBaseUrl: string, networkName: string, authProvider: Aut
 ```javascript
 private var authProvider: AuthProvider
 ```
-<small>*Defined in [subproviders/iframe.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L12)*</small>
+<small>*Defined in [subproviders/iframe.ts:15](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L15)*</small>
 
 
 <a id="_subproviders_iframe_.iframesubprovider.currentrequest"></a>
@@ -2679,7 +2893,7 @@ private var authProvider: AuthProvider
 ```javascript
 private var currentRequest: Request
 ```
-<small>*Defined in [subproviders/iframe.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L13)*</small>
+<small>*Defined in [subproviders/iframe.ts:16](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L16)*</small>
 
 
 <a id="_subproviders_iframe_.iframesubprovider.currentrequestdialog"></a>
@@ -2688,7 +2902,7 @@ private var currentRequest: Request
 ```javascript
 var currentRequestDialog: Dialog
 ```
-<small>*Defined in [subproviders/iframe.ts:9](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L9)*</small>
+<small>*Defined in [subproviders/iframe.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L12)*</small>
 
 
 <a id="_subproviders_iframe_.iframesubprovider.networkname"></a>
@@ -2697,7 +2911,7 @@ var currentRequestDialog: Dialog
 ```javascript
 private var networkName: string
 ```
-<small>*Defined in [subproviders/iframe.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L11)*</small>
+<small>*Defined in [subproviders/iframe.ts:14](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L14)*</small>
 
 
 <a id="_subproviders_iframe_.iframesubprovider.webbaseurl"></a>
@@ -2706,7 +2920,7 @@ private var networkName: string
 ```javascript
 private var webBaseUrl: string
 ```
-<small>*Defined in [subproviders/iframe.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L10)*</small>
+<small>*Defined in [subproviders/iframe.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L13)*</small>
 
 
 
@@ -2727,7 +2941,7 @@ private var webBaseUrl: string
 ```typescript
 function handleAuthorization(payload: any, _: any, end: any)
 ```
-<small>*Defined in [subproviders/iframe.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L23)*</small>
+<small>*Defined in [subproviders/iframe.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L26)*</small>
 
 
 
@@ -2760,7 +2974,7 @@ function handleAuthorization(payload: any, _: any, end: any)
 ```typescript
 function receiveMessage(event: MessageEvent)
 ```
-<small>*Defined in [subproviders/iframe.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L31)*</small>
+<small>*Defined in [subproviders/iframe.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L34)*</small>
 
 
 
@@ -2790,7 +3004,7 @@ function receiveMessage(event: MessageEvent)
 ```typescript
 private function showAuthorizationModal(element: any, payload: any, end: any)
 ```
-<small>*Defined in [subproviders/iframe.ts:95](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L95)*</small>
+<small>*Defined in [subproviders/iframe.ts:98](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L98)*</small>
 
 
 
@@ -2822,7 +3036,7 @@ private function showAuthorizationModal(element: any, payload: any, end: any)
 ```typescript
 private function showBitskiModal(accessToken: any, payload: any, end: any)
 ```
-<small>*Defined in [subproviders/iframe.ts:72](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L72)*</small>
+<small>*Defined in [subproviders/iframe.ts:75](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L75)*</small>
 
 
 
@@ -2854,7 +3068,7 @@ private function showBitskiModal(accessToken: any, payload: any, end: any)
 ```typescript
 private function urlForMethod(method: string): string | undefined
 ```
-<small>*Defined in [subproviders/iframe.ts:61](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L61)*</small>
+<small>*Defined in [subproviders/iframe.ts:64](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/iframe.ts#L64)*</small>
 
 
 
@@ -2942,7 +3156,7 @@ new LocalDialogSubprovider(opts?: any): LocalDialogSubprovider
 ```javascript
 private var currentDialog: Dialog
 ```
-<small>*Defined in [subproviders/local-dialog.ts:9](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L9)*</small>
+<small>*Defined in [subproviders/local-dialog.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L12)*</small>
 
 
 <a id="_subproviders_local_dialog_.localdialogsubprovider.currentrequest"></a>
@@ -2951,7 +3165,7 @@ private var currentDialog: Dialog
 ```javascript
 private var currentRequest: Request
 ```
-<small>*Defined in [subproviders/local-dialog.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L10)*</small>
+<small>*Defined in [subproviders/local-dialog.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L13)*</small>
 
 
 <a id="_subproviders_local_dialog_.localdialogsubprovider.transactionwindow"></a>
@@ -2960,7 +3174,7 @@ private var currentRequest: Request
 ```javascript
 private var transactionWindow: any
 ```
-<small>*Defined in [subproviders/local-dialog.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L11)*</small>
+<small>*Defined in [subproviders/local-dialog.ts:14](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L14)*</small>
 
 
 
@@ -2981,7 +3195,7 @@ private var transactionWindow: any
 ```typescript
 private function createDefinition(label: any, value: any): HTMLDListElement
 ```
-<small>*Defined in [subproviders/local-dialog.ts:44](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L44)*</small>
+<small>*Defined in [subproviders/local-dialog.ts:47](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L47)*</small>
 
 
 
@@ -3016,7 +3230,7 @@ private function createDefinition(label: any, value: any): HTMLDListElement
 ```typescript
 private function createTransactionWindow(payload: any, submitHandler: any, cancelHandler: any): any
 ```
-<small>*Defined in [subproviders/local-dialog.ts:67](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L67)*</small>
+<small>*Defined in [subproviders/local-dialog.ts:70](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L70)*</small>
 
 
 
@@ -3052,7 +3266,7 @@ private function createTransactionWindow(payload: any, submitHandler: any, cance
 ```typescript
 private function displayModal(element: any, payload: any, end: any)
 ```
-<small>*Defined in [subproviders/local-dialog.ts:148](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L148)*</small>
+<small>*Defined in [subproviders/local-dialog.ts:151](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L151)*</small>
 
 
 
@@ -3084,7 +3298,7 @@ private function displayModal(element: any, payload: any, end: any)
 ```typescript
 function handleAuthorization(payload: any, next: any, end: any)
 ```
-<small>*Defined in [subproviders/local-dialog.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L17)*</small>
+<small>*Defined in [subproviders/local-dialog.ts:20](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L20)*</small>
 
 
 
@@ -3117,7 +3331,7 @@ function handleAuthorization(payload: any, next: any, end: any)
 ```typescript
 private function showTransactionModal(payload: any, next: any, end: any)
 ```
-<small>*Defined in [subproviders/local-dialog.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L21)*</small>
+<small>*Defined in [subproviders/local-dialog.ts:24](https://github.com/BitskiCo/bitski-js/blob/master/src/subproviders/local-dialog.ts#L24)*</small>
 
 
 

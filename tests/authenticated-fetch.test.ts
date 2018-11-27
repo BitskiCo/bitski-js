@@ -48,7 +48,7 @@ function createAuthProvider(): OpenidAuthProvider {
 }
 
 function createInstance(authProvider: OpenidAuthProvider): AuthenticatedFetchSubprovider {
-  return new AuthenticatedFetchSubprovider('https://localhost:56610/v1/web3/kovan', true, authProvider);
+  return new AuthenticatedFetchSubprovider('https://localhost:56610/v1/web3/kovan', true, authProvider, { 'X-API-KEY': 'test-client-id' });
 }
 
 function createRequest(method: string, params: any[]): any {
@@ -84,12 +84,17 @@ describe('handles authenticated sends', () => {
     }));
 
     jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(mockUser);
+    const sendRequestSpy = jest.spyOn(instance, 'sendRequest');
     return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
       jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
 
       const request = createRequest('eth_accounts', []);
 
       return engine.sendAsync(request, (error, value) => {
+        expect(sendRequestSpy).toHaveBeenCalled();
+        const params = sendRequestSpy.mock.calls[0][0];
+        expect(params.headers['Authorization']).toBe('Bearer test-access-token');
+        expect(params.headers['X-API-KEY']).toBe('test-client-id');
         expect(error).toBeNull();
         expect(value.result).toBe('foo');
         done();
@@ -109,17 +114,16 @@ describe('handles authenticated sends', () => {
       jsonrpc: '2.0',
       result: 'foo',
     }));
-
-    jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(mockUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
-      jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
-
-      const request = createRequest('eth_peerCount', []);
-      return engine.sendAsync(request, (error, value) => {
-        expect(error).toBeNull();
-        expect(value.result).toBe('foo');
-        done();
-      });
+    const sendRequestSpy = jest.spyOn(instance, 'sendRequest');
+    const request = createRequest('eth_peerCount', []);
+    return engine.sendAsync(request, (error, value) => {
+      expect(sendRequestSpy).toHaveBeenCalled();
+      const params = sendRequestSpy.mock.calls[0][0];
+      expect(params.headers['Authorization']).toBeUndefined();
+      expect(params.headers['X-API-KEY']).toBe('test-client-id');
+      expect(error).toBeNull();
+      expect(value.result).toBe('foo');
+      done();
     });
   });
 });

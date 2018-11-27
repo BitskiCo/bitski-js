@@ -4,6 +4,9 @@ import { AuthorizationHandler } from './authorization-handler';
 
 type Request = [any, any];
 
+/*
+ * An AuthorizationHandler Subprovider that uses a local dialog to request permission from the user. Meant for development mode only.
+ */
 export class LocalDialogSubprovider extends AuthorizationHandler {
 
   private currentDialog?: Dialog;
