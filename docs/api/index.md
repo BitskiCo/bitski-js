@@ -794,7 +794,7 @@ private var engines: Map<string, any> =  new Map<string, ProviderEngine>()
 ```typescript
 private function addDefaultSubproviders(engine: ProviderEngine, enableCache?: boolean)
 ```
-<small>*Defined in [bitski.ts:167](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L167)*</small>
+<small>*Defined in [bitski.ts:165](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L165)*</small>
 
 
 
@@ -859,7 +859,7 @@ private function assumedCallbackType(w: Window): OAuthProviderIntegrationType
 ```typescript
 private function createBitskiEngine(networkName?: undefined | string, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:192](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L192)*</small>
+<small>*Defined in [bitski.ts:190](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L190)*</small>
 
 
 
@@ -929,7 +929,7 @@ private function createEngine(subproviders: Subprovider[], options?: any): Provi
 ```typescript
 private function createThirdPartyEngine(rpcUrl: string, options?: any): ProviderEngine
 ```
-<small>*Defined in [bitski.ts:205](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L205)*</small>
+<small>*Defined in [bitski.ts:203](https://github.com/BitskiCo/bitski-js/blob/master/src/bitski.ts#L203)*</small>
 
 
 

@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.2.0-beta.8",
+  "version": "0.2.0-beta.9",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
     "build": "tsc && browserify -s Bitski -e dist/lib/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.js && npm run docs",
