@@ -1,27 +1,25 @@
 {
   "compilerOptions": {
-    "outDir": "dist/lib",
-    "sourceMap": true,
-    "declaration": true,
     "noImplicitAny": false,
-    "module": "es6",
     "strict": true,
     "target": "es2017",
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["*", "src/types/*"]
+    }
   },
   "include": ["src"],
-  "typeRoots" : ["src/types", "node_modules/@types"],
-  "types": ["web3-provider-engine"],
   "typedocOptions": {
     "module": "commonjs",
     "target": "ES5",
     "exclude": ["**/node_modules/**/*.*", "**/src/utils/callback.*"],
     "experimentalDecorators": true,
     "excludeExternals": true,
-    "out": "docs/api",
+    "out": "../../docs/api",
     "readme": "none",
     "theme": "markdown",
     "name": "Bitski.js",

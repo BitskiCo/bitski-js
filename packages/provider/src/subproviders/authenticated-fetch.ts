@@ -2,7 +2,7 @@ import retry from 'async/retry';
 import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
 import createPayload from 'web3-provider-engine/util/create-payload';
 
-import { AuthProvider } from '../auth/auth-provider';
+import { AccessTokenProvider } from '../auth/access-token-provider';
 
 const RETRIABLE_ERRORS = [
     // ignore server overload errors
@@ -28,12 +28,12 @@ function isErrorRetriable(err) {
  * Subprovider that fetches over HTTP and manages authentication headers
  */
 export class AuthenticatedFetchSubprovider extends FetchSubprovider {
-    private authProvider: AuthProvider;
+    private accessTokenProvider: AccessTokenProvider;
     private defaultHeaders: object;
 
-    constructor(rpcUrl: string, debug: boolean, authProvider: AuthProvider, defaultHeaders: object = {}) {
+    constructor(rpcUrl: string, debug: boolean, accessTokenProvider: AccessTokenProvider, defaultHeaders: object = {}) {
         super({ rpcUrl, debug });
-        this.authProvider = authProvider;
+        this.accessTokenProvider = accessTokenProvider;
         this.defaultHeaders = defaultHeaders;
     }
 
@@ -46,7 +46,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     }
 
     public handleAuthenticatedRequest(payload, next, end) {
-        this.authProvider.getAccessToken().then((accessToken) => {
+        this.accessTokenProvider.getAccessToken().then((accessToken) => {
             const parameters = this.generateParameters(payload, accessToken);
             return this.sendRequest(parameters, next, end);
         }).catch((error) => {
@@ -60,7 +60,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     }
 
     private requiresAuthentication(payload) {
-        return AUTHENTICATED_METHODS.includes(payload.method);
+        return AUTHENTICATED_METHODS.some(method => method == payload.method);
     }
 
     private generateParameters(payload, accessToken?: string): object {

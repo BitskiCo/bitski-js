@@ -1,32 +1,18 @@
 import { Log, User } from 'oidc-client';
-import ProviderEngine from 'web3-provider-engine';
-import CacheSubprovider from 'web3-provider-engine/subproviders/cache';
-import DefaultFixtures from 'web3-provider-engine/subproviders/default-fixture';
-import RpcSource from 'web3-provider-engine/subproviders/fetch';
-import InflightCacheSubprovider from 'web3-provider-engine/subproviders/inflight-cache';
-import NonceTrackerSubprovider from 'web3-provider-engine/subproviders/nonce-tracker';
-import SanitizingSubprovider from 'web3-provider-engine/subproviders/sanitizer';
-import Subprovider from 'web3-provider-engine/subproviders/subprovider';
-import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
-import VmSubprovider from 'web3-provider-engine/subproviders/vm';
-import { AuthProvider, OAuthProviderIntegrationType } from './auth/auth-provider';
+import { BitskiEngine } from 'bitski-provider';
+import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
+import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
+import { OAuthProviderIntegrationType } from './auth/auth-provider';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
-import { AuthenticatedFetchSubprovider } from './subproviders/authenticated-fetch';
-import { AuthorizationHandler } from './subproviders/authorization-handler';
-import { IFrameSubprovider } from './subproviders/iframe';
-import { LocalDialogSubprovider } from './subproviders/local-dialog';
-import { AuthenticatedCacheSubprovider } from './subproviders/authenticated-cache';
-
-const ENABLE_CACHE = true;
 
 /**
  * Bitski SDK
  */
 export class Bitski {
-  private engines = new Map<string, ProviderEngine>();
+  private engines = new Map<string, BitskiEngine>();
   private clientId: string;
-  private authProvider: AuthProvider;
+  private authProvider: OpenidAuthProvider;
 
   /**
    * @param clientId OAuth Client ID
@@ -45,23 +31,25 @@ export class Bitski {
    * @param options options for the provider
    * @param options.pollingInterval minimum interval in milliseconds to poll for new blocks. default is 4000.
    */
-  public getProvider(networkName?: string, options?: any): ProviderEngine {
+  public getProvider(networkName?: string, options?: any): BitskiEngine {
     const existingProvider = this.engines.get(networkName || 'mainnet');
     if (existingProvider) {
       existingProvider.start();
       return existingProvider;
     }
-    let provider: ProviderEngine;
+    let provider: BitskiEngine;
     switch (networkName) {
       case 'mainnet':
       case 'rinkeby':
       case 'kovan':
       case undefined:
-        provider = this.createBitskiEngine(networkName, options);
+        provider = new BitskiBrowserEngine(this.clientId, this.authProvider, networkName, options);
+        provider.start();
         break;
 
       default:
-        provider = this.createThirdPartyEngine(networkName, options);
+        provider = new BitskiDevelopmentEngine(options, networkName);
+        provider.start();
         break;
     }
     this.engines.set(networkName || 'mainnet', provider);
@@ -144,65 +132,4 @@ export class Bitski {
     return OAuthProviderIntegrationType.REDIRECT;
   }
 
-  private createEngine(subproviders: Subprovider[], options?: any): ProviderEngine {
-    const engine = new ProviderEngine(options);
-
-    this.addDefaultSubproviders(engine);
-
-    subproviders.forEach(provider => engine.addProvider(provider));
-
-    engine.on('error', error => {
-      if (error.message === 'Not signed in') {
-        engine.stop();
-      }
-    });
-
-    engine.start();
-
-    return engine;
-  }
-
-  private addDefaultSubproviders(engine: ProviderEngine, enableCache = ENABLE_CACHE) {
-    engine.addProvider(new DefaultFixtures());
-
-    engine.addProvider(new NonceTrackerSubprovider());
-
-    const sanitizer = new SanitizingSubprovider();
-    engine.addProvider(sanitizer);
-
-    if (enableCache) {
-      const cacheSubprovider = new CacheSubprovider();
-      engine.addProvider(cacheSubprovider);
-    }
-
-    const filterAndSubsSubprovider = new SubscriptionSubprovider();
-    filterAndSubsSubprovider.on('data', (err, notification) => {
-      engine.emit('data', err, notification);
-    });
-    engine.addProvider(filterAndSubsSubprovider);
-
-    if (enableCache) {
-      const inflightCache = new InflightCacheSubprovider();
-      engine.addProvider(inflightCache);
-    }
-  }
-
-  private createBitskiEngine(networkName?: string, options?: any): ProviderEngine {
-    const network = networkName || 'mainnet';
-    const fetchSubprovider = new AuthenticatedFetchSubprovider(
-      `https://api.bitski.com/v1/web3/${network}`,
-      false,
-      this.authProvider,
-      {'X-API-KEY': this.clientId, 'X-CLIENT-ID': this.clientId},
-    );
-    const iframeSubprovider = new IFrameSubprovider('https://www.bitski.com', networkName || 'mainnet', this.authProvider);
-    const cacheSubprovider = new AuthenticatedCacheSubprovider(this.authProvider);
-    return this.createEngine([cacheSubprovider, iframeSubprovider, fetchSubprovider], options);
-  }
-
-  private createThirdPartyEngine(rpcUrl: string, options?: any): ProviderEngine {
-    const fetchSubprovider = new RpcSource({ rpcUrl });
-    const authorizationProvider = new LocalDialogSubprovider();
-    return this.createEngine([authorizationProvider, fetchSubprovider], options);
-  }
 }

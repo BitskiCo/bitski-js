@@ -1,5 +1,5 @@
 import JsonRpcError from 'json-rpc-error';
-import { AuthProvider } from '../auth/auth-provider';
+import { AccessTokenProvider } from 'bitski-provider';
 import { Dialog } from '../components/dialog';
 import { AuthorizationHandler } from './authorization-handler';
 
@@ -12,19 +12,19 @@ export class IFrameSubprovider extends AuthorizationHandler {
     public currentRequestDialog?: Dialog;
     private webBaseUrl: string;
     private networkName: string;
-    private authProvider: AuthProvider;
+    private tokenProvider: AccessTokenProvider;
     private currentRequest?: Request;
 
-    constructor(webBaseUrl: string, networkName: string, authProvider: AuthProvider) {
+    constructor(webBaseUrl: string, networkName: string, tokenProvider: AccessTokenProvider) {
         super();
         this.webBaseUrl = webBaseUrl;
         this.networkName = networkName;
-        this.authProvider = authProvider;
+        this.tokenProvider = tokenProvider;
         window.addEventListener('message', this.receiveMessage.bind(this), false);
     }
 
     public handleAuthorization(payload, _, end): void {
-        this.authProvider.getAccessToken().then((accessToken) => {
+        this.tokenProvider.getAccessToken().then((accessToken) => {
             this.showBitskiModal(accessToken, payload, end);
         }).catch((error) => {
             end(error, undefined);
