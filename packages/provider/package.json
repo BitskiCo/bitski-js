@@ -1,0 +1,57 @@
+{
+  "name": "bitski-provider",
+  "description": "Core Bitski provider",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "dist/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BitskiCo/bitski-js"
+  },
+  "version": "0.2.0-beta.10",
+  "scripts": {
+    "lint": "tslint 'src/**/*.ts'",
+    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
+    "prepare": "npm run build",
+    "prepack": "npm run build",
+    "docs": "typedoc",
+    "test": "jest --coverage",
+    "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit"
+  },
+  "dependencies": {
+    "json-rpc-error": "^2.0.0",
+    "web3-provider-engine": "github:BitskiCo/provider-engine#fix/kovan-subscriptions"
+  },
+  "devDependencies": {
+    "@types/ethereum-protocol": "^1.0.0",
+    "@types/events": "^1.2.0",
+    "@types/jest": "^23.3.2",
+    "jest": "^23.6.0",
+    "jest-fetch-mock": "^1.6.6",
+    "jest-junit": "^5.1.0",
+    "ts-jest": "^23.10.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.6",
+    "xhr-mock": "^2.4.1"
+  },
+  "jest": {
+    "automock": false,
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "json",
+      "text",
+      "html",
+      "cobertura"
+    ],
+    "setupFiles": [
+      "./tests/util/setup-jest.js"
+    ],
+    "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    }
+  }
+}

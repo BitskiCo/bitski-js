@@ -1,9 +1,10 @@
 import { User, UserManager } from 'oidc-client';
+import { AccessTokenProvider } from 'bitski-provider';
 import { AuthProvider, OAuthProviderIntegrationType } from './auth-provider';
 
 const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
 
-export class OpenidAuthProvider implements AuthProvider {
+export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     public timeout: number = 5000;
 
     public userManager: UserManager;
