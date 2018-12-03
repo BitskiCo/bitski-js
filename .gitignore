@@ -62,7 +62,8 @@ typings/
 _site/*
 
 # Compiled library
-dist/
+dist
+lib
 
 # Rollup
 .rpt2_cache/

@@ -13,14 +13,17 @@ pipeline {
         stage("Test") {
             steps {
                 sh "npm install"
+                sh "./node_modules/lerna/cli.js bootstrap"
                 sh "npm run test:ci"
             }
         }
     }
     post {
         always {
-          junit 'junit.xml'
-          step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/cobertura-coverage.xml'])
+          junit 'packages/browser/junit.xml'
+          junit 'packages/provider/junit.xml'
+          step([$class: 'CoberturaPublisher', coberturaReportFile: 'packages/browser/coverage/cobertura-coverage.xml'])
+          step([$class: 'CoberturaPublisher', coberturaReportFile: 'packages/provider/coverage/cobertura-coverage.xml'])
         }
     }
 }
