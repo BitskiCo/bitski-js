@@ -6,11 +6,7 @@
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": ["*", "src/types/*"]
-    }
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
   "typedocOptions": {

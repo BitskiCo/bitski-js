@@ -10,8 +10,11 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "*": ["*", "src/types/*"]
-    }
+      "*": ["*", "types/*"]
+    },
+    "typeRoots": [
+      "./node_modules/@types", "./types"
+    ]
   },
-  "include": ["src"]
+  "include": ["src", "types"]
 }
