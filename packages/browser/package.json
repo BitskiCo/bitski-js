@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.2.0-beta.11",
+  "version": "0.2.0-beta.12",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
@@ -21,7 +21,7 @@
     "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit"
   },
   "dependencies": {
-    "bitski-provider": "^0.2.0-beta.11",
+    "bitski-provider": "^0.2.0-beta.12",
     "oidc-client": ">=1.5.2",
     "web3-provider-engine": "^14.1.0"
   },
