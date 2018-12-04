@@ -20,11 +20,11 @@
     "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit"
   },
   "dependencies": {
+    "@types/ethereum-protocol": "^1.0.0",
     "json-rpc-error": "^2.0.0",
     "web3-provider-engine": "github:BitskiCo/provider-engine#fix/kovan-subscriptions"
   },
   "devDependencies": {
-    "@types/ethereum-protocol": "^1.0.0",
     "@types/events": "^1.2.0",
     "@types/jest": "^23.3.2",
     "jest": "^23.6.0",
