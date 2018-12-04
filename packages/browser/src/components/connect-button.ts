@@ -31,7 +31,7 @@ export class ConnectButton {
     existingDiv?: HTMLElement,
     size: ConnectButtonSize = ConnectButtonSize.MEDIUM,
     authIntegrationType: OAuthProviderIntegrationType = OAuthProviderIntegrationType.POPUP,
-    callback?: (error?: Error, user?: User) => void
+    callback?: (error?: Error, user?: User) => void,
   ) {
     this.authProvider = authProvider;
     this.size = size;

@@ -8,7 +8,8 @@
   "scripts": {
     "test": "lerna run test",
     "test:ci": "lerna run test:ci",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "lint": "lerna run lint"
   },
   "devDependencies": {
     "lerna": "^3.5.1",

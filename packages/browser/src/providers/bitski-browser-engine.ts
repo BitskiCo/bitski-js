@@ -1,8 +1,7 @@
-import { AuthenticatedFetchSubprovider } from 'bitski-provider';
-import { IFrameSubprovider } from '../subproviders/iframe';
-import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cache';
+import { AuthenticatedFetchSubprovider, BitskiEngine } from 'bitski-provider';
 import { OpenidAuthProvider } from '../auth/openid-auth-provider';
-import { BitskiEngine } from 'bitski-provider';
+import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cache';
+import { IFrameSubprovider } from '../subproviders/iframe';
 
 export class BitskiBrowserEngine extends BitskiEngine {
 
@@ -18,7 +17,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
     this.authProvider = authProvider;
     this.clientId = clientId;
 
-    this.on('error', error => {
+    this.on('error', (error) => {
       if (error.message === 'Not signed in') {
         this.stop();
       }

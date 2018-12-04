@@ -14,6 +14,7 @@ pipeline {
             steps {
                 sh "npm install"
                 sh "./node_modules/lerna/cli.js bootstrap"
+                sh "npm run lint"
                 sh "npm run test:ci"
             }
         }

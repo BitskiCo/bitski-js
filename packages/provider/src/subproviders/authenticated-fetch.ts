@@ -14,9 +14,9 @@ const RETRIABLE_ERRORS = [
 ];
 
 const AUTHENTICATED_METHODS = [
-    "eth_accounts",
-    "eth_sendTransaction",
-    "eth_sign",
+    'eth_accounts',
+    'eth_sendTransaction',
+    'eth_sign',
 ];
 
 function isErrorRetriable(err) {
@@ -60,7 +60,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     }
 
     private requiresAuthentication(payload) {
-        return AUTHENTICATED_METHODS.some(method => method == payload.method);
+        return AUTHENTICATED_METHODS.some((method) => method === payload.method);
     }
 
     private generateParameters(payload, accessToken?: string): object {
@@ -69,20 +69,20 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
         // remove extra parameter from request
         delete newPayload.origin;
 
-        let headers: object = {
+        let headers: any = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         };
 
         headers = Object.assign({}, headers, this.defaultHeaders);
 
-        const originDomain = payload['origin'];
+        const originDomain = payload.origin;
         if (super.originHttpHeaderKey && originDomain) {
             headers[super.originHttpHeaderKey] = originDomain;
         }
 
         if (accessToken) {
-            headers['Authorization'] = `Bearer ${accessToken}`;
+            headers.Authorization = `Bearer ${accessToken}`;
         }
 
         const requestParameters = {

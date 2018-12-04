@@ -24,7 +24,7 @@ export class AuthorizationHandler extends Subprovider {
   }
 
   public handleAuthorization(payload, next, end): void {
-    //Default implementation
+    // Default implementation
     end(new JsonRpcError.InternalError());
   }
 
