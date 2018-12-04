@@ -142,9 +142,9 @@ export class LocalDialogSubprovider extends AuthorizationHandler {
       body.appendChild(buttons);
 
       return {
+        cancel: cancelHandler,
         element: container,
         submit: submitHandler,
-        cancel: cancelHandler
       };
   }
 

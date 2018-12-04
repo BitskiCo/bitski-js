@@ -11,7 +11,8 @@
             "options": [160]
         },
         "indent": [true, "spaces", 2],
-        "no-switch-case-fall-through": true
+        "no-switch-case-fall-through": true,
+        "no-reference": false
     },
     "rulesDirectory": []
 }

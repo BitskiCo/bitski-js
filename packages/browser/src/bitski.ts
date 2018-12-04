@@ -1,10 +1,10 @@
-import { Log, User } from 'oidc-client';
 import { BitskiEngine } from 'bitski-provider';
-import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
-import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
+import { Log, User } from 'oidc-client';
 import { OAuthProviderIntegrationType } from './auth/auth-provider';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
+import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
+import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
 
 /**
  * Bitski SDK
@@ -72,7 +72,11 @@ export class Bitski {
    * @param authMethod Login method to use. Defaults to popup.
    * @param callback Post-login callback. Called when sign in is complete. Not applicable for redirect login method.
    */
-  public getConnectButton(existingDiv?: HTMLElement, size: ConnectButtonSize = ConnectButtonSize.MEDIUM, authMethod: OAuthProviderIntegrationType = OAuthProviderIntegrationType.POPUP, callback?: (error?: Error, user?: User) => void): ConnectButton {
+  public getConnectButton(
+    existingDiv?: HTMLElement,
+    size: ConnectButtonSize = ConnectButtonSize.MEDIUM,
+    authMethod: OAuthProviderIntegrationType = OAuthProviderIntegrationType.POPUP,
+    callback?: (error?: Error, user?: User) => void): ConnectButton {
     return new ConnectButton(this.authProvider, existingDiv, size, authMethod, callback);
   }
 
@@ -106,7 +110,7 @@ export class Bitski {
    * Sign the current user out of your application.
    */
   public signOut(): Promise<void> {
-    this.engines.forEach(engine => engine.stop());
+    this.engines.forEach((engine) => engine.stop());
     return this.authProvider.signOut();
   }
 
