@@ -9,19 +9,19 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.2.0-beta.10",
+  "version": "0.2.0-beta.12",
   "scripts": {
     "lint": "tslint 'src/**/*.ts'",
-    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json && npm run bundle && npm run docs",
+    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
     "bundle": "browserify -s Bitski -e dist/esm/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.bundle.js",
-    "prepare": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
-    "prepack": "npm run build",
+    "prepare": "npm run build",
+    "prepack": "npm run build && npm run bundle",
     "docs": "typedoc",
     "test": "jest --coverage",
     "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit"
   },
   "dependencies": {
-    "bitski-provider": "^0.2.0-beta.10",
+    "bitski-provider": "^0.2.0-beta.12",
     "oidc-client": ">=1.5.2",
     "web3-provider-engine": "^14.1.0"
   },
