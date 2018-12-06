@@ -1,5 +1,5 @@
-import { User, UserManager } from 'oidc-client';
 import { AccessTokenProvider } from 'bitski-provider';
+import { User, UserManager } from 'oidc-client';
 import { AuthProvider, OAuthProviderIntegrationType } from './auth-provider';
 
 const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
@@ -12,7 +12,9 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     constructor(clientId: string, redirectUri?: string, postLogoutRedirectUri?: string, otherSettings?: object) {
         const settings = {
             authority: 'https://account.bitski.com',
+            automaticSilentRenew: true,
             client_id: clientId,
+            includeIdTokenInSilentRenew: false,
             post_logout_redirect_uri: postLogoutRedirectUri,
             redirect_uri: redirectUri,
             response_type: 'id_token token',
@@ -20,8 +22,6 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
 
             popup_post_logout_redirect_uri: postLogoutRedirectUri,
             popup_redirect_uri: redirectUri,
-            includeIdTokenInSilentRenew: false,
-            automaticSilentRenew: true,
             silent_redirect_uri: redirectUri,
 
             filterProtocolClaims: true,

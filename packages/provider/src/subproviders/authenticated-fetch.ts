@@ -11,12 +11,13 @@ const RETRIABLE_ERRORS = [
     // ignore server sent html error pages
     // or truncated json responses
     'SyntaxError',
+    'ECONNRESET',
 ];
 
 const AUTHENTICATED_METHODS = [
-    "eth_accounts",
-    "eth_sendTransaction",
-    "eth_sign",
+    'eth_accounts',
+    'eth_sendTransaction',
+    'eth_sign',
 ];
 
 function isErrorRetriable(err) {
@@ -59,30 +60,30 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
         return this.sendRequest(parameters, next, end);
     }
 
-    private requiresAuthentication(payload) {
-        return AUTHENTICATED_METHODS.some(method => method == payload.method);
+    protected requiresAuthentication(payload) {
+        return AUTHENTICATED_METHODS.some((method) => method === payload.method);
     }
 
-    private generateParameters(payload, accessToken?: string): object {
+    protected generateParameters(payload, accessToken?: string): object {
         // overwrite id to not conflict with other concurrent users
         const newPayload = createPayload(payload);
         // remove extra parameter from request
         delete newPayload.origin;
 
-        let headers: object = {
+        let headers: any = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         };
 
         headers = Object.assign({}, headers, this.defaultHeaders);
 
-        const originDomain = payload['origin'];
+        const originDomain = payload.origin;
         if (super.originHttpHeaderKey && originDomain) {
             headers[super.originHttpHeaderKey] = originDomain;
         }
 
         if (accessToken) {
-            headers['Authorization'] = `Bearer ${accessToken}`;
+            headers.Authorization = `Bearer ${accessToken}`;
         }
 
         const requestParameters = {
@@ -94,7 +95,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
         return requestParameters;
     }
 
-    private sendRequest(parameters: object, next, end) {
+    protected sendRequest(parameters: object, next, end) {
         retry({
             errorFilter: isErrorRetriable,
             interval: 1000,

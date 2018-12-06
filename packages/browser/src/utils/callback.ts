@@ -18,12 +18,12 @@ function processCallback() {
 function parseUrlParams(url: string): any {
   if (url.includes('#')) { throw new Error('No params found in result'); }
 
-  let params = url.split('#').pop();
+  const params = url.split('#').pop();
 
   if (!params) { throw new Error('No params found in result'); }
 
-  return params.split("&").reduce((prev, item) => {
-    let [key, value] = item.split('=');
+  return params.split('&').reduce((prev, item) => {
+    const [key, value] = item.split('=');
     if (key && value) {
       prev[decodeURIComponent(key)] = decodeURIComponent(value);
     }
@@ -37,7 +37,7 @@ function parseUrlParams(url: string): any {
  */
 function notifyParent(url: string): void {
   if (window.parent && window !== window.parent) {
-    window.parent.postMessage(url, location.protocol + "//" + location.host);
+    window.parent.postMessage(url, location.protocol + '//' + location.host);
   } else {
     throw new Error('Could not notify parent');
   }

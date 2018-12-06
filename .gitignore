@@ -64,6 +64,7 @@ _site/*
 # Compiled library
 dist
 lib
+etc
 
 # Rollup
 .rpt2_cache/

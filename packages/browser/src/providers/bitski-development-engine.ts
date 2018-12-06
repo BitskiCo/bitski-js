@@ -1,6 +1,6 @@
+import { BitskiEngine } from 'bitski-provider';
 import RpcSource from 'web3-provider-engine/subproviders/fetch';
 import { LocalDialogSubprovider } from '../subproviders/local-dialog';
-import { BitskiEngine } from 'bitski-provider';
 
 export class BitskiDevelopmentEngine extends BitskiEngine {
 

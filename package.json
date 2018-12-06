@@ -1,17 +1,18 @@
 {
-  "name": "root",
   "private": true,
   "workspaces": [
     "packages/browser",
     "packages/provider"
   ],
   "scripts": {
-    "test": "lerna run test",
-    "test:ci": "lerna run test:ci",
-    "build": "lerna run build"
+    "postinstall": "lerna bootstrap",
+    "test": "jest --coverage --verbose",
+    "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit",
+    "build": "lerna run build",
+    "lint": "tslint 'packages/*/src/**/*.ts'",
+    "docs": "typedoc --options ./typedoc.js"
   },
   "devDependencies": {
-    "lerna": "^3.5.1",
     "@types/jest": "^23.3.2",
     "babel-preset-es2015": "^6.24.1",
     "browserify": "^16.2.3",
@@ -19,12 +20,34 @@
     "jest": "^23.6.0",
     "jest-fetch-mock": "^1.6.6",
     "jest-junit": "^5.1.0",
+    "lerna": "^3.5.1",
     "ts-jest": "^23.10.0",
     "tslint": "^5.11.0",
-    "tslint-loader": "^3.6.0",
-    "typedoc": "^0.12.0",
+    "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
+    "typedoc-plugin-monorepo": "^0.1.0",
     "typescript": "^3.1.6",
     "xhr-mock": "^2.4.1"
+  },
+  "jest": {
+    "automock": false,
+    "coverageDirectory": "coverage",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{ts}",
+      "!src/utils/callback.ts"
+    ],
+    "coverageReporters": [
+      "json",
+      "text",
+      "html",
+      "cobertura"
+    ],
+    "projects": [
+      "./packages/browser/",
+      "./packages/provider/"
+    ]
   }
 }

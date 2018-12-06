@@ -1,5 +1,5 @@
-import JsonRpcError from 'json-rpc-error';
 import { AccessTokenProvider } from 'bitski-provider';
+import JsonRpcError from 'json-rpc-error';
 import { Dialog } from '../components/dialog';
 import { AuthorizationHandler } from './authorization-handler';
 

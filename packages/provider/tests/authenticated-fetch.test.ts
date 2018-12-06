@@ -1,10 +1,7 @@
-import { InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
 import mock from 'xhr-mock';
-import { AuthenticatedFetchSubprovider } from '../src/subproviders/authenticated-fetch';
+import { AuthenticatedFetchSubprovider } from '../src/index';
 import { MockEngine } from './util/mock-engine';
-import { AccessTokenProvider } from '../dist';
-
-const clientID = 'test-client-id';
+import { AccessTokenProvider } from '../src/index';
 
 class MockProvider implements AccessTokenProvider {
   public getAccessToken(): Promise<string> {
@@ -12,12 +9,15 @@ class MockProvider implements AccessTokenProvider {
   }
 }
 
-function createAuthProvider() {
-  return new MockProvider();
+function createFetchProvider(): AuthenticatedFetchSubprovider {
+  const tokenProvider = new MockProvider();
+  return new AuthenticatedFetchSubprovider('https://localhost:56610/v1/web3/kovan', true, tokenProvider, { 'X-API-KEY': 'test-client-id' });
 }
 
-function createInstance(tokenProvider: AccessTokenProvider): AuthenticatedFetchSubprovider {
-  return new AuthenticatedFetchSubprovider('https://localhost:56610/v1/web3/kovan', true, tokenProvider, { 'X-API-KEY': 'test-client-id' });
+function createEngine(fetchProvider: AuthenticatedFetchSubprovider): MockEngine {
+  const engine = new MockEngine();
+  engine.addProvider(fetchProvider);
+  return engine;
 }
 
 function createRequest(method: string, params: any[]): any {
@@ -40,10 +40,8 @@ afterEach(() => {
 
 describe('handles authenticated sends', () => {
   test('should send request with headers when signed in', (done) => {
-    const authProvider = createAuthProvider();
-    const instance = createInstance(authProvider);
-    const engine = new MockEngine();
-    engine.addProvider(instance);
+    const provider = createFetchProvider();
+    const engine = createEngine(provider);
 
     // @ts-ignore
     fetch.mockResponse(JSON.stringify({
@@ -51,8 +49,11 @@ describe('handles authenticated sends', () => {
       jsonrpc: '2.0',
       result: 'foo',
     }));
-    const sendRequestSpy = jest.spyOn(instance, 'sendRequest');
+
+    // @ts-ignore
+    const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
     const request = createRequest('eth_accounts', []);
+
     return engine.sendAsync(request, (error, value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];
@@ -65,10 +66,8 @@ describe('handles authenticated sends', () => {
   });
 
   test('sends that dont require authentication should work without a user', (done) => {
-    const authProvider = createAuthProvider();
-    const instance = createInstance(authProvider);
-    const engine = new MockEngine();
-    engine.addProvider(instance);
+    const provider = createFetchProvider();
+    const engine = createEngine(provider);
 
     // @ts-ignore
     fetch.mockResponse(JSON.stringify({
@@ -76,8 +75,10 @@ describe('handles authenticated sends', () => {
       jsonrpc: '2.0',
       result: 'foo',
     }));
-    const sendRequestSpy = jest.spyOn(instance, 'sendRequest');
+    // @ts-ignore
+    const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
     const request = createRequest('eth_peerCount', []);
+
     return engine.sendAsync(request, (error, value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];

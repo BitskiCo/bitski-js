@@ -28,7 +28,7 @@ export class AuthenticatedCacheSubprovider extends Subprovider {
         }
 
         // Load from cache
-        this.checkCachedValues(payload.method).then(value => {
+        this.checkCachedValues(payload.method).then((value) => {
             if (value !== undefined) {
                 // Value for method is cached, return value
                 end(undefined, value);
@@ -36,7 +36,7 @@ export class AuthenticatedCacheSubprovider extends Subprovider {
                 // Value for method is not cached, fallback to fetch
                 next();
             }
-        }).catch(_ => {
+        }).catch(() => {
             // If method is not supported, or we encounter an error, fallback to fetch provider
             return next();
         });
@@ -61,8 +61,8 @@ export class AuthenticatedCacheSubprovider extends Subprovider {
     }
 
     private getAccounts(): Promise<[string]> {
-        //TODO: Move this to a subscription model and load into memory automatically
-        return this.authProvider.getUser().then(user => {
+        // TODO: Move this to a subscription model and load into memory automatically
+        return this.authProvider.getUser().then((user) => {
             if (user && user.profile && user.profile.accounts) {
                 this.cachedValues.set('eth_accounts', user.profile.accounts);
                 return user.profile.accounts;
