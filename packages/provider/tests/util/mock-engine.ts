@@ -12,6 +12,7 @@ export class MockEngine extends Web3ProviderEngine {
       net_listening: true,
       web3_clientVersion: 'ProviderEngine/v0.0.0/javascript',
     }));
+    // @ts-ignore
     this._blockTracker.emit('block', {
       difficulty: '0x00',
       extraData: '0x00',

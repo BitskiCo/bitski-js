@@ -1,4 +1,4 @@
 docs/* linguist-documentation
 docs/api/* linguist-generated
-lib/* linguist-generated
-dist/* linguist-generated
+packages/*/lib/* linguist-generated
+packages/*/dist/* linguist-generated
