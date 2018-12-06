@@ -11,6 +11,7 @@ const RETRIABLE_ERRORS = [
     // ignore server sent html error pages
     // or truncated json responses
     'SyntaxError',
+    'ECONNRESET',
 ];
 
 const AUTHENTICATED_METHODS = [
