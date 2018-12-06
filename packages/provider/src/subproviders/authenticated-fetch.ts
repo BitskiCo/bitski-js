@@ -60,11 +60,11 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
         return this.sendRequest(parameters, next, end);
     }
 
-    private requiresAuthentication(payload) {
+    protected requiresAuthentication(payload) {
         return AUTHENTICATED_METHODS.some((method) => method === payload.method);
     }
 
-    private generateParameters(payload, accessToken?: string): object {
+    protected generateParameters(payload, accessToken?: string): object {
         // overwrite id to not conflict with other concurrent users
         const newPayload = createPayload(payload);
         // remove extra parameter from request
@@ -95,7 +95,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
         return requestParameters;
     }
 
-    private sendRequest(parameters: object, next, end) {
+    protected sendRequest(parameters: object, next, end) {
         retry({
             errorFilter: isErrorRetriable,
             interval: 1000,
