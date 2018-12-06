@@ -2,9 +2,16 @@
 
 [![npm](https://img.shields.io/npm/v/bitski.svg)](https://www.npmjs.com/package/bitski)
 
-The official Javascript SDK for Bitski. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain.
+The official Bitski Javascript SDK for the browser. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain. We currently support mainnet, as well as Kovan and Rinkeby test networks.
 
-We currently support mainnet, as well as Kovan and Rinkeby test networks.
+### Packages
+
+This repo consists of 2 packages:
+
+- [`bitski`](https://github.com/BitskiCo/bitski-js/tree/master/packages/browser): The bitski javascript browser SDK
+- [`bitski-provider`](https://github.com/BitskiCo/bitski-js/tree/master/packages/provider): A shared core provider component used in both browser and server SDKs.
+
+If you are using Node, you should use our [`bitski-node`](https://github.com/BitskiCo/bitski-node) package instead.
 
 ### Getting Started
 
@@ -33,9 +40,7 @@ Alternatively you can add this script tag to your app’s `<head>`:
 
 ### Starting the SDK
 
-Where you would normally check for Web3, you can now run the Bitski SDK instead of falling back to displaying Metamask installation instructions. There are two steps to starting the SDK: Creating a bitski instance, and signing in.
-
-#### Creating the instance
+Where you would normally check for an ethereum provider, you can now run the Bitski SDK instead of falling back to displaying Metamask installation instructions. There are two steps to starting the SDK: Creating a bitski instance, and getting a provider.
 
 Starting the SDK is as simple as creating a Bitski object with your new client id and your redirect url. Please note that your redirect url entered here must exactly match what you entered for your app's redirect urls in the Bitski developer portal.
 
@@ -51,16 +56,39 @@ Or, if you are using the CDN version:
 const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 ```
 
+### Getting a provider
+
+Once the SDK is initialized you can get a web3 provider and start making requests.
+
+```javascript
+const provider = bitskiInstance.getProvider();
+const web3 = new Web3(provider);
+
+const network = await web3.eth.net.getId();
+```
+
+To use a different network pass in a network name ("rinkeby", "kovan") as the first argument.
+
+```javascript
+const provider = bitskiInstance.getProvider("rinkeby");
+```
+
+To use in a dev environment with a local test net, pass in your RPC url:
+
+```javascript
+const provider = bitskiInstance.getProvider("http://localhost:9545");
+```
+
 ### Signing in
 
-In order to do anything with your web3 instance you'll need the user to be signed in with Bitski via OAuth. We support two primary methods for signing in with Bitski: redirect, and popup.
+In order to get access to the user's wallet you need to sign in the provider. Typically this is done as a separate popup over your app, but you can also use a redirect flow if you'd prefer.
 
 Since the user could already be logged in to your dapp, you should start by calling `getUser()` to check the logged in state.
 
 ```javascript
 bitskiInstance.getUser().then(user => {
   if (user && !user.expired) {
-    // setup web3 and continue with your app
+    // continue with your app
   } else {
     // handle logged out state
   }
@@ -75,7 +103,7 @@ If the user is not logged in, you should then give the option to sign in.
 
 For the popup flow, the browser will open a small popup window where the user can log in / sign up, and then approve access to your app, which will redirect to the URL you pass with an access token.
 
-In that redirect url page, you will initialize Bitski again, and call the `signInCallback` method, which will post back to your main window with the access token, and remove the popup.
+On that redirect url page, you will initialize Bitski again, and call the `signInCallback` method, which will post back to your main window with the access token, and remove the popup.
 
 _Note: In order for the popup window to properly open in most browsers, this needs to be triggered with a click action. For your convenenience, we've included a standard login button that handles that for you._
 
@@ -164,34 +192,21 @@ if (window.location.href.includes('callback=true')) {
 
 #### Manually triggering sign in
 
-You can also manually trigger log in via popup or redirect by calling `signIn()` directly:
+You can also manually trigger log in via popup or redirect by calling `signIn()` directly. Just make sure that you call it from inside an user interaction handler such as a click.
 
 ```javascript
 import { Bitski, OAuthProviderIntegrationType } from 'bitski';
 
 const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
-var bitskiProvider = bitskiInstance.getProvider();
-web3 = new Web3(bitskiProvider);
+const bitskiProvider = bitskiInstance.getProvider();
+const web3 = new Web3(bitskiProvider);
 
 // later in your code…
-bitskiInstance.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
-  // logged in
+document.querySelector('#sign-in-btn').addEventListenter('click', () => {
+  bitskiInstance.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+    // logged in
+  });
 });
-```
-
-#### Getting a Web3 instance
-
-Once the SDK is initialized and logged in, you can request a Web3 provider. Bitski will automatically configure the Web3 provider to work with our servers. You can also pass a network name as a parameter to access test networks (rinkeby or kovan).
-
-```javascript
-//mainnet
-var bitskiProvider = bitskiInstance.getProvider();
-//rinkeby
-var bitskiProvider = bitskiInstance.getProvider('rinkeby');
-//local dev (ganache / truffle develop)
-var bitskiProvider = bitskiInstance.getProvider('http://localhost:9545');
-
-window.web3 = new Web3(bitskiProvider);
 ```
 
 ### Interaction with other Dapp browsers
@@ -206,16 +221,16 @@ if (typeof web3 !== 'undefined') {
   // initialize Bitski
   const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
   var bitskiProvider = bitskiInstance.getProvider();
-  web3 = new Web3(bitskiProvider);
+  window.web3 = new Web3(bitskiProvider);
 }
 ```
 
-You can also require your users to use a Bitski wallet & account by storing your instance of web3 somewhere else in the global namespace, which should override any existing Metamask or DApp browser providers.
+You can also require your users to use a Bitski wallet & account by just ignoring `window.web3` or `window.ethereum` and creating your own instance directly.
 
 ```javascript
 const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 var bitskiProvider = bitskiInstance.getProvider();
-window.web3 = new Web3(bitskiProvider);
+const web3 = new Web3(bitskiProvider);
 ```
 
 ### Sign Out
