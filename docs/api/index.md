@@ -3058,7 +3058,7 @@ new AuthenticatedFetchSubprovider(rpcUrl: string, debug: boolean, accessTokenPro
 ```javascript
 private var accessTokenProvider: AccessTokenProvider
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L31)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L32)*</small>
 
 
 <a id="provider.authenticatedfetchsubprovider.defaultheaders"></a>
@@ -3067,7 +3067,7 @@ private var accessTokenProvider: AccessTokenProvider
 ```javascript
 private var defaultHeaders: object
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L32)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:33](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L33)*</small>
 
 
 
@@ -3088,7 +3088,7 @@ private var defaultHeaders: object
 ```typescript
 private function generateParameters(payload: any, accessToken?: undefined | string): object
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:66](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L66)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:67](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L67)*</small>
 
 
 
@@ -3123,7 +3123,7 @@ private function generateParameters(payload: any, accessToken?: undefined | stri
 ```typescript
 function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:48](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L48)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:49](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L49)*</small>
 
 
 
@@ -3155,7 +3155,7 @@ function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```typescript
 function handleRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:40](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L40)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:41](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L41)*</small>
 
 
 
@@ -3187,7 +3187,7 @@ function handleRequest(payload: any, next: any, end: any)
 ```typescript
 function handleUnauthenticatedRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:57](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L57)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:58](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L58)*</small>
 
 
 
@@ -3219,7 +3219,7 @@ function handleUnauthenticatedRequest(payload: any, next: any, end: any)
 ```typescript
 private function requiresAuthentication(payload: any): boolean
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:62](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L62)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:63](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L63)*</small>
 
 
 
@@ -3253,7 +3253,7 @@ private function requiresAuthentication(payload: any): boolean
 ```typescript
 private function sendRequest(parameters: object, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:97](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L97)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:98](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L98)*</small>
 
 
 
@@ -3402,7 +3402,7 @@ var AUTHENTICATED_METHODS: string[] =  [
     'eth_sign',
 ]
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:16](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L16)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L17)*</small>
 
 
 
@@ -3421,6 +3421,7 @@ var RETRIABLE_ERRORS: string[] =  [
     // ignore server sent html error pages
     // or truncated json responses
     'SyntaxError',
+    'ECONNRESET',
 ]
 ```
 <small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:7](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L7)*</small>
@@ -3444,7 +3445,7 @@ var RETRIABLE_ERRORS: string[] =  [
 ```typescript
 function isErrorRetriable(err: any): boolean
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L22)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L23)*</small>
 
 
 
