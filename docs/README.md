@@ -33,8 +33,6 @@ const web3 = new Web3(provider);
 // public calls are always available
 const network = await web3.eth.getBlockNumber();
 
-const authStatus = await bitski.getAuthStatus();
-
 // connect via oauth to use the wallet (call this from a click handler)
 await bitski.start();
 
