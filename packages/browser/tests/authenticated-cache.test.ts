@@ -28,7 +28,7 @@ function createAuthProvider(): OpenidAuthProvider {
     stateStore,
     userStore: stateStore,
   };
-  return new OpenidAuthProvider(clientID, undefined, undefined, otherSettings);
+  return new OpenidAuthProvider(clientID, '', otherSettings);
 }
 
 describe('authorization handler', () => {
@@ -87,7 +87,7 @@ describe('authorization handler', () => {
     const authProvider = createAuthProvider();
 
     const provider = new AuthenticatedCacheSubprovider(authProvider);
-
+    //@ts-ignore
     provider.cachedValues.set('eth_accounts', ['1234']);
 
     const payload = {

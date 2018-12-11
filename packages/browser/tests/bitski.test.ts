@@ -1,7 +1,7 @@
 import { Log } from 'oidc-client';
-import { OAuthProviderIntegrationType } from '../src/auth/auth-provider';
+import { OAuthSignInMethod } from '../src/auth/auth-provider';
 import { InMemoryWebStorage, WebStorageStateStore } from '../node_modules/oidc-client';
-import { Bitski } from '../src/bitski';
+import { Bitski, AuthenticationStatus } from '../src/bitski';
 
 const clientID = 'test-client-id';
 
@@ -12,7 +12,7 @@ function createInstance(): Bitski {
     stateStore,
     userStore: stateStore,
   };
-  return new Bitski(clientID, undefined, undefined, otherSettings);
+  return new Bitski(clientID, undefined, otherSettings);
 }
 
 describe('managing providers', () => {
@@ -20,11 +20,22 @@ describe('managing providers', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
     expect(provider).toBeDefined();
+    //@ts-ignore
+    expect(provider.rpcUrl.includes('mainnet')).toBe(true);
+  });
+
+  test('should be able to pass a network name', () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider('rinkeby');
+    expect(provider).toBeDefined();
+    //@ts-ignore
+    expect(provider.rpcUrl.includes('rinkeby')).toBe(true);
   });
 
   test('should pass settings to provider-engine', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider('mainnet', { pollingInterval: 10000000 });
+    //@ts-ignore
     expect(provider._blockTracker._pollingInterval).toBe(10000000);
   });
 
@@ -47,8 +58,10 @@ describe('managing providers', () => {
   test('should stop all engines when signing out', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider('kovan');
+    //@ts-ignore
     expect(provider._blockTracker._isRunning).toBe(true);
     bitski.signOut();
+    //@ts-ignore
     expect(provider._blockTracker._isRunning).toBe(false);
   });
 
@@ -64,44 +77,96 @@ describe('managing providers', () => {
     const bitski = createInstance();
     const providerEngine = bitski.getProvider('http://localhost:7545');
     expect(providerEngine !== undefined);
+    //@ts-ignore
     expect(providerEngine.rpcUrl == 'http://localhost:7545');
   });
+});
+
+describe('authentication', () => {
+
+  test('should get auth status from auth provider', () => {
+    const bitski = createInstance();
+    //@ts-ignore
+    const spy = jest.spyOn(bitski.authProvider, 'getAuthStatus');
+    spy.mockResolvedValue(AuthenticationStatus.Connected);
+    return bitski.getAuthStatus().then(authStatus => {
+      expect(authStatus).toBe(AuthenticationStatus.Connected);
+    });
+  });
+
+  test('should log in via popup', () => {
+    expect.assertions(2);
+    const bitski = createInstance();
+    //@ts-ignore
+    const spy = jest.spyOn(bitski.authProvider, 'signIn');
+    const mockUser = {
+      sub: 'test-user',
+      expired: false
+    };
+    spy.mockResolvedValue(mockUser);
+    return bitski.signIn().then(user => {
+      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Popup);
+      expect(user).toBe(mockUser);
+    });
+  });
+
+  test('should connect by logging in silently', () => {
+    expect.assertions(2);
+    const bitski = createInstance();
+    //@ts-ignore
+    const spy = jest.spyOn(bitski.authProvider, 'signIn');
+    const mockUser = {
+      sub: 'test-user',
+      expired: false
+    };
+    spy.mockResolvedValue(mockUser);
+    return bitski.connect().then(user => {
+      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Silent);
+      expect(user).toBe(mockUser);
+    });
+  });
+
+  test('can get user from auth provider', () => {
+    expect.assertions(2);
+    const bitski = createInstance();
+    //@ts-ignore
+    const spy = jest.spyOn(bitski.authProvider, 'getUser');
+    const mockUser = {
+      sub: 'test-user',
+      expired: false
+    };
+    spy.mockResolvedValue(mockUser);
+    return bitski.getUser().then(user => {
+      expect(spy).toHaveBeenCalled();
+      expect(user).toBe(mockUser);
+    });
+  });
+
 });
 
 describe('when handling callbacks', () => {
   test('should forward oauth login method if provided', () => {
     const bitski = createInstance();
+    //@ts-ignore
     const spy = jest.spyOn(bitski.authProvider, 'signInCallback');
-    bitski.signInCallback(OAuthProviderIntegrationType.REDIRECT);
-    expect(spy).toHaveBeenCalledWith(OAuthProviderIntegrationType.REDIRECT, undefined);
+    bitski.redirectCallback();
+    expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect, undefined);
   });
 
   test('should forward url when provided', () => {
     const bitski = createInstance();
+    //@ts-ignore
     const spy = jest.spyOn(bitski.authProvider, 'signInCallback');
-    bitski.signInCallback(OAuthProviderIntegrationType.REDIRECT, 'http://foo.bar/callback');
-    expect(spy).toHaveBeenCalledWith(OAuthProviderIntegrationType.REDIRECT, 'http://foo.bar/callback');
+    bitski.redirectCallback('http://foo.bar/callback');
+    expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect, 'http://foo.bar/callback');
   });
 
-  test('should default to redirect login method', () => {
+  test('should default to popup login method', () => {
     const bitski = createInstance();
+    //@ts-ignore
     const spy = jest.spyOn(bitski.authProvider, 'signInCallback');
-    bitski.signInCallback();
-    expect(spy).toHaveBeenCalledWith(OAuthProviderIntegrationType.REDIRECT, undefined);
-  });
-
-  test('should default to silent login method when window.parent is not the same as window', () => {
-    const bitski = createInstance();
-    const assumedValue = bitski.assumedCallbackType({ parent: 'foo' });
-    expect(assumedValue).toBe(OAuthProviderIntegrationType.SILENT);
-  });
-
-  test('should default to popup login method when window.opener is defined', () => {
-    const bitski = createInstance();
-    let w: any = { opener: 'foo' };
-    w.parent = w;
-    const assumedValue = bitski.assumedCallbackType(w);
-    expect(assumedValue).toBe(OAuthProviderIntegrationType.POPUP);
+    bitski.callback();
+    expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Popup);
   });
 });
 
@@ -115,7 +180,7 @@ test('should be able to create connect button', () => {
 test('should be able to pass callback to connect button', () => {
   const bitski = createInstance();
   const callback = jest.fn();
-  const connectButton = bitski.getConnectButton(undefined, undefined, undefined, callback);
+  const connectButton = bitski.getConnectButton(undefined, callback);
   expect(connectButton.callback).toBe(callback);
 });
 

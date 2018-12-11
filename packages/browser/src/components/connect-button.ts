@@ -1,13 +1,13 @@
 import { User } from 'oidc-client';
-import { AuthProvider, OAuthProviderIntegrationType } from '../auth/auth-provider';
+import { AuthProvider, OAuthSignInMethod } from '../auth/auth-provider';
 
 /**
  * Sizing options for the Bitski connect button.
  */
 export enum ConnectButtonSize {
-  SMALL,
-  MEDIUM,
-  LARGE,
+  Small = 'SMALL',
+  Medium = 'MEDIUM',
+  Large = 'LARGE',
 }
 
 /**
@@ -18,7 +18,7 @@ export class ConnectButton {
   public size: ConnectButtonSize;
   public callback?: (error?: Error, user?: User) => void;
   private authProvider: AuthProvider;
-  private authIntegrationType: OAuthProviderIntegrationType;
+  private authIntegrationType: OAuthSignInMethod;
   private defaultColor: string = '#298FFF';
   private activeColor: string = '#1A7CE6';
 
@@ -29,8 +29,8 @@ export class ConnectButton {
   constructor(
     authProvider: AuthProvider,
     existingDiv?: HTMLElement,
-    size: ConnectButtonSize = ConnectButtonSize.MEDIUM,
-    authIntegrationType: OAuthProviderIntegrationType = OAuthProviderIntegrationType.POPUP,
+    size: ConnectButtonSize = ConnectButtonSize.Medium,
+    authIntegrationType: OAuthSignInMethod = OAuthSignInMethod.Popup,
     callback?: (error?: Error, user?: User) => void,
   ) {
     this.authProvider = authProvider;
@@ -62,7 +62,7 @@ export class ConnectButton {
   }
 
   private signin() {
-    this.authProvider.signIn(this.authIntegrationType).then((user: User) => {
+    this.authProvider.signInOrConnect(this.authIntegrationType).then((user: User) => {
       if (this.callback) {
         this.callback(undefined, user);
       }
@@ -97,13 +97,13 @@ export class ConnectButton {
     this.element.style.cursor = 'pointer';
 
     switch (this.size) {
-      case ConnectButtonSize.SMALL:
+      case ConnectButtonSize.Small:
         this.configureForSmall();
         break;
-      case ConnectButtonSize.MEDIUM:
+      case ConnectButtonSize.Medium:
         this.configureForMedium();
         break;
-      case ConnectButtonSize.LARGE:
+      case ConnectButtonSize.Large:
         this.configureForLarge();
         break;
     }

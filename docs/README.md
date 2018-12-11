@@ -13,6 +13,44 @@ This repo consists of 2 packages:
 
 If you are using Node, you should use our [`bitski-node`](https://github.com/BitskiCo/bitski-node) package instead.
 
+### Example App
+
+Want to see Bitski in action? You can check out a [full demo app using our SDK](https://example-dapp-1.bitski.com) and [view the demo's source code](https://github.com/BitskiCo/example-dapp-game).
+
+### Basic Usage
+
+A very simple integration of the Bitski would look something like this.
+
+```javascript
+import { Bitski } from 'bitski';
+import Web3 from 'web3';
+
+const bitski = new Bitski('CLIENT-ID', 'https://myapp.com/callback.html');
+
+const provider = bitski.getProvider();
+const web3 = new Web3(provider);
+
+// public calls are always available
+const network = await web3.eth.getBlockNumber();
+
+const authStatus = await bitski.getAuthStatus();
+
+// connect via oauth to use the wallet (call this from a click handler)
+await bitski.start();
+
+// now you can get accounts
+const accounts = await web3.eth.getAccounts();
+
+// and submit transactions for the user to approve
+const txn = await web3.eth.sendTransaction({
+  from: accounts[0],
+  to: '...',
+  value: web3.utils.toWei('1')
+});
+```
+
+See below for detailed info on setting up your client id, callback page, and signing in.
+
 ### Getting Started
 
 In order to use Bitski you will need a client id. You can set one up by visiting the [Developer Portal](https://developer.bitski.com) and creating an app.
@@ -35,7 +73,7 @@ Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.1.11/dist/lib/bitski.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.2.0-beta.14/dist/bitski.bundle.js"></script>
 ```
 
 ### Starting the SDK
@@ -46,14 +84,14 @@ Starting the SDK is as simple as creating a Bitski object with your new client i
 
 ```javascript
 import { Bitski } from 'bitski';
-const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 ```
 
 Or, if you are using the CDN version:
 
 ```javascript
 // SDK is imported into the global namespace as bitski
-const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const bitski = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 ```
 
 ### Getting a provider
@@ -61,7 +99,7 @@ const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL
 Once the SDK is initialized you can get a web3 provider and start making requests.
 
 ```javascript
-const provider = bitskiInstance.getProvider();
+const provider = bitski.getProvider();
 const web3 = new Web3(provider);
 
 const network = await web3.eth.net.getId();
@@ -70,42 +108,81 @@ const network = await web3.eth.net.getId();
 To use a different network pass in a network name ("rinkeby", "kovan") as the first argument.
 
 ```javascript
-const provider = bitskiInstance.getProvider("rinkeby");
+const provider = bitski.getProvider("rinkeby");
 ```
 
 To use in a dev environment with a local test net, pass in your RPC url:
 
 ```javascript
-const provider = bitskiInstance.getProvider("http://localhost:9545");
+const provider = bitski.getProvider("http://localhost:9545");
 ```
 
-### Signing in
+### Authentication status
 
 In order to get access to the user's wallet you need to sign in the provider. Typically this is done as a separate popup over your app, but you can also use a redirect flow if you'd prefer.
 
-Since the user could already be logged in to your dapp, you should start by calling `getUser()` to check the logged in state.
+First, check the login status to see if you need to sign in or if the user is already signed in from a previous session.
 
 ```javascript
-bitskiInstance.getUser().then(user => {
-  if (user && !user.expired) {
-    // continue with your app
+bitski.getAuthStatus().then(status => {
+  if (status === AuthenticationStatus.Connected) {
+    // logged in already!
   } else {
-    // handle logged out state
+    // show connect button
   }
-}).catch(err => {
-  // handle logged out state
 });
 ```
 
-If the user is not logged in, you should then give the option to sign in.
+There are 3 possible values:
 
-#### Signing in with popup
+- *Connected*: The user has an active access token. No action is needed.
+- *Approved*: The user has previously logged in but does not have an access token.
+- *NotConnected*: The user has not signed in before.
 
-For the popup flow, the browser will open a small popup window where the user can log in / sign up, and then approve access to your app, which will redirect to the URL you pass with an access token.
+If the status is Approved or NotConnected, you need to call either `start()` or `signIn()` to use wallet features.
 
-On that redirect url page, you will initialize Bitski again, and call the `signInCallback` method, which will post back to your main window with the access token, and remove the popup.
+### Signing in
+
+#### Implementing the callback
+
+Our login flow uses OAuth2 to approve your app and pass it an access token on behalf of the current user. In order to receive that access token, you need to setup a callback page. The easiest way to do this is to use our static [callback.html](https://github.com/BitskiCo/bitski-js/blob/develop/callback.html) file.
+
+1. Copy [callback.html](https://github.com/BitskiCo/bitski-js/blob/develop/callback.html) somewhere on your domain
+2. Add the URL to this html file to your app's authorized redirect urls in the Bitski [Developer Portal](https://developer.bitski.com)
+
+If you would prefer to manually handle the callback in your app:
+
+1. Create a dedicated route for this purpose (keep in mind that this is the page that will be rendered inside of the popup, so keep the elements on the page to a minimum).
+2. Add the URL to this route to your app's authorized redirect urls in the Bitski [Developer Portal](https://developer.bitski.com).
+3. When this route is loaded run the following code:
+
+```javascript
+import { Bitski } from 'bitski';
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+bitski.callback();
+```
+
+_Note: The access token will be passed as a hash on the url (ie. #token=blah), which may conflict with existing hash-based navigation your app may be doing._
+
+
+#### Triggering sign in
+
+When you want to prompt the user to sign in simply call `start()` or `signIn()` from inside a click handler, or use our dedicated connect button. If you call `start()` the SDK will attempt to sign in silently if possible, while `signIn()` will always trigger the popup.
+The browser will open a small popup window where the user can log in / sign up, and then approve access to your app, which will redirect to your callback page with the access token.
+
+```javascript
+myBtn.addEventHandler('click', () => {
+  bitski.start().then(() => {
+    //signed in!
+  });
+});
+```
 
 _Note: In order for the popup window to properly open in most browsers, this needs to be triggered with a click action. For your convenenience, we've included a standard login button that handles that for you._
+
+#### Using the Bitski connect button
+
+For your convenience we provide a connect button that you can drop into your page that will trigger the sign in behavior automatically. Here's an example of how you might set that up:
 
 ```html
 <!-- my-app.html -->
@@ -114,135 +191,211 @@ _Note: In order for the popup window to properly open in most browsers, this nee
 
 ```javascript
 // my-app.js
-import { Bitski } from 'bitski';
-const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL'>);
+import { Bitski, AuthenticationStatus } from 'bitski';
+import Web3 from 'web3';
 
-window.addEventListener('load', () => {
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL'>);
+const web3 = new Web3(bitski.getProvider());
+
+function checkAuthStatus() {
   //Check if we are logged in
-  bitskiInstance.getUser().then(user => {
-    if (user && !user.expired) {
+  bitski.getAuthStatus().then(status => {
+    if (status == AuthenticationStatus.Connected) {
       //already logged in
-      window.web3 = new Web3(bitskiInstance.getProvider());
-      // Proceed with app
+      continueToApp();
     } else {
       //create the connect button
       const containerElement = document.querySelector('#bitski-button');
-      const connectButton = bitskiInstance.getConnectButton(containerElement);
+      const connectButton = bitski.getConnectButton({ container: containerElement });
       connectButton.callback = function(error, user) {
-        containerElement.removeChild(connectButton.element);
         //Logged in!
-        window.web3 = new Web3(bitskiInstance.getProvider());
-        // Proceed with app
+        connectButton.remove();
+        continueToApp();
       }
     }
   });
+}
+
+window.addEventListener('load', () => {
+  checkAuthStatus();
 });
 ```
 
-Make sure to also call the callback when redirected to the callback page. This page will be rendered inside of the popup window, and will tell the main window that we are logged in.
-
-```javascript
-// my-app-callback.js
-import { Bitski } from 'bitski';
-const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL'>);
-bitskiInstance.signInCallback();
-```
-
-In general it's a good idea to keep this page looking pretty blank, otherwise it could look strange inside the popup.
-
 #### Signing in with redirect
 
-For the redirect flow, the browser will redirect to the bitski login page where the user will be asked to log in / sign up, and then approve access to your app, which will then redirect back to your redirect url with an access token in the url.
+If you would prefer to login in the same window as your app you can use the redirect flow. For the redirect flow, the browser will navigate to the bitski login page where the user will be asked to log in / sign up, and then approve access to your app, which will then redirect back to your redirect url with an access token in the url.
 
 After login, the user is redirected to the URL you passed with an access token in the parameters. To process the sign in request, initialize Bitski again, and call the sign in callback. This completes the cycle by telling the Bitski SDK to check for an access token.
 
-Generally, for the redirect flow, it makes sense to make the redirect page be the main page of your app with a query param to indicate that the user has been redirected. Something like `http://my-dapp.com/app?callback=true` could work nicely.
+Generally, for the redirect flow, it makes sense to make the redirect page be the main logged in page of your app. For example `https://my-dapp.com/` would have a login button and `https://my-dapp.com/app/` would be your logged in version of the app.
 
 An example of how this might work could be the following:
 
 ```javascript
-// my-app.js
+// index.js
+import { Bitski } from 'bitski';
+
+// create instance
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+
+// call signInRedirect from some click handler
+document.querySelector('#sign-in').addEventHandler('click', () => {
+  bitski.signInRedirect('https://my-dapp.com/app/');
+});
+```
+
+```javascript
+// app.js
 import { Bitski } from 'bitski';
 import Web3 from 'web3';
 
 // create instance
-const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const provider = bitski.getProvider();
+const web3 = new Web3(provider);
 
-// check if you've received the callback
-if (window.location.href.includes('callback=true')) {
-  bitskiInstance.signInCallback();
-  const provider = bitskiInstance.getProvider();
-  const web3 = new Web3(provider);
-  // proceed with app
-} else {
-  // not on the callback page, check if logged in (will redirect if not logged in)
-  bitskiInstance.getUser().then(user => {
-    if (user && !user.expired) {
-      // logged in
-      const provider = bitskiInstance.getProvider();
-      const web3 = new Web3(provider);
-      //proceed with app
-    } else {
-      //ideally you would trigger this from a sign in button instead
-      bitskiInstance.signIn();
-    }
-  });
-}
-```
-
-#### Manually triggering sign in
-
-You can also manually trigger log in via popup or redirect by calling `signIn()` directly. Just make sure that you call it from inside an user interaction handler such as a click.
-
-```javascript
-import { Bitski, OAuthProviderIntegrationType } from 'bitski';
-
-const bitskiInstance = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
-const bitskiProvider = bitskiInstance.getProvider();
-const web3 = new Web3(bitskiProvider);
-
-// later in your code…
-document.querySelector('#sign-in-btn').addEventListenter('click', () => {
-  bitskiInstance.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
-    // logged in
-  });
+// call the callback to validate save your access token
+bitski.redirectCallback().then(() => {
+  // fully logged in and ready to use the wallet
+}).catch(error => {
+  // handle errors from login flow
 });
 ```
 
-### Interaction with other Dapp browsers
-
-The last step is to consider the experience you want for users of Metamask and other dapp browsers. For maximum compatibility with other providers, simply check for the existence of web3 before configuring bitski.
-
-```javascript
-if (typeof web3 !== 'undefined') {
-  // fallback to version provided by dapp browser
-  web3 = new Web3(web3.currentProvider);
-} else {
-  // initialize Bitski
-  const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
-  var bitskiProvider = bitskiInstance.getProvider();
-  window.web3 = new Web3(bitskiProvider);
-}
-```
-
-You can also require your users to use a Bitski wallet & account by just ignoring `window.web3` or `window.ethereum` and creating your own instance directly.
-
-```javascript
-const bitskiInstance = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
-var bitskiProvider = bitskiInstance.getProvider();
-const web3 = new Web3(bitskiProvider);
-```
 
 ### Sign Out
 
 If you'd like to offer the ability to sign out of your dapp, you can use the `signOut()` method. This will keep the user logged in on Bitski.com as well as other dapps, but will remove your cached logged in state.
 
 ```javascript
-bitskiInstance.signOut().then(() => {
+bitski.signOut().then(() => {
   //signed out!
 });
 ```
 
-### Example App
+### Interaction with other wallets
 
-Want to see Bitski in action? You can check out a [full demo app using our SDK](https://example-dapp-1.bitski.com) and [view the demo's source code](https://github.com/BitskiCo/example-dapp-game).
+The last step is to consider how you want to handle wallet choice. With Bitski you can offer the choice between a built in provider (Metamask, Toshi, or other dapp browsers) and a Bitski wallet.
+Simply checking for the presence of a built in provider may not offer your users enough choice. Consider the case where a user has both Metamask installed and a Bitski wallet. They may want to use
+different wallets with different apps. Here are a few approaches you can take:
+
+#### 1. Offer choice if other provider detected (recommended)
+
+In this scenario, you would show a Bitski connect button and a "Use Existing Provider" button. This gives the user control over what accounts to use while not overwhelming crypto newcomers with choice.
+
+```html
+<!-- login.html -->
+<div id="login-bitski"></div>
+<a id="login-injected" style="display: none;" href="#">Use Existing Provider</a>
+```
+
+```javascript
+// login.js
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+
+function continueToApp(provider) {
+  web3 = new Web3(provider);
+  // continue!
+}
+
+window.addEventListener('load', () => {
+  const useExistingBtn = document.querySelector('#login-injected');
+  const useBitskiBtn = document.querySelector('#login-bitski');
+
+  // inject bitski connect button
+  const connectBtn = bitski.getConnectButton({ container: useBitskiBtn });
+
+  // set bitski post-login callback
+  connectBtn.callback = function() {
+    continueToApp(bitski.getProvider());
+  }
+
+  if (window.ethereum) {
+    // Show use existing button
+    useExistingBtn.style.display = 'block';
+
+    // Add action
+    useExistingBtn.addEventListener('click', () => {
+      window.ethereum.enable().then(() => {
+        continueToApp(window.ethereum);
+      });
+    });
+  }
+});
+```
+
+#### 2. Always offer choice
+
+In this scenario, when you get to the point where you need a wallet to continue in your app, you can offer the choice between Bitski and other providers, whether an injected provider is available or not.
+You would show a Bitski connect button along side either a download button (if no injected provider) or continue button for each solution you want to promote.
+
+```html
+<!-- login.html -->
+<div id="login-bitski"></div>
+<a id="download-mm" href="#" target="_blank">Download Metamask</a>
+<a id="login-injected" style="display: none;" href="#">Use Existing Provider</a>
+```
+
+```javascript
+// login.js
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+
+function continueToApp(provider) {
+  web3 = new Web3(provider);
+  // continue!
+}
+
+window.addEventListener('load', () => {
+  const useExistingBtn = document.querySelector('#login-injected');
+  const useBitskiBtn = document.querySelector('#login-bitski');
+  const downloadMMBtn = document.querySelector('#download-mm');
+
+  // inject bitski connect button
+  const connectBtn = bitski.getConnectButton({ container: useBitskiBtn });
+
+  // set bitski post-login callback
+  connectBtn.callback = function() {
+    continueToApp(bitski.getProvider());
+  }
+
+  if (window.ethereum) {
+    // Show use existing button
+    downloadMMBtn.style.display = 'none';
+    useExistingBtn.style.display = 'block';
+
+    // Add action
+    useExistingBtn.addEventListener('click', () => {
+      window.ethereum.enable().then(() => {
+        continueToApp(window.ethereum);
+      });
+    });
+  }
+});
+```
+
+#### 3. Require Bitski
+
+In some circumstances it might make sense to require a particular wallet. For example, maybe your dapp needs to be used in a native or cross-platform context. In these cases, you can
+simply ignore any injected providers and use Bitski.
+
+```javascript
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+var bitskiProvider = bitski.getProvider();
+const web3 = new Web3(bitskiProvider);
+```
+
+#### 4. Fallback to Bitski (not recommended)
+
+In this case, you would use an injected provider if available, otherwise show Bitski. The problem with this approach is that people who use both Bitski and other wallets will not have the option to use Bitski.
+
+```javascript
+if (window.ethereum) {
+  // fallback to version provided by dapp browser
+  web3 = new Web3(window.ethereum);
+} else {
+  // initialize Bitski
+  const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+  var bitskiProvider = bitski.getProvider();
+  window.web3 = new Web3(bitskiProvider);
+}
+```
