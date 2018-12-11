@@ -1,5 +1,5 @@
 import { InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
-import { OAuthProviderIntegrationType } from '../src/auth/auth-provider';
+import { OAuthSignInMethod } from '../src/auth/auth-provider';
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { ConnectButton, ConnectButtonSize } from '../src/components/connect-button';
 
@@ -12,24 +12,24 @@ function createAuthProvider(): OpenidAuthProvider {
     stateStore,
     userStore: stateStore,
   };
-  return new OpenidAuthProvider(clientID, undefined, undefined, otherSettings);
+  return new OpenidAuthProvider(clientID, '', otherSettings);
 }
 test('it sets small attributes', () => {
   const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.SMALL);
+  const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.Small);
   expect(button.element.style.height).toBe('20px');
 });
 
 test('it sets large attributes', () => {
   const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.LARGE);
+  const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.Large);
   expect(button.element.style.height).toBe('40px');
 });
 
 test('it defaults to medium', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider);
-  expect(button.size).toBe(ConnectButtonSize.MEDIUM);
+  expect(button.size).toBe(ConnectButtonSize.Medium);
 });
 
 test('it inserts itself into an existing HTMLElement', () => {
@@ -42,14 +42,14 @@ test('it inserts itself into an existing HTMLElement', () => {
 test('it does not throw when no callback', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider);
-  jest.spyOn(authProvider, 'signIn').mockResolvedValue({});
+  jest.spyOn(authProvider, 'signInOrConnect').mockResolvedValue({});
   expect(() => { button['signin'](); }).not.toThrow();
 });
 
 test('it does not throw when received error and no callback', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider);
-  jest.spyOn(authProvider, 'signIn').mockRejectedValue('foo');
+  jest.spyOn(authProvider, 'signInOrConnect').mockRejectedValue('foo');
   expect(() => { button['signin'](); }).not.toThrow();
 });
 
@@ -93,9 +93,9 @@ test('it sets focus and blur states', () => {
 test('it uses provided authentication mode', (done) => {
   expect.assertions(1);
   const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, undefined, undefined, OAuthProviderIntegrationType.REDIRECT);
+  const button = new ConnectButton(authProvider, undefined, undefined, OAuthSignInMethod.Redirect);
   jest.spyOn(authProvider, 'signIn').mockImplementation((method) => {
-    expect(method).toBe(OAuthProviderIntegrationType.REDIRECT);
+    expect(method).toBe(OAuthSignInMethod.Redirect);
     done();
     return Promise.resolve();
   });

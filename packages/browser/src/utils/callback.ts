@@ -16,7 +16,7 @@ function processCallback() {
  * @param url the url to parse
  */
 function parseUrlParams(url: string): any {
-  if (url.includes('#')) { throw new Error('No params found in result'); }
+  if (!url.includes('#')) { throw new Error('No params found in result'); }
 
   const params = url.split('#').pop();
 
@@ -67,4 +67,11 @@ function notifyOpener(url: string): void {
   } else {
     throw new Error('No window.opener');
   }
+}
+
+// Call the callback immediately
+try {
+  processCallback();
+} catch (error) {
+  console.error('Error logging in: ' + error); // tslint:disable-line
 }

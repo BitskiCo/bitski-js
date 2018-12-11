@@ -1,7 +1,8 @@
 import { InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
 import mock from 'xhr-mock';
-import { OAuthProviderIntegrationType } from '../src/auth/auth-provider';
+import { OAuthSignInMethod } from '../src/auth/auth-provider';
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
+import { AuthenticationStatus } from '../src/bitski';
 
 const dummyUser = {
   access_token: 'test-access-token',
@@ -27,7 +28,7 @@ function createInstance(): OpenidAuthProvider {
     stateStore,
     userStore: stateStore,
   };
-  return new OpenidAuthProvider(clientID, undefined, undefined, otherSettings);
+  return new OpenidAuthProvider(clientID, 'http://localhost:3000', otherSettings);
 }
 
 beforeEach(() => {
@@ -44,67 +45,78 @@ afterEach(() => {
   mock.teardown();
 });
 
-describe('initializing the sdk', () => {
-  test('correctly sets client id', () => {
-    const authProvider = createInstance();
-    expect(authProvider.userManager['_settings'].client_id).toBe(clientID);
-  });
-
-  test('should call signinpopupCallback when window.opener exists', () => {
-    Object.defineProperty(global, 'opener', { writable: true, value: {} });
-    const authProvider = createInstance();
-  });
-});
-
-describe('getUserOrSignIn', () => {
-  test('getUserOrSignIn should get user when signed in', () => {
+describe('getAuthStatus', () => {
+  test('should be connected when user exists', () => {
     expect.assertions(1);
     const authProvider = createInstance();
     jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(dummyUser);
-    return authProvider.getUserOrSignIn().then((user) => {
-      expect(user).toMatchObject(dummyUser);
+    return authProvider.getAuthStatus().then(authStatus => {
+      expect(authStatus).toBe(AuthenticationStatus.Connected);
     });
   });
 
-  test('getUserOrSignIn should sign in when user is expired', () => {
+  test('should be approved when user exists but expired', () => {
     expect.assertions(1);
     const authProvider = createInstance();
-    jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue({ expired: true });
-    jest.spyOn(authProvider.userManager, 'signinRedirect').mockResolvedValue(dummyUser);
-    return authProvider.getUserOrSignIn().then((user) => {
-      expect(user).toMatchObject(dummyUser);
+    let user = dummyUser;
+    user.expired = true;
+    localStorage.setItem('bitski.isSignedIn', 'true');
+    jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
+    return authProvider.getAuthStatus().then(authStatus => {
+      expect(authStatus).toBe(AuthenticationStatus.Approved);
     });
   });
 
-  test('getUserOrSignIn should sign in when not signed in', () => {
-    expect.assertions(2);
+  test('should be approved when user does not exist but previously signed in', () => {
+    expect.assertions(1);
     const authProvider = createInstance();
-    jest.spyOn(authProvider.userManager, 'getUser').mockRejectedValue(new Error('not signed in'));
-    const signInSilentMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockResolvedValue(dummyUser);
-    return authProvider.getUserOrSignIn(OAuthProviderIntegrationType.SILENT).then((user) => {
-      expect(signInSilentMock).toHaveBeenCalled();
-      expect(user).toMatchObject(dummyUser);
+    localStorage.setItem('bitski.isSignedIn', 'true');
+    jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(undefined);
+    return authProvider.getAuthStatus().then(authStatus => {
+      expect(authStatus).toBe(AuthenticationStatus.Approved);
+    });
+  });
+
+  test('should be not connected when user does not exist and has not previously signed in', () => {
+    expect.assertions(1);
+    const authProvider = createInstance();
+    jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(undefined);
+    return authProvider.getAuthStatus().then(authStatus => {
+      expect(authStatus).toBe(AuthenticationStatus.NotConnected);
     });
   });
 });
 
-describe('getUser', () => {
-  test('getUser should sign in silent if previously signed in', () => {
+describe('getting an access token', () => {
+  test('getAccessToken should reject if user is not available', () => {
+    expect.assertions(1);
     const authProvider = createInstance();
-    const signingPopupMock = jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
-      const signinSilentMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockResolvedValue(dummyUser);
-      return authProvider.getUser();
-    }).then((user) => {
-      expect(user).toMatchObject(dummyUser);
+    jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(undefined);
+    return authProvider.getAccessToken().catch(err => {
+      expect(err.message).toBe('Not signed in');
     });
   });
 
-  test('getUser should return null if we haven\'nt signed in previously', () => {
+  test('getAccessToken should reject if access token is invalid', () => {
+    expect.assertions(1);
     const authProvider = createInstance();
-    return authProvider.getUser().then((user) => {
-      expect(user).toBeNull();
+    let user = dummyUser;
+    user.expired = true;
+    jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
+    return authProvider.getAccessToken().catch(err => {
+      expect(err.message).toBe('Not signed in');
     });
+  });
+});
+
+describe('getting the user', () => {
+  test('getUser should pass value from userManager', () => {
+    const authProvider = createInstance();
+    const spy = jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(dummyUser);
+    return authProvider.getUser().then(user => {
+      expect(user).toBe(dummyUser);
+      expect(spy).toHaveBeenCalled();
+    })
   });
 });
 
@@ -112,25 +124,28 @@ describe('signing in', () => {
   test('should handle popup sign in', () => {
     const authProvider = createInstance();
     const signingPopupMock = jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+    return authProvider.signIn(OAuthSignInMethod.Popup).then((user) => {
       expect(user).toMatchObject(dummyUser);
       expect(signingPopupMock).toHaveBeenCalled();
+    });
+  });
+
+  test('should handle redirect sign in', () => {
+    const authProvider = createInstance();
+    const signingRedirectMock = jest.spyOn(authProvider.userManager, 'signinRedirect').mockResolvedValue(dummyUser);
+    return authProvider.signIn(OAuthSignInMethod.Redirect).then((user) => {
+      expect(user).toMatchObject(dummyUser);
+      expect(signingRedirectMock).toHaveBeenCalled();
     });
   });
 
   test('should handle silent sign in', () => {
     const authProvider = createInstance();
     const signinSilentMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.SILENT).then((user) => {
+    return authProvider.signIn(OAuthSignInMethod.Silent).then((user) => {
       expect(user).toMatchObject(dummyUser);
       expect(signinSilentMock).toHaveBeenCalled();
     });
-  });
-
-  test('should prevent iframe sign in', () => {
-    const authProvider = createInstance();
-    const expectedError = new Error('iFrame sign-in not allowed with Bitski due to security issues. Please use popup method instead.');
-    return expect(authProvider.signIn(OAuthProviderIntegrationType.IFRAME)).rejects.toEqual(expectedError);
   });
 });
 
@@ -138,7 +153,7 @@ describe('sign in callback', () => {
   test('sign in callback should default to redirect', () => {
     const authProvider = createInstance();
     const signinRedirectCallbackMock = jest.spyOn(authProvider.userManager, 'signinRedirectCallback').mockResolvedValue(dummyUser);
-    return authProvider.signInCallback(1).then(() => {
+    return authProvider.signInCallback(OAuthSignInMethod.Redirect).then(() => {
       expect(signinRedirectCallbackMock).toBeCalled();
     });
   });
@@ -146,8 +161,56 @@ describe('sign in callback', () => {
   test('sign in callback should respect passed authentication type', () => {
     const authProvider = createInstance();
     const signinSilentCallbackMock = jest.spyOn(authProvider.userManager, 'signinSilentCallback').mockResolvedValue(dummyUser);
-    return authProvider.signInCallback(OAuthProviderIntegrationType.SILENT).then(() => {
+    return authProvider.signInCallback(OAuthSignInMethod.Silent).then(() => {
       expect(signinSilentCallbackMock).toBeCalled();
+    });
+  });
+});
+
+describe('sign in or connect', () => {
+  test('should return the user when already connected', () => {
+    expect.assertions(2);
+    const authProvider = createInstance();
+    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.Connected);
+    const getUserMock = jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(dummyUser);
+    return authProvider.signInOrConnect().then(user => {
+      expect(user).toBe(dummyUser);
+      expect(getUserMock).toHaveBeenCalled();
+    });
+  });
+
+  test('should sign in silent when user is approved', () => {
+    expect.assertions(2);
+    const authProvider = createInstance();
+    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.Approved);
+    const signinMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockResolvedValue(dummyUser);
+    return authProvider.signInOrConnect().then(user => {
+      expect(user).toBe(dummyUser);
+      expect(signinMock).toHaveBeenCalled();
+    });
+  });
+
+  test('should sign in popup if sign in silent fails is approved', () => {
+    expect.assertions(3);
+    const authProvider = createInstance();
+    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.Approved);
+    const signinMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockRejectedValue(new Error('foo'));
+    const signinPopupMock = jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return authProvider.signInOrConnect().then(user => {
+      expect(user).toBe(dummyUser);
+      expect(signinMock).toHaveBeenCalled();
+      expect(signinPopupMock).toHaveBeenCalled();
+    });
+  });
+
+  test('should sign in popup if not connected', () => {
+    expect.assertions(2);
+    const authProvider = createInstance();
+    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.NotConnected);
+    const signinPopupMock = jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return authProvider.signInOrConnect().then(user => {
+      expect(user).toBe(dummyUser);
+      expect(signinPopupMock).toHaveBeenCalled();
     });
   });
 });
@@ -166,7 +229,7 @@ describe('sign out', () => {
       return res.status(401).body('{ "error": { "message": "Not authorized." }}');
     });
     jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+    return authProvider.signIn(OAuthSignInMethod.Popup).then((user) => {
       jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
       return expect(authProvider.signOut()).rejects.toEqual(new Error('Not authorized.'));
     });
@@ -179,7 +242,7 @@ describe('sign out', () => {
       return res.status(401).body('{ "error": "Not authorized." }');
     });
     jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+    return authProvider.signIn(OAuthSignInMethod.Popup).then((user) => {
       jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
       return expect(authProvider.signOut()).rejects.toEqual(new Error('Not authorized.'));
     });
@@ -192,7 +255,7 @@ describe('sign out', () => {
       return res.status(500).body('Something went wrong.');
     });
     jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+    return authProvider.signIn(OAuthSignInMethod.Popup).then((user) => {
       jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
       return expect(authProvider.signOut()).rejects.toEqual(new Error('Unknown error. Could not parse error response.'));
     });
@@ -205,7 +268,7 @@ describe('sign out', () => {
       return res.status(500).body('{}');
     });
     jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+    return authProvider.signIn(OAuthSignInMethod.Popup).then((user) => {
       jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
       return expect(authProvider.signOut()).rejects.toEqual(new Error('Unknown error.'));
     });
@@ -217,7 +280,7 @@ describe('sign out', () => {
     authProvider.timeout = 100;
     mock.post('https://www.bitski.com/v1/logout', () => new Promise(() => { }));
     jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
-    return authProvider.signIn(OAuthProviderIntegrationType.POPUP).then((user) => {
+    return authProvider.signIn(OAuthSignInMethod.Popup).then((user) => {
       jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
       return expect(authProvider.signOut()).rejects.toEqual(new Error('Connection timed out.'));
     });

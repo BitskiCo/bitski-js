@@ -13,7 +13,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
   constructor(clientId: string, authProvider: OpenidAuthProvider, networkName?: string, options?: any) {
     super(options);
     this.networkName = networkName || 'mainnet';
-    this.rpcUrl = `https://api.bitski.com/v1/web3/${networkName}`;
+    this.rpcUrl = `https://api.bitski.com/v1/web3/${this.networkName}`;
     this.authProvider = authProvider;
     this.clientId = clientId;
 

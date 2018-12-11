@@ -3,28 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Logging in...</title>
-    <style>
-      body {
-        font: 14px sans-serif;
-      }
-      #error-message {
-        color: #c01e26;
-      }
-    </style>
   </head>
-
   <body>
-    <div id="error-message"></div>
-    <script src="https://cdn.jsdelivr.net/npm/bitski@0.2.0-beta.9/dist/lib/utils/callback.js"></script>
-    <script>
-      window.addEventListener('load', () => {
-        try {
-          processCallback();
-        } catch (err) {
-          console.error(err);
-          document.getElementById('error-message').innerText = 'Error: ' + err.message;
-        }
-      });
-    </script>
+    <script src="/node_modules/bitski/lib/utils/callback.js"></script>
   </body>
 </html>
