@@ -1,5 +1,5 @@
 import { AccessTokenProvider } from 'bitski-provider';
-import { User, UserManager } from 'oidc-client';
+import { User, UserManager, WebStorageStateStore } from 'oidc-client';
 import { AuthenticationStatus } from '../bitski';
 import { AuthProvider, OAuthSignInMethod } from './auth-provider';
 
@@ -14,6 +14,7 @@ const DEFAULT_SETTINGS = {
     loadUserInfo: true,
     response_type: 'id_token token',
     scope: 'openid',
+    userStore: new WebStorageStateStore({ store: localStorage }),
 };
 
 export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {

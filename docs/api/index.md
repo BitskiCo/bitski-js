@@ -1375,7 +1375,7 @@ new OpenidAuthProvider(clientId: string, redirectUri: string, opts?: any): Openi
 ```javascript
 var timeout: number = 5000
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L21)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L22)*</small>
 
 
 <a id="undefined"></a>
@@ -1384,7 +1384,7 @@ var timeout: number = 5000
 ```javascript
 var userManager: UserManager
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L22)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L23)*</small>
 
 
 
@@ -1405,7 +1405,7 @@ var userManager: UserManager
 ```typescript
 function getAccessToken(): Promise<string>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:69](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L69)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:70](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L70)*</small>
 
 
 
@@ -1431,7 +1431,7 @@ function getAccessToken(): Promise<string>
 ```typescript
 function getAuthStatus(): Promise<AuthenticationStatus>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:79](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L79)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:80](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L80)*</small>
 
 
 
@@ -1457,7 +1457,7 @@ function getAuthStatus(): Promise<AuthenticationStatus>
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:117](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L117)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:118](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L118)*</small>
 
 
 
@@ -1483,7 +1483,7 @@ function getUser(): Promise<User>
 ```typescript
 function signIn(method: OAuthSignInMethod, opts?: any): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:91](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L91)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:92](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L92)*</small>
 
 
 
@@ -1518,7 +1518,7 @@ function signIn(method: OAuthSignInMethod, opts?: any): Promise<User>
 ```typescript
 function signInCallback(method: OAuthSignInMethod, url?: undefined | string): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:141](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L141)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:142](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L142)*</small>
 
 
 
@@ -1553,7 +1553,7 @@ function signInCallback(method: OAuthSignInMethod, url?: undefined | string): Pr
 ```typescript
 function signInOrConnect(signInMethod?: OAuthSignInMethod): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:121](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L121)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:122](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L122)*</small>
 
 
 
@@ -1587,7 +1587,7 @@ function signInOrConnect(signInMethod?: OAuthSignInMethod): Promise<User>
 ```typescript
 function signOut(): Promise<any>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:152](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L152)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:153](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L153)*</small>
 
 
 
@@ -2019,6 +2019,20 @@ var response_type: string = "id_token token"
 var scope: string = "openid"
 ```
 <small>*Defined in [browser/src/auth/openid-auth-provider.ts:16](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L16)*</small>
+
+
+
+
+
+<a id="undefined"></a>
+
+####  userStore
+
+
+```javascript
+var userStore: WebStorageStateStore =  new WebStorageStateStore({ store: localStorage })
+```
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L17)*</small>
 
 
 
