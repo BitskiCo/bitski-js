@@ -11,6 +11,8 @@ module.exports = {
   ],
   experimentalDecorators: true,
   excludeExternals: true,
+  excludePrivate: true,
+  excludeProtected: true,
   out: "./docs/api/",
   readme: "none",
   theme: "markdown",

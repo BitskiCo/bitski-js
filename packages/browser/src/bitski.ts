@@ -64,9 +64,10 @@ export class Bitski {
    * Creates a sign in with bitski button to add to your app. If an HTML element is passed in as the
    * first parameter, it will automatically add it to the DOM inside that element. Make sure to add
    * a callback to get notified of login events.
-   * @param existingDiv Existing element to turn into a Bitski connect button
-   * @param size ConnectButtonSize of button to generate. Defaults to Medium.
-   * @param authMethod Login method to use. Defaults to popup.
+   * @param options Optionally provide options for the button
+   * @param options.container Existing dom element to embed the Bitski connect button
+   * @param options.size ConnectButtonSize of button to generate. Defaults to Medium.
+   * @param options.authMethod Login method to use. Defaults to popup.
    * @param callback Post-login callback. Called when sign in is complete. Not applicable for redirect login method.
    */
   public getConnectButton(options?: any, callback?: (error?: Error, user?: User) => void): ConnectButton {
