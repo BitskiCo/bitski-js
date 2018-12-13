@@ -33,8 +33,6 @@ const web3 = new Web3(provider);
 // public calls are always available
 const network = await web3.eth.getBlockNumber();
 
-const authStatus = await bitski.getAuthStatus();
-
 // connect via oauth to use the wallet (call this from a click handler)
 await bitski.start();
 
@@ -73,7 +71,7 @@ Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.2.0-beta.14/dist/bitski.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.2.0-beta.15/dist/bitski.bundle.js"></script>
 ```
 
 ### Starting the SDK
@@ -90,8 +88,8 @@ const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 Or, if you are using the CDN version:
 
 ```javascript
-// SDK is imported into the global namespace as bitski
-const bitski = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+// SDK is imported into the global namespace as Bitski
+const bitski = new Bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 ```
 
 ### Getting a provider
@@ -136,7 +134,7 @@ bitski.getAuthStatus().then(status => {
 There are 3 possible values:
 
 - *Connected*: The user has an active access token. No action is needed.
-- *Approved*: The user has previously logged in but does not have an access token.
+- *Expired*: The user has previously logged in but does not have an access token.
 - *NotConnected*: The user has not signed in before.
 
 If the status is Approved or NotConnected, you need to call either `start()` or `signIn()` to use wallet features.

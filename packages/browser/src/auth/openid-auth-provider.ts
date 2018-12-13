@@ -38,8 +38,16 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         }
     }
 
+    private get canUseSilentLogin(): boolean {
+        // best we can do for now is see if the browser exposes the storage access API
+        if ('hasStorageAccess' in document) {
+            return false;
+        }
+        return true;
+    }
+
     constructor(clientId: string, redirectUri: string, opts?: any) {
-        let settings = {
+        let settings: any = {
             client_id: clientId,
             popup_redirect_uri: redirectUri,
             redirect_uri: redirectUri,
@@ -47,6 +55,9 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         };
 
         settings = Object.assign(settings, DEFAULT_SETTINGS);
+
+        // disable automatic renew for newer versions of Safari
+        settings.automaticSilentRenew = this.canUseSilentLogin;
 
         if (opts) {
             settings = Object.assign(settings, opts);
@@ -70,7 +81,7 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
             if (user && !user.expired) {
                 return AuthenticationStatus.Connected;
             } else if (this.hasSignedIn) {
-                return AuthenticationStatus.Approved;
+                return AuthenticationStatus.Expired;
             } else {
                 return AuthenticationStatus.NotConnected;
             }
@@ -113,10 +124,14 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
             switch (authStatus) {
             case AuthenticationStatus.Connected:
                 return this.userManager.getUser();
-            case AuthenticationStatus.Approved:
-                return this.signIn(OAuthSignInMethod.Silent).catch(() => {
+            case AuthenticationStatus.Expired:
+                if (this.canUseSilentLogin) {
+                    return this.signIn(OAuthSignInMethod.Silent).catch(() => {
+                        return this.signIn(method);
+                    });
+                } else {
                     return this.signIn(method);
-                });
+                }
             case AuthenticationStatus.NotConnected:
                 return this.signIn(method);
            }

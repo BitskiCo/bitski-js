@@ -1,8 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "target": "ES5",
     "outDir": "lib",
-    "module": "commonjs",
+    "module": "umd",
     "declaration": true,
     "sourceMap": true
   }
