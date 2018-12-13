@@ -8,7 +8,7 @@ import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
 
 export enum AuthenticationStatus {
   Connected = 'CONNECTED',
-  Approved = 'APPROVED',
+  Expired = 'EXPIRED',
   NotConnected = 'NOT_CONNECTED',
 }
 
@@ -90,7 +90,7 @@ export class Bitski {
   }
 
   /**
-   * Check the logged in state of the user. Either connected (have an active session), approved (previously had an active session), or not connected.
+   * Check the logged in state of the user. Either connected (have an active session), expired (connected but needs new access token), or not connected.
    */
   public getAuthStatus(): Promise<AuthenticationStatus> {
     return this.authProvider.getAuthStatus();
