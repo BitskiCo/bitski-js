@@ -90,8 +90,8 @@ const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 Or, if you are using the CDN version:
 
 ```javascript
-// SDK is imported into the global namespace as bitski
-const bitski = new bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+// SDK is imported into the global namespace as Bitski
+const bitski = new Bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 ```
 
 ### Getting a provider
@@ -136,7 +136,7 @@ bitski.getAuthStatus().then(status => {
 There are 3 possible values:
 
 - *Connected*: The user has an active access token. No action is needed.
-- *Approved*: The user has previously logged in but does not have an access token.
+- *Expired*: The user has previously logged in but does not have an access token.
 - *NotConnected*: The user has not signed in before.
 
 If the status is Approved or NotConnected, you need to call either `start()` or `signIn()` to use wallet features.

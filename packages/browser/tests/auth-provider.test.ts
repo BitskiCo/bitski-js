@@ -63,7 +63,7 @@ describe('getAuthStatus', () => {
     localStorage.setItem('bitski.isSignedIn', 'true');
     jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(user);
     return authProvider.getAuthStatus().then(authStatus => {
-      expect(authStatus).toBe(AuthenticationStatus.Approved);
+      expect(authStatus).toBe(AuthenticationStatus.Expired);
     });
   });
 
@@ -73,7 +73,7 @@ describe('getAuthStatus', () => {
     localStorage.setItem('bitski.isSignedIn', 'true');
     jest.spyOn(authProvider.userManager, 'getUser').mockResolvedValue(undefined);
     return authProvider.getAuthStatus().then(authStatus => {
-      expect(authStatus).toBe(AuthenticationStatus.Approved);
+      expect(authStatus).toBe(AuthenticationStatus.Expired);
     });
   });
 
@@ -179,10 +179,10 @@ describe('sign in or connect', () => {
     });
   });
 
-  test('should sign in silent when user is approved', () => {
+  test('should sign in silent when user is expired', () => {
     expect.assertions(2);
     const authProvider = createInstance();
-    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.Approved);
+    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.Expired);
     const signinMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockResolvedValue(dummyUser);
     return authProvider.signInOrConnect().then(user => {
       expect(user).toBe(dummyUser);
@@ -190,10 +190,23 @@ describe('sign in or connect', () => {
     });
   });
 
-  test('should sign in popup if sign in silent fails is approved', () => {
+  test('should sign in popup when user is expired but silent is not available', () => {
+    expect.assertions(2);
+    const authProvider = createInstance();
+    document.hasStorageAccess = true;
+    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.Expired);
+    const signinMock = jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
+    return authProvider.signInOrConnect().then(user => {
+      expect(user).toBe(dummyUser);
+      expect(signinMock).toHaveBeenCalled();
+      delete document.hasStorageAccess;
+    });
+  });
+
+  test('should sign in popup if sign in silent fails when approved', () => {
     expect.assertions(3);
     const authProvider = createInstance();
-    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.Approved);
+    jest.spyOn(authProvider, 'getAuthStatus').mockResolvedValue(AuthenticationStatus.Expired);
     const signinMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockRejectedValue(new Error('foo'));
     const signinPopupMock = jest.spyOn(authProvider.userManager, 'signinPopup').mockResolvedValue(dummyUser);
     return authProvider.signInOrConnect().then(user => {
