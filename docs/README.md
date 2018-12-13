@@ -103,7 +103,7 @@ const web3 = new Web3(provider);
 const network = await web3.eth.net.getId();
 ```
 
-To use a different network pass in a network name ("rinkeby", "kovan") as the first argument.
+Unlike Metamask and other dapp browsers, you can request a provider for the network you are on. To use a different network pass in a network name ("rinkeby", "kovan") as the first argument.
 
 ```javascript
 const provider = bitski.getProvider("rinkeby");
@@ -145,7 +145,7 @@ If the status is Approved or NotConnected, you need to call either `start()` or 
 
 Our login flow uses OAuth2 to approve your app and pass it an access token on behalf of the current user. In order to receive that access token, you need to setup a callback page. The easiest way to do this is to use our static [callback.html](https://github.com/BitskiCo/bitski-js/blob/develop/callback.html) file.
 
-1. Copy [callback.html](https://github.com/BitskiCo/bitski-js/blob/develop/callback.html) somewhere on your domain
+1. Copy [callback.html](https://github.com/BitskiCo/bitski-js/blob/develop/packages/browser/callback.html) somewhere on your domain
 2. Add the URL to this html file to your app's authorized redirect urls in the Bitski [Developer Portal](https://developer.bitski.com)
 
 If you would prefer to manually handle the callback in your app:
