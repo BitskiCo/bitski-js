@@ -4,6 +4,8 @@
 
 The official Bitski Javascript SDK for the browser. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain. We currently support mainnet, as well as Kovan and Rinkeby test networks.
 
+*Note: These docs are for version 0.2.x. Upgrading from 0.1.x? Please see our [Migration Guide](https://github.com/BitskiCo/bitski-js/tree/develop/MIGRATING.md)*
+
 ### Packages
 
 This repo consists of 2 packages:
@@ -71,7 +73,7 @@ Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.33/dist/web3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.2.0-beta.16/dist/bitski.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.2.0/dist/bitski.bundle.js"></script>
 ```
 
 ### Starting the SDK
@@ -218,6 +220,12 @@ window.addEventListener('load', () => {
   checkAuthStatus();
 });
 ```
+
+There are a few optional options you can pass in:
+
+- container: An HTML element that you want to inject the button into. If you don't pass anything in you can inject it yourself by accessing the button's element key.
+- size: The size of the button. 'SMALL', 'MEDIUM', or 'LARGE'. Default is 'MEDIUM'.
+- authMethod: The sign in method to use. 'POPUP' or 'REDIRECT'. Default is 'POPUP'.
 
 #### Signing in with redirect
 
