@@ -70,8 +70,8 @@ npm install --save bitski@beta
 Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.2.0-beta.15/dist/bitski.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.33/dist/web3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.2.0-beta.16/dist/bitski.bundle.js"></script>
 ```
 
 ### Starting the SDK
