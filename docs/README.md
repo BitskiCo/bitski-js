@@ -139,13 +139,13 @@ There are 3 possible values:
 - *Expired*: The user has previously logged in but does not have an access token.
 - *NotConnected*: The user has not signed in before.
 
-If the status is Approved or NotConnected, you need to call either `start()` or `signIn()` to use wallet features.
+If the status is Expired or NotConnected, you need to call either `start()` or `signIn()` to use wallet features.
 
 ### Signing in
 
 #### Implementing the callback
 
-Our login flow uses OAuth2 to approve your app and pass it an access token on behalf of the current user. In order to receive that access token, you need to setup a callback page. The easiest way to do this is to use our static [callback.html](https://github.com/BitskiCo/bitski-js/blob/develop/callback.html) file.
+Our login flow uses OAuth2 to approve your app and pass it an access token on behalf of the current user. In order to receive that access token, you need to setup a callback page. The easiest way to do this is to use our static [callback.html](https://github.com/BitskiCo/bitski-js/blob/develop/packages/browser/callback.html) file.
 
 1. Copy [callback.html](https://github.com/BitskiCo/bitski-js/blob/develop/packages/browser/callback.html) somewhere on your domain
 2. Add the URL to this html file to your app's authorized redirect urls in the Bitski [Developer Portal](https://developer.bitski.com)
