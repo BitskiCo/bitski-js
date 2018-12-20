@@ -142,7 +142,11 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     public signInCallback(method: OAuthSignInMethod, url?: string): Promise<User> {
         switch (method) {
         case OAuthSignInMethod.Redirect:
-            return this.userManager.signinRedirectCallback(url || window.location.href);
+            return this.userManager.signinRedirectCallback(url || window.location.href).then((user) => {
+                // the redirect flow does not complete the sign in promise
+                this.hasSignedIn = true;
+                return user;
+            });
         case OAuthSignInMethod.Popup:
             return this.userManager.signinPopupCallback(url || window.location.href);
         case OAuthSignInMethod.Silent:
