@@ -139,6 +139,16 @@ describe('signing in', () => {
     });
   });
 
+  test('should set hasSignedIn when calling the redirect callback', () => {
+    const authProvider = createInstance();
+    const signingRedirectMock = jest.spyOn(authProvider.userManager, 'signinRedirectCallback').mockResolvedValue(dummyUser);
+    return authProvider.signInCallback(OAuthSignInMethod.Redirect, 'blah').then((user) => {
+      expect(authProvider.hasSignedIn).toBe(true);
+      expect(user).toMatchObject(dummyUser);
+      expect(signingRedirectMock).toHaveBeenCalled();
+    });
+  });
+
   test('should handle silent sign in', () => {
     const authProvider = createInstance();
     const signinSilentMock = jest.spyOn(authProvider.userManager, 'signinSilent').mockResolvedValue(dummyUser);
