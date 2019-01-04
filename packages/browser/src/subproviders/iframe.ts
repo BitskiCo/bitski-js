@@ -106,6 +106,9 @@ export class IFrameSubprovider extends AuthorizationHandler {
         }
 
         this.currentRequest = [payload, end];
-        this.currentRequestDialog = new Dialog(element);
+        this.currentRequestDialog = new Dialog(element, true);
+        this.currentRequestDialog.onClose = () => {
+            end(new Error('The transaction was cancelled'), undefined);
+        };
     }
 }

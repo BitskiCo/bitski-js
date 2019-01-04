@@ -5,6 +5,7 @@ import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
+import css from './styles/index';
 
 export enum AuthenticationStatus {
   Connected = 'CONNECTED',
@@ -28,6 +29,13 @@ export class Bitski {
   constructor(clientId: string, redirectUri?: string, options?: any) {
     this.clientId = clientId;
     this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, options);
+    if (document && document.body) {
+      this.injectStyles();
+    } else {
+      window.addEventListener('load', () => {
+        this.injectStyles();
+      });
+    }
   }
 
   /**
@@ -176,6 +184,21 @@ export class Bitski {
     if (level) {
       Log.level = level;
     }
+  }
+
+  /**
+   * Embeds Bitski's UI styles
+   */
+  private injectStyles(): void {
+    if (document.getElementById('BitskiEmbeddedStyles')) {
+      return;
+    }
+    const style = document.createElement('style');
+    style.setAttribute('type', 'text/css');
+    style.setAttribute('id', 'BitskiEmbeddedStyles');
+    style.appendChild(document.createTextNode(css));
+    const head = document.head || document.getElementsByTagName('head')[0];
+    head.append(style);
   }
 
 }
