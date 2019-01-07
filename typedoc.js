@@ -7,7 +7,8 @@ module.exports = {
     "**/dist/**/*",
     "**/lib/**/*",
     "**/node_modules/**/*.*",
-    "**/src/utils/callback.*"
+    "**/src/utils/callback.*",
+    "**/src/styles/*.*"
   ],
   experimentalDecorators: true,
   excludeExternals: true,

@@ -17,13 +17,13 @@ function createAuthProvider(): OpenidAuthProvider {
 test('it sets small attributes', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.Small);
-  expect(button.element.style.height).toBe('20px');
+  expect(button.element.classList.contains('size-small')).toBe(true);
 });
 
 test('it sets large attributes', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.Large);
-  expect(button.element.style.height).toBe('40px');
+  expect(button.element.classList.contains('size-large')).toBe(true);
 });
 
 test('it defaults to medium', () => {
@@ -76,18 +76,6 @@ test('it calls the callback on error', (done) => {
   };
   button.callback = callback;
   button['signin']();
-});
-
-test('it sets focus and blur states', () => {
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider);
-  const defaultColor = button.element.style.backgroundColor;
-  // test focus
-  button.element.dispatchEvent(new Event('focus'));
-  expect(button.element.style.backgroundColor).not.toBe(defaultColor);
-  // test blur
-  button.element.dispatchEvent(new Event('blur'));
-  expect(button.element.style.backgroundColor).toBe(defaultColor);
 });
 
 test('it uses provided authentication mode', (done) => {

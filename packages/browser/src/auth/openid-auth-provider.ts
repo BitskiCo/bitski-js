@@ -129,6 +129,9 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
                 if (this.canUseSilentLogin) {
                     return this.signIn(OAuthSignInMethod.Silent).catch(() => {
                         return this.signIn(method);
+                    }).catch((err) => {
+                        this.hasSignedIn = false;
+                        throw err;
                     });
                 } else {
                     return this.signIn(method);
