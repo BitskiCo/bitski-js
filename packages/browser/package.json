@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.2.1",
+  "version": "0.2.2",
   "scripts": {
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
     "bundle": "browserify -s Bitski -e dist/esm/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.bundle.js",
@@ -17,7 +17,7 @@
     "prepack": "npm run build && npm run bundle"
   },
   "dependencies": {
-    "bitski-provider": "^0.2.0",
+    "bitski-provider": "^0.2.2",
     "oidc-client": ">=1.5.2",
     "web3-provider-engine": "^14.1.0"
   },
