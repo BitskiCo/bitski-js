@@ -37,7 +37,8 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{ts}",
-      "!src/utils/callback.ts"
+      "!src/utils/callback.ts",
+      "src/styles/*.{ts}"
     ],
     "coverageReporters": [
       "json",

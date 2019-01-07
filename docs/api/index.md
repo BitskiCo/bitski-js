@@ -39,7 +39,7 @@
 ```javascript
 var Connected:  = "CONNECTED"
 ```
-<small>*Defined in [browser/src/bitski.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L10)*</small>
+<small>*Defined in [browser/src/bitski.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L11)*</small>
 
 
 
@@ -53,7 +53,7 @@ var Connected:  = "CONNECTED"
 ```javascript
 var Expired:  = "EXPIRED"
 ```
-<small>*Defined in [browser/src/bitski.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L11)*</small>
+<small>*Defined in [browser/src/bitski.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L12)*</small>
 
 
 
@@ -67,7 +67,7 @@ var Expired:  = "EXPIRED"
 ```javascript
 var NotConnected:  = "NOT_CONNECTED"
 ```
-<small>*Defined in [browser/src/bitski.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L12)*</small>
+<small>*Defined in [browser/src/bitski.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L13)*</small>
 
 
 
@@ -413,7 +413,7 @@ new Bitski(clientId: string, redirectUri?: undefined | string, options?: any): B
 ```typescript
 function callback()
 ```
-<small>*Defined in [browser/src/bitski.ts:152](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L152)*</small>
+<small>*Defined in [browser/src/bitski.ts:160](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L160)*</small>
 
 
 
@@ -439,7 +439,7 @@ function callback()
 ```typescript
 function connect(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:116](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L116)*</small>
+<small>*Defined in [browser/src/bitski.ts:124](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L124)*</small>
 
 
 
@@ -469,7 +469,7 @@ function connect(): Promise<User>
 ```typescript
 function getAuthStatus(): Promise<AuthenticationStatus>
 ```
-<small>*Defined in [browser/src/bitski.ts:95](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L95)*</small>
+<small>*Defined in [browser/src/bitski.ts:103](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L103)*</small>
 
 
 
@@ -499,7 +499,7 @@ function getAuthStatus(): Promise<AuthenticationStatus>
 ```typescript
 function getConnectButton(options?: any, callback?: undefined | function): ConnectButton
 ```
-<small>*Defined in [browser/src/bitski.ts:73](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L73)*</small>
+<small>*Defined in [browser/src/bitski.ts:81](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L81)*</small>
 
 
 
@@ -538,7 +538,7 @@ function getConnectButton(options?: any, callback?: undefined | function): Conne
 ```typescript
 function getProvider(networkName?: undefined | string, options?: any): BitskiEngine
 ```
-<small>*Defined in [browser/src/bitski.ts:39](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L39)*</small>
+<small>*Defined in [browser/src/bitski.ts:47](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L47)*</small>
 
 
 
@@ -577,7 +577,7 @@ function getProvider(networkName?: undefined | string, options?: any): BitskiEng
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:109](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L109)*</small>
+<small>*Defined in [browser/src/bitski.ts:117](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L117)*</small>
 
 
 
@@ -607,7 +607,7 @@ function getUser(): Promise<User>
 ```typescript
 function redirectCallback(url?: undefined | string): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:145](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L145)*</small>
+<small>*Defined in [browser/src/bitski.ts:153](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L153)*</small>
 
 
 
@@ -645,7 +645,7 @@ function redirectCallback(url?: undefined | string): Promise<User>
 ```typescript
 function setLogger(logger: any, level?: undefined | number)
 ```
-<small>*Defined in [browser/src/bitski.ts:174](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L174)*</small>
+<small>*Defined in [browser/src/bitski.ts:182](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L182)*</small>
 
 
 
@@ -680,7 +680,7 @@ function setLogger(logger: any, level?: undefined | number)
 ```typescript
 function signIn(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:102](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L102)*</small>
+<small>*Defined in [browser/src/bitski.ts:110](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L110)*</small>
 
 
 
@@ -710,7 +710,7 @@ function signIn(): Promise<User>
 ```typescript
 function signInRedirect(redirectUri?: undefined | string)
 ```
-<small>*Defined in [browser/src/bitski.ts:131](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L131)*</small>
+<small>*Defined in [browser/src/bitski.ts:139](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L139)*</small>
 
 
 
@@ -744,7 +744,7 @@ function signInRedirect(redirectUri?: undefined | string)
 ```typescript
 function signOut(): Promise<void>
 ```
-<small>*Defined in [browser/src/bitski.ts:163](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L163)*</small>
+<small>*Defined in [browser/src/bitski.ts:171](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L171)*</small>
 
 
 
@@ -774,7 +774,7 @@ function signOut(): Promise<void>
 ```typescript
 function start(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:88](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L88)*</small>
+<small>*Defined in [browser/src/bitski.ts:96](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L96)*</small>
 
 
 
@@ -1020,7 +1020,7 @@ var size: ConnectButtonSize
 ```typescript
 function remove()
 ```
-<small>*Defined in [browser/src/components/connect-button.ts:58](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/connect-button.ts#L58)*</small>
+<small>*Defined in [browser/src/components/connect-button.ts:51](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/connect-button.ts#L51)*</small>
 
 
 
@@ -1042,18 +1042,21 @@ function remove()
 ##  Dialog
 
 
+
+
+
+
 <a id="undefined"></a>
 ### constructor
 ```typescript
-new Dialog(content: any, width?: undefined | number, height?: undefined | number): Dialog
+new Dialog(content: HTMLElement | string, dynamicContent?: boolean): Dialog
 ```
 ##### Parameters
 
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| content | `any`   |   |
-| width _(Optional)_ | `undefined          ⎮number`   |   |
-| height _(Optional)_ | `undefined          ⎮number`   |   |
+| Param | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| content | `HTMLElement          ⎮string`  | - |    |
+| dynamicContent | `boolean`  | false |    |
 
 
 
@@ -1066,10 +1069,54 @@ new Dialog(content: any, width?: undefined | number, height?: undefined | number
 
 ---
 
+### Properties
+<a id="undefined"></a>
+
+#### onClose
+```javascript
+var onClose: undefined | function
+```
+<small>*Defined in [browser/src/components/dialog.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L12)*</small>
+
+
+
+
+---
+
 ### Methods
 <a id="undefined"></a>
 
+#### close
+
+
+
+
+
+
+
+
+##### Declaration
+
+
+```typescript
+function close()
+```
+<small>*Defined in [browser/src/components/dialog.ts:69](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L69)*</small>
+
+
+
+
+
+
+
+
+<a id="undefined"></a>
+
 #### dismiss
+
+
+
+
 
 
 
@@ -1080,7 +1127,7 @@ new Dialog(content: any, width?: undefined | number, height?: undefined | number
 ```typescript
 function dismiss()
 ```
-<small>*Defined in [browser/src/components/dialog.ts:46](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L46)*</small>
+<small>*Defined in [browser/src/components/dialog.ts:60](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L60)*</small>
 
 
 
@@ -1091,7 +1138,11 @@ function dismiss()
 
 <a id="undefined"></a>
 
-#### isDocumentLoaded
+#### hide
+
+
+
+
 
 
 
@@ -1100,14 +1151,10 @@ function dismiss()
 
 
 ```typescript
-function isDocumentLoaded(): boolean
+function hide()
 ```
-<small>*Defined in [browser/src/components/dialog.ts:38](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L38)*</small>
+<small>*Defined in [browser/src/components/dialog.ts:53](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L53)*</small>
 
-
-
-##### Return Value
-`boolean`
 
 
 
@@ -1117,7 +1164,11 @@ function isDocumentLoaded(): boolean
 
 <a id="undefined"></a>
 
-#### shouldRenderFullScreen
+#### setLoading
+
+
+
+
 
 
 
@@ -1126,14 +1177,44 @@ function isDocumentLoaded(): boolean
 
 
 ```typescript
-function shouldRenderFullScreen(): boolean
+function setLoading(loading: boolean)
 ```
-<small>*Defined in [browser/src/components/dialog.ts:42](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L42)*</small>
+<small>*Defined in [browser/src/components/dialog.ts:80](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L80)*</small>
 
 
 
-##### Return Value
-`boolean`
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| loading | `boolean`   |   |
+
+
+
+
+
+
+
+
+<a id="undefined"></a>
+
+#### show
+
+
+
+
+
+
+
+
+##### Declaration
+
+
+```typescript
+function show()
+```
+<small>*Defined in [browser/src/components/dialog.ts:47](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L47)*</small>
+
 
 
 
@@ -1518,7 +1599,7 @@ function signIn(method: OAuthSignInMethod, opts?: any): Promise<User>
 ```typescript
 function signInCallback(method: OAuthSignInMethod, url?: undefined | string): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:142](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L142)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:145](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L145)*</small>
 
 
 
@@ -1587,7 +1668,7 @@ function signInOrConnect(signInMethod?: OAuthSignInMethod): Promise<User>
 ```typescript
 function signOut(): Promise<any>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:157](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L157)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:160](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L160)*</small>
 
 
 
@@ -1894,25 +1975,21 @@ var DEFAULT_AUTHORIZED_METHODS: string[] =  ['eth_sendTransaction', 'eth_sign', 
 
 <a id="undefined"></a>
 
-#### «Const» DEFAULT_DIALOG_HEIGHT
+#### «Const» TEMPLATE
 
 
 ```javascript
-var DEFAULT_DIALOG_HEIGHT: 420 = 420
-```
-<small>*Defined in [browser/src/components/dialog.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L2)*</small>
-
-
-
-
-
-<a id="undefined"></a>
-
-#### «Const» DEFAULT_DIALOG_WIDTH
-
-
-```javascript
-var DEFAULT_DIALOG_WIDTH: 490 = 490
+var TEMPLATE: "
+  <div class='bitski-dialog'>
+      <button class='close-button'>Close</button>
+      <div class='bitski-dialog-body'></div>
+  </div>
+" =  `
+  <div class='bitski-dialog'>
+      <button class='close-button'>Close</button>
+      <div class='bitski-dialog-body'></div>
+  </div>
+`
 ```
 <small>*Defined in [browser/src/components/dialog.ts:1](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/components/dialog.ts#L1)*</small>
 
