@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.2.2",
+  "version": "0.2.3",
   "scripts": {
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
     "prepare": "npm run build",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@types/ethereum-protocol": "^1.0.0",
     "json-rpc-error": "^2.0.0",
-    "web3-provider-engine": "github:BitskiCo/provider-engine#fix/kovan-subscriptions"
+    "web3-provider-engine": "github:BitskiCo/provider-engine#master"
   },
   "devDependencies": {
     "@types/events": "^1.2.0",
