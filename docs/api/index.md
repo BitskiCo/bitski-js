@@ -2388,6 +2388,35 @@ new BitskiEngine(options: any): BitskiEngine
 
 
 
+<a id="undefined"></a>
+
+#### send
+
+
+
+
+##### Declaration
+
+
+```typescript
+function send(payload: JSONRPCRequestPayload)
+```
+<small>*Defined in [provider/src/bitski-engine.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L31)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| payload | `JSONRPCRequestPayload`   |   |
+
+
+
+
+
+
+
 
 
 
