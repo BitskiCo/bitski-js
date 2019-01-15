@@ -211,7 +211,14 @@ new AuthenticatedCacheSubprovider(authProvider: any): AuthenticatedCacheSubprovi
 
 ---
 
+### Properties
+
+
+
+---
+
 ### Methods
+
 <a id="undefined"></a>
 
 #### handleRequest
@@ -250,12 +257,13 @@ function handleRequest(payload: any, next: any, end: any): any
 
 
 
+
 ---
 
 
 ### Relationships
 ##### Extends
-* any
+* Subprovider
 
 ---
 
@@ -286,7 +294,14 @@ new AuthorizationHandler(opts?: any): AuthorizationHandler
 
 ---
 
+### Properties
+
+
+
+---
+
 ### Methods
+
 <a id="undefined"></a>
 
 #### handleAuthorization
@@ -353,12 +368,13 @@ function handleRequest(payload: any, next: any, end: any)
 
 
 
+
 ---
 
 
 ### Relationships
 ##### Extends
-* any
+* Subprovider
 
 ---
 
@@ -1271,9 +1287,11 @@ var currentRequestDialog: Dialog
 
 
 
+
 ---
 
 ### Methods
+
 <a id="undefined"></a>
 
 #### handleAuthorization
@@ -1339,6 +1357,7 @@ function receiveMessage(event: MessageEvent)
 
 
 
+
 ---
 
 
@@ -1375,7 +1394,14 @@ new LocalDialogSubprovider(opts?: any): LocalDialogSubprovider
 
 ---
 
+### Properties
+
+
+
+---
+
 ### Methods
+
 <a id="undefined"></a>
 
 #### handleAuthorization
@@ -1400,6 +1426,7 @@ function handleAuthorization(payload: any, next: any, end: any)
 | payload | `any`   |   |
 | next | `any`   |   |
 | end | `any`   |   |
+
 
 
 
@@ -2401,7 +2428,7 @@ new BitskiEngine(options: any): BitskiEngine
 ```typescript
 function send(payload: JSONRPCRequestPayload)
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L31)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L34)*</small>
 
 
 
@@ -2433,6 +2460,142 @@ function send(payload: JSONRPCRequestPayload)
 * Web3ProviderEngine
 ##### Implements
 * Provider
+
+---
+
+<a id="undefined"></a>
+
+##  NonceTrackerSubprovider
+
+
+
+
+
+
+<a id="undefined"></a>
+### constructor
+```typescript
+new NonceTrackerSubprovider(): NonceTrackerSubprovider
+```
+##### Return Value
+[NonceTrackerSubprovider](#)
+
+
+
+
+
+---
+
+### Properties
+
+
+
+---
+
+### Methods
+
+<a id="undefined"></a>
+
+#### handleRequest
+
+
+
+
+##### Declaration
+
+
+```typescript
+function handleRequest(payload: any, next: any, end: any)
+```
+<small>*Defined in [provider/src/subproviders/nonce-tracker.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/nonce-tracker.ts#L17)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| payload | `any`   |   |
+| next | `any`   |   |
+| end | `any`   |   |
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+### Relationships
+##### Extends
+* Subprovider
+
+---
+
+<a id="undefined"></a>
+
+##  TransactionValidatorSubprovider
+
+
+
+
+
+
+### Properties
+
+
+
+---
+
+### Methods
+
+<a id="undefined"></a>
+
+#### handleRequest
+
+
+
+
+##### Declaration
+
+
+```typescript
+function handleRequest(payload: any, next: any, end: any)
+```
+<small>*Defined in [provider/src/subproviders/transaction-validator.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/transaction-validator.ts#L10)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| payload | `any`   |   |
+| next | `any`   |   |
+| end | `any`   |   |
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+### Relationships
+##### Extends
+* Subprovider
 
 ---
 
