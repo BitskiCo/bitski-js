@@ -66,6 +66,9 @@ export class IFrameSubprovider extends AuthorizationHandler {
         switch (method) {
         case 'eth_sendTransaction':
             return this.webBaseUrl + '/eth-send-transaction';
+        case 'eth_sign':
+        case 'personal_sign':
+            return this.webBaseUrl + '/eth-sign';
         default:
             return undefined;
         }

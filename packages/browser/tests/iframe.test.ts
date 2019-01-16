@@ -80,13 +80,17 @@ afterEach(() => {
 });
 
 describe('it handles sends with authorization', () => {
-    test('iframe: should show approval dialog by default', (done) => {
+
+    test('iframe: should show approval dialog for eth_sendTransaction', (done) => {
         const authProvider = createAuthProvider();
         const instance = createInstance(authProvider);
         const engine = new MockEngine();
         engine.addProvider(instance);
 
         const request = createRequest('eth_sendTransaction', []);
+
+        // @ts-ignore
+        const spy = jest.spyOn(instance, 'urlForMethod');
 
         return prepareAuthenticatedSession(authProvider).then((user) => {
             const mockResponse = {
@@ -107,6 +111,82 @@ describe('it handles sends with authorization', () => {
             return engine.sendAsync(request, (error, value) => {
                 expect(error).toBeNull();
                 expect(value.result).toBe('foo');
+                expect(spy).toBeCalled();
+                expect(spy.mock.results[0].value).toBe('https://www.bitski.com/eth-send-transaction');
+                done();
+            });
+        });
+    });
+
+    test('iframe: should show approval dialog for eth_sign', (done) => {
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+        const engine = new MockEngine();
+        engine.addProvider(instance);
+
+        const request = createRequest('eth_sign', []);
+
+        // @ts-ignore
+        const spy = jest.spyOn(instance, 'urlForMethod');
+
+        return prepareAuthenticatedSession(authProvider).then((user) => {
+            const mockResponse = {
+                id: 0,
+                jsonrpc: '2.0',
+                result: 'foo',
+            };
+
+            setTimeout(() => {
+                const message = new MessageEvent('worker', {
+                    data: mockResponse,
+                    origin: 'https://www.bitski.com',
+                });
+
+                instance.receiveMessage(message);
+            }, GET_ACCESS_TOKEN_TIMEOUT);
+
+            return engine.sendAsync(request, (error, value) => {
+                expect(error).toBeNull();
+                expect(value.result).toBe('foo');
+                expect(spy).toBeCalled();
+                expect(spy.mock.results[0].value).toBe('https://www.bitski.com/eth-sign');
+                done();
+            });
+        });
+    });
+
+    test('iframe: should show approval dialog for personal_sign', (done) => {
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+        const engine = new MockEngine();
+        engine.addProvider(instance);
+
+        const request = createRequest('personal_sign', []);
+
+        // @ts-ignore
+        const spy = jest.spyOn(instance, 'urlForMethod');
+
+        return prepareAuthenticatedSession(authProvider).then((user) => {
+            const mockResponse = {
+                id: 0,
+                jsonrpc: '2.0',
+                result: 'foo',
+            };
+
+            setTimeout(() => {
+                const message = new MessageEvent('worker', {
+                    data: mockResponse,
+                    origin: 'https://www.bitski.com',
+                });
+
+                instance.receiveMessage(message);
+            }, GET_ACCESS_TOKEN_TIMEOUT);
+
+            return engine.sendAsync(request, (error, value) => {
+                expect(error).toBeNull();
+                expect(value.result).toBe('foo');
+                expect(spy).toBeCalled();
+                expect(spy.mock.results[0].value).toBe('https://www.bitski.com/eth-sign');
                 done();
             });
         });
@@ -182,9 +262,9 @@ describe('it handles sends with authorization', () => {
             });
 
             setTimeout(() => {
-                //@ts-ignore
+                // @ts-ignore
                 if (instance.currentTransactionDialog) {
-                    //@ts-ignore
+                    // @ts-ignore
                     const dismissMock = instance.currentTransactionDialog.dismiss = jest.fn();
 
                     engine.sendAsync(request, () => {});
