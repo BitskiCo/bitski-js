@@ -39,6 +39,20 @@ declare module "web3-provider-engine" {
     export = Web3ProviderEngine;
 }
 
+declare module "web3-provider-engine/subproviders/subprovider" {
+    import { JSONRPCRequestPayload, JSONRPCResponsePayload } from "ethereum-protocol";
+    import Web3ProviderEngine from "web3-provider-engine";
+
+    class Subprovider {
+        engine?: Web3ProviderEngine;
+        setEngine(engine: Web3ProviderEngine);
+        handleRequest(payload: JSONRPCRequestPayload, next: () => void, end: () => void);
+        emitPayload(payload: JSONRPCRequestPayload, callback: (error: null | Error, response: JSONRPCResponsePayload) => void);
+    }
+
+    export = Subprovider;
+}
+
 // declare module "web3-provider-engine/subproviders/nonce-tracker";
 // declare module "web3-provider-engine/subproviders/hooked-wallet";
 // declare module "web3-provider-engine/subproviders/filters";
