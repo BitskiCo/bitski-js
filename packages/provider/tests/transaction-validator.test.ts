@@ -106,3 +106,25 @@ test('it only updates values that are missing', (done) => {
   });
 
 });
+
+test('it ignores non-transaction requests', (done) => {
+  const { engine, provider } = createEngine();
+
+  engine.addProvider(new FixtureSubprovider({
+    eth_accounts: [],
+  }));
+
+  const request = {
+    id: 1,
+    jsonrpc: '2.0',
+    method: 'eth_accounts',
+    params: [],
+  };
+
+  engine.sendAsync(request, (err, result) => {
+    expect(err).toBeNull();
+    expect(result.result).toEqual([]);
+    done();
+  });
+
+});
