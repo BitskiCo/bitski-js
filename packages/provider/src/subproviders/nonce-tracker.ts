@@ -22,6 +22,9 @@ export class NonceTrackerSubprovider extends Subprovider {
       case 'eth_sendTransaction':
         this.handleSendTransactionRequest(payload, next);
         return;
+      default:
+        next();
+        return;
     }
   }
 

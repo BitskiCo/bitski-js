@@ -80,4 +80,26 @@ test('it updates nonce when transaction is successful', (done) => {
     expect(provider.nonceCache.get('0xf00')).toBe('0x02');
     done();
   });
-}
+});
+
+test('it ignores irrellevant requests', (done) => {
+  const { engine, provider } = createEngine();
+
+  engine.addProvider(new FixtureSubprovider({
+    eth_accounts: [],
+  }));
+
+  const request = {
+    id: 1,
+    jsonrpc: '2.0',
+    method: 'eth_accounts',
+    params: [],
+  };
+
+  engine.sendAsync(request, (err, result) => {
+    expect(err).toBeNull();
+    expect(result.result).toEqual([]);
+    done();
+  });
+
+});
