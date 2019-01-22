@@ -6,6 +6,7 @@ The official Bitski Javascript SDK for the browser. Bitski connects your DApp wi
 
 *Note: These docs are for version 0.2.x. Upgrading from 0.1.x? Please see our [Migration Guide](https://github.com/BitskiCo/bitski-js/tree/develop/MIGRATING.md)*
 
+
 ### Packages
 
 This repo consists of 2 packages:
@@ -405,3 +406,6 @@ if (window.ethereum) {
   window.web3 = new Web3(bitskiProvider);
 }
 ```
+
+### Report Vulnerabilities
+Bitski provides a “bug bounty” to engage with the security researchers in the community. If you have found a vulnerability in our product or service, please [submit a vulnerability report](https://www.bitski.com/bounty) to the Bitski security team.
