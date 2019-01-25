@@ -1,34 +1,14 @@
-import { AuthenticatedCacheSubprovider } from '../src/subproviders/authenticated-cache';
-import { InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
+import { AuthenticatedCacheSubprovider } from '../src/subproviders/authenticated-cache';
 
 const mockUser = {
-  access_token: 'test-access-token',
-  expired: false,
-  expires_at: Math.floor(Date.now() / 1000) + 60,
-  expires_in: 60,
-  id_token: 'test-id-token',
-  profile: {
-    accounts: ['test-account']
-  },
-  scope: 'openid',
-  scopes: [],
-  session_state: null,
-  state: null,
-  toStorageString: jest.fn().mockReturnValue('{ "id_token": "test-id-token", "session_state": "test-session-state", "access_token": "test-access-token" }'),
-  token_type: '',
+  accounts: ['test-account'],
 };
 
 const clientID = 'test-client-id';
 
 function createAuthProvider(): OpenidAuthProvider {
-  const store = new InMemoryWebStorage();
-  const stateStore = new WebStorageStateStore({ prefix: 'bitski.', store });
-  const otherSettings = {
-    stateStore,
-    userStore: stateStore,
-  };
-  return new OpenidAuthProvider(clientID, '', otherSettings);
+  return new OpenidAuthProvider(clientID, '');
 }
 
 describe('authorization handler', () => {
@@ -37,19 +17,19 @@ describe('authorization handler', () => {
     const authProvider = createAuthProvider();
     const provider = new AuthenticatedCacheSubprovider(authProvider);
     const payload = {
-      jsonrpc: '2.0',
       id: 0,
+      jsonrpc: '2.0',
       method: 'foo',
-      params: []
+      params: [],
     };
 
     const next = () => {
       done();
-    }
+    };
 
     const end = (error, value) => {
       done.fail('end() should not be called');
-    }
+    };
 
     provider.handleRequest(payload, next, end);
   });
@@ -64,19 +44,19 @@ describe('authorization handler', () => {
     const provider = new AuthenticatedCacheSubprovider(authProvider);
 
     const payload = {
-      jsonrpc: '2.0',
       id: 0,
+      jsonrpc: '2.0',
       method: 'eth_accounts',
-      params: []
+      params: [],
     };
 
     const next = () => {
       done();
-    }
+    };
 
     const end = (error, value) => {
       done.fail('end() should not be called');
-    }
+    };
 
     provider.handleRequest(payload, next, end);
   });
@@ -87,25 +67,25 @@ describe('authorization handler', () => {
     const authProvider = createAuthProvider();
 
     const provider = new AuthenticatedCacheSubprovider(authProvider);
-    //@ts-ignore
+    // @ts-ignore
     provider.cachedValues.set('eth_accounts', ['1234']);
 
     const payload = {
-      jsonrpc: '2.0',
       id: 0,
+      jsonrpc: '2.0',
       method: 'eth_accounts',
-      params: []
+      params: [],
     };
 
     const next = () => {
       done.fail('next() should not have been called');
-    }
+    };
 
     const end = (error, value) => {
       expect(error).toBeUndefined();
       expect(value).toEqual(['1234']);
       done();
-    }
+    };
 
     provider.handleRequest(payload, next, end);
   });
@@ -120,21 +100,21 @@ describe('authorization handler', () => {
     const provider = new AuthenticatedCacheSubprovider(authProvider);
 
     const payload = {
-      jsonrpc: '2.0',
       id: 0,
+      jsonrpc: '2.0',
       method: 'eth_accounts',
-      params: []
+      params: [],
     };
 
     const next = () => {
       done.fail('next() should not have been called');
-    }
+    };
 
     const end = (error, value) => {
       expect(error).toBeUndefined();
       expect(value).toEqual(['test-account']);
       done();
-    }
+    };
 
     provider.handleRequest(payload, next, end);
   });
@@ -143,26 +123,26 @@ describe('authorization handler', () => {
     const authProvider = createAuthProvider();
 
     // getUser will return user with no accounts value
-    let user = mockUser;
-    delete user.profile.accounts;
+    const user = mockUser;
+    delete user.accounts;
     const getUserSpy = jest.spyOn(authProvider, 'getUser').mockResolvedValue(user);
 
     const provider = new AuthenticatedCacheSubprovider(authProvider);
 
     const payload = {
-      jsonrpc: '2.0',
       id: 0,
+      jsonrpc: '2.0',
       method: 'eth_accounts',
-      params: []
+      params: [],
     };
 
     const next = () => {
       done();
-    }
+    };
 
     const end = (error, value) => {
       done.fail('end() should not be called');
-    }
+    };
 
     provider.handleRequest(payload, next, end);
   });
@@ -177,21 +157,21 @@ describe('authorization handler', () => {
     const provider = new AuthenticatedCacheSubprovider(authProvider);
 
     const payload = {
-      jsonrpc: '2.0',
       id: 0,
+      jsonrpc: '2.0',
       method: 'eth_accounts',
+      params: [],
       skipCache: true,
-      params: []
     };
 
     const next = () => {
       expect(getUserSpy).not.toHaveBeenCalled();
       done();
-    }
+    };
 
     const end = (error, value) => {
       done.fail('end() should not be called');
-    }
+    };
 
     provider.handleRequest(payload, next, end);
   });
@@ -206,20 +186,20 @@ describe('authorization handler', () => {
     const provider = new AuthenticatedCacheSubprovider(authProvider);
 
     const payload = {
-      jsonrpc: '2.0',
       id: 0,
+      jsonrpc: '2.0',
       method: 'eth_accounts',
-      params: []
+      params: [],
     };
 
     const next = () => {
       expect(getUserSpy).toHaveBeenCalled();
       done();
-    }
+    };
 
     const end = (error, value) => {
       done.fail('end() should not be called');
-    }
+    };
 
     provider.handleRequest(payload, next, end);
   });

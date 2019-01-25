@@ -1,6 +1,6 @@
 import Web3ProviderEngine from 'web3-provider-engine';
-import { NonceTrackerSubprovider } from '../src/subproviders/nonce-tracker';
 import FixtureSubprovider from 'web3-provider-engine/subproviders/fixture';
+import { NonceTrackerSubprovider } from '../src/subproviders/nonce-tracker';
 
 function createEngine() {
   const engine = new Web3ProviderEngine();
@@ -26,7 +26,6 @@ test('it forwards requests when cache is empty', (done) => {
   };
 
   engine.sendAsync(request, (err, result) => {
-    console.log(result);
     expect(result.result).toBe('0x0');
     expect(err).toBeNull();
     expect(provider.nonceCache.get('0xf00')).toBe('0x0');
@@ -47,7 +46,6 @@ test('it responds from cache when cache is present', (done) => {
   provider.nonceCache.set('0xf00', '0x01');
 
   engine.sendAsync(request, (err, result) => {
-    console.log(result);
     expect(result.result).toBe('0x01');
     expect(err).toBeNull();
     expect(provider.nonceCache.get('0xf00')).toBe('0x01');

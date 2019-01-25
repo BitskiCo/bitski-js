@@ -1,7 +1,7 @@
 import mock from 'xhr-mock';
 import { AuthenticatedFetchSubprovider } from '../src/index';
-import { MockEngine } from './util/mock-engine';
 import { AccessTokenProvider } from '../src/index';
+import { MockEngine } from './util/mock-engine';
 
 class MockProvider implements AccessTokenProvider {
   public getAccessToken(): Promise<string> {
@@ -57,7 +57,7 @@ describe('handles authenticated sends', () => {
     return engine.sendAsync(request, (error, value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];
-      expect(params.headers['Authorization']).toBe('Bearer test-access-token');
+      expect(params.headers.Authorization).toBe('Bearer test-access-token');
       expect(params.headers['X-API-KEY']).toBe('test-client-id');
       expect(error).toBeNull();
       expect(value.result).toBe('foo');
@@ -82,7 +82,7 @@ describe('handles authenticated sends', () => {
     return engine.sendAsync(request, (error, value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];
-      expect(params.headers['Authorization']).toBeUndefined();
+      expect(params.headers.Authorization).toBeUndefined();
       expect(params.headers['X-API-KEY']).toBe('test-client-id');
       expect(error).toBeNull();
       expect(value.result).toBe('foo');

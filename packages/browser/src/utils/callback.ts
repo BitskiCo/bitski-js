@@ -1,45 +1,11 @@
 /**
  * Automatically handles finalizing the oauth sign in process with the Bitski SDK
  */
-function processCallback() {
+export function processCallback() {
   if (window.opener) {
-    notifyOpener(window.location.href);
-  } else if (window.parent && window.parent !== window) {
-    notifyParent(window.location.href);
+    notifyOpener(window.location);
   } else {
-    throw new Error('Callback opened on invalid window');
-  }
-}
-
-/**
- * Extracts query params from the hash of the url
- * @param url the url to parse
- */
-function parseUrlParams(url: string): any {
-  if (!url.includes('#')) { throw new Error('No params found in result'); }
-
-  const params = url.split('#').pop();
-
-  if (!params) { throw new Error('No params found in result'); }
-
-  return params.split('&').reduce((prev, item) => {
-    const [key, value] = item.split('=');
-    if (key && value) {
-      prev[decodeURIComponent(key)] = decodeURIComponent(value);
-    }
-    return prev;
-  }, {});
-}
-
-/**
- * Notifies the parent window when in an iframe
- * @param url the url that contains the query params
- */
-function notifyParent(url: string): void {
-  if (window.parent && window !== window.parent) {
-    window.parent.postMessage(url, location.protocol + '//' + location.host);
-  } else {
-    throw new Error('Could not notify parent');
+    throw new Error('Parent window could not be found');
   }
 }
 
@@ -47,7 +13,7 @@ function notifyParent(url: string): void {
  * Notifies the opener when in a popup
  * @param url the url that contains the query params
  */
-function notifyOpener(url: string): void {
+function notifyOpener(url: Location): void {
   if (window.opener) {
     if (url) {
       // parse url to get state
@@ -69,9 +35,31 @@ function notifyOpener(url: string): void {
   }
 }
 
-// Call the callback immediately
-try {
-  processCallback();
-} catch (error) {
-  console.error('Error logging in: ' + error); // tslint:disable-line
+/**
+ * Extracts query params from the hash of the url
+ * @param url the url to parse
+ */
+export function parseUrlParams(url: Location): any {
+  let params: string | undefined;
+
+  if (url.href.includes('#')) {
+    params = extractQuery(url.hash);
+  } else if (url.href.includes('?')) {
+    params = url.search.split('?').pop();
+  }
+
+  if (!params) { throw new Error('No params found in result'); }
+
+  return params.split('&').reduce((prev, item) => {
+    const [key, value] = item.split('=');
+    if (key && value) {
+      prev[decodeURIComponent(key)] = decodeURIComponent(value);
+    }
+    return prev;
+  }, {});
+}
+
+function extractQuery(url): string {
+  if (!url.includes('#')) { throw new Error('No params found in result'); }
+  return url.split('#').pop();
 }

@@ -12,13 +12,16 @@
   "version": "0.3.0",
   "scripts": {
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
-    "bundle": "browserify -s Bitski -e dist/esm/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.bundle.js",
+    "bundle": "npm run bundle:main && npm run bundle:callback && npm run minify",
+    "bundle:main": "browserify -s Bitski -e dist/esm/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.bundle.js",
+    "bundle:callback": "browserify dist/esm/callback.js -t [ babelify --presets [ es2015 ] ] > dist/callback.js",
+    "minify": "terser dist/bitski.bundle.js -o dist/bitski.min.js",
     "prepare": "npm run build",
     "prepack": "npm run build && npm run bundle"
   },
   "dependencies": {
+    "@openid/appauth": "^1.2.0",
     "bitski-provider": "^0.3.0",
-    "oidc-client": ">=1.5.2",
     "web3-provider-engine": "^14.1.0"
   },
   "devDependencies": {
@@ -41,6 +44,9 @@
       "node_modules/(?!(bitski-provider)/)"
     ],
     "preset": "ts-jest",
+    "setupFiles": [
+      "./tests/util/setup-jest.js"
+    ],
     "globals": {
       "ts-jest": {
         "diagnostics": false
