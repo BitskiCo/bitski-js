@@ -52,6 +52,11 @@ export class TokenStore {
     this.accessToken = parsedToken;
   }
 
+  public invalidateCurrentToken() {
+    this.accessToken = undefined;
+    localStorage.removeItem(this.accessTokenKey);
+  }
+
   public clear() {
     this.accessToken = undefined;
     localStorage.removeItem(this.refreshTokenKey);

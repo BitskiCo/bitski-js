@@ -198,26 +198,54 @@ describe('authentication', () => {
     });
   });
 
+  test('should submit redirect callback', () => {
+    const bitski = createInstance();
+    // @ts-ignore
+    const spy = jest.spyOn(bitski.authProvider, 'redirectCallback');
+    bitski.redirectCallback();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  test('can add and remove signout callbacks', () => {
+    expect.assertions(3);
+    const bitski = createInstance();
+    // @ts-ignore
+    expect(bitski.signoutHandlers.length).toEqual(0);
+    const callback = jest.fn();
+    bitski.addSignOutHandler(callback);
+    // @ts-ignore
+    expect(bitski.signoutHandlers.length).toEqual(1);
+    bitski.removeSignOutHandler(callback);
+    // @ts-ignore
+    expect(bitski.signoutHandlers.length).toEqual(0);
+  });
+
+  test('signout callbacks are called upon sign out', () => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    // @ts-ignore
+    jest.spyOn(bitski.authProvider.oauthManager, 'requestSignOut').mockResolvedValue({});
+    const callback = jest.fn();
+    bitski.addSignOutHandler(callback);
+    return bitski.signOut().then(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+  });
+
 });
 
-test('should submit redirect callback', () => {
-  const bitski = createInstance();
-  // @ts-ignore
-  const spy = jest.spyOn(bitski.authProvider, 'redirectCallback');
-  bitski.redirectCallback();
-  expect(spy).toHaveBeenCalled();
-});
+describe('connect button', () => {
+  test('should be able to create connect button', () => {
+    const bitski = createInstance();
+    const connectButton = bitski.getConnectButton();
+    expect(connectButton).toBeDefined();
+    expect(connectButton.element.onclick).toBeDefined();
+  });
 
-test('should be able to create connect button', () => {
-  const bitski = createInstance();
-  const connectButton = bitski.getConnectButton();
-  expect(connectButton).toBeDefined();
-  expect(connectButton.element.onclick).toBeDefined();
-});
-
-test('should be able to pass callback to connect button', () => {
-  const bitski = createInstance();
-  const callback = jest.fn();
-  const connectButton = bitski.getConnectButton(undefined, callback);
-  expect(connectButton.callback).toBe(callback);
+  test('should be able to pass callback to connect button', () => {
+    const bitski = createInstance();
+    const callback = jest.fn();
+    const connectButton = bitski.getConnectButton(undefined, callback);
+    expect(connectButton.callback).toBe(callback);
+  });
 });

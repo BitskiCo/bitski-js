@@ -331,6 +331,17 @@ describe('sign in or connect', () => {
 
 describe('sign out', () => {
 
+  test('should call signout callback', () => {
+    expect.assertions(1);
+    const authProvider = createInstance();
+    const spy = jest.fn();
+    authProvider.signOutCallback = spy;
+    jest.spyOn(authProvider.oauthManager, 'requestSignOut').mockResolvedValue({});
+    return authProvider.signOut().then(() => {
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+
   test('should request sign out via api', () => {
     expect.assertions(4);
     const authProvider = createInstance();
@@ -352,6 +363,20 @@ describe('sign out', () => {
     const spy = jest.spyOn(authProvider.oauthManager, 'requestSignOut');
     return authProvider.signOut().then(() => {
       expect(spy).not.toHaveBeenCalled();
+    });
+  });
+
+  test('should invalidate tokens when requested', () => {
+    expect.assertions(3);
+    const authProvider = createInstance();
+    const spy = jest.fn();
+    authProvider.signOutCallback = spy;
+    (authProvider.tokenStore as MockTokenStore).setToken(dummyToken);
+    (authProvider.tokenStore as MockTokenStore).setRefreshToken('test-refresh-token');
+    return authProvider.invalidateToken().then(() => {
+      expect(authProvider.tokenStore.currentToken).toBeUndefined();
+      expect(authProvider.tokenStore.refreshToken).toBeDefined();
+      expect(spy).toHaveBeenCalled();
     });
   });
 });
