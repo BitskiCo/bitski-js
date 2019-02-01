@@ -11,6 +11,7 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     public oauthManager: OAuthManager;
     public tokenStore: TokenStore;
     public userStore: UserStore;
+    public signOutCallback?: () => void;
 
     constructor(clientId: string, redirectUri: string, additionalScopes?: string[], opts?: any) {
         let settings: any = {
@@ -46,6 +47,16 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
             return this.refreshAccessToken();
         }
         return Promise.reject(new Error('Not signed in'));
+    }
+
+    public invalidateToken(): Promise<void> {
+        if (this.tokenStore.currentToken) {
+            this.tokenStore.invalidateCurrentToken();
+        }
+        if (this.signOutCallback) {
+            this.signOutCallback();
+        }
+        return Promise.resolve();
     }
 
     public refreshAccessToken(): Promise<string> {
@@ -119,6 +130,9 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
             this.tokenStore.clear();
             this.userStore.clear();
             return this.oauthManager.requestSignOut(token);
+        }
+        if (this.signOutCallback) {
+            this.signOutCallback();
         }
         return Promise.resolve();
     }

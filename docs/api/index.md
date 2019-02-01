@@ -651,6 +651,40 @@ getauthStatus(): AuthenticationStatus
 ### Methods
 <a id="undefined"></a>
 
+#### addSignOutHandler
+
+
+
+
+
+
+
+
+##### Declaration
+
+
+```typescript
+function addSignOutHandler(fn: function)
+```
+<small>*Defined in [browser/src/bitski.ts:172](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L172)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| fn | `function`   |   |
+
+
+
+
+
+
+
+
+<a id="undefined"></a>
+
 #### connect
 
 
@@ -666,7 +700,7 @@ getauthStatus(): AuthenticationStatus
 ```typescript
 function connect(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:147](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L147)*</small>
+<small>*Defined in [browser/src/bitski.ts:149](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L149)*</small>
 
 
 
@@ -696,7 +730,7 @@ function connect(): Promise<User>
 ```typescript
 function getAuthStatus(): Promise<AuthenticationStatus>
 ```
-<small>*Defined in [browser/src/bitski.ts:126](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L126)*</small>
+<small>*Defined in [browser/src/bitski.ts:128](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L128)*</small>
 
 
 
@@ -726,7 +760,7 @@ function getAuthStatus(): Promise<AuthenticationStatus>
 ```typescript
 function getConnectButton(options?: any, callback?: undefined | function): ConnectButton
 ```
-<small>*Defined in [browser/src/bitski.ts:96](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L96)*</small>
+<small>*Defined in [browser/src/bitski.ts:98](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L98)*</small>
 
 
 
@@ -765,7 +799,7 @@ function getConnectButton(options?: any, callback?: undefined | function): Conne
 ```typescript
 function getProvider(options?: ProviderOptions | string): BitskiEngine
 ```
-<small>*Defined in [browser/src/bitski.ts:72](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L72)*</small>
+<small>*Defined in [browser/src/bitski.ts:74](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L74)*</small>
 
 
 
@@ -803,7 +837,7 @@ function getProvider(options?: ProviderOptions | string): BitskiEngine
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:140](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L140)*</small>
+<small>*Defined in [browser/src/bitski.ts:142](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L142)*</small>
 
 
 
@@ -833,12 +867,46 @@ function getUser(): Promise<User>
 ```typescript
 function redirectCallback(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:161](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L161)*</small>
+<small>*Defined in [browser/src/bitski.ts:163](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L163)*</small>
 
 
 
 ##### Return Value
 `Promise<User>`
+
+
+
+
+
+
+
+<a id="undefined"></a>
+
+#### removeSignOutHandler
+
+
+
+
+
+
+
+
+##### Declaration
+
+
+```typescript
+function removeSignOutHandler(fn: function)
+```
+<small>*Defined in [browser/src/bitski.ts:180](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L180)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| fn | `function`   |   |
+
 
 
 
@@ -863,7 +931,7 @@ function redirectCallback(): Promise<User>
 ```typescript
 function signIn(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:133](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L133)*</small>
+<small>*Defined in [browser/src/bitski.ts:135](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L135)*</small>
 
 
 
@@ -893,7 +961,7 @@ function signIn(): Promise<User>
 ```typescript
 function signInRedirect()
 ```
-<small>*Defined in [browser/src/bitski.ts:154](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L154)*</small>
+<small>*Defined in [browser/src/bitski.ts:156](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L156)*</small>
 
 
 
@@ -919,7 +987,7 @@ function signInRedirect()
 ```typescript
 function signOut(): Promise<void>
 ```
-<small>*Defined in [browser/src/bitski.ts:168](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L168)*</small>
+<small>*Defined in [browser/src/bitski.ts:190](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L190)*</small>
 
 
 
@@ -949,7 +1017,7 @@ function signOut(): Promise<void>
 ```typescript
 function start(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:111](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L111)*</small>
+<small>*Defined in [browser/src/bitski.ts:113](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L113)*</small>
 
 
 
@@ -2028,6 +2096,15 @@ var oauthManager: OAuthManager
 
 <a id="undefined"></a>
 
+#### signOutCallback
+```javascript
+var signOutCallback: undefined | function
+```
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:14](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L14)*</small>
+
+
+<a id="undefined"></a>
+
 #### tokenStore
 ```javascript
 var tokenStore: TokenStore
@@ -2080,7 +2157,7 @@ getauthStatus(): AuthenticationStatus
 ```typescript
 function connect(): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:85](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L85)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:96](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L96)*</small>
 
 
 
@@ -2106,7 +2183,7 @@ function connect(): Promise<User>
 ```typescript
 function getAccessToken(): Promise<string>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:41](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L41)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:42](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L42)*</small>
 
 
 
@@ -2132,12 +2209,38 @@ function getAccessToken(): Promise<string>
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:91](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L91)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:102](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L102)*</small>
 
 
 
 ##### Return Value
 `Promise<User>`
+
+
+
+
+
+
+
+<a id="undefined"></a>
+
+#### invalidateToken
+
+
+
+
+##### Declaration
+
+
+```typescript
+function invalidateToken(): Promise<void>
+```
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:52](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L52)*</small>
+
+
+
+##### Return Value
+`Promise<void>`
 
 
 
@@ -2158,7 +2261,7 @@ function getUser(): Promise<User>
 ```typescript
 function redirectCallback(): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:109](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L109)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:120](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L120)*</small>
 
 
 
@@ -2184,7 +2287,7 @@ function redirectCallback(): Promise<User>
 ```typescript
 function refreshAccessToken(): Promise<string>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:51](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L51)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:62](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L62)*</small>
 
 
 
@@ -2210,7 +2313,7 @@ function refreshAccessToken(): Promise<string>
 ```typescript
 function signIn(method: OAuthSignInMethod): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:66](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L66)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:77](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L77)*</small>
 
 
 
@@ -2244,7 +2347,7 @@ function signIn(method: OAuthSignInMethod): Promise<User>
 ```typescript
 function signInOrConnect(signInMethod?: OAuthSignInMethod): Promise<User>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:95](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L95)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:106](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L106)*</small>
 
 
 
@@ -2278,7 +2381,7 @@ function signInOrConnect(signInMethod?: OAuthSignInMethod): Promise<User>
 ```typescript
 function signOut(): Promise<any>
 ```
-<small>*Defined in [browser/src/auth/openid-auth-provider.ts:116](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L116)*</small>
+<small>*Defined in [browser/src/auth/openid-auth-provider.ts:127](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/openid-auth-provider.ts#L127)*</small>
 
 
 
@@ -2510,6 +2613,28 @@ getrefreshToken(): string | undefined
 
 ```typescript
 function clear()
+```
+<small>*Defined in [browser/src/auth/token-store.ts:60](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/token-store.ts#L60)*</small>
+
+
+
+
+
+
+
+
+<a id="undefined"></a>
+
+#### invalidateCurrentToken
+
+
+
+
+##### Declaration
+
+
+```typescript
+function invalidateCurrentToken()
 ```
 <small>*Defined in [browser/src/auth/token-store.ts:55](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/auth/token-store.ts#L55)*</small>
 
@@ -3528,7 +3653,7 @@ new AuthenticatedFetchSubprovider(rpcUrl: string, debug: boolean, accessTokenPro
 ```typescript
 function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:49](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L49)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:59](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L59)*</small>
 
 
 
@@ -3560,7 +3685,7 @@ function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```typescript
 function handleRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:41](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L41)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:51](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L51)*</small>
 
 
 
@@ -3592,7 +3717,7 @@ function handleRequest(payload: any, next: any, end: any)
 ```typescript
 function handleUnauthenticatedRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:58](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L58)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:68](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L68)*</small>
 
 
 
@@ -3891,6 +4016,32 @@ function getAccessToken(): Promise<string>
 
 
 
+<a id="undefined"></a>
+
+#### invalidateToken
+
+
+
+
+##### Declaration
+
+
+```typescript
+function invalidateToken(): Promise<void>
+```
+<small>*Defined in [provider/src/auth/access-token-provider.ts:3](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/auth/access-token-provider.ts#L3)*</small>
+
+
+
+##### Return Value
+`Promise<void>`
+
+
+
+
+
+
+
 
 
 
@@ -3934,6 +4085,24 @@ var RETRIABLE_ERRORS: string[] =  [
 
 
 
+<a id="undefined"></a>
+
+#### «Const» UNAUTHORIZED_ERRORS
+
+
+```javascript
+var UNAUTHORIZED_ERRORS: string[] =  [
+    'Missing auth', // No token sent
+    'Invalid client id', // Wrong client id, or invalid access token
+    'Not Authorized',
+]
+```
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L23)*</small>
+
+
+
+
+
 
 ### Functions
 <a id="undefined"></a>
@@ -3949,7 +4118,7 @@ var RETRIABLE_ERRORS: string[] =  [
 ```typescript
 function isErrorRetriable(err: any): boolean
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L23)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:29](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L29)*</small>
 
 
 
@@ -3958,6 +4127,40 @@ function isErrorRetriable(err: any): boolean
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | err | `any`   |   |
+
+
+
+##### Return Value
+`boolean`
+
+
+
+
+
+
+
+<a id="undefined"></a>
+
+###  isUnauthorizedError
+
+
+
+
+##### Declaration
+
+
+```typescript
+function isUnauthorizedError(err: Error): boolean
+```
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L34)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| err | `Error`   |   |
 
 
 

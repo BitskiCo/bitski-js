@@ -42,6 +42,7 @@ export class Bitski {
   private engines = new Map<string, BitskiEngine>();
   private clientId: string;
   private authProvider: OpenidAuthProvider;
+  private signoutHandlers: Array<() => void> = [];
 
   /**
    * @param clientId OAuth Client ID
@@ -60,6 +61,7 @@ export class Bitski {
         this.injectStyles();
       });
     }
+    this.authProvider.signOutCallback = this.onSignOut.bind(this);
   }
 
   /**
@@ -163,6 +165,26 @@ export class Bitski {
   }
 
   /**
+   * Register a callback to be called on sign out. This is a good practice,
+   * since there may be situations where you are signed out unexpectedly.
+   * @param fn Your callback function
+   */
+  public addSignOutHandler(fn: () => void) {
+    this.signoutHandlers.push(fn);
+  }
+
+  /**
+   * Remove a registered signout callback
+   * @param fn Your callback function
+   */
+  public removeSignOutHandler(fn: () => void) {
+    const index = this.signoutHandlers.findIndex((item) => item === fn);
+    if (index >= 0) {
+      this.signoutHandlers.splice(index, 1);
+    }
+  }
+
+  /**
    * Sign the current user out of your application.
    */
   public signOut(): Promise<void> {
@@ -209,6 +231,12 @@ export class Bitski {
 
   private createRPCEngine(rpcUrl: string, options: ProviderOptions): BitskiEngine {
     return new BitskiDevelopmentEngine(options, rpcUrl);
+  }
+
+  private onSignOut() {
+    this.signoutHandlers.forEach((cb) => {
+      cb();
+    });
   }
 
   /**

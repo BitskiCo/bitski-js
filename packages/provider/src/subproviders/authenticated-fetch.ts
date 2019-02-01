@@ -20,9 +20,19 @@ const AUTHENTICATED_METHODS = [
     'eth_sign',
 ];
 
+const UNAUTHORIZED_ERRORS = [
+    'Missing auth', // No token sent
+    'Invalid client id', // Wrong client id, or invalid access token
+    'Not Authorized',
+];
+
 function isErrorRetriable(err) {
     const errMsg = err.toString();
     return RETRIABLE_ERRORS.some((phrase) => errMsg.includes(phrase));
+}
+
+function isUnauthorizedError(err: Error) {
+    return UNAUTHORIZED_ERRORS.some((phrase) => err.message.includes(phrase));
 }
 
 /*
@@ -108,6 +118,11 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
                     const errMsg = `FetchSubprovider - cannot complete request. All retries exhausted.\nOriginal Error:\n${err.toString()}\n\n`;
                     const retriesExhaustedErr = new Error(errMsg);
                     return end(retriesExhaustedErr);
+                }
+                if (err && isUnauthorizedError(err)) {
+                    return this.accessTokenProvider.invalidateToken().then(() => {
+                        return end(err);
+                    });
                 }
                 // otherwise continue normally
                 return end(err, result);
