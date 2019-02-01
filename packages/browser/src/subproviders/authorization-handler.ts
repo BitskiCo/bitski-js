@@ -1,4 +1,3 @@
-import JsonRpcError from 'json-rpc-error';
 import Subprovider from 'web3-provider-engine/subproviders/subprovider';
 
 const DEFAULT_AUTHORIZED_METHODS = ['eth_sendTransaction', 'eth_sign', 'eth_signTypedData', 'personal_sign'];
@@ -6,9 +5,9 @@ const DEFAULT_AUTHORIZED_METHODS = ['eth_sendTransaction', 'eth_sign', 'eth_sign
 /*
  * Base Subprovider that requests authorization for specific methods. Meant to be extended.
  */
-export class AuthorizationHandler extends Subprovider {
+export abstract class AuthorizationHandler extends Subprovider {
 
-  private authorizedMethods: [string];
+  protected authorizedMethods: string[];
 
   constructor(opts?: any) {
     super();
@@ -23,12 +22,9 @@ export class AuthorizationHandler extends Subprovider {
     next();
   }
 
-  public handleAuthorization(payload, next, end): void {
-    // Default implementation
-    end(new JsonRpcError.InternalError());
-  }
+  public abstract handleAuthorization(payload, next, end): void;
 
-  private requiresAuthorization(method: string): boolean {
+  protected requiresAuthorization(method: string): boolean {
     return this.authorizedMethods.includes(method);
   }
 

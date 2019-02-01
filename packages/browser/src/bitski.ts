@@ -1,11 +1,17 @@
 import { BitskiEngine } from 'bitski-provider';
-import { Log, User } from 'oidc-client';
-import { OAuthSignInMethod } from './auth/auth-provider';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
+import { User } from './auth/user';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
 import css from './styles/index';
+import { processCallback } from './utils/callback';
+
+export enum OAuthSignInMethod {
+  Redirect = 'REDIRECT',
+  Popup = 'POPUP',
+  Silent = 'SILENT', // Deprecated
+}
 
 export enum AuthenticationStatus {
   Connected = 'CONNECTED',
@@ -13,10 +19,26 @@ export enum AuthenticationStatus {
   NotConnected = 'NOT_CONNECTED',
 }
 
+export { ConnectButtonSize };
+
+export interface ProviderOptions {
+  networkName?: string;
+  rpcUrl?: string;
+  webBaseUrl?: string;
+  pollingInterval?: number;
+}
+
 /**
  * Bitski SDK
  */
 export class Bitski {
+  /**
+   * Alternative to using our static callback.html file. Call this from your own redirect page.
+   */
+  public static callback(): void {
+    processCallback();
+  }
+
   private engines = new Map<string, BitskiEngine>();
   private clientId: string;
   private authProvider: OpenidAuthProvider;
@@ -24,11 +46,13 @@ export class Bitski {
   /**
    * @param clientId OAuth Client ID
    * @param redirectUri Redirect uri, defaults to the current url. This should be the location of your callback html file.
+   * @param additionalScopes To use custom scopes, add them here. The default value is ['offline'].
+   * Note: Make sure your app is approved for the scopes you are requesting first.
    * @param options Other OAuth settings. Don't change these unless you know what you are doing.
    */
-  constructor(clientId: string, redirectUri?: string, options?: any) {
+  constructor(clientId: string, redirectUri?: string, additionalScopes?: string[], options?: any) {
     this.clientId = clientId;
-    this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, options);
+    this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, additionalScopes, options);
     if (document && document.body) {
       this.injectStyles();
     } else {
@@ -40,32 +64,23 @@ export class Bitski {
 
   /**
    * Returns a new web3 provider for a given network.
-   * @param networkName optional name of the network to use, or host for a local provider. Defaults to mainnet.
    * @param options options for the provider
+   * @param options.networkName The network name to use (defaults to mainnet)
+   * @param options.rpcUrl Use this instead of networkName to use the SDK in a dev environment
    * @param options.pollingInterval minimum interval in milliseconds to poll for new blocks. default is 4000.
    */
-  public getProvider(networkName?: string, options?: any): BitskiEngine {
-    const existingProvider = this.engines.get(networkName || 'mainnet');
+  public getProvider(options?: ProviderOptions | string): BitskiEngine {
+    const normalizedOptions = this.normalizeProviderOptions(options);
+    const providerId = normalizedOptions.rpcUrl || normalizedOptions.networkName || 'mainnet';
+    const existingProvider = this.engines.get(providerId);
     if (existingProvider) {
       existingProvider.start();
       return existingProvider;
     }
-    let provider: BitskiEngine;
-    switch (networkName) {
-      case 'mainnet':
-      case 'rinkeby':
-      case 'kovan':
-      case undefined:
-        provider = new BitskiBrowserEngine(this.clientId, this.authProvider, networkName, options);
-        provider.start();
-        break;
-      default:
-        provider = new BitskiDevelopmentEngine(options, networkName);
-        provider.start();
-        break;
-    }
-    this.engines.set(networkName || 'mainnet', provider);
-    return provider;
+    const newProvider = this.createProvider(normalizedOptions);
+    newProvider.start();
+    this.engines.set(providerId, newProvider);
+    return newProvider;
   }
 
   /**
@@ -78,7 +93,7 @@ export class Bitski {
    * @param options.authMethod Login method to use. Defaults to popup.
    * @param callback Post-login callback. Called when sign in is complete. Not applicable for redirect login method.
    */
-  public getConnectButton(options?: any, callback?: (error?: Error, user?: User) => void): ConnectButton {
+  public getConnectButton(options?: any, callback?: (error?: Error, user?: any) => void): ConnectButton {
     let settings = {
       authMethod: OAuthSignInMethod.Popup,
       container: undefined,
@@ -98,10 +113,18 @@ export class Bitski {
   }
 
   /**
+   * Check the logged in state of the user
+   */
+  public get authStatus(): AuthenticationStatus {
+    return this.authProvider.authStatus;
+  }
+
+  /**
+   * DEPRECATED - use bitski.authStatus instead.
    * Check the logged in state of the user. Either connected (have an active session), expired (connected but needs new access token), or not connected.
    */
   public getAuthStatus(): Promise<AuthenticationStatus> {
-    return this.authProvider.getAuthStatus();
+    return Promise.resolve(this.authProvider.authStatus);
   }
 
   /**
@@ -112,7 +135,7 @@ export class Bitski {
   }
 
   /**
-   * Gets the current signed in user. Will return null if we are not signed in.
+   * Gets the current signed in user. Will reject if we are not signed in.
    */
   public getUser(): Promise<User> {
     return this.authProvider.getUser();
@@ -122,47 +145,21 @@ export class Bitski {
    * Connects to bitski to get a valid access token if possible.
    */
   public connect(): Promise<User> {
-    return this.authProvider.getAuthStatus().then((authStatus) => {
-      if (authStatus === AuthenticationStatus.Connected) {
-        return this.authProvider.getUser();
-      }
-      return this.authProvider.signIn(OAuthSignInMethod.Silent);
-    });
+    return this.authProvider.connect();
   }
 
   /**
    * Starts redirect sign in flow. This is an alternative flow to the popup that all takes place in the same browser window.
-   * @param redirectUri Optionally specify the url to be redirected to after login.
-   * By default it will redirect to the uri you passed when initializing the sdk, or the current url.
-   * Note that the exact uri you enter here must exactly match a redirect uri entered on the Bitski developer portal.
    */
-  public signInRedirect(redirectUri?: string): void {
-    let opts: any;
-    if (redirectUri) {
-      opts = {
-        redirect_uri: redirectUri,
-      };
-    }
-    this.authProvider.signIn(OAuthSignInMethod.Redirect, opts);
+  public signInRedirect(): void {
+    this.authProvider.signIn(OAuthSignInMethod.Redirect);
   }
 
   /**
-   * Called from your oauth redirect page.
-   * @param url Optionally provide the full callback url including the query params. Should only be needed in cases when window.location.href is not correct.
+   * Call from your oauth redirect page.
    */
-  public redirectCallback(url?: string): Promise<User> {
-    return this.authProvider.signInCallback(OAuthSignInMethod.Redirect, url);
-  }
-
-  /**
-   * Alternative to using our static callback.html file. Call this from your own redirect page.
-   */
-  public callback(): void {
-    if (window.parent !== window) {
-      this.authProvider.signInCallback(OAuthSignInMethod.Silent);
-    } else {
-      this.authProvider.signInCallback(OAuthSignInMethod.Popup);
-    }
+  public redirectCallback(): Promise<User> {
+    return this.authProvider.redirectCallback();
   }
 
   /**
@@ -173,17 +170,45 @@ export class Bitski {
     return this.authProvider.signOut();
   }
 
-  /**
-   * Set logger and log level for debugging purposes
-   * @param logger The logger to use (i.e. console). Must support methods info(), warn(), and error().
-   * @param level The desired log level.
-   * Use 0 for none (the default), 1 for errors, 2 for warnings, 3 for info, and 4 for debug.
-   */
-  public setLogger(logger: any, level?: number): void {
-    Log.logger = logger;
-    if (level) {
-      Log.level = level;
+  private createProvider(options: ProviderOptions): BitskiEngine {
+    if (options.rpcUrl && !options.networkName) {
+      return this.createRPCEngine(options.rpcUrl, options);
+    } else {
+      return this.createBitskiEngine(options.networkName || 'mainnet', options);
     }
+  }
+
+  private normalizeProviderOptions(options: ProviderOptions | string | undefined): ProviderOptions {
+    if (typeof options === 'string') {
+      if (options.includes('http')) {
+        // Passed in a url string
+        return {
+          rpcUrl: options,
+        };
+      } else {
+        // Passed in a network name
+        return {
+          networkName: options,
+        };
+      }
+    } else if (options) {
+      // Options is good to go already
+      if (options.networkName || options.rpcUrl) {
+        return options;
+      }
+    }
+    // Return the default value
+    return {
+      networkName: 'mainnet',
+    };
+  }
+
+  private createBitskiEngine(networkName: string, options: ProviderOptions): BitskiEngine {
+    return new BitskiBrowserEngine(this.clientId, this.authProvider, networkName, options.webBaseUrl, options.rpcUrl, options);
+  }
+
+  private createRPCEngine(rpcUrl: string, options: ProviderOptions): BitskiEngine {
+    return new BitskiDevelopmentEngine(options, rpcUrl);
   }
 
   /**

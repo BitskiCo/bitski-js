@@ -1,5 +1,5 @@
-import { User } from 'oidc-client';
-import { AuthProvider, OAuthSignInMethod } from '../auth/auth-provider';
+import { AuthProvider } from '../auth/auth-provider';
+import { OAuthSignInMethod } from '../bitski';
 
 /**
  * Sizing options for the Bitski connect button.
@@ -16,7 +16,7 @@ export enum ConnectButtonSize {
 export class ConnectButton {
   public element: HTMLElement;
   public size: ConnectButtonSize;
-  public callback?: (error?: Error, user?: User) => void;
+  public callback?: (error?: Error, user?: any) => void;
   private authProvider: AuthProvider;
   private authIntegrationType: OAuthSignInMethod;
 
@@ -29,7 +29,7 @@ export class ConnectButton {
     existingDiv?: HTMLElement,
     size: ConnectButtonSize = ConnectButtonSize.Medium,
     authIntegrationType: OAuthSignInMethod = OAuthSignInMethod.Popup,
-    callback?: (error?: Error, user?: User) => void,
+    callback?: (error?: Error, user?: any) => void,
   ) {
     this.authProvider = authProvider;
     this.size = size;
@@ -55,9 +55,9 @@ export class ConnectButton {
   }
 
   private signin() {
-    this.authProvider.signInOrConnect(this.authIntegrationType).then((user: User) => {
+    this.authProvider.signInOrConnect(this.authIntegrationType).then((user) => {
       if (this.callback) {
-        this.callback(undefined, user);
+        this.callback(undefined, { expired: false });
       }
     }).catch((error: Error) => {
       if (this.callback) {

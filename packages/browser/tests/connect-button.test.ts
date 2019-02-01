@@ -1,18 +1,11 @@
-import { InMemoryWebStorage, WebStorageStateStore } from 'oidc-client';
-import { OAuthSignInMethod } from '../src/auth/auth-provider';
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
+import { OAuthSignInMethod } from '../src/bitski';
 import { ConnectButton, ConnectButtonSize } from '../src/components/connect-button';
 
 const clientID = 'test-client-id';
 
 function createAuthProvider(): OpenidAuthProvider {
-  const store = new InMemoryWebStorage();
-  const stateStore = new WebStorageStateStore({ prefix: 'bitski.', store });
-  const otherSettings = {
-    stateStore,
-    userStore: stateStore,
-  };
-  return new OpenidAuthProvider(clientID, '', otherSettings);
+  return new OpenidAuthProvider(clientID, '');
 }
 test('it sets small attributes', () => {
   const authProvider = createAuthProvider();
@@ -43,17 +36,17 @@ test('it does not throw when no callback', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider);
   jest.spyOn(authProvider, 'signInOrConnect').mockResolvedValue({});
-  expect(() => { button['signin'](); }).not.toThrow();
+  expect(() => { button.signin(); }).not.toThrow();
 });
 
 test('it does not throw when received error and no callback', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider);
   jest.spyOn(authProvider, 'signInOrConnect').mockRejectedValue('foo');
-  expect(() => { button['signin'](); }).not.toThrow();
+  expect(() => { button.signin(); }).not.toThrow();
 });
 
-test('it calls the callback on success', done => {
+test('it calls the callback on success', (done) => {
   const authProvider = createAuthProvider();
   jest.spyOn(authProvider, 'signIn').mockResolvedValue({});
   const callback = (error, user) => {
@@ -62,7 +55,7 @@ test('it calls the callback on success', done => {
     done();
   };
   const button = new ConnectButton(authProvider, undefined, undefined, undefined, callback);
-  button['signin']();
+  button.signin();
 });
 
 test('it calls the callback on error', (done) => {
@@ -75,7 +68,7 @@ test('it calls the callback on error', (done) => {
     done();
   };
   button.callback = callback;
-  button['signin']();
+  button.signin();
 });
 
 test('it uses provided authentication mode', (done) => {
@@ -87,7 +80,7 @@ test('it uses provided authentication mode', (done) => {
     done();
     return Promise.resolve();
   });
-  button['signin']();
+  button.signin();
 });
 
 test('it can remove itself from the DOM', () => {
