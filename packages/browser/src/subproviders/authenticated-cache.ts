@@ -10,7 +10,7 @@ export class AuthenticatedCacheSubprovider extends Subprovider {
     private authProvider: AuthProvider;
     private cachedValues: Map<string, any>;
 
-    constructor(authProvider) {
+    constructor(authProvider: AuthProvider) {
         super();
         this.authProvider = authProvider;
         this.cachedValues = new Map<string, any>();
@@ -60,13 +60,14 @@ export class AuthenticatedCacheSubprovider extends Subprovider {
         }
     }
 
-    private getAccounts(): Promise<[string]> {
+    private getAccounts(): Promise<string[]> {
         // TODO: Move this to a subscription model and load into memory automatically
         return this.authProvider.getUser().then((user) => {
-            if (user && user.profile && user.profile.accounts) {
-                this.cachedValues.set('eth_accounts', user.profile.accounts);
-                return user.profile.accounts;
+            if (user.accounts) {
+                this.cachedValues.set('eth_accounts', user.accounts);
+                return user.accounts;
             }
+            throw new Error('Accounts not found on user');
         });
     }
 }

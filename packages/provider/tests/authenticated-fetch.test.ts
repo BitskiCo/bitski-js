@@ -1,11 +1,13 @@
-import mock from 'xhr-mock';
 import { AuthenticatedFetchSubprovider } from '../src/index';
-import { MockEngine } from './util/mock-engine';
 import { AccessTokenProvider } from '../src/index';
+import { MockEngine } from './util/mock-engine';
 
 class MockProvider implements AccessTokenProvider {
   public getAccessToken(): Promise<string> {
     return Promise.resolve('test-access-token');
+  }
+  public invalidateToken(): Promise<void> {
+    return Promise.resolve();
   }
 }
 
@@ -30,12 +32,8 @@ function createRequest(method: string, params: any[]): any {
 }
 
 beforeEach(() => {
-  mock.setup();
-  // fetch.resetMocks();
-});
-
-afterEach(() => {
-  mock.teardown();
+  // @ts-ignore
+  fetch.resetMocks();
 });
 
 describe('handles authenticated sends', () => {
@@ -57,7 +55,7 @@ describe('handles authenticated sends', () => {
     return engine.sendAsync(request, (error, value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];
-      expect(params.headers['Authorization']).toBe('Bearer test-access-token');
+      expect(params.headers.Authorization).toBe('Bearer test-access-token');
       expect(params.headers['X-API-KEY']).toBe('test-client-id');
       expect(error).toBeNull();
       expect(value.result).toBe('foo');
@@ -75,6 +73,7 @@ describe('handles authenticated sends', () => {
       jsonrpc: '2.0',
       result: 'foo',
     }));
+
     // @ts-ignore
     const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
     const request = createRequest('eth_peerCount', []);
@@ -82,10 +81,33 @@ describe('handles authenticated sends', () => {
     return engine.sendAsync(request, (error, value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];
-      expect(params.headers['Authorization']).toBeUndefined();
+      expect(params.headers.Authorization).toBeUndefined();
       expect(params.headers['X-API-KEY']).toBe('test-client-id');
       expect(error).toBeNull();
       expect(value.result).toBe('foo');
+      done();
+    });
+  });
+
+  test('unauthorized requests should request token invalidation', (done) => {
+    const provider = createFetchProvider();
+    const engine = createEngine(provider);
+
+    // @ts-ignore
+    fetch.mockResponse(JSON.stringify({
+      error: {
+        message: 'Not Authorized',
+      },
+      id: 0,
+      jsonrpc: '2.0',
+    }));
+    // @ts-ignore
+    const invalidateTokenSpy = jest.spyOn(provider.accessTokenProvider, 'invalidateToken');
+    const request = createRequest('eth_peerCount', []);
+
+    return engine.sendAsync(request, (error, value) => {
+      expect(invalidateTokenSpy).toHaveBeenCalled();
+      expect(error).toBeDefined();
       done();
     });
   });

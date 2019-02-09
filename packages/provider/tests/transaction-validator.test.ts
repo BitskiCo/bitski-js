@@ -1,6 +1,6 @@
 import Web3ProviderEngine from 'web3-provider-engine';
-import { TransactionValidatorSubprovider } from '../src/subproviders/transaction-validator';
 import FixtureSubprovider from 'web3-provider-engine/subproviders/fixture';
+import { TransactionValidatorSubprovider } from '../src/subproviders/transaction-validator';
 
 function createEngine() {
   const engine = new Web3ProviderEngine();
