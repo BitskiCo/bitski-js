@@ -1,3 +1,56 @@
+# Migrating from 0.3.x to 0.4.x
+
+Starting in version 0.4.x we switched OAuth libraries, offering us the ability to use refresh tokens, and providing an overall smaller package size. There are just a couple of changes needed to get your app working with this new version.
+
+## Updated callback script
+
+We had to make a couple of changes to our callback script. Please update your link to point at our new version:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.4.0/dist/callback.js"></script>
+```
+
+## Requesting scopes
+
+We made it slightly more obvious how to request custom scopes, and removed the old way. If you pass in custom scopes, make sure to include the "offline" scope as well, in order to receive refresh tokens.
+
+**Solution**:
+
+You can now pass in an array at the top level:
+
+```javascript
+import { Bitski } from 'bitski';
+const bitski = new Bitski('client-id', 'redirect-url', ['offline', 'email']);
+```
+
+## User object has been modified
+
+Our previous library had a different model for user. In most cases, you don't need to do anything with the user object, but if you were using it to get their user id, access token, or email address, you'll need to make a couple of changes.
+
+**Solution**:
+
+```javascript
+import { Bitski } from 'bitski';
+const bitski = new Bitski('client-id', 'redirect-url');
+// Access user id, or email address:
+const user = await bitski.getUser();
+const id = user.id // user id (previously user.profile.sub)
+const email = user.email // email (previously user.profile.email)
+
+// Get the access token
+const token = bitski.authProvider.tokenStore.currentToken;
+```
+
+## Silent renew has been removed
+
+Previously we renewed access tokens by using a silent login flow in a hidden iframe. This was never an ideal flow, and it has been replaced with refresh tokens. This shouldn't have any negative effects in your app unless you are using our library in a non-standard way.
+
+## Logger has been removed
+
+Our previous oauth library allowed you to pass in a logger object to get more context into what was happening in the oauth process. Our new library does not provide that option, so we have removed the `setLogger()` method.
+
+---
+
 # Migrating from 0.1.x to 0.2.x
 
 Version 0.2.x introduced some great improvements but has a few breaking changes. This guide will cover some tips for updating your code.

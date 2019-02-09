@@ -4,7 +4,7 @@
 
 The official Bitski Javascript SDK for the browser. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain. We currently support mainnet, as well as Kovan and Rinkeby test networks.
 
-*Note: These docs are for version 0.2.x. Upgrading from 0.1.x? Please see our [Migration Guide](https://github.com/BitskiCo/bitski-js/tree/develop/MIGRATING.md)*
+*Note: These docs are for version 0.4.x. Upgrading from 0.3.x or earlier? Please see our [Migration Guide](https://github.com/BitskiCo/bitski-js/tree/develop/MIGRATING.md)*
 
 
 ### Packages
@@ -74,7 +74,7 @@ Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.33/dist/web3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.3.0/dist/bitski.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.4.0/dist/bitski.min.js"></script>
 ```
 
 ### Starting the SDK
@@ -134,7 +134,7 @@ First, check the login status to see if you need to sign in or if the user is al
 There are 3 possible values:
 
 - *Connected*: The user has an active access token. No action is needed.
-- *Expired*: The user has previously logged in but does not have an access token.
+- *Expired*: The user is signed in but does not have a current access token
 - *NotConnected*: The user has not signed in before.
 
 If the status is Expired or NotConnected, you need to call either `start()` or `signIn()` to use wallet features.
@@ -160,7 +160,7 @@ import { Bitski } from 'bitski';
 Bitski.callback();
 ```
 
-_Note: The access token will be passed as a hash on the url (ie. #token=blah), which may conflict with existing hash-based navigation your app may be doing._
+_Note: The access token may be passed as a hash on the url (ie. #token=blah), which may conflict with existing hash-based navigation your app may be doing._
 
 
 #### Triggering sign in
