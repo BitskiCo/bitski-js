@@ -54,7 +54,7 @@ export class Bitski {
    */
   constructor(clientId: string, redirectUri?: string, additionalScopes?: string[], options?: any) {
     this.clientId = clientId;
-    this.sdkVersion = '0.4.0';
+    this.sdkVersion = '0.4.1';
     this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, additionalScopes, options);
     if (document && document.body) {
       this.injectStyles();
