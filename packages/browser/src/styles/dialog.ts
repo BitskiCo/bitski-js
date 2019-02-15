@@ -1,8 +1,5 @@
 /* tslint:disable */
 
-const closeSVG = 'PHN2ZyB3aWR0aD0iMTJweCIgaGVpZ2h0PSIxMnB4IiB2aWV3Qm94PSIwIDAgMTIgMTIiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHBhdGggZD0iTTcuODYzOTYxMDMsNS43NDI2NDA2OSBMMTEuMDQ1OTQxNSw4LjkyNDYyMTIgQzExLjYzMTcyOCw5LjUxMDQwNzY0IDExLjYzMTcyOCwxMC40NjAxNTUxIDExLjA0NTk0MTUsMTEuMDQ1OTQxNSBDMTAuNDYwMTU1MSwxMS42MzE3MjggOS41MTA0MDc2NCwxMS42MzE3MjggOC45MjQ2MjEyLDExLjA0NTk0MTUgTDUuNzQyNjQwNjksNy44NjM5NjEwMyBMMi41NjA2NjAxNywxMS4wNDU5NDE1IEMxLjk3NDg3MzczLDExLjYzMTcyOCAxLjAyNTEyNjI3LDExLjYzMTcyOCAwLjQzOTMzOTgyOCwxMS4wNDU5NDE1IEMtMC4xNDY0NDY2MDksMTAuNDYwMTU1MSAtMC4xNDY0NDY2MDksOS41MTA0MDc2NCAwLjQzOTMzOTgyOCw4LjkyNDYyMTIgTDMuNjIxMzIwMzQsNS43NDI2NDA2OSBMMC40MzkzMzk4MjgsMi41NjA2NjAxNyBDLTAuMTQ2NDQ2NjA5LDEuOTc0ODczNzMgLTAuMTQ2NDQ2NjA5LDEuMDI1MTI2MjcgMC40MzkzMzk4MjgsMC40MzkzMzk4MjggQzEuMDI1MTI2MjcsLTAuMTQ2NDQ2NjA5IDEuOTc0ODczNzMsLTAuMTQ2NDQ2NjA5IDIuNTYwNjYwMTcsMC40MzkzMzk4MjggTDUuNzQyNjQwNjksMy42MjEzMjAzNCBMOC45MjQ2MjEyLDAuNDM5MzM5ODI4IEM5LjUxMDQwNzY0LC0wLjE0NjQ0NjYwOSAxMC40NjAxNTUxLC0wLjE0NjQ0NjYwOSAxMS4wNDU5NDE1LDAuNDM5MzM5ODI4IEMxMS42MzE3MjgsMS4wMjUxMjYyNyAxMS42MzE3MjgsMS45NzQ4NzM3MyAxMS4wNDU5NDE1LDIuNTYwNjYwMTcgTDcuODYzOTYxMDMsNS43NDI2NDA2OSBaIiBmaWxsPSIjQ0NDRUQzIj48L3BhdGg+PC9zdmc+';
-const loadingSVG = 'PHN2ZyBmaWxsPSIjMDAwIiB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHZpZXdCb3g9IjAgMCAzOCAzOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCB4MT0iOC4wNDIlIiB5MT0iMCUiIHgyPSI2NS42ODIlIiB5Mj0iMjMuODY1JSIgaWQ9ImEiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMDAwIiBzdG9wLW9wYWNpdHk9IjAiIG9mZnNldD0iMCUiLz4KICAgICAgICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzAwMCIgc3RvcC1vcGFjaXR5PSIuNjMxIiBvZmZzZXQ9IjYzLjE0NiUiLz4KICAgICAgICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzAwIiBvZmZzZXQ9IjEwMCUiLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPC9kZWZzPgogICAgPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxIDEpIj4KICAgICAgICAgICAgPHBhdGggZD0iTTM2IDE4YzAtOS45NC04LjA2LTE4LTE4LTE4IiBpZD0iT3ZhbC0yIiBzdHJva2U9InVybCgjYSkiIHN0cm9rZS13aWR0aD0iMiI+PC9wYXRoPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+';
-
 const css = `
 #bitski-dialog-container {
   position: fixed;
@@ -37,7 +34,7 @@ const css = `
   pointer-events: auto;
 }
 .bitski-dialog .close-button {
-  background: transparent url('data:image/svg+xml;base64,${closeSVG}') no-repeat 50% 50%;
+  background: transparent url('https://cdn.bitskistatic.com/sdk/close.svg') no-repeat 50% 50%;
   position: absolute;
   right: 12px;
   top: 12px;
@@ -64,7 +61,7 @@ const css = `
 }
 .bitski-dialog-body.loading::after {
   content: "";
-  background: url('data:image/svg+xml;base64,${loadingSVG}') no-repeat 50% 50%;
+  background: url('https://cdn.bitskistatic.com/sdk/loading.svg') no-repeat 50% 50%;
   animation: rotate 600ms linear infinite;
   position: absolute;
   top: 50%;
