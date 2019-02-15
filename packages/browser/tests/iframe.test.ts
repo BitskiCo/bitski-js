@@ -222,12 +222,41 @@ describe('it handles sends with authorization', () => {
         setTimeout(() => {
             const message = new MessageEvent('worker', {
                 data: {
-                    foo: 'bar',
+                    id: 20,
+                    jsonrpc: '2.0',
+                    result: '0xf00',
                 },
                 origin: 'https://www.bitski.com',
             });
             instance.receiveMessage(message);
             expect(mismatchedRequestMock).not.toHaveBeenCalled();
+            done();
+        }, GET_ACCESS_TOKEN_TIMEOUT);
+    });
+
+    test('iframe: should not validate id if original request did not have an id', (done) => {
+        expect.assertions(1);
+
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+
+        const request = createRequest('eth_sendTransaction', []);
+        delete request.id;
+        const mismatchedRequestMock = jest.fn();
+
+        instance.currentRequest = [request, mismatchedRequestMock];
+
+        setTimeout(() => {
+            const message = new MessageEvent('worker', {
+                data: {
+                    id: 0,
+                    jsonrpc: '2.0',
+                    result: '0xf00',
+                },
+                origin: 'https://www.bitski.com',
+            });
+            instance.receiveMessage(message);
+            expect(mismatchedRequestMock).toHaveBeenCalled();
             done();
         }, GET_ACCESS_TOKEN_TIMEOUT);
     });
