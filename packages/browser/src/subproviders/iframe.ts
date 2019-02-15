@@ -1,5 +1,6 @@
 import { AccessTokenProvider } from 'bitski-provider';
 import JsonRpcError from 'json-rpc-error';
+import createPayload from 'web3-provider-engine/util/create-payload';
 import { Dialog } from '../components/dialog';
 import { AuthorizationHandler } from './authorization-handler';
 
@@ -14,12 +15,14 @@ export class IFrameSubprovider extends AuthorizationHandler {
     private networkName: string;
     private tokenProvider: AccessTokenProvider;
     private currentRequest?: Request;
+    private sdkVersion: string;
 
-    constructor(webBaseUrl: string, networkName: string, tokenProvider: AccessTokenProvider) {
+    constructor(webBaseUrl: string, networkName: string, tokenProvider: AccessTokenProvider, sdkVersion: string) {
         super();
         this.webBaseUrl = webBaseUrl;
         this.networkName = networkName;
         this.tokenProvider = tokenProvider;
+        this.sdkVersion = sdkVersion;
         window.addEventListener('message', this.receiveMessage.bind(this), false);
     }
 
@@ -32,7 +35,7 @@ export class IFrameSubprovider extends AuthorizationHandler {
     }
 
     public receiveMessage(event: MessageEvent): void {
-        if (event.origin !== this.webBaseUrl) {
+        if (!event.origin.includes('bitski.com')) {
             return;
         }
 
@@ -83,8 +86,9 @@ export class IFrameSubprovider extends AuthorizationHandler {
             return;
         }
 
-        const encodedPayload = btoa(JSON.stringify(payload));
-        const txnParams = `network=${this.networkName}&payload=${encodedPayload}&referrerAccessToken=${accessToken}`;
+        const newPayload = createPayload(payload);
+        const encodedPayload = btoa(JSON.stringify(newPayload));
+        const txnParams = `sdkVersion=${this.sdkVersion}&network=${this.networkName}&payload=${encodedPayload}&referrerAccessToken=${accessToken}`;
 
         const iframe = document.createElement('iframe');
         iframe.style.position = 'absolute';
