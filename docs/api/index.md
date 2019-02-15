@@ -666,7 +666,7 @@ getauthStatus(): AuthenticationStatus
 ```typescript
 function addSignOutHandler(fn: function)
 ```
-<small>*Defined in [browser/src/bitski.ts:172](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L172)*</small>
+<small>*Defined in [browser/src/bitski.ts:174](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L174)*</small>
 
 
 
@@ -700,7 +700,7 @@ function addSignOutHandler(fn: function)
 ```typescript
 function connect(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:149](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L149)*</small>
+<small>*Defined in [browser/src/bitski.ts:151](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L151)*</small>
 
 
 
@@ -730,7 +730,7 @@ function connect(): Promise<User>
 ```typescript
 function getAuthStatus(): Promise<AuthenticationStatus>
 ```
-<small>*Defined in [browser/src/bitski.ts:128](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L128)*</small>
+<small>*Defined in [browser/src/bitski.ts:130](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L130)*</small>
 
 
 
@@ -760,7 +760,7 @@ function getAuthStatus(): Promise<AuthenticationStatus>
 ```typescript
 function getConnectButton(options?: any, callback?: undefined | function): ConnectButton
 ```
-<small>*Defined in [browser/src/bitski.ts:98](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L98)*</small>
+<small>*Defined in [browser/src/bitski.ts:100](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L100)*</small>
 
 
 
@@ -799,7 +799,7 @@ function getConnectButton(options?: any, callback?: undefined | function): Conne
 ```typescript
 function getProvider(options?: ProviderOptions | string): BitskiEngine
 ```
-<small>*Defined in [browser/src/bitski.ts:74](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L74)*</small>
+<small>*Defined in [browser/src/bitski.ts:76](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L76)*</small>
 
 
 
@@ -837,7 +837,7 @@ function getProvider(options?: ProviderOptions | string): BitskiEngine
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:142](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L142)*</small>
+<small>*Defined in [browser/src/bitski.ts:144](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L144)*</small>
 
 
 
@@ -867,7 +867,7 @@ function getUser(): Promise<User>
 ```typescript
 function redirectCallback(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:163](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L163)*</small>
+<small>*Defined in [browser/src/bitski.ts:165](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L165)*</small>
 
 
 
@@ -897,7 +897,7 @@ function redirectCallback(): Promise<User>
 ```typescript
 function removeSignOutHandler(fn: function)
 ```
-<small>*Defined in [browser/src/bitski.ts:180](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L180)*</small>
+<small>*Defined in [browser/src/bitski.ts:182](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L182)*</small>
 
 
 
@@ -931,7 +931,7 @@ function removeSignOutHandler(fn: function)
 ```typescript
 function signIn(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:135](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L135)*</small>
+<small>*Defined in [browser/src/bitski.ts:137](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L137)*</small>
 
 
 
@@ -961,7 +961,7 @@ function signIn(): Promise<User>
 ```typescript
 function signInRedirect()
 ```
-<small>*Defined in [browser/src/bitski.ts:156](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L156)*</small>
+<small>*Defined in [browser/src/bitski.ts:158](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L158)*</small>
 
 
 
@@ -987,7 +987,7 @@ function signInRedirect()
 ```typescript
 function signOut(): Promise<void>
 ```
-<small>*Defined in [browser/src/bitski.ts:190](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L190)*</small>
+<small>*Defined in [browser/src/bitski.ts:192](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L192)*</small>
 
 
 
@@ -1017,7 +1017,7 @@ function signOut(): Promise<void>
 ```typescript
 function start(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:113](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L113)*</small>
+<small>*Defined in [browser/src/bitski.ts:115](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L115)*</small>
 
 
 
@@ -1072,7 +1072,7 @@ function callback()
 <a id="undefined"></a>
 ### constructor
 ```typescript
-new BitskiBrowserEngine(clientId: string, tokenProvider: AccessTokenProvider, networkName?: undefined | string, webBaseUrl?: undefined | string, rpcUrl?: undefined | string, options?: any): BitskiBrowserEngine
+new BitskiBrowserEngine(clientId: string, tokenProvider: AccessTokenProvider, sdkVersion: string, networkName?: undefined | string, webBaseUrl?: undefined | string, rpcUrl?: undefined | string, options?: any): BitskiBrowserEngine
 ```
 ##### Parameters
 
@@ -1080,6 +1080,7 @@ new BitskiBrowserEngine(clientId: string, tokenProvider: AccessTokenProvider, ne
 | ------ | ------ | ------ |
 | clientId | `string`   |   |
 | tokenProvider | `AccessTokenProvider`   |   |
+| sdkVersion | `string`   |   |
 | networkName _(Optional)_ | `undefined          ⎮string`   |   |
 | webBaseUrl _(Optional)_ | `undefined          ⎮string`   |   |
 | rpcUrl _(Optional)_ | `undefined          ⎮string`   |   |
@@ -1509,7 +1510,7 @@ function show()
 <a id="undefined"></a>
 ### constructor
 ```typescript
-new IFrameSubprovider(webBaseUrl: string, networkName: string, tokenProvider: AccessTokenProvider): IFrameSubprovider
+new IFrameSubprovider(webBaseUrl: string, networkName: string, tokenProvider: AccessTokenProvider, sdkVersion: string): IFrameSubprovider
 ```
 ##### Parameters
 
@@ -1518,6 +1519,7 @@ new IFrameSubprovider(webBaseUrl: string, networkName: string, tokenProvider: Ac
 | webBaseUrl | `string`   |   |
 | networkName | `string`   |   |
 | tokenProvider | `AccessTokenProvider`   |   |
+| sdkVersion | `string`   |   |
 
 
 
@@ -1537,7 +1539,7 @@ new IFrameSubprovider(webBaseUrl: string, networkName: string, tokenProvider: Ac
 ```javascript
 var currentRequestDialog: Dialog
 ```
-<small>*Defined in [browser/src/subproviders/iframe.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/iframe.ts#L12)*</small>
+<small>*Defined in [browser/src/subproviders/iframe.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/iframe.ts#L13)*</small>
 
 
 
@@ -1560,7 +1562,7 @@ var currentRequestDialog: Dialog
 ```typescript
 function handleAuthorization(payload: any, _: any, end: any)
 ```
-<small>*Defined in [browser/src/subproviders/iframe.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/iframe.ts#L26)*</small>
+<small>*Defined in [browser/src/subproviders/iframe.ts:29](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/iframe.ts#L29)*</small>
 
 
 
@@ -1593,7 +1595,7 @@ function handleAuthorization(payload: any, _: any, end: any)
 ```typescript
 function receiveMessage(event: MessageEvent)
 ```
-<small>*Defined in [browser/src/subproviders/iframe.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/iframe.ts#L34)*</small>
+<small>*Defined in [browser/src/subproviders/iframe.ts:37](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/iframe.ts#L37)*</small>
 
 
 
@@ -3299,7 +3301,7 @@ var sub: string
 ```javascript
 var Request: [any, any]
 ```
-<small>*Defined in [browser/src/subproviders/iframe.ts:6](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/iframe.ts#L6)*</small>
+<small>*Defined in [browser/src/subproviders/iframe.ts:7](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/iframe.ts#L7)*</small>
 
 
 

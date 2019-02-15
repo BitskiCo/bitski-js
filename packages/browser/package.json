@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.4.0",
+  "version": "0.4.1",
   "scripts": {
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
     "bundle": "npm run bundle:main && npm run bundle:callback && npm run minify",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@openid/appauth": "^1.2.0",
-    "bitski-provider": "^0.4.0",
+    "bitski-provider": "^0.4.1",
     "web3-provider-engine": "^14.1.0"
   },
   "devDependencies": {

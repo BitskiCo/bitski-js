@@ -43,6 +43,7 @@ export class Bitski {
   private clientId: string;
   private authProvider: OpenidAuthProvider;
   private signoutHandlers: Array<() => void> = [];
+  private sdkVersion: string;
 
   /**
    * @param clientId OAuth Client ID
@@ -53,6 +54,7 @@ export class Bitski {
    */
   constructor(clientId: string, redirectUri?: string, additionalScopes?: string[], options?: any) {
     this.clientId = clientId;
+    this.sdkVersion = '0.4.1';
     this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, additionalScopes, options);
     if (document && document.body) {
       this.injectStyles();
@@ -226,7 +228,7 @@ export class Bitski {
   }
 
   private createBitskiEngine(networkName: string, options: ProviderOptions): BitskiEngine {
-    return new BitskiBrowserEngine(this.clientId, this.authProvider, networkName, options.webBaseUrl, options.rpcUrl, options);
+    return new BitskiBrowserEngine(this.clientId, this.authProvider, this.sdkVersion, networkName, options.webBaseUrl, options.rpcUrl, options);
   }
 
   private createRPCEngine(rpcUrl: string, options: ProviderOptions): BitskiEngine {
