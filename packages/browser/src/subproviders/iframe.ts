@@ -51,7 +51,7 @@ export class IFrameSubprovider extends AuthorizationHandler {
 
         const payload = this.currentRequest[0];
 
-        if (payload.id !== data.id) {
+        if (typeof payload.id === 'number' && payload.id !== data.id) {
             return;
         }
 
