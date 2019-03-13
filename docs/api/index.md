@@ -3655,7 +3655,7 @@ new AuthenticatedFetchSubprovider(rpcUrl: string, debug: boolean, accessTokenPro
 ```typescript
 function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:59](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L59)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:64](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L64)*</small>
 
 
 
@@ -3687,7 +3687,7 @@ function handleAuthenticatedRequest(payload: any, next: any, end: any)
 ```typescript
 function handleRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:51](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L51)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:56](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L56)*</small>
 
 
 
@@ -3719,7 +3719,7 @@ function handleRequest(payload: any, next: any, end: any)
 ```typescript
 function handleUnauthenticatedRequest(payload: any, next: any, end: any)
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:68](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L68)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:73](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L73)*</small>
 
 
 
@@ -4056,6 +4056,9 @@ function invalidateToken(): Promise<void>
 var AUTHENTICATED_METHODS: string[] =  [
     'eth_accounts',
     'eth_sendTransaction',
+    'eth_signTransaction',
+    'eth_signTypedData',
+    'personal_sign',
     'eth_sign',
 ]
 ```
@@ -4099,7 +4102,7 @@ var UNAUTHORIZED_ERRORS: string[] =  [
     'Not Authorized',
 ]
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L23)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L26)*</small>
 
 
 
@@ -4120,7 +4123,7 @@ var UNAUTHORIZED_ERRORS: string[] =  [
 ```typescript
 function isErrorRetriable(err: any): boolean
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:29](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L29)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L32)*</small>
 
 
 
@@ -4154,7 +4157,7 @@ function isErrorRetriable(err: any): boolean
 ```typescript
 function isUnauthorizedError(err: Error): boolean
 ```
-<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L34)*</small>
+<small>*Defined in [provider/src/subproviders/authenticated-fetch.ts:37](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/authenticated-fetch.ts#L37)*</small>
 
 
 
