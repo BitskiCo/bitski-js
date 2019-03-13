@@ -17,6 +17,9 @@ const RETRIABLE_ERRORS = [
 const AUTHENTICATED_METHODS = [
     'eth_accounts',
     'eth_sendTransaction',
+    'eth_signTransaction',
+    'eth_signTypedData',
+    'personal_sign',
     'eth_sign',
 ];
 
@@ -39,11 +42,13 @@ function isUnauthorizedError(err: Error) {
  * Subprovider that fetches over HTTP and manages authentication headers
  */
 export class AuthenticatedFetchSubprovider extends FetchSubprovider {
-    private accessTokenProvider: AccessTokenProvider;
-    private defaultHeaders: object;
+    protected authenticatedMethods: string[];
+    protected accessTokenProvider: AccessTokenProvider;
+    protected defaultHeaders: object;
 
     constructor(rpcUrl: string, debug: boolean, accessTokenProvider: AccessTokenProvider, defaultHeaders: object = {}) {
         super({ rpcUrl, debug });
+        this.authenticatedMethods = AUTHENTICATED_METHODS;
         this.accessTokenProvider = accessTokenProvider;
         this.defaultHeaders = defaultHeaders;
     }
@@ -71,7 +76,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     }
 
     protected requiresAuthentication(payload) {
-        return AUTHENTICATED_METHODS.some((method) => method === payload.method);
+        return this.authenticatedMethods.some((method) => method === payload.method);
     }
 
     protected generateParameters(payload, accessToken?: string): object {
