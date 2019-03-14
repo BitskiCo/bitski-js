@@ -1,7 +1,5 @@
 import Subprovider from 'web3-provider-engine/subproviders/subprovider';
-
-const DEFAULT_AUTHORIZED_METHODS = ['eth_sendTransaction', 'eth_sign', 'eth_signTypedData', 'personal_sign'];
-
+import { DEFAULT_AUTHORIZED_METHODS } from '../constants';
 /*
  * Base Subprovider that requests authorization for specific methods. Meant to be extended.
  */

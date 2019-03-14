@@ -1,7 +1,9 @@
+import { AuthorizationServiceConfiguration } from '@openid/appauth';
 import { BitskiEngine } from 'bitski-provider';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
+import { SDK_VERSION } from './constants';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
 import css from './styles/index';
@@ -20,6 +22,10 @@ export enum AuthenticationStatus {
 }
 
 export { ConnectButtonSize };
+
+export interface BitskiSDKOptions {
+  configuration?: AuthorizationServiceConfiguration;
+}
 
 export interface ProviderOptions {
   networkName?: string;
@@ -52,9 +58,9 @@ export class Bitski {
    * Note: Make sure your app is approved for the scopes you are requesting first.
    * @param options Other OAuth settings. Don't change these unless you know what you are doing.
    */
-  constructor(clientId: string, redirectUri?: string, additionalScopes?: string[], options?: any) {
+  constructor(clientId: string, redirectUri?: string, additionalScopes?: string[], options?: BitskiSDKOptions) {
     this.clientId = clientId;
-    this.sdkVersion = '0.4.1';
+    this.sdkVersion = SDK_VERSION;
     this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, additionalScopes, options);
     if (document && document.body) {
       this.injectStyles();

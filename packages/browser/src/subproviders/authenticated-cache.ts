@@ -1,7 +1,6 @@
 import Subprovider from 'web3-provider-engine/subproviders/subprovider';
 import { AuthProvider } from '../auth/auth-provider';
-
-const CACHED_METHODS = ['eth_accounts'];
+import { CACHED_METHODS } from '../constants';
 
 /*
  * Subprovider that caches values related to the user.

@@ -1,5 +1,6 @@
 import { AccessTokenProvider, AuthenticatedFetchSubprovider, BitskiEngine } from 'bitski-provider';
 import { AuthProvider } from '../auth/auth-provider';
+import { BITSKI_RPC_BASE_URL, BITSKI_WEB_BASE_URL } from '../constants';
 import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cache';
 import { IFrameSubprovider } from '../subproviders/iframe';
 
@@ -27,10 +28,10 @@ export class BitskiBrowserEngine extends BitskiEngine {
     options?: any) {
     super(options);
     this.networkName = networkName || 'mainnet';
-    this.rpcUrl = rpcUrl || `https://api.bitski.com/v1/web3/${this.networkName}`;
+    this.rpcUrl = rpcUrl || `${BITSKI_RPC_BASE_URL}/${this.networkName}`;
     this.tokenProvider = tokenProvider;
     this.clientId = clientId;
-    this.webBaseUrl = webBaseUrl || 'https://sign.bitski.com';
+    this.webBaseUrl = webBaseUrl || BITSKI_WEB_BASE_URL;
     this.sdkVersion = sdkVersion;
 
     this.on('error', (error) => {

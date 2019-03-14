@@ -8,11 +8,8 @@ import {
   BasicQueryStringUtils,
   DefaultCrypto,
 } from '@openid/appauth';
-
+import { CHECK_FOR_POPUP_CLOSE_INTERVAL, DEFAULT_POPUP_FEATURES } from '../constants';
 import { parseUrlParams } from '../utils/callback';
-
-const CheckForPopupClosedInterval = 500;
-const DefaultPopupFeatures = 'location=no,toolbar=no,width=500,height=500,left=100,top=100;';
 
 export class PopupRequestHandler extends AuthorizationRequestHandler {
 
@@ -32,8 +29,8 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     this.pendingRequest = request;
     this.id = request.state;
     window[`popupCallback_${request.state}`] = this.callback.bind(this);
-    this.closedTimer = window.setInterval(this.checkPopup.bind(this), CheckForPopupClosedInterval);
-    this.popupWindow = window.open(url, '_blank', DefaultPopupFeatures);
+    this.closedTimer = window.setInterval(this.checkPopup.bind(this), CHECK_FOR_POPUP_CLOSE_INTERVAL);
+    this.popupWindow = window.open(url, '_blank', DEFAULT_POPUP_FEATURES);
     if (this.popupWindow) {
       this.popupWindow.focus();
     }
