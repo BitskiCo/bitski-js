@@ -63,6 +63,59 @@ describe('handles authenticated sends', () => {
     });
   });
 
+  test('retries requests when receiving errors that match the criteria', (done) => {
+    const provider = createFetchProvider();
+    const engine = createEngine(provider);
+
+    // @ts-ignore
+    fetch.once('ECONNRESET', { status: 500 }).once('ECONNRESET', { status: 500 }).once(JSON.stringify({ id: 0, jsonrpc: '2.0', result: 'foo' }));
+
+    // @ts-ignore
+    const request = createRequest('eth_peerCount', []);
+
+    return engine.sendAsync(request, (error, value) => {
+      expect(fetch.mock.calls.length).toBe(3);
+      expect(error).toBeNull();
+      expect(value.result).toBe('foo');
+      done();
+    });
+  });
+
+  test('does not retry for non-retryable errors', (done) => {
+    const provider = createFetchProvider();
+    const engine = createEngine(provider);
+
+    // @ts-ignore
+    fetch.mockResponse(JSON.stringify({ error: { message: 'Not Authorized' }}));
+
+    // @ts-ignore
+    const request = createRequest('eth_peerCount', []);
+
+    return engine.sendAsync(request, (error, value) => {
+      expect(fetch.mock.calls.length).toBe(1);
+      expect(error.message).toMatch(/Not Authorized/);
+      expect(value.result).toBeUndefined();
+      done();
+    });
+  });
+
+  test('retries only 5 times', (done) => {
+    const provider = createFetchProvider();
+    const engine = createEngine(provider);
+
+    // @ts-ignore
+    fetch.mockReject(new Error('ECONNRESET'));
+    // @ts-ignore
+    const request = createRequest('eth_peerCount', []);
+
+    return engine.sendAsync(request, (error, value) => {
+      expect(error.message).toMatch(/All retries exhausted/);
+      expect(value.result).toBeUndefined();
+      expect(fetch.mock.calls.length).toBe(5);
+      done();
+    });
+  });
+
   test('sends that dont require authentication should work without a user', (done) => {
     const provider = createFetchProvider();
     const engine = createEngine(provider);
