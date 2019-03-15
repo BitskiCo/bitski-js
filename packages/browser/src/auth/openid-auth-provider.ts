@@ -1,7 +1,7 @@
 import { AccessTokenProvider } from 'bitski-provider';
-import { AuthenticationStatus, OAuthSignInMethod } from '../bitski';
+import { AuthenticationStatus, BitskiSDKOptions, OAuthSignInMethod } from '../bitski';
 import { AuthProvider } from './auth-provider';
-import { OAuthManager } from './oauth-manager';
+import { OAuthManager, OAuthManagerOptions } from './oauth-manager';
 import { TokenStore } from './token-store';
 import { User } from './user';
 import { UserStore } from './user-store';
@@ -13,8 +13,8 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     public userStore: UserStore;
     public signOutCallback?: () => void;
 
-    constructor(clientId: string, redirectUri: string, additionalScopes?: string[], opts?: any) {
-        let settings: any = {
+    constructor(clientId: string, redirectUri: string, additionalScopes?: string[], opts?: BitskiSDKOptions) {
+        let settings: OAuthManagerOptions = {
             additionalScopes,
             clientId,
             redirectUri,
