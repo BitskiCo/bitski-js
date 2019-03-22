@@ -1,5 +1,4 @@
 import { TokenResponse } from '@openid/appauth';
-import mock from 'xhr-mock';
 import { AccessToken } from '../src/auth/access-token';
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { TokenStore } from '../src/auth/token-store';
@@ -37,14 +36,12 @@ beforeEach(() => {
   if (localStorage) {
     localStorage.clear();
   }
-  mock.setup();
 });
 
 afterEach(() => {
   if (localStorage) {
     localStorage.clear();
   }
-  mock.teardown();
 });
 
 describe('getAuthStatus', () => {

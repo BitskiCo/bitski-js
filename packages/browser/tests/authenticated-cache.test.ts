@@ -34,6 +34,36 @@ describe('authorization handler', () => {
     provider.handleRequest(payload, next, end);
   });
 
+  test('it forwards calls when no cached data is undefined', (done) => {
+    const authProvider = createAuthProvider();
+
+    // getUser will return undefined
+    const getUserSpy = jest.spyOn(authProvider, 'getUser');
+    getUserSpy.mockResolvedValue(undefined);
+
+    const provider = new AuthenticatedCacheSubprovider(authProvider);
+
+    const payload = {
+      id: 0,
+      jsonrpc: '2.0',
+      method: 'eth_accounts',
+      params: [],
+    };
+
+    // @ts-ignore
+    jest.spyOn(provider, 'checkCachedValues').mockResolvedValue(undefined);
+
+    const next = () => {
+      done();
+    };
+
+    const end = (error, value) => {
+      done.fail('end() should not be called');
+    };
+
+    provider.handleRequest(payload, next, end);
+  });
+
   test('it forwards calls when no cached data is available', (done) => {
     const authProvider = createAuthProvider();
 

@@ -1,7 +1,7 @@
-import mock from 'xhr-mock';
+
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { Dialog } from '../src/components/dialog';
-import { IFrameSubprovider } from '../src/subproviders/iframe';
+import { IFrameSubprovider, TransactionKind } from '../src/subproviders/iframe';
 import { MockEngine } from './util/mock-engine';
 
 const mockUser = {
@@ -28,10 +28,10 @@ function createAuthProvider(): OpenidAuthProvider {
 }
 
 function createInstance(authProvider: OpenidAuthProvider): IFrameSubprovider {
-    return new IFrameSubprovider('https://www.bitski.com', 'kovan', authProvider);
+    return new IFrameSubprovider('https://www.bitski.com', 'https://api.bitski.com/v1', 1, authProvider);
 }
 
-function createRequest(method: string, params: any[]): any {
+function createRequest(method: string, params?: any[]): any {
     return {
         id: 0,
         jsonrpc: '2.0',
@@ -45,147 +45,45 @@ function prepareAuthenticatedSession(authProvider: OpenidAuthProvider) {
 }
 
 beforeEach(() => {
-    mock.setup();
-});
-
-afterEach(() => {
-    mock.teardown();
+    // @ts-ignore
+    fetch.resetMocks();
 });
 
 describe('it handles sends with authorization', () => {
 
     test('iframe: should show approval dialog for eth_sendTransaction', (done) => {
-        expect.assertions(4);
+        expect.assertions(6);
 
         const authProvider = createAuthProvider();
         const instance = createInstance(authProvider);
         const engine = new MockEngine();
         engine.addProvider(instance);
 
-        const request = createRequest('eth_sendTransaction', []);
-
-        // @ts-ignore
-        const spy = jest.spyOn(instance, 'urlForMethod');
-
-        prepareAuthenticatedSession(authProvider);
-        const mockResponse = {
-            id: 0,
-            jsonrpc: '2.0',
-            result: 'foo',
+        const txn = {
+            from: '0x',
+            to: '0x',
+            value: '0x',
+            gas: '0x',
+            gasPrice: '0x'
         };
 
-        setTimeout(() => {
-            const message = new MessageEvent('worker', {
-                data: mockResponse,
-                origin: 'https://www.bitski.com',
-            });
-
-            instance.receiveMessage(message);
-        }, GET_ACCESS_TOKEN_TIMEOUT);
-
-        return engine.sendAsync(request, (error, value) => {
-            expect(error).toBeNull();
-            expect(value.result).toBe('foo');
-            expect(spy).toBeCalled();
-            expect(spy.mock.results[0].value).toBe('https://www.bitski.com/eth-send-transaction');
-            done();
-        });
-    });
-
-    test('iframe: should show approval dialog for eth_sign', (done) => {
-        expect.assertions(4);
-
-        const authProvider = createAuthProvider();
-        const instance = createInstance(authProvider);
-        const engine = new MockEngine();
-        engine.addProvider(instance);
-
-        const request = createRequest('eth_sign', []);
+        const request = createRequest('eth_sendTransaction', [txn]);
 
         // @ts-ignore
-        const spy = jest.spyOn(instance, 'urlForMethod');
+        const showModalSpy = jest.spyOn(instance, 'showAuthorizationModal');
 
-        prepareAuthenticatedSession(authProvider);
-
-        const mockResponse = {
-            id: 0,
-            jsonrpc: '2.0',
-            result: 'foo',
-        };
-
-        setTimeout(() => {
-            const message = new MessageEvent('worker', {
-                data: mockResponse,
-                origin: 'https://www.bitski.com',
-            });
-
-            instance.receiveMessage(message);
-        }, GET_ACCESS_TOKEN_TIMEOUT);
-
-        return engine.sendAsync(request, (error, value) => {
-            expect(error).toBeNull();
-            expect(value.result).toBe('foo');
-            expect(spy).toBeCalled();
-            expect(spy.mock.results[0].value).toBe('https://www.bitski.com/eth-sign');
-            done();
+        showModalSpy.mockImplementation((_, req) => {
+            // @ts-ignore
+            instance.currentRequest = req;
         });
-    });
-
-    test('iframe: should show approval dialog for personal_sign', (done) => {
-        expect.assertions(4);
-
-        const authProvider = createAuthProvider();
-        const instance = createInstance(authProvider);
-        const engine = new MockEngine();
-        engine.addProvider(instance);
-
-        const request = createRequest('personal_sign', []);
 
         // @ts-ignore
-        const spy = jest.spyOn(instance, 'urlForMethod');
+        const submitTransactionSpy = jest.spyOn(instance, 'submitTransaction');
+        submitTransactionSpy.mockImplementation((transaction) => {
+            return Promise.resolve({ transaction });
+        });
 
         prepareAuthenticatedSession(authProvider);
-
-        const mockResponse = {
-            id: 0,
-            jsonrpc: '2.0',
-            result: 'foo',
-        };
-
-        setTimeout(() => {
-            const message = new MessageEvent('worker', {
-                data: mockResponse,
-                origin: 'https://www.bitski.com',
-            });
-
-            instance.receiveMessage(message);
-        }, GET_ACCESS_TOKEN_TIMEOUT);
-
-        return engine.sendAsync(request, (error, value) => {
-            expect(error).toBeNull();
-            expect(value.result).toBe('foo');
-            expect(spy).toBeCalled();
-            expect(spy.mock.results[0].value).toBe('https://www.bitski.com/eth-sign');
-            done();
-        });
-    });
-
-    test('iframe: should ignore messages when from another host', (done) => {
-        expect.assertions(1);
-
-        const authProvider = createAuthProvider();
-        const instance = createInstance(authProvider);
-        const engine = new MockEngine();
-        engine.addProvider(instance);
-
-        prepareAuthenticatedSession(authProvider);
-
-        const responseMock = jest.fn();
-        const request = createRequest('eth_sendTransaction', []);
-
-        engine.sendAsync(request, (error, value) => {
-            responseMock(error, value);
-        });
 
         setTimeout(() => {
             const message = new MessageEvent('worker', {
@@ -194,75 +92,403 @@ describe('it handles sends with authorization', () => {
                     jsonrpc: '2.0',
                     result: 'foo',
                 },
-                origin: 'https://www.foo.com',
+                origin: 'https://sign.bitski.com',
             });
+
             instance.receiveMessage(message);
-            expect(responseMock).not.toHaveBeenCalled();
-            done();
         }, GET_ACCESS_TOKEN_TIMEOUT);
+
+        return engine.sendAsync(request, (error, value) => {
+            expect(error).toBeNull();
+            expect(value.result).toBe('foo');
+            expect(showModalSpy).toBeCalled();
+            const transaction = showModalSpy.mock.calls[0][0];
+            expect(transaction).not.toBeUndefined();
+            expect(transaction.payload).toMatchObject(request.params[0]);
+            expect(transaction.kind).toBe(TransactionKind.SendTransaction);
+            done();
+        });
     });
 
-    test('iframe: should ignore messages when they don\'t have IDs that match the current request', (done) => {
-        expect.assertions(1);
+    test('iframe: should show approval dialog for eth_signTransaction', (done) => {
+        expect.assertions(6);
 
         const authProvider = createAuthProvider();
         const instance = createInstance(authProvider);
         const engine = new MockEngine();
         engine.addProvider(instance);
 
-        prepareAuthenticatedSession(authProvider);
+        const txn = {
+            from: '0x',
+            to: '0x',
+            value: '0x',
+            gas: '0x',
+            gasPrice: '0x',
+        };
 
-        const mismatchedRequestMock = jest.fn();
-        const request = createRequest('eth_sendTransaction', []);
+        const request = createRequest('eth_signTransaction', [txn]);
 
-        engine.sendAsync(request, (error, value) => {
-            mismatchedRequestMock(error, value);
+        // @ts-ignore
+        const showModalSpy = jest.spyOn(instance, 'showAuthorizationModal');
+
+        showModalSpy.mockImplementation((_, req) => {
+            // @ts-ignore
+            instance.currentRequest = req;
         });
 
-        setTimeout(() => {
-            const message = new MessageEvent('worker', {
-                data: {
-                    id: 20,
-                    jsonrpc: '2.0',
-                    result: '0xf00',
-                },
-                origin: 'https://www.bitski.com',
-            });
-            instance.receiveMessage(message);
-            expect(mismatchedRequestMock).not.toHaveBeenCalled();
-            done();
-        }, GET_ACCESS_TOKEN_TIMEOUT);
-    });
+        // @ts-ignore
+        const submitTransactionSpy = jest.spyOn(instance, 'submitTransaction');
+        submitTransactionSpy.mockImplementation((transaction) => {
+            return Promise.resolve({ transaction });
+        });
 
-    test('iframe: should not validate id if original request did not have an id', (done) => {
-        expect.assertions(1);
-
-        const authProvider = createAuthProvider();
-        const instance = createInstance(authProvider);
-
-        const request = createRequest('eth_sendTransaction', []);
-        delete request.id;
-        const mismatchedRequestMock = jest.fn();
-
-        instance.currentRequest = [request, mismatchedRequestMock];
+        prepareAuthenticatedSession(authProvider);
 
         setTimeout(() => {
             const message = new MessageEvent('worker', {
                 data: {
                     id: 0,
                     jsonrpc: '2.0',
-                    result: '0xf00',
+                    result: 'foo',
+                },
+                origin: 'https://sign.bitski.com',
+            });
+
+            instance.receiveMessage(message);
+        }, GET_ACCESS_TOKEN_TIMEOUT);
+
+        return engine.sendAsync(request, (error, value) => {
+            expect(error).toBeNull();
+            expect(value.result).toBe('foo');
+            expect(showModalSpy).toBeCalled();
+            const transaction = showModalSpy.mock.calls[0][0];
+            expect(transaction).not.toBeUndefined();
+            expect(transaction.payload).toMatchObject(request.params[0]);
+            expect(transaction.kind).toBe(TransactionKind.SignTransaction);
+            done();
+        });
+    });
+
+    test('iframe: should show approval dialog for eth_sign', (done) => {
+        expect.assertions(7);
+
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+        const engine = new MockEngine();
+        engine.addProvider(instance);
+
+        const request = createRequest('eth_sign', ['0x9b2055d370f73ec7d8a03e965129118dc8f5bf83', '0xdeadbeaf']);
+
+        // @ts-ignore
+        const showModalSpy = jest.spyOn(instance, 'showAuthorizationModal');
+
+        showModalSpy.mockImplementation((_, req) => {
+            // @ts-ignore
+            instance.currentRequest = req;
+        });
+
+        // @ts-ignore
+        const submitTransactionSpy = jest.spyOn(instance, 'submitTransaction');
+        submitTransactionSpy.mockImplementation((transaction) => {
+            return Promise.resolve({ transaction });
+        });
+
+        prepareAuthenticatedSession(authProvider);
+
+        setTimeout(() => {
+            const message = new MessageEvent('worker', {
+                data: {
+                    id: 0,
+                    jsonrpc: '2.0',
+                    result: 'foo',
                 },
                 origin: 'https://www.bitski.com',
             });
+
             instance.receiveMessage(message);
-            expect(mismatchedRequestMock).toHaveBeenCalled();
-            done();
         }, GET_ACCESS_TOKEN_TIMEOUT);
+
+        return engine.sendAsync(request, (error, value) => {
+            expect(error).toBeNull();
+            expect(value.result).toBe('foo');
+            expect(showModalSpy).toBeCalled();
+            const transaction = showModalSpy.mock.calls[0][0];
+            expect(transaction).not.toBeUndefined();
+            expect(transaction.payload.from).toBe('0x9b2055d370f73ec7d8a03e965129118dc8f5bf83');
+            expect(transaction.payload.message).toBe('0xdeadbeaf');
+            expect(transaction.kind).toBe(TransactionKind.Sign);
+            done();
+        });
+    });
+
+    test('iframe: should show approval dialog for personal_sign', (done) => {
+        expect.assertions(7);
+
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+        const engine = new MockEngine();
+        engine.addProvider(instance);
+
+        const request = createRequest('personal_sign', ['0xdeadbeaf', '0x9b2055d370f73ec7d8a03e965129118dc8f5bf83']);
+
+        // @ts-ignore
+        const showModalSpy = jest.spyOn(instance, 'showAuthorizationModal');
+
+        showModalSpy.mockImplementation((_, req) => {
+            // @ts-ignore
+            instance.currentRequest = req;
+        });
+
+        // @ts-ignore
+        const submitTransactionSpy = jest.spyOn(instance, 'submitTransaction');
+        submitTransactionSpy.mockImplementation((transaction) => {
+            return Promise.resolve({ transaction });
+        });
+
+        prepareAuthenticatedSession(authProvider);
+
+        setTimeout(() => {
+            const message = new MessageEvent('worker', {
+                data: {
+                    id: 0,
+                    jsonrpc: '2.0',
+                    result: 'foo',
+                },
+                origin: 'https://www.bitski.com',
+            });
+
+            instance.receiveMessage(message);
+        }, GET_ACCESS_TOKEN_TIMEOUT);
+
+        return engine.sendAsync(request, (error, value) => {
+            expect(error).toBeNull();
+            expect(value.result).toBe('foo');
+            expect(showModalSpy).toBeCalled();
+            const transaction = showModalSpy.mock.calls[0][0];
+            expect(transaction).not.toBeUndefined();
+            expect(transaction.payload.from).toBe('0x9b2055d370f73ec7d8a03e965129118dc8f5bf83');
+            expect(transaction.payload.message).toBe('0xdeadbeaf');
+            expect(transaction.kind).toBe(TransactionKind.Sign);
+            done();
+        });
+    });
+
+    test('should properly submit transactions to the server', async () => {
+        expect.assertions(6);
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+
+        const transaction = {
+            id: 'test-id',
+            kind: TransactionKind.Sign,
+            payload: {
+                from: '0xf00',
+                message: '0xb45',
+            },
+            context: {
+                chainId: 1,
+            },
+        };
+
+        const accessToken = 'test-token';
+
+        // @ts-ignore
+        fetch.mockResponse(JSON.stringify({ transaction }), 201);
+
+        // @ts-ignore
+        await instance.submitTransaction(transaction, accessToken);
+
+        expect(fetch).toBeCalled();
+
+        // @ts-ignore
+        const [url, params] = fetch.mock.calls[0];
+
+        expect(url).toBe('https://api.bitski.com/v1/transactions');
+        expect(params.method).toBe('POST');
+        expect(params.headers['Content-Type']).toBe('application/json');
+        expect(params.headers['Authorization']).toBe('Bearer test-token');
+
+        const parsed = JSON.parse(params.body);
+        expect(parsed.transaction).toMatchObject(transaction);
+    });
+
+    test('it validates parameters for requests when creating transaction', () => {
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+
+        const noParamsTxn = createRequest('eth_sendTransaction');
+
+        expect(() => {
+            // @ts-ignore
+            instance.createPayload(noParamsTxn);
+        }).toThrow(/Invalid request/);
+
+        const emptyParamsTxn = createRequest('eth_sendTransaction', []);
+
+        expect(() => {
+            // @ts-ignore
+            instance.createPayload(emptyParamsTxn);
+        }).toThrow(/Invalid request/);
+
+        const noParamsMsg = createRequest('eth_sign');
+
+        expect(() => {
+            // @ts-ignore
+            instance.createPayload(noParamsMsg);
+        }).toThrow(/Invalid request/);
+
+        const missingParamsMsg = createRequest('eth_sign', []);
+
+        expect(() => {
+            // @ts-ignore
+            instance.createPayload(missingParamsMsg);
+        }).toThrow(/Invalid request/);
+
+        const noParamsPersonalMsg = createRequest('personal_sign');
+
+        expect(() => {
+            // @ts-ignore
+            instance.createPayload(noParamsPersonalMsg);
+        }).toThrow(/Invalid request/);
+
+        const missingParamsPersonalMsg = createRequest('personal_sign', []);
+
+        expect(() => {
+            // @ts-ignore
+            instance.createPayload(missingParamsPersonalMsg);
+        }).toThrow(/Invalid request/);
+
+        const invalidMethod = createRequest('eth_signTypedData', []);
+
+        expect(() => {
+            // @ts-ignore
+            instance.createPayload(invalidMethod);
+        }).toThrow(/Method not supported/);
+    });
+
+    test('it validates method when creating a transaction', (done) => {
+        expect.assertions(1);
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+        prepareAuthenticatedSession(authProvider);
+
+        const request = createRequest('invalid_method');
+
+        instance.handleAuthorization(request, (error) => {
+            expect(error.message).toMatch(/Method not supported/);
+            done();
+        });
+    });
+
+    test('iframe: should ignore messages when from another host', () => {
+        expect.assertions(1);
+
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+
+        const responseMock = jest.fn();
+        const request = createRequest('eth_sendTransaction', []);
+
+        // @ts-ignore
+        instance.currentRequest = [request, responseMock];
+
+        const message = new MessageEvent('worker', {
+            data: {
+                id: 0,
+                jsonrpc: '2.0',
+                result: 'foo',
+            },
+            origin: 'https://www.foo.com',
+        });
+
+        instance.receiveMessage(message);
+        expect(responseMock).not.toHaveBeenCalled();
+    });
+
+    test('iframe: should ignore messages when no data is included', () => {
+        expect.assertions(1);
+
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+
+        const responseMock = jest.fn();
+        const request = createRequest('eth_sendTransaction', []);
+
+        // @ts-ignore
+        instance.currentRequest = [request, responseMock];
+
+        const message = new MessageEvent('worker', {
+            origin: 'https://sign.bitski.com',
+        });
+
+        instance.receiveMessage(message);
+        expect(responseMock).not.toHaveBeenCalled();
+    });
+
+    test('iframe: should ignore messages when from another host', () => {
+        expect.assertions(1);
+
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+
+        const responseMock = jest.fn();
+        const request = createRequest('eth_sendTransaction', []);
+
+        // @ts-ignore Set a dialog instead of a current request to assert that it returns
+        instance.currentRequestDialog = { dismiss: responseMock };
+
+        const message = new MessageEvent('worker', {
+            data: {
+                id: 0,
+                jsonrpc: '2.0',
+                result: 'foo',
+            },
+            origin: 'https://sign.bitski.com',
+        });
+
+        instance.receiveMessage(message);
+        expect(responseMock).not.toHaveBeenCalled();
+    });
+
+    test('iframe: should dismiss dialog and call callback when message is valid', () => {
+        expect.assertions(4);
+
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+
+        const responseMock = jest.fn();
+        const request = createRequest('eth_sendTransaction', []);
+
+        const mockDialog = { dismiss: jest.fn() };
+
+        // @ts-ignore
+        instance.currentRequestDialog = mockDialog;
+        // @ts-ignore
+        instance.currentRequest = [request, responseMock];
+
+        const message = new MessageEvent('worker', {
+            data: {
+                id: 0,
+                jsonrpc: '2.0',
+                result: 'foo',
+            },
+            origin: 'https://sign.bitski.com',
+        });
+
+        instance.receiveMessage(message);
+
+        // @ts-ignore
+        expect(instance.currentRequest).toBeUndefined();
+
+        // @ts-ignore
+        expect(instance.currentRequestDialog).toBeUndefined();
+
+        expect(responseMock).toHaveBeenCalledWith(undefined, 'foo');
+        expect(mockDialog.dismiss).toHaveBeenCalled();
     });
 
     test('iframe: should close existing dialog if one is already open', (done) => {
-        expect.assertions(3);
+        expect.assertions(4);
 
         const authProvider = createAuthProvider();
         const instance = createInstance(authProvider);
@@ -271,24 +497,45 @@ describe('it handles sends with authorization', () => {
 
         prepareAuthenticatedSession(authProvider);
 
-        const request = createRequest('eth_sendTransaction', []);
+        const txn = {
+            from: '0x',
+            to: '0x',
+            value: '0x',
+            gas: '0x',
+            gasPrice: '0x',
+        };
+
+        const request = createRequest('eth_sendTransaction', [txn]);
 
         const dummyDialog = new Dialog('hello world');
-        const dismissMock = jest.spyOn(dummyDialog, 'dismiss');
-        const nextMock = jest.fn();
-        const endMock = jest.fn();
+        const dismissMock = jest.spyOn(dummyDialog, 'close');
+        const newCallback = jest.fn();
+        const existingCallback = jest.fn();
+        dummyDialog.onClose = existingCallback;
 
+        // @ts-ignore
+        const submitTransactionSpy = jest.spyOn(instance, 'submitTransaction');
+        submitTransactionSpy.mockImplementation((transaction) => {
+            return Promise.resolve({ transaction });
+        });
+
+        // @ts-ignore
         instance.currentRequestDialog = dummyDialog;
 
         // @ts-ignore
-        instance.currentRequest = [nextMock, endMock];
+        instance.currentRequest = [request, existingCallback];
 
-        instance.handleAuthorization(request, () => { /* */ }, () => { /* */ });
+        instance.handleAuthorization(request, newCallback);
 
         setTimeout(() => {
             expect(dismissMock).toHaveBeenCalled();
-            expect(nextMock).not.toHaveBeenCalled();
-            expect(endMock).toHaveBeenCalled();
+            expect(existingCallback).toHaveBeenCalled();
+            expect(newCallback).not.toHaveBeenCalled();
+
+            // @ts-ignore
+            instance.currentRequestDialog.close();
+            expect(newCallback).toHaveBeenCalled();
+
             done();
         }, 1000);
     });
