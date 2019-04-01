@@ -25,7 +25,7 @@ describe('it handles authorized requests with a local dialog', () => {
         value: '0x0',
       }]);
 
-      instance.handleAuthorization(payload, jest.fn, jest.fn);
+      instance.handleRequest(payload, jest.fn, jest.fn);
       // @ts-ignore
       expect(instance.currentDialog).not.toBeUndefined();
       // @ts-ignore
@@ -45,7 +45,7 @@ describe('it handles authorized requests with a local dialog', () => {
       }]);
       const next = jest.fn();
       const end = jest.fn();
-      instance.handleAuthorization(payload, next, end);
+      instance.handleRequest(payload, next, end);
       // @ts-ignore
       instance.transactionWindow.submit();
       expect(next).toBeCalled();
@@ -65,7 +65,7 @@ describe('it handles authorized requests with a local dialog', () => {
       }]);
       const next = jest.fn();
       const end = jest.fn();
-      instance.handleAuthorization(payload, next, end);
+      instance.handleRequest(payload, next, end);
       // @ts-ignore
       instance.transactionWindow.cancel();
       expect(next).not.toBeCalled();
@@ -94,7 +94,7 @@ describe('it handles authorized requests with a local dialog', () => {
         value: '0x0',
       }]);
 
-      instance.handleAuthorization(payload, jest.fn, jest.fn);
+      instance.handleRequest(payload, jest.fn, jest.fn);
 
       expect(dismissSpy).toBeCalled();
       expect(end).toBeCalled();

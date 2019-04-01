@@ -17,18 +17,18 @@ export class LocalDialogSubprovider extends AuthorizationHandler {
       super(opts);
   }
 
-  public handleAuthorization(payload, next, end): void {
-    this.showTransactionModal(payload, next, end);
+  public handleAuthorization(payload, end): void {
+    this.showTransactionModal(payload, end);
   }
 
-  private showTransactionModal(payload, next, end) {
+  private showTransactionModal(payload, end) {
 
       const submitHandler = () => {
-        next();
         this.currentRequest = undefined;
         if (this.currentDialog) {
             this.currentDialog.dismiss();
         }
+        this.skip();
       };
 
       const cancelHandler = () => {

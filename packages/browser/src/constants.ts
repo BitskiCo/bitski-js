@@ -3,8 +3,10 @@ export const SDK_VERSION = '0.4.1';
 
 // URLs
 export const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
+export const BITSKI_TRANSACTION_API_BASE_URL = 'https://api.bitski.com/v1';
 export const BITSKI_RPC_BASE_URL = 'https://api.bitski.com/v1/web3';
 export const BITSKI_WEB_BASE_URL = 'https://sign.bitski.com';
+export const IFRAME_MESSAGE_ORIGIN_INCLUDES = '.bitski.com';
 
 // OAuth
 export const DEFAULT_OAUTH_CONFIGURATION = {
@@ -27,4 +29,4 @@ export const USER_KEY = 'bitski.user';
 
 // Methods
 export const CACHED_METHODS = ['eth_accounts'];
-export const DEFAULT_AUTHORIZED_METHODS = ['eth_sendTransaction', 'eth_sign', 'eth_signTypedData', 'personal_sign'];
+export const DEFAULT_AUTHORIZED_METHODS = ['eth_sendTransaction', 'eth_signTransaction', 'eth_sign', 'personal_sign'];

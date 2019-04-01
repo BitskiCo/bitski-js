@@ -6,6 +6,7 @@ import { DEFAULT_AUTHORIZED_METHODS } from '../constants';
 export abstract class AuthorizationHandler extends Subprovider {
 
   protected authorizedMethods: string[];
+  protected next?: () => void;
 
   constructor(opts?: any) {
     super();
@@ -14,13 +15,21 @@ export abstract class AuthorizationHandler extends Subprovider {
 
   public handleRequest(payload, next, end): void {
     if (this.requiresAuthorization(payload.method)) {
-      this.handleAuthorization(payload, next, end);
+      this.next = next;
+      this.handleAuthorization(payload, end);
       return;
     }
     next();
   }
 
-  public abstract handleAuthorization(payload, next, end): void;
+  public abstract handleAuthorization(payload, callback): void;
+
+  protected skip() {
+    if (this.next) {
+      this.next();
+      this.next = undefined;
+    }
+  }
 
   protected requiresAuthorization(method: string): boolean {
     return this.authorizedMethods.includes(method);

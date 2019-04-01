@@ -15,7 +15,15 @@ describe('managing providers', () => {
     const provider = bitski.getProvider();
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.rpcUrl.includes('mainnet')).toBe(true);
+    expect(provider.network.name).toBe('mainnet');
+  });
+
+  test('should get a mainnet provider when passing options with no network name', () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider({ pollingInterval: 1000000 });
+    expect(provider).toBeDefined();
+    // @ts-ignore
+    expect(provider.network.name).toBe('mainnet');
   });
 
   test('should be able to pass a network name as a string', () => {
@@ -23,7 +31,7 @@ describe('managing providers', () => {
     const provider = bitski.getProvider('rinkeby');
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.rpcUrl.includes('rinkeby')).toBe(true);
+    expect(provider.network.name).toBe('rinkeby');
   });
 
   test('should be able to pass a network name in options', () => {
@@ -31,7 +39,12 @@ describe('managing providers', () => {
     const provider = bitski.getProvider({ networkName: 'rinkeby' });
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.rpcUrl.includes('rinkeby')).toBe(true);
+    expect(provider.network.name).toBe('rinkeby');
+  });
+
+  test('passing an invalid network name results in an error', () => {
+    const bitski = createInstance();
+    expect(() => { bitski.getProvider('ropstem'); }).toThrow(/Unsupported network/);
   });
 
   test('should be able to pass a rpcUrl in options', () => {
@@ -45,17 +58,20 @@ describe('managing providers', () => {
   test('should be able to pass in custom configuration', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({
-      networkName: 'rinkeby',
-      rpcUrl: 'https://api-v2.bitski.com/web3/rinkeby',
+      network: {
+        name: 'rinkeby',
+        rpcUrl: 'https://api-v2.bitski.com/web3/rinkeby',
+        chainId: 4,
+      },
       webBaseUrl: 'https://next.bitski.com',
     });
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.networkName).toBe('rinkeby');
+    expect(provider.network.name).toBe('rinkeby');
     // @ts-ignore
     expect(provider.webBaseUrl).toBe('https://next.bitski.com');
     // @ts-ignore
-    expect(provider.rpcUrl).toBe('https://api-v2.bitski.com/web3/rinkeby');
+    expect(provider.network.rpcUrl).toBe('https://api-v2.bitski.com/web3/rinkeby');
   });
 
   test('should pass settings to provider-engine', () => {
@@ -134,6 +150,7 @@ describe('authentication', () => {
     spy.mockReturnValue(AuthenticationStatus.Connected);
     return bitski.getAuthStatus().then((authStatus) => {
       expect(authStatus).toBe(AuthenticationStatus.Connected);
+      expect(authStatus).toBe(bitski.authStatus);
     });
   });
 

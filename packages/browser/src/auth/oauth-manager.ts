@@ -16,6 +16,7 @@ import {
 } from '@openid/appauth';
 import { BITSKI_USER_API_HOST, DEFAULT_OAUTH_CONFIGURATION, DEFAULT_OPTIONAL_SCOPES, DEFAULT_SCOPES } from '../constants';
 import { NoHashQueryStringUtils } from '../utils/no-hash-query-string-utils';
+import { parseResponse } from '../utils/request-utils';
 import { PopupRequestHandler } from './popup-handler';
 import { UserInfoResponse } from './user';
 
@@ -141,7 +142,7 @@ export class OAuthManager {
         },
         method: 'POST',
     }).then((response) => {
-        return this.parseResponse(response);
+        return parseResponse<any>(response);
     });
   }
 
@@ -160,31 +161,7 @@ export class OAuthManager {
         Authorization: `Bearer ${accessToken}`,
       },
     }).then((response) => {
-      return this.parseResponse(response);
-    }).then((parsed) => {
-      return parsed as UserInfoResponse;
-    });
-  }
-
-  /**
-   * Parses a Fetch Response to extract either the result or the error
-   * @param response the fetch response to parse
-   */
-  protected parseResponse(response: Response): Promise<any> {
-    return response.json().catch((jsonParseError) => {
-      throw new Error('Unknown error. Could not parse error response');
-    }).then((json) => {
-      if (response.status >= 200 && response.status < 300) {
-          return json;
-      } else {
-        if (json && json.error && json.error.message) {
-            throw new Error(json.error.message);
-        } else if (json && json.error) {
-            throw new Error(json.error);
-        } else {
-            throw new Error('Unknown error');
-        }
-      }
+      return parseResponse<UserInfoResponse>(response);
     });
   }
 
