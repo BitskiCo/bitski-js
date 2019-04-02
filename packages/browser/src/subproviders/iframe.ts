@@ -89,7 +89,8 @@ export class IFrameSubprovider extends AuthorizationHandler {
    * @param event MessageEvent received from the browser
    */
   public receiveMessage(event: MessageEvent): void {
-    if (!event.origin.includes(IFRAME_MESSAGE_ORIGIN_INCLUDES)) {
+    // Ignore messages from the current window, and from frames that aren't on Bitski.com
+    if (event.source === window || !event.origin.includes(IFRAME_MESSAGE_ORIGIN_INCLUDES)) {
       return;
     }
 
