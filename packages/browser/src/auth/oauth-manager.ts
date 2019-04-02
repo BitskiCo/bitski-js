@@ -14,21 +14,18 @@ import {
   TokenRequestHandler,
   TokenResponse,
 } from '@openid/appauth';
-
+import { BITSKI_USER_API_HOST, DEFAULT_OAUTH_CONFIGURATION, DEFAULT_OPTIONAL_SCOPES, DEFAULT_SCOPES } from '../constants';
 import { NoHashQueryStringUtils } from '../utils/no-hash-query-string-utils';
+import { parseResponse } from '../utils/request-utils';
 import { PopupRequestHandler } from './popup-handler';
 import { UserInfoResponse } from './user';
 
-const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
-
-const DEFAULT_CONFIGURATION = new AuthorizationServiceConfiguration({
-  authorization_endpoint: 'https://account.bitski.com/oauth2/auth',
-  revocation_endpoint: '',
-  token_endpoint: 'https://account.bitski.com/oauth2/token',
-  userinfo_endpoint: 'https://account.bitski.com/userinfo',
-});
-
-const DEFAULT_SCOPES = ['openid'];
+export interface OAuthManagerOptions {
+  clientId: string;
+  redirectUri: string;
+  configuration?: AuthorizationServiceConfiguration;
+  additionalScopes?: string[];
+}
 
 /**
  * Responsible for submitting requests to our OAuth server.
@@ -55,13 +52,12 @@ export class OAuthManager {
    * @param options.additionalScopes string[] (optional): Additional scopes to request outside of openid.
    * Default is offline. Pass an empty array to only request openid.
    */
-  constructor(options: any) {
+  constructor(options: OAuthManagerOptions) {
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
-    this.configuration = options.configuration || DEFAULT_CONFIGURATION;
-    const additionalScopes = options.additionalScopes || ['offline'];
-    this.scopes = DEFAULT_SCOPES;
-    this.scopes.push(additionalScopes);
+    this.configuration = options.configuration || new AuthorizationServiceConfiguration(DEFAULT_OAUTH_CONFIGURATION);
+    const additionalScopes = options.additionalScopes || DEFAULT_OPTIONAL_SCOPES;
+    this.scopes = DEFAULT_SCOPES.concat(additionalScopes);
     this.tokenHandler = new BaseTokenRequestHandler(new FetchRequestor());
     this.notifier = new AuthorizationNotifier();
     this.notifier.setAuthorizationListener(this.didCompleteAuthorizationFlow.bind(this));
@@ -146,7 +142,7 @@ export class OAuthManager {
         },
         method: 'POST',
     }).then((response) => {
-        return this.parseResponse(response);
+        return parseResponse<any>(response);
     });
   }
 
@@ -165,31 +161,7 @@ export class OAuthManager {
         Authorization: `Bearer ${accessToken}`,
       },
     }).then((response) => {
-      return this.parseResponse(response);
-    }).then((parsed) => {
-      return parsed as UserInfoResponse;
-    });
-  }
-
-  /**
-   * Parses a Fetch Response to extract either the result or the error
-   * @param response the fetch response to parse
-   */
-  protected parseResponse(response: Response): Promise<any> {
-    return response.json().catch((jsonParseError) => {
-      throw new Error('Unknown error. Could not parse error response');
-    }).then((json) => {
-      if (response.status >= 200 && response.status < 300) {
-          return json;
-      } else {
-        if (json && json.error && json.error.message) {
-            throw new Error(json.error.message);
-        } else if (json && json.error) {
-            throw new Error(json.error);
-        } else {
-            throw new Error('Unknown error');
-        }
-      }
+      return parseResponse<UserInfoResponse>(response);
     });
   }
 

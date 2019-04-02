@@ -1,8 +1,6 @@
 import { TokenResponse } from '@openid/appauth';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants';
 import { AccessToken } from './access-token';
-
-const REFRESH_TOKEN_KEY = 'bitski.refresh_token';
-const ACCESS_TOKEN_KEY = 'bitski.access_token';
 
 export class TokenStore {
 

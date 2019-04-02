@@ -1,5 +1,6 @@
-import { AccessTokenProvider, AuthenticatedFetchSubprovider, BitskiEngine } from 'bitski-provider';
+import { AccessTokenProvider, AuthenticatedFetchSubprovider, BitskiEngine, Network } from 'bitski-provider';
 import { AuthProvider } from '../auth/auth-provider';
+import { BITSKI_RPC_BASE_URL, BITSKI_TRANSACTION_API_BASE_URL, BITSKI_WEB_BASE_URL } from '../constants';
 import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cache';
 import { IFrameSubprovider } from '../subproviders/iframe';
 
@@ -10,9 +11,9 @@ function isAuthProvider(object: any): object is AuthProvider {
 
 export class BitskiBrowserEngine extends BitskiEngine {
 
-  private networkName: string;
-  private rpcUrl: string;
+  private network: Network;
   private webBaseUrl: string;
+  private apiBaseUrl: string;
   private tokenProvider: AccessTokenProvider;
   private clientId: string;
   private sdkVersion: string;
@@ -21,16 +22,16 @@ export class BitskiBrowserEngine extends BitskiEngine {
     clientId: string,
     tokenProvider: AccessTokenProvider,
     sdkVersion: string,
-    networkName?: string,
+    network: Network,
     webBaseUrl?: string,
-    rpcUrl?: string,
+    apiBaseUrl?: string,
     options?: any) {
     super(options);
-    this.networkName = networkName || 'mainnet';
-    this.rpcUrl = rpcUrl || `https://api.bitski.com/v1/web3/${this.networkName}`;
+    this.network = network;
+    this.apiBaseUrl = apiBaseUrl || BITSKI_TRANSACTION_API_BASE_URL;
     this.tokenProvider = tokenProvider;
     this.clientId = clientId;
-    this.webBaseUrl = webBaseUrl || 'https://sign.bitski.com';
+    this.webBaseUrl = webBaseUrl || BITSKI_WEB_BASE_URL;
     this.sdkVersion = sdkVersion;
 
     this.on('error', (error) => {
@@ -49,7 +50,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
       'X-CLIENT-VERSION': this.sdkVersion,
     };
     const fetchSubprovider = new AuthenticatedFetchSubprovider(
-      this.rpcUrl,
+      this.network.rpcUrl,
       false,
       this.tokenProvider,
       defaultHeaders,
@@ -62,7 +63,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
     }
 
     // Respond to requests that need approval with an iframe
-    const iframeSubprovider = new IFrameSubprovider(this.webBaseUrl, this.networkName, this.tokenProvider, this.sdkVersion);
+    const iframeSubprovider = new IFrameSubprovider(this.webBaseUrl, this.apiBaseUrl, this.network.chainId, this.tokenProvider, defaultHeaders);
     this.addProvider(iframeSubprovider);
 
     // Finally, add our basic fetch provider

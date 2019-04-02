@@ -1,7 +1,9 @@
-import { BitskiEngine } from 'bitski-provider';
+import { AuthorizationServiceConfiguration } from '@openid/appauth';
+import { BitskiEngine, Kovan, Mainnet, Network, Rinkeby } from 'bitski-provider';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
+import { SDK_VERSION } from './constants';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
 import css from './styles/index';
@@ -19,11 +21,19 @@ export enum AuthenticationStatus {
   NotConnected = 'NOT_CONNECTED',
 }
 
+// Networks
+export { Network, Mainnet, Rinkeby, Kovan };
+
 export { ConnectButtonSize };
+
+export interface BitskiSDKOptions {
+  configuration?: AuthorizationServiceConfiguration;
+}
 
 export interface ProviderOptions {
   networkName?: string;
   rpcUrl?: string;
+  network?: Network;
   webBaseUrl?: string;
   pollingInterval?: number;
 }
@@ -52,9 +62,9 @@ export class Bitski {
    * Note: Make sure your app is approved for the scopes you are requesting first.
    * @param options Other OAuth settings. Don't change these unless you know what you are doing.
    */
-  constructor(clientId: string, redirectUri?: string, additionalScopes?: string[], options?: any) {
+  constructor(clientId: string, redirectUri?: string, additionalScopes?: string[], options?: BitskiSDKOptions) {
     this.clientId = clientId;
-    this.sdkVersion = '0.4.1';
+    this.sdkVersion = SDK_VERSION;
     this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, additionalScopes, options);
     if (document && document.body) {
       this.injectStyles();
@@ -197,8 +207,19 @@ export class Bitski {
   private createProvider(options: ProviderOptions): BitskiEngine {
     if (options.rpcUrl && !options.networkName) {
       return this.createRPCEngine(options.rpcUrl, options);
+    } else if (options.network) {
+      return this.createBitskiEngine(options.network, options);
     } else {
-      return this.createBitskiEngine(options.networkName || 'mainnet', options);
+      switch (options.networkName) {
+      case 'mainnet':
+        return this.createBitskiEngine(Mainnet, options);
+      case 'rinkeby':
+        return this.createBitskiEngine(Rinkeby, options);
+      case 'kovan':
+        return this.createBitskiEngine(Kovan, options);
+      default:
+        throw new Error(`Unsupported network ${options.networkName}`);
+      }
     }
   }
 
@@ -215,20 +236,16 @@ export class Bitski {
           networkName: options,
         };
       }
-    } else if (options) {
+    } else if (options && (options.networkName || options.rpcUrl || options.network)) {
       // Options is good to go already
-      if (options.networkName || options.rpcUrl) {
-        return options;
-      }
+      return options;
     }
     // Return the default value
-    return {
-      networkName: 'mainnet',
-    };
+    return Object.assign({}, { networkName: 'mainnet' }, options);
   }
 
-  private createBitskiEngine(networkName: string, options: ProviderOptions): BitskiEngine {
-    return new BitskiBrowserEngine(this.clientId, this.authProvider, this.sdkVersion, networkName, options.webBaseUrl, options.rpcUrl, options);
+  private createBitskiEngine(network: Network, options: ProviderOptions): BitskiEngine {
+    return new BitskiBrowserEngine(this.clientId, this.authProvider, this.sdkVersion, network, options.webBaseUrl, undefined, options);
   }
 
   private createRPCEngine(rpcUrl: string, options: ProviderOptions): BitskiEngine {

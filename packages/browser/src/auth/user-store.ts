@@ -1,6 +1,5 @@
+import { USER_KEY } from '../constants';
 import { User } from './user';
-
-const USER_KEY = 'bitski.user';
 
 export class UserStore {
 
