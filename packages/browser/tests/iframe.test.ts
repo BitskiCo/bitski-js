@@ -434,6 +434,37 @@ describe('it handles sends with authorization', () => {
         const responseMock = jest.fn();
         const request = createRequest('eth_sendTransaction', []);
 
+        // @ts-ignore Set a current request so that it continues
+        instance.currentRequest = [request, jest.fn()];
+
+        // @ts-ignore Set a dialog instead of a current request to assert that it returns
+        instance.currentRequestDialog = { dismiss: responseMock };
+
+        const message = new MessageEvent('worker', {
+            data: {
+                id: 0,
+                jsonrpc: '2.0',
+                result: 'foo',
+            },
+            origin: 'http://myetherwallet.com',
+        });
+
+        instance.receiveMessage(message);
+        expect(responseMock).not.toHaveBeenCalled();
+    });
+
+    test('iframe: should ignore messages when from same window', () => {
+        expect.assertions(1);
+
+        const authProvider = createAuthProvider();
+        const instance = createInstance(authProvider);
+
+        const responseMock = jest.fn();
+        const request = createRequest('eth_sendTransaction', []);
+
+        // @ts-ignore Set a current request so that it continues
+        instance.currentRequest = [request, jest.fn()];
+
         // @ts-ignore Set a dialog instead of a current request to assert that it returns
         instance.currentRequestDialog = { dismiss: responseMock };
 
@@ -444,6 +475,7 @@ describe('it handles sends with authorization', () => {
                 result: 'foo',
             },
             origin: 'https://sign.bitski.com',
+            source: window,
         });
 
         instance.receiveMessage(message);
