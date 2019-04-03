@@ -1,6 +1,6 @@
 const TEMPLATE = `
   <div class='bitski-dialog'>
-      <button class='close-button'>Close</button>
+      <button class='bitski-close-button'>Close</button>
       <div class='bitski-dialog-body'></div>
   </div>
 `;
@@ -45,13 +45,13 @@ export class Dialog {
    * Show the dialog
    */
   public show() {
-    this.container.classList.add('visible', 'loaded');
+    this.container.classList.add('bitski-visible', 'bitski-loaded');
   }
   /**
    * Hides the dialog, but does not remove
    */
   public hide() {
-    this.container.classList.remove('visible', 'loaded');
+    this.container.classList.remove('bitski-visible', 'bitski-loaded');
   }
 
   /**
@@ -81,9 +81,9 @@ export class Dialog {
     const body = document.querySelector<HTMLElement>('.bitski-dialog-body');
     if (body) {
       if (loading) {
-        body.classList.add('loading');
+        body.classList.add('bitski-loading');
       } else {
-        body.classList.remove('loading');
+        body.classList.remove('bitski-loading');
       }
     }
   }
@@ -154,7 +154,7 @@ export class Dialog {
       }
     });
     // Close on close button click
-    const closeButton = this.container.querySelector('.close-button');
+    const closeButton = this.container.querySelector('.bitski-close-button');
     if (closeButton) {
       closeButton.addEventListener('click', this.close.bind(this));
     }
