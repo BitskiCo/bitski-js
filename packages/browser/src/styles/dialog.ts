@@ -12,7 +12,7 @@ const css = `
   transition: background linear 0.2s;
   pointer-events: none;
 }
-#bitski-dialog-container.visible {
+#bitski-dialog-container.bitski-visible {
   background: rgba(0, 0, 0, 0.5);
   pointer-events: auto;
 }
@@ -27,13 +27,13 @@ const css = `
   width: 100%;
   height: 100%;
 }
-#bitski-dialog-container.visible .bitski-dialog {
+#bitski-dialog-container.bitski-visible .bitski-dialog {
   opacity: 1;
   transform: none;
   transition: opacity 300ms linear, transform 600ms cubic-bezier(0.19, 1, 0.22, 1);
   pointer-events: auto;
 }
-.bitski-dialog .close-button {
+.bitski-dialog .bitski-close-button {
   background: transparent url('https://cdn.bitskistatic.com/sdk/close.svg') no-repeat 50% 50%;
   position: absolute;
   right: 12px;
@@ -59,7 +59,7 @@ const css = `
   z-index: 5;
   max-width: 100%;
 }
-.bitski-dialog-body.loading::after {
+.bitski-dialog-body.bitski-loading::after {
   content: "";
   background: url('https://cdn.bitskistatic.com/sdk/loading.svg') no-repeat 50% 50%;
   animation: rotate 600ms linear infinite;
