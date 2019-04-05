@@ -19,7 +19,12 @@ export class BitskiEngine extends Web3ProviderEngine {
     this.addProvider(new NonceTrackerSubprovider());
     this.addProvider(new TransactionValidatorSubprovider());
     this.addProvider(new SanitizingSubprovider());
-    this.addProvider(new CacheSubprovider());
+
+    const enableCache = !(options && options.disableCaching === false);
+
+    if (enableCache) {
+      this.addProvider(new CacheSubprovider());
+    }
 
     const filterAndSubsSubprovider = new SubscriptionSubprovider();
     filterAndSubsSubprovider.on('data', (err, notification) => {
@@ -27,7 +32,10 @@ export class BitskiEngine extends Web3ProviderEngine {
     });
 
     this.addProvider(filterAndSubsSubprovider);
-    this.addProvider(new InflightCacheSubprovider());
+
+    if (enableCache) {
+      this.addProvider(new InflightCacheSubprovider());
+    }
   }
 
   // Some versions of web3 prefer to use send(payload, callback) instead of sendAsync() with a callback.
