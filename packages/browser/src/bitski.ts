@@ -36,6 +36,7 @@ export interface ProviderOptions {
   network?: Network;
   webBaseUrl?: string;
   pollingInterval?: number;
+  disableCaching?: boolean;
 }
 
 /**
