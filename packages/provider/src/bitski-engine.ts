@@ -20,7 +20,7 @@ export class BitskiEngine extends Web3ProviderEngine {
     this.addProvider(new TransactionValidatorSubprovider());
     this.addProvider(new SanitizingSubprovider());
 
-    const enableCache = !(options && options.disableCaching === false);
+    const enableCache = !(options && options.disableCaching === true);
 
     if (enableCache) {
       this.addProvider(new CacheSubprovider());
