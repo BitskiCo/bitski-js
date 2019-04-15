@@ -81,6 +81,19 @@ describe('managing providers', () => {
     expect(provider._blockTracker._pollingInterval).toBe(10000000);
   });
 
+  test('should pass additional headers to providers', () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider({
+      networkName: 'rinkeby',
+      additionalHeaders: {
+        'X-FOO-FEATURE': 'ENABLED',
+      },
+    });
+    expect(provider).toBeDefined();
+    // @ts-ignore
+    expect(provider.headers['X-FOO-FEATURE']).toBe('ENABLED');
+  });
+
   test('should create new provider if one doesnt yet exist', () => {
     const bitski = createInstance();
     // @ts-ignore
