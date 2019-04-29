@@ -1,6 +1,7 @@
 import { AccessTokenProvider, AuthenticatedFetchSubprovider, BitskiEngine, Network } from 'bitski-provider';
 import { AuthProvider } from '../auth/auth-provider';
-import { BITSKI_RPC_BASE_URL, BITSKI_TRANSACTION_API_BASE_URL, BITSKI_WEB_BASE_URL } from '../constants';
+import { ProviderOptions } from '../bitski';
+import { BITSKI_TRANSACTION_API_BASE_URL, BITSKI_WEB_BASE_URL } from '../constants';
 import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cache';
 import { IFrameSubprovider } from '../subproviders/iframe';
 
@@ -17,6 +18,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
   private tokenProvider: AccessTokenProvider;
   private clientId: string;
   private sdkVersion: string;
+  private headers: object;
 
   constructor(
     clientId: string,
@@ -25,7 +27,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
     network: Network,
     webBaseUrl?: string,
     apiBaseUrl?: string,
-    options?: any) {
+    options?: ProviderOptions) {
     super(options);
     this.network = network;
     this.apiBaseUrl = apiBaseUrl || BITSKI_TRANSACTION_API_BASE_URL;
@@ -34,26 +36,31 @@ export class BitskiBrowserEngine extends BitskiEngine {
     this.webBaseUrl = webBaseUrl || BITSKI_WEB_BASE_URL;
     this.sdkVersion = sdkVersion;
 
+    const defaultHeaders = {
+      'X-API-KEY': this.clientId,
+      'X-CLIENT-ID': this.clientId,
+      'X-CLIENT-VERSION': this.sdkVersion,
+    };
+    this.headers = defaultHeaders;
+    if (options && options.additionalHeaders) {
+      this.headers = Object.assign({}, options.additionalHeaders, this.headers);
+    }
+
     this.on('error', (error) => {
       if (error.message === 'Not signed in') {
         this.stop();
       }
     });
 
-    this.addSubproviders();
+    this.addSubproviders(options);
   }
 
-  protected addSubproviders() {
-    const defaultHeaders = {
-      'X-API-KEY': this.clientId,
-      'X-CLIENT-ID': this.clientId,
-      'X-CLIENT-VERSION': this.sdkVersion,
-    };
+  protected addSubproviders(options?: ProviderOptions) {
     const fetchSubprovider = new AuthenticatedFetchSubprovider(
       this.network.rpcUrl,
       false,
       this.tokenProvider,
-      defaultHeaders,
+      this.headers,
     );
 
     // Respond to some requests via userinfo object if available
@@ -63,7 +70,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
     }
 
     // Respond to requests that need approval with an iframe
-    const iframeSubprovider = new IFrameSubprovider(this.webBaseUrl, this.apiBaseUrl, this.network.chainId, this.tokenProvider, defaultHeaders);
+    const iframeSubprovider = new IFrameSubprovider(this.webBaseUrl, this.apiBaseUrl, this.network.chainId, this.tokenProvider, this.headers);
     this.addProvider(iframeSubprovider);
 
     // Finally, add our basic fetch provider

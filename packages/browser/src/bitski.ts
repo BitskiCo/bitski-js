@@ -37,6 +37,7 @@ export interface ProviderOptions {
   webBaseUrl?: string;
   pollingInterval?: number;
   disableCaching?: boolean;
+  additionalHeaders?: object;
 }
 
 /**
