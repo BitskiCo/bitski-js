@@ -27,20 +27,22 @@ class MockFixtureProvider extends FixtureSubprovider {
 }
 
 test('it updates missing values', (done) => {
-  expect.assertions(5);
+  expect.assertions(6);
 
-  const { engine, provider } = createEngine();
+  const { engine } = createEngine();
 
   const fixtures = {
     eth_estimateGas: '0x01',
     eth_gasPrice: '0x0001',
     eth_getTransactionCount: '0x0',
     eth_sendTransaction: '0x1',
+    eth_accounts: ['0xf00'],
   };
 
   const assertionsCallback = (payload) => {
     if (payload.method === 'eth_sendTransaction') {
       expect(payload.params[0]).toBeDefined();
+      expect(payload.params[0].from).toBe(fixtures.eth_accounts[0]);
       expect(payload.params[0].gas).toBe(fixtures.eth_estimateGas);
       expect(payload.params[0].gasPrice).toBe(fixtures.eth_gasPrice);
       expect(payload.params[0].nonce).toBe(fixtures.eth_getTransactionCount);
@@ -55,7 +57,47 @@ test('it updates missing values', (done) => {
     method: 'eth_sendTransaction',
     params: [{
       amount: '0x0',
-      from: '0xf00',
+    }],
+  };
+
+  engine.sendAsync(request, (err, result) => {
+    expect(err).toBeNull();
+    done();
+  });
+
+});
+
+test('it ignores errors when trying to set values', (done) => {
+  expect.assertions(6);
+
+  const { engine } = createEngine();
+
+  const fixtures = {
+    eth_getTransactionCount: '0x0',
+    eth_sendTransaction: '0x1',
+    eth_accounts: ['0xf00'],
+  };
+
+  const assertionsCallback = (payload) => {
+    if (payload.method === 'eth_sendTransaction') {
+      expect(payload.params[0]).toBeDefined();
+      expect(payload.params[0].from).toBe(fixtures.eth_accounts[0]);
+      expect(payload.params[0].gas).toBeUndefined();
+      expect(payload.params[0].gasPrice).toBeUndefined();
+      // Current behavior is that if any of the requirements fail to load,
+      // none of them get set (Promise.all).
+      expect(payload.params[0].nonce).toBeUndefined();
+    }
+  };
+
+  engine.addProvider(new MockFixtureProvider(fixtures, assertionsCallback));
+
+  const request = {
+    id: 1,
+    jsonrpc: '2.0',
+    method: 'eth_sendTransaction',
+    params: [{
+      amount: '0x0',
     }],
   };
 
@@ -67,20 +109,22 @@ test('it updates missing values', (done) => {
 });
 
 test('it only updates values that are missing', (done) => {
-  expect.assertions(5);
+  expect.assertions(6);
 
-  const { engine, provider } = createEngine();
+  const { engine } = createEngine();
 
   const fixtures = {
     eth_estimateGas: '0x01',
     eth_gasPrice: '0x0001',
     eth_getTransactionCount: '0x0',
     eth_sendTransaction: '0x1',
+    eth_accounts: ['0xf00'],
   };
 
   const assertionsCallback = (payload) => {
     if (payload.method === 'eth_sendTransaction') {
       expect(payload.params[0]).toBeDefined();
+      expect(payload.params[0].from).toBe(fixtures.eth_accounts[0]);
       expect(payload.params[0].gas).toBe(fixtures.eth_estimateGas);
       expect(payload.params[0].gasPrice).toBe(fixtures.eth_gasPrice);
       expect(payload.params[0].nonce).toBe('0xff');
@@ -107,8 +151,53 @@ test('it only updates values that are missing', (done) => {
 
 });
 
+test('it ignores transactions that already have all values', (done) => {
+  expect.assertions(6);
+
+  const { engine } = createEngine();
+
+  const fixtures = {
+    eth_estimateGas: '0x01',
+    eth_gasPrice: '0x0001',
+    eth_getTransactionCount: '0x0',
+    eth_sendTransaction: '0x1',
+    eth_accounts: ['0xf00'],
+  };
+
+  const assertionsCallback = (payload) => {
+    if (payload.method === 'eth_sendTransaction') {
+      expect(payload.params[0]).toBeDefined();
+      expect(payload.params[0].from).toBe('0xff');
+      expect(payload.params[0].gas).toBe('0x02');
+      expect(payload.params[0].gasPrice).toBe('0x003');
+      expect(payload.params[0].nonce).toBe('0xff');
+    }
+  };
+
+  engine.addProvider(new MockFixtureProvider(fixtures, assertionsCallback));
+
+  const request = {
+    id: 1,
+    jsonrpc: '2.0',
+    method: 'eth_sendTransaction',
+    params: [{
+      amount: '0x0',
+      from: '0xff',
+      gas: '0x02',
+      gasPrice: '0x003',
+      nonce: '0xff',
+    }],
+  };
+
+  engine.sendAsync(request, (err, result) => {
+    expect(err).toBeNull();
+    done();
+  });
+
+});
+
 test('it ignores non-transaction requests', (done) => {
-  const { engine, provider } = createEngine();
+  const { engine } = createEngine();
 
   engine.addProvider(new FixtureSubprovider({
     eth_accounts: [],

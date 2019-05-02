@@ -46,7 +46,7 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         if (this.tokenStore.refreshToken) {
             return this.refreshAccessToken();
         }
-        return Promise.reject(new Error('Not signed in'));
+        return Promise.reject(new Error('Not signed in. Please sign in and try your request again.'));
     }
 
     public invalidateToken(): Promise<void> {

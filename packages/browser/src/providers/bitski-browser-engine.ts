@@ -1,9 +1,11 @@
 import { AccessTokenProvider, AuthenticatedFetchSubprovider, BitskiEngine, Network } from 'bitski-provider';
 import { AuthProvider } from '../auth/auth-provider';
 import { ProviderOptions } from '../bitski';
-import { BITSKI_TRANSACTION_API_BASE_URL, BITSKI_WEB_BASE_URL } from '../constants';
+import { BITSKI_RPC_BASE_URL, BITSKI_TRANSACTION_API_BASE_URL, BITSKI_WEB_BASE_URL } from '../constants';
+import { BitskiTransactionSigner } from '../signing/transaction-signer';
 import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cache';
-import { IFrameSubprovider } from '../subproviders/iframe';
+import { RemoteAccountSubprovider } from '../subproviders/remote-accounts';
+import { SignatureSubprovider } from '../subproviders/signature';
 
 // Predicate to determine if the token provider is an AuthProvider
 function isAuthProvider(object: any): object is AuthProvider {
@@ -19,43 +21,50 @@ export class BitskiBrowserEngine extends BitskiEngine {
   private clientId: string;
   private sdkVersion: string;
   private headers: object;
+  private signer: BitskiTransactionSigner;
 
   constructor(
     clientId: string,
     tokenProvider: AccessTokenProvider,
     sdkVersion: string,
     network: Network,
-    webBaseUrl?: string,
-    apiBaseUrl?: string,
-    options?: ProviderOptions) {
+    options: ProviderOptions = {},
+  ) {
     super(options);
     this.network = network;
-    this.apiBaseUrl = apiBaseUrl || BITSKI_TRANSACTION_API_BASE_URL;
-    this.tokenProvider = tokenProvider;
     this.clientId = clientId;
-    this.webBaseUrl = webBaseUrl || BITSKI_WEB_BASE_URL;
     this.sdkVersion = sdkVersion;
+    this.apiBaseUrl = options.apiBaseUrl || BITSKI_TRANSACTION_API_BASE_URL;
+    this.webBaseUrl = options.webBaseUrl || BITSKI_WEB_BASE_URL;
+    this.tokenProvider = tokenProvider;
 
     const defaultHeaders = {
       'X-API-KEY': this.clientId,
       'X-CLIENT-ID': this.clientId,
       'X-CLIENT-VERSION': this.sdkVersion,
     };
+
     this.headers = defaultHeaders;
+
     if (options && options.additionalHeaders) {
       this.headers = Object.assign({}, options.additionalHeaders, this.headers);
     }
 
-    this.on('error', (error) => {
-      if (error.message === 'Not signed in') {
-        this.stop();
-      }
-    });
+    this.signer = new BitskiTransactionSigner(this.webBaseUrl, this.apiBaseUrl, this.headers);
 
-    this.addSubproviders(options);
+    this.addSubproviders();
   }
 
-  protected addSubproviders(options?: ProviderOptions) {
+  protected addSubproviders() {
+    // Used for eth_accounts calls
+    const accountsProvider = new RemoteAccountSubprovider(
+      `${BITSKI_RPC_BASE_URL}/mainnet`,
+      false,
+      this.tokenProvider,
+      this.headers,
+    );
+
+    // Used for all other calls
     const fetchSubprovider = new AuthenticatedFetchSubprovider(
       this.network.rpcUrl,
       false,
@@ -69,11 +78,14 @@ export class BitskiBrowserEngine extends BitskiEngine {
       this.addProvider(cacheSubprovider);
     }
 
-    // Respond to requests that need approval with an iframe
-    const iframeSubprovider = new IFrameSubprovider(this.webBaseUrl, this.apiBaseUrl, this.network.chainId, this.tokenProvider, this.headers);
-    this.addProvider(iframeSubprovider);
+    // Ensure that whenever accounts are requested, they go through Bitski
+    this.addProvider(accountsProvider);
 
-    // Finally, add our basic fetch provider
+    // Respond to requests that need signed with an iframe
+    const signatureSubprovider = new SignatureSubprovider(this.network, this.signer, this.tokenProvider);
+    this.addProvider(signatureSubprovider);
+
+    // Finally, add our basic HTTP provider
     this.addProvider(fetchSubprovider);
   }
 

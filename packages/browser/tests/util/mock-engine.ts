@@ -2,8 +2,14 @@ import Web3ProviderEngine from 'web3-provider-engine';
 import FixtureProvider from 'web3-provider-engine/subproviders/fixture';
 
 export class MockEngine extends Web3ProviderEngine {
-  constructor() {
+  constructor(providers: any[] = []) {
     super();
+
+    // Inject subproviders before the fallback FixtureProvider
+    providers.forEach((provider) => {
+      super.addProvider(provider);
+    });
+
     super.addProvider(new FixtureProvider({
       eth_getBlockByNumber: false,
       eth_hashrate: '0x00',
@@ -11,7 +17,11 @@ export class MockEngine extends Web3ProviderEngine {
       eth_syncing: true,
       net_listening: true,
       web3_clientVersion: 'ProviderEngine/v0.0.0/javascript',
+      eth_sendRawTransaction: '0x',
+      eth_accounts: [],
+      eth_getBalance: '0x1',
     }));
+
     // @ts-ignore
     this._blockTracker.emit('block', {
       difficulty: '0x00',

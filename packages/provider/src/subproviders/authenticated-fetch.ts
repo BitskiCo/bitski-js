@@ -59,8 +59,8 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     headers = Object.assign({}, headers, this.defaultHeaders);
 
     const originDomain = payload.origin;
-    if (super.originHttpHeaderKey && originDomain) {
-      headers[super.originHttpHeaderKey] = originDomain;
+    if (this.originHttpHeaderKey && originDomain) {
+      headers[this.originHttpHeaderKey] = originDomain;
     }
 
     if (accessToken) {
@@ -82,7 +82,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
       interval: 1000,
       times: 5,
     },
-    (cb) => super._submitRequest(parameters, cb),
+    (cb) => this._submitRequest(parameters, cb),
     (err, result) => {
       // ends on retriable error
       if (err && this.isErrorRetriable(err)) {

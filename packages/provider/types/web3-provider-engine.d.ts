@@ -53,6 +53,19 @@ declare module "web3-provider-engine/subproviders/subprovider" {
     export = Subprovider;
 }
 
+declare module "web3-provider-engine/subproviders/fetch" {
+    import Subprovider from 'web3-provider-engine/subproviders/subprovider';
+
+    class FetchSubprovider extends Subprovider {
+        rpcUrl: string;
+        originHttpHeaderKey: string;
+        constructor(options?: { rpcUrl: string, debug: boolean });
+        _submitRequest(reqParams, cb): void;
+    }
+
+    export = FetchSubprovider;
+}
+
 // declare module "web3-provider-engine/subproviders/nonce-tracker";
 // declare module "web3-provider-engine/subproviders/hooked-wallet";
 // declare module "web3-provider-engine/subproviders/filters";
