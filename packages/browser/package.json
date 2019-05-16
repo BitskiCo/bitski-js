@@ -11,6 +11,7 @@
   },
   "version": "0.5.6",
   "scripts": {
+    "test": "jest",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
     "bundle": "npm run bundle:main && npm run bundle:callback && npm run minify",
     "bundle:main": "browserify -s Bitski -e dist/esm/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.bundle.js",
@@ -26,33 +27,6 @@
     "web3-provider-engine": "^14.1.0"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.2",
-    "@types/uuid": "^3.4.4",
-    "babel-preset-es2015": "^6.24.1",
-    "browserify": "^16.2.3",
-    "jest": "^23.6.0",
-    "jest-fetch-mock": "^1.6.6",
-    "jest-junit": "^5.1.0",
-    "ts-jest": "^23.10.0",
-    "tslint": "^5.11.0",
-    "typedoc": "^0.12.0",
-    "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
-    "typescript": "^3.1.6",
-    "xhr-mock": "^2.4.1"
-  },
-  "jest": {
-    "automock": false,
-    "transformIgnorePatterns": [
-      "node_modules/(?!(bitski-provider)/)"
-    ],
-    "preset": "ts-jest",
-    "setupFiles": [
-      "./tests/util/setup-jest.js"
-    ],
-    "globals": {
-      "ts-jest": {
-        "diagnostics": false
-      }
-    }
+    "jest": "^23.6.0"
   }
 }

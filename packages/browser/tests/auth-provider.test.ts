@@ -88,7 +88,7 @@ describe('getting an access token', () => {
     expect.assertions(1);
     const authProvider = createInstance();
     return authProvider.getAccessToken().catch((err) => {
-      expect(err.message).toBe('Not signed in');
+      expect(err.message).toMatch(/Not signed in/);
     });
   });
 

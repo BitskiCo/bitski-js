@@ -1,5 +1,5 @@
 import { User } from '../src/auth/user';
-import { AuthenticationStatus, Bitski, OAuthSignInMethod } from '../src/bitski';
+import { AuthenticationStatus, Bitski, Mainnet, OAuthSignInMethod, Rinkeby } from '../src/bitski';
 
 const clientID = 'test-client-id';
 
@@ -15,7 +15,7 @@ describe('managing providers', () => {
     const provider = bitski.getProvider();
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.network.name).toBe('mainnet');
+    expect(provider.network).toBe(Mainnet);
   });
 
   test('should get a mainnet provider when passing options with no network name', () => {
@@ -23,7 +23,7 @@ describe('managing providers', () => {
     const provider = bitski.getProvider({ pollingInterval: 1000000 });
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.network.name).toBe('mainnet');
+    expect(provider.network).toBe(Mainnet);
   });
 
   test('should be able to pass a network name as a string', () => {
@@ -31,7 +31,7 @@ describe('managing providers', () => {
     const provider = bitski.getProvider('rinkeby');
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.network.name).toBe('rinkeby');
+    expect(provider.network).toBe(Rinkeby);
   });
 
   test('should be able to pass a network name in options', () => {
@@ -39,7 +39,7 @@ describe('managing providers', () => {
     const provider = bitski.getProvider({ networkName: 'rinkeby' });
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.network.name).toBe('rinkeby');
+    expect(provider.network).toBe(Rinkeby);
   });
 
   test('passing an invalid network name results in an error', () => {
@@ -47,19 +47,23 @@ describe('managing providers', () => {
     expect(() => { bitski.getProvider('ropstem'); }).toThrow(/Unsupported network/);
   });
 
-  test('should be able to pass a rpcUrl in options', () => {
+  test('should be able to pass a custom network in options', () => {
     const bitski = createInstance();
-    const provider = bitski.getProvider({ rpcUrl: 'http://localhost:3000/web3' });
+    const provider = bitski.getProvider({
+      network: {
+        rpcUrl: 'http://localhost:3000/web3',
+        chainId: 0,
+      },
+    });
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.rpcUrl).toBe('http://localhost:3000/web3');
+    expect(provider.network.rpcUrl).toBe('http://localhost:3000/web3');
   });
 
   test('should be able to pass in custom configuration', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({
       network: {
-        name: 'rinkeby',
         rpcUrl: 'https://api-v2.bitski.com/web3/rinkeby',
         chainId: 4,
       },
@@ -67,7 +71,7 @@ describe('managing providers', () => {
     });
     expect(provider).toBeDefined();
     // @ts-ignore
-    expect(provider.network.name).toBe('rinkeby');
+    expect(provider.network.chainId).toBe(4);
     // @ts-ignore
     expect(provider.webBaseUrl).toBe('https://next.bitski.com');
     // @ts-ignore
@@ -125,20 +129,23 @@ describe('managing providers', () => {
     expect(provider._blockTracker._isRunning).toBe(false);
   });
 
-  test('should stop engine when force logged out', () => {
+  test('should not stop engine when force logged out', () => {
+    expect.assertions(2);
     const bitski = createInstance();
     const provider = bitski.getProvider('kovan');
+
+    // Assert the error is passed through
+    provider.on('error', (error) => { expect(error.message).toMatch(/Not signed in/); });
+
+    // Assert the provider is not stopped
     const spy = jest.spyOn(provider, 'stop');
     provider.emit('error', new Error('Not signed in'));
-    expect(spy).toHaveBeenCalled();
+    expect(spy).not.toHaveBeenCalled();
   });
 
-  test('should create regular RPCProvider when passing host string', () => {
+  test('should throw an error when passing host string as name', () => {
     const bitski = createInstance();
-    const providerEngine = bitski.getProvider('http://localhost:7545');
-    expect(providerEngine !== undefined);
-    // @ts-ignore
-    expect(providerEngine.rpcUrl === 'http://localhost:7545');
+    expect(() => { bitski.getProvider('http://localhost:7545'); }).toThrow(/Unsupported network name/);
   });
 });
 
