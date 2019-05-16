@@ -339,7 +339,7 @@ describe('sign out', () => {
     });
   });
 
-  test('should request sign out via api', () => {
+  test('should remove user data on sign out', () => {
     expect.assertions(4);
     const authProvider = createInstance();
     (authProvider.tokenStore as MockTokenStore).setToken(dummyToken);
@@ -347,19 +347,10 @@ describe('sign out', () => {
     authProvider.userStore.set(dummyUser);
     const spy = jest.spyOn(authProvider.oauthManager, 'requestSignOut').mockResolvedValue({});
     return authProvider.signOut().then(() => {
-      expect(spy).toHaveBeenCalledWith(dummyToken.token);
+      expect(spy).not.toHaveBeenCalled();
       expect(authProvider.tokenStore.currentToken).toBeUndefined();
       expect(authProvider.tokenStore.refreshToken).toBeUndefined();
       expect(authProvider.userStore.currentUser).toBeUndefined();
-    });
-  });
-
-  test('should resolve silently if not signed in', () => {
-    expect.assertions(1);
-    const authProvider = createInstance();
-    const spy = jest.spyOn(authProvider.oauthManager, 'requestSignOut');
-    return authProvider.signOut().then(() => {
-      expect(spy).not.toHaveBeenCalled();
     });
   });
 
