@@ -1,5 +1,5 @@
 import { AuthorizationServiceConfiguration } from '@openid/appauth';
-import { BitskiEngine, Kovan, Mainnet, Network, Rinkeby } from 'bitski-provider';
+import { BitskiEngine, BitskiEngineOptions, Kovan, Mainnet, Network, Rinkeby } from 'bitski-provider';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
@@ -29,11 +29,12 @@ export interface BitskiSDKOptions {
   configuration?: AuthorizationServiceConfiguration;
 }
 
-export interface ProviderOptions {
+export interface ProviderOptions extends BitskiEngineOptions {
   networkName?: string;
   network?: Network;
   pollingInterval?: number;
   disableCaching?: boolean;
+  disableValidation?: boolean;
   additionalHeaders?: object;
   webBaseUrl?: string;
   apiBaseUrl?: string;
