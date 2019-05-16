@@ -125,15 +125,14 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     }
 
     public signOut(): Promise<any> {
-        if (this.tokenStore.currentToken) {
-            const token = this.tokenStore.currentToken;
-            this.tokenStore.clear();
-            this.userStore.clear();
-            return this.oauthManager.requestSignOut(token);
-        }
+        this.tokenStore.clear();
+        this.userStore.clear();
+        // Call the sign out callback if one has been provided
         if (this.signOutCallback) {
             this.signOutCallback();
         }
+        // We don't currently have the ability to invalidate access tokens, so for now simply resolve.
+        // Down the road this may perform a network request to invalidate.
         return Promise.resolve();
     }
 
