@@ -1,6 +1,5 @@
+import { FetchSubprovider } from '@bitski/provider-engine';
 import retry from 'async/retry';
-import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
-import createPayload from 'web3-provider-engine/util/create-payload';
 import { AccessTokenProvider } from '../auth/access-token-provider';
 import { AUTHENTICATED_METHODS, RETRIABLE_ERRORS, UNAUTHORIZED_ERRORS } from '../constants';
 
@@ -13,7 +12,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
   protected defaultHeaders: object;
 
   constructor(rpcUrl: string, debug: boolean, accessTokenProvider: AccessTokenProvider, defaultHeaders: object = {}) {
-    super({ rpcUrl, debug });
+    super({ rpcUrl });
     this.authenticatedMethods = AUTHENTICATED_METHODS;
     this.accessTokenProvider = accessTokenProvider;
     this.defaultHeaders = defaultHeaders;
@@ -47,7 +46,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
 
   protected generateParameters(payload, accessToken?: string): object {
     // overwrite id to not conflict with other concurrent users
-    const newPayload = createPayload(payload);
+    const newPayload = this.createPayload(payload);
     // remove extra parameter from request
     delete newPayload.origin;
 
