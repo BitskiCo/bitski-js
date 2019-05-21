@@ -12,6 +12,7 @@ function createProvider() {
   const instance = new SignatureSubprovider(Mainnet, new MockSigner('0xf00b4r'), authProvider);
   const provider = new MockEngine();
   provider.addProvider(instance);
+  provider.start();
   return { instance, provider };
 }
 

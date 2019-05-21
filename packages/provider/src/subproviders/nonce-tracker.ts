@@ -1,4 +1,4 @@
-import Subprovider from 'web3-provider-engine/subproviders/subprovider';
+import { Subprovider } from '@bitski/provider-engine';
 
 /**
  * A subprovider that tracks and automatically increments the nonce on the client.

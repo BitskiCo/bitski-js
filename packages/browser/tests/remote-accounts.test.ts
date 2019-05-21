@@ -7,6 +7,7 @@ function createProvider() {
   const tokenProvider = new MockTokenProvider();
   const accountsProvider = new RemoteAccountSubprovider('https://test-api.bitski.com/v1/test', false, tokenProvider);
   const provider = new MockEngine([accountsProvider]);
+  provider.start();
   return { provider, accountsProvider };
 }
 

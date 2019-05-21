@@ -1,5 +1,5 @@
-import Web3ProviderEngine from 'web3-provider-engine';
-import FixtureSubprovider from 'web3-provider-engine/subproviders/fixture';
+import Web3ProviderEngine from '@bitski/provider-engine';
+import { FixtureSubprovider } from '@bitski/provider-engine';
 import { TransactionValidatorSubprovider } from '../src/subproviders/transaction-validator';
 
 function createEngine() {

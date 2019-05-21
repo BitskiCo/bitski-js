@@ -1,4 +1,4 @@
-import Subprovider from 'web3-provider-engine/subproviders/subprovider';
+import { Subprovider } from '@bitski/provider-engine';
 import { AuthProvider } from '../auth/auth-provider';
 import { CACHED_METHODS } from '../constants';
 
