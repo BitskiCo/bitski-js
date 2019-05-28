@@ -12,7 +12,8 @@
         },
         "indent": [true, "spaces", 2],
         "no-switch-case-fall-through": true,
-        "no-reference": false
+        "no-reference": false,
+        "object-literal-sort-keys": false
     },
     "rulesDirectory": []
 }

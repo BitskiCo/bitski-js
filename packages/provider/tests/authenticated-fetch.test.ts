@@ -50,16 +50,12 @@ describe('handles authenticated sends', () => {
 
     // @ts-ignore
     const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
-    const request = createRequest('eth_accounts', []);
-    provider.originHttpHeaderKey = 'Origin';
-    request.origin = 'http://foo.bar';
-    return engine.sendAsync(request, (error, value) => {
+    engine.send('eth_accounts', []).then((value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];
       expect(params.headers.Authorization).toBe('Bearer test-access-token');
       expect(params.headers['X-API-KEY']).toBe('test-client-id');
-      expect(error).toBeNull();
-      expect(value.result).toBe('foo');
+      expect(value).toBe('foo');
       done();
     });
   });
@@ -70,10 +66,7 @@ describe('handles authenticated sends', () => {
     const engine = createEngine(provider);
     provider.accessTokenProvider.loggedIn = false;
 
-    // @ts-ignore
-    const request = createRequest('eth_accounts', []);
-
-    return engine.sendAsync(request, (error) => {
+    engine.send('eth_accounts', []).catch((error) => {
       expect(error.message).toMatch(/Not logged in/);
       done();
     });
@@ -86,13 +79,9 @@ describe('handles authenticated sends', () => {
     // @ts-ignore
     fetch.once('ECONNRESET', { status: 500 }).once('ECONNRESET', { status: 500 }).once(JSON.stringify({ id: 0, jsonrpc: '2.0', result: 'foo' }));
 
-    // @ts-ignore
-    const request = createRequest('eth_peerCount', []);
-
-    return engine.sendAsync(request, (error, value) => {
+    return engine.send('eth_peerCount', []).then((value) => {
       expect(fetch.mock.calls.length).toBe(3);
-      expect(error).toBeNull();
-      expect(value.result).toBe('foo');
+      expect(value).toBe('foo');
       done();
     });
   });
@@ -104,13 +93,9 @@ describe('handles authenticated sends', () => {
     // @ts-ignore
     fetch.mockResponse(JSON.stringify({ error: { message: 'Not Authorized' }}));
 
-    // @ts-ignore
-    const request = createRequest('eth_peerCount', []);
-
-    return engine.sendAsync(request, (error, value) => {
+    engine.send('eth_peerCount', []).catch((error) => {
       expect(fetch.mock.calls.length).toBe(1);
       expect(error.message).toMatch(/Not Authorized/);
-      expect(value.result).toBeUndefined();
       done();
     });
   });
@@ -124,9 +109,8 @@ describe('handles authenticated sends', () => {
     // @ts-ignore
     const request = createRequest('eth_peerCount', []);
 
-    return engine.sendAsync(request, (error, value) => {
+    return engine.send('eth_peerCount', []).catch((error) => {
       expect(error.message).toMatch(/All retries exhausted/);
-      expect(value.result).toBeUndefined();
       expect(fetch.mock.calls.length).toBe(5);
       done();
     });
@@ -145,15 +129,13 @@ describe('handles authenticated sends', () => {
 
     // @ts-ignore
     const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
-    const request = createRequest('eth_peerCount', []);
 
-    return engine.sendAsync(request, (error, value) => {
+    engine.send('eth_peerCount', []).then((value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];
       expect(params.headers.Authorization).toBeUndefined();
       expect(params.headers['X-API-KEY']).toBe('test-client-id');
-      expect(error).toBeNull();
-      expect(value.result).toBe('foo');
+      expect(value).toBe('foo');
       done();
     });
   });
@@ -170,11 +152,11 @@ describe('handles authenticated sends', () => {
       id: 0,
       jsonrpc: '2.0',
     }));
+
     // @ts-ignore
     const invalidateTokenSpy = jest.spyOn(provider.accessTokenProvider, 'invalidateToken');
-    const request = createRequest('eth_peerCount', []);
 
-    return engine.sendAsync(request, (error, value) => {
+    engine.send('eth_peerCount', []).catch((error) => {
       expect(invalidateTokenSpy).toHaveBeenCalled();
       expect(error).toBeDefined();
       done();
