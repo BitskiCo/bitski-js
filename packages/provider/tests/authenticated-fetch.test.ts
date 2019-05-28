@@ -1,12 +1,20 @@
 import { AuthenticatedFetchSubprovider } from '../src/index';
 import { AccessTokenProvider } from '../src/index';
 import { MockEngine } from './util/mock-engine';
+import { createRequest } from './util/rpc-utils';
 
 class MockProvider implements AccessTokenProvider {
+  public loggedIn: boolean = true;
+
   public getAccessToken(): Promise<string> {
-    return Promise.resolve('test-access-token');
+    if (this.loggedIn) {
+      return Promise.resolve('test-access-token');
+    }
+    return Promise.reject(new Error('Not logged in'));
   }
+
   public invalidateToken(): Promise<void> {
+    this.loggedIn = false;
     return Promise.resolve();
   }
 }
@@ -19,16 +27,8 @@ function createFetchProvider(): AuthenticatedFetchSubprovider {
 function createEngine(fetchProvider: AuthenticatedFetchSubprovider): MockEngine {
   const engine = new MockEngine();
   engine.addProvider(fetchProvider);
+  engine.start();
   return engine;
-}
-
-function createRequest(method: string, params: any[]): any {
-  return {
-    id: 0,
-    jsonrpc: '2.0',
-    method,
-    params,
-  };
 }
 
 beforeEach(() => {
@@ -51,7 +51,8 @@ describe('handles authenticated sends', () => {
     // @ts-ignore
     const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
     const request = createRequest('eth_accounts', []);
-
+    provider.originHttpHeaderKey = 'Origin';
+    request.origin = 'http://foo.bar';
     return engine.sendAsync(request, (error, value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
       const params = sendRequestSpy.mock.calls[0][0];
@@ -59,6 +60,21 @@ describe('handles authenticated sends', () => {
       expect(params.headers['X-API-KEY']).toBe('test-client-id');
       expect(error).toBeNull();
       expect(value.result).toBe('foo');
+      done();
+    });
+  });
+
+  test('forwards error when access token cannot be loaded for a request that requires one', (done) => {
+    expect.assertions(1);
+    const provider = createFetchProvider();
+    const engine = createEngine(provider);
+    provider.accessTokenProvider.loggedIn = false;
+
+    // @ts-ignore
+    const request = createRequest('eth_accounts', []);
+
+    return engine.sendAsync(request, (error) => {
+      expect(error.message).toMatch(/Not logged in/);
       done();
     });
   });

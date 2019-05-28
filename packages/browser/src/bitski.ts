@@ -1,11 +1,10 @@
 import { AuthorizationServiceConfiguration } from '@openid/appauth';
-import { BitskiEngine, Kovan, Mainnet, Network, Rinkeby } from 'bitski-provider';
+import { BitskiEngine, BitskiEngineOptions, Kovan, Mainnet, Network, Rinkeby } from 'bitski-provider';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
 import { SDK_VERSION } from './constants';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
-import { BitskiDevelopmentEngine } from './providers/bitski-development-engine';
 import css from './styles/index';
 import { processCallback } from './utils/callback';
 
@@ -30,14 +29,15 @@ export interface BitskiSDKOptions {
   configuration?: AuthorizationServiceConfiguration;
 }
 
-export interface ProviderOptions {
+export interface ProviderOptions extends BitskiEngineOptions {
   networkName?: string;
-  rpcUrl?: string;
   network?: Network;
-  webBaseUrl?: string;
   pollingInterval?: number;
   disableCaching?: boolean;
+  disableValidation?: boolean;
   additionalHeaders?: object;
+  webBaseUrl?: string;
+  apiBaseUrl?: string;
 }
 
 /**
@@ -86,16 +86,21 @@ export class Bitski {
    * @param options.pollingInterval minimum interval in milliseconds to poll for new blocks. default is 4000.
    */
   public getProvider(options?: ProviderOptions | string): BitskiEngine {
-    const normalizedOptions = this.normalizeProviderOptions(options);
-    const providerId = normalizedOptions.rpcUrl || normalizedOptions.networkName || 'mainnet';
-    const existingProvider = this.engines.get(providerId);
+    const network = this.networkFromProviderOptions(options);
+    // Check cache for existing provider
+    const existingProvider = this.engines.get(network.rpcUrl);
     if (existingProvider) {
       existingProvider.start();
       return existingProvider;
     }
-    const newProvider = this.createProvider(normalizedOptions);
+    // Create a new provider if one does not exist
+    let normalizedOptions = {};
+    if (options && typeof options !== 'string') {
+      normalizedOptions = options;
+    }
+    const newProvider = this.createProvider(network, normalizedOptions);
     newProvider.start();
-    this.engines.set(providerId, newProvider);
+    this.engines.set(network.rpcUrl, newProvider);
     return newProvider;
   }
 
@@ -206,52 +211,38 @@ export class Bitski {
     return this.authProvider.signOut();
   }
 
-  private createProvider(options: ProviderOptions): BitskiEngine {
-    if (options.rpcUrl && !options.networkName) {
-      return this.createRPCEngine(options.rpcUrl, options);
-    } else if (options.network) {
-      return this.createBitskiEngine(options.network, options);
-    } else {
-      switch (options.networkName) {
-      case 'mainnet':
-        return this.createBitskiEngine(Mainnet, options);
-      case 'rinkeby':
-        return this.createBitskiEngine(Rinkeby, options);
-      case 'kovan':
-        return this.createBitskiEngine(Kovan, options);
-      default:
-        throw new Error(`Unsupported network ${options.networkName}`);
-      }
+  private createProvider(network: Network, options: ProviderOptions = {}): BitskiEngine {
+    return new BitskiBrowserEngine(this.clientId, this.authProvider, this.sdkVersion, network, options);
+  }
+
+  private networkFromName(networkName: string): Network {
+    switch (networkName) {
+    case '':
+    case 'mainnet':
+      return Mainnet;
+    case 'rinkeby':
+      return Rinkeby;
+    case 'kovan':
+      return Kovan;
+    default:
+      throw new Error(`Unsupported network name ${networkName}. Try passing a \`network\` in the options instead.`);
     }
   }
 
-  private normalizeProviderOptions(options: ProviderOptions | string | undefined): ProviderOptions {
+  private networkFromProviderOptions(options: ProviderOptions | string | undefined): Network {
+    if (!options) {
+      return Mainnet;
+    }
     if (typeof options === 'string') {
-      if (options.includes('http')) {
-        // Passed in a url string
-        return {
-          rpcUrl: options,
-        };
-      } else {
-        // Passed in a network name
-        return {
-          networkName: options,
-        };
-      }
-    } else if (options && (options.networkName || options.rpcUrl || options.network)) {
-      // Options is good to go already
-      return options;
+      return this.networkFromName(options);
     }
-    // Return the default value
-    return Object.assign({}, { networkName: 'mainnet' }, options);
-  }
-
-  private createBitskiEngine(network: Network, options: ProviderOptions): BitskiEngine {
-    return new BitskiBrowserEngine(this.clientId, this.authProvider, this.sdkVersion, network, options.webBaseUrl, undefined, options);
-  }
-
-  private createRPCEngine(rpcUrl: string, options: ProviderOptions): BitskiEngine {
-    return new BitskiDevelopmentEngine(options, rpcUrl);
+    if (options.network) {
+      return options.network;
+    }
+    if (options.networkName) {
+      return this.networkFromName(options.networkName);
+    }
+    return Mainnet;
   }
 
   private onSignOut() {

@@ -9,41 +9,20 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.5.6",
+  "version": "0.6.0",
   "scripts": {
+    "test": "jest",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
     "prepare": "npm run build",
     "prepack": "npm run build"
   },
   "dependencies": {
+    "@bitski/provider-engine": "^0.2.0",
     "@types/ethereum-protocol": "^1.0.0",
-    "json-rpc-error": "^2.0.0",
-    "web3-provider-engine": "github:BitskiCo/provider-engine#master"
+    "json-rpc-error": "^2.0.0"
   },
   "devDependencies": {
-    "@types/events": "^1.2.0",
-    "@types/jest": "^23.3.2",
-    "jest": "^23.6.0",
-    "jest-fetch-mock": "^1.6.6",
-    "jest-junit": "^5.1.0",
-    "ts-jest": "^23.10.0",
-    "tslint": "^5.11.0",
-    "typescript": "^3.1.6",
-    "xhr-mock": "^2.4.1"
+    "jest": "^23.6.0"
   },
-  "jest": {
-    "automock": false,
-    "transformIgnorePatterns": [
-      "node_modules/(?!(bitski-provider)/)"
-    ],
-    "setupFiles": [
-      "./tests/util/setup-jest.js"
-    ],
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "diagnostics": false
-      }
-    }
-  }
+  "gitHead": "f927467810fc95f498e7284ffae4472f8d4278d9"
 }

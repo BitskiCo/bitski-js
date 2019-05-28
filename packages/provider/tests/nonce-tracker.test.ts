@@ -1,5 +1,5 @@
-import Web3ProviderEngine from 'web3-provider-engine';
-import FixtureSubprovider from 'web3-provider-engine/subproviders/fixture';
+import Web3ProviderEngine from '@bitski/provider-engine';
+import { FixtureSubprovider } from '@bitski/provider-engine';
 import { NonceTrackerSubprovider } from '../src/subproviders/nonce-tracker';
 
 function createEngine() {
