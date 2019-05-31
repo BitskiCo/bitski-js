@@ -21,7 +21,7 @@
     "prepack": "npm run build && npm run bundle"
   },
   "dependencies": {
-    "@bitski/provider-engine": "^0.2.0",
+    "@bitski/provider-engine": "^0.4.1",
     "@openid/appauth": "^1.2.0",
     "bitski-provider": "^0.6.0",
     "uuid": "^3.3.2"
@@ -33,5 +33,5 @@
     "jest": "^23.6.0",
     "terser": "^3.14.1"
   },
-  "gitHead": "f927467810fc95f498e7284ffae4472f8d4278d9"
+  "gitHead": "712655013208eec20a934aa4d81bcd849f83ee63"
 }

@@ -10,9 +10,16 @@ function createInstance(): Bitski {
 }
 
 describe('managing providers', () => {
+
+  beforeEach(() => {
+    // This doesn't seem to be working. Instead catching network errors and silencing them.
+    fetch.mockResponse(JSON.stringify({ jsonrpc: '2.0', id: 0, result: null }));
+  });
+
   test('should get a mainnet provider by default', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
+    provider.on('error', (error) => {});
     expect(provider).toBeDefined();
     // @ts-ignore
     expect(provider.network).toBe(Mainnet);
@@ -21,6 +28,7 @@ describe('managing providers', () => {
   test('should get a mainnet provider when passing options with no network name', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({ pollingInterval: 1000000 });
+    provider.on('error', (error) => {});
     expect(provider).toBeDefined();
     // @ts-ignore
     expect(provider.network).toBe(Mainnet);
@@ -29,6 +37,7 @@ describe('managing providers', () => {
   test('should be able to pass a network name as a string', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider('rinkeby');
+    provider.on('error', (error) => {});
     expect(provider).toBeDefined();
     // @ts-ignore
     expect(provider.network).toBe(Rinkeby);
@@ -37,6 +46,7 @@ describe('managing providers', () => {
   test('should be able to pass a network name in options', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({ networkName: 'rinkeby' });
+    provider.on('error', (error) => {});
     expect(provider).toBeDefined();
     // @ts-ignore
     expect(provider.network).toBe(Rinkeby);
@@ -55,6 +65,7 @@ describe('managing providers', () => {
         chainId: 0,
       },
     });
+    provider.on('error', (error) => {});
     expect(provider).toBeDefined();
     // @ts-ignore
     expect(provider.network.rpcUrl).toBe('http://localhost:3000/web3');
@@ -69,6 +80,7 @@ describe('managing providers', () => {
       },
       webBaseUrl: 'https://next.bitski.com',
     });
+    provider.on('error', (error) => {});
     expect(provider).toBeDefined();
     // @ts-ignore
     expect(provider.network.chainId).toBe(4);
@@ -81,6 +93,7 @@ describe('managing providers', () => {
   test('should pass settings to provider-engine', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({ networkName: 'mainnet', pollingInterval: 10000000 });
+    provider.on('error', (error) => {});
     // @ts-ignore
     expect(provider._blockTracker._pollingInterval).toBe(10000000);
   });
@@ -93,6 +106,7 @@ describe('managing providers', () => {
         'X-FOO-FEATURE': 'ENABLED',
       },
     });
+    provider.on('error', (error) => {});
     expect(provider).toBeDefined();
     // @ts-ignore
     expect(provider.headers['X-FOO-FEATURE']).toBe('ENABLED');
@@ -103,6 +117,7 @@ describe('managing providers', () => {
     // @ts-ignore
     expect(bitski.engines.size).toBe(0);
     const provider = bitski.getProvider('kovan');
+    provider.on('error', (error) => {});
     // @ts-ignore
     expect(bitski.engines.size).toBe(1);
   });
@@ -122,6 +137,7 @@ describe('managing providers', () => {
   test('should stop all engines when signing out', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider('kovan');
+    provider.on('error', (error) => {});
     // @ts-ignore
     expect(provider._blockTracker._isRunning).toBe(true);
     bitski.signOut();
