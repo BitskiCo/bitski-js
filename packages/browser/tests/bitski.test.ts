@@ -13,6 +13,8 @@ describe('managing providers', () => {
   test('should get a mainnet provider by default', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
+    // @ts-ignore
+    expect(provider.rpcHeaders['X-CLIENT-ID']).toBe('test-client-id');
     expect(provider).toBeDefined();
     // @ts-ignore
     expect(provider.network).toBe(Mainnet);
@@ -64,18 +66,20 @@ describe('managing providers', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({
       network: {
-        rpcUrl: 'https://api-v2.bitski.com/web3/rinkeby',
+        rpcUrl: 'https://api-v2.otl.com/web3/rinkeby',
         chainId: 4,
       },
       webBaseUrl: 'https://next.bitski.com',
     });
     expect(provider).toBeDefined();
     // @ts-ignore
+    expect(provider.rpcHeaders['X-CLIENT-ID']).toBeUndefined();
+    // @ts-ignore
     expect(provider.network.chainId).toBe(4);
     // @ts-ignore
     expect(provider.webBaseUrl).toBe('https://next.bitski.com');
     // @ts-ignore
-    expect(provider.network.rpcUrl).toBe('https://api-v2.bitski.com/web3/rinkeby');
+    expect(provider.network.rpcUrl).toBe('https://api-v2.otl.com/web3/rinkeby');
   });
 
   test('should pass settings to provider-engine', () => {

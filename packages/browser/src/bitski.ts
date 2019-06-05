@@ -263,7 +263,7 @@ export class Bitski {
     style.setAttribute('id', 'BitskiEmbeddedStyles');
     style.appendChild(document.createTextNode(css));
     const head = document.head || document.getElementsByTagName('head')[0];
-    head.append(style);
+    head.appendChild(style);
   }
 
 }

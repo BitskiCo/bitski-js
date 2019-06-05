@@ -20,7 +20,13 @@ export class BitskiBrowserEngine extends BitskiEngine {
   private tokenProvider: AccessTokenProvider;
   private clientId: string;
   private sdkVersion: string;
+
+  // Headers for bitski endpoints
   private headers: object;
+
+  // Headers specifically for rpc endpoint
+  private rpcHeaders: object;
+
   private signer: BitskiTransactionSigner;
 
   constructor(
@@ -31,6 +37,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
     options: ProviderOptions = {},
   ) {
     super(options);
+    options = options || {};
     this.network = network;
     this.clientId = clientId;
     this.sdkVersion = sdkVersion;
@@ -38,16 +45,22 @@ export class BitskiBrowserEngine extends BitskiEngine {
     this.webBaseUrl = options.webBaseUrl || BITSKI_WEB_BASE_URL;
     this.tokenProvider = tokenProvider;
 
-    const defaultHeaders = {
+    const defaultBitskiHeaders = {
       'X-API-KEY': this.clientId,
       'X-CLIENT-ID': this.clientId,
       'X-CLIENT-VERSION': this.sdkVersion,
     };
 
-    this.headers = defaultHeaders;
+    this.headers = defaultBitskiHeaders;
+    this.rpcHeaders = {};
 
     if (options && options.additionalHeaders) {
       this.headers = Object.assign({}, options.additionalHeaders, this.headers);
+      this.rpcHeaders = options.additionalHeaders;
+    }
+
+    if (this.network && this.network.rpcUrl.includes('bitski.com')) {
+      this.rpcHeaders = Object.assign({}, this.rpcHeaders, defaultBitskiHeaders);
     }
 
     this.signer = new BitskiTransactionSigner(this.webBaseUrl, this.apiBaseUrl, this.headers);
@@ -69,7 +82,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
       this.network.rpcUrl,
       false,
       this.tokenProvider,
-      this.headers,
+      this.rpcHeaders,
     );
 
     // Respond to some requests via userinfo object if available
