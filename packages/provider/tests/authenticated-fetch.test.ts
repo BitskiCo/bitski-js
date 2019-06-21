@@ -25,7 +25,7 @@ function createFetchProvider(): AuthenticatedFetchSubprovider {
 }
 
 function createEngine(fetchProvider: AuthenticatedFetchSubprovider): MockEngine {
-  const engine = new MockEngine();
+  const engine = new MockEngine({ disableBlockTracking: true, disableCaching: true });
   engine.addProvider(fetchProvider);
   engine.start();
   return engine;
