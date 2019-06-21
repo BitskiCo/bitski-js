@@ -17,7 +17,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@bitski/provider-engine": "^0.4.1",
+    "@bitski/provider-engine": "^0.6.0",
     "async": "^3.0.1",
     "json-rpc-error": "^2.0.0"
   },

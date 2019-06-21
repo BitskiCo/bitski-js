@@ -23,12 +23,4 @@ export class MockEngine extends Web3ProviderEngine {
       eth_getBalance: '0x1',
     }));
   }
-
-  public start() {
-    super.start();
-    // Emit a block after a short delay to start requests
-    setTimeout(() => {
-      this._blockTracker.emit('latest', '0x1');
-    }, 500);
-  }
 }

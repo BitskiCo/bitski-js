@@ -17,6 +17,8 @@ export interface BitskiEngineOptions {
   disableCaching?: boolean;
   // Disable transaction validation
   disableValidation?: boolean;
+  // Disable polling for new blocks
+  disableBlockTracking?: boolean;
 }
 
 export class BitskiEngine extends Web3ProviderEngine {
@@ -64,15 +66,17 @@ export class BitskiEngine extends Web3ProviderEngine {
   }
 
   public supportsSubscriptions(): boolean {
-    return true;
+    return this._pollForBlocks;
   }
 
   public subscribe(subscribeMethod: string = 'eth_subscribe', subscriptionMethod: string, parameters: any[]): Promise<string> {
+    if (!this._pollForBlocks) { return Promise.reject(new Error('Subscriptions are not supported')); }
     parameters.unshift(subscriptionMethod);
     return this.send(subscribeMethod, parameters);
   }
 
   public unsubscribe(subscriptionId: string, unsubscribeMethod: string = 'eth_unsubscribe'): Promise<boolean> {
+    if (!this._pollForBlocks) { return Promise.reject(new Error('Subscriptions are not supported')); }
     return this.send(unsubscribeMethod, [subscriptionId]).then((response) => {
       if (response) {
           this.removeAllListeners(subscriptionId);

@@ -99,7 +99,7 @@ describe('managing providers', () => {
     const provider = bitski.getProvider({ networkName: 'mainnet', pollingInterval: 10000000 });
     provider.on('error', (error) => {});
     // @ts-ignore
-    expect(provider._blockTracker._pollingInterval).toBe(10000000);
+    expect(provider._blockTracker._blockTracker._pollingInterval).toBe(10000000);
   });
 
   test('should pass additional headers to providers', () => {
@@ -143,10 +143,10 @@ describe('managing providers', () => {
     const provider = bitski.getProvider('kovan');
     provider.on('error', (error) => {});
     // @ts-ignore
-    expect(provider._blockTracker._isRunning).toBe(true);
+    expect(provider.isRunning()).toBe(true);
     bitski.signOut();
     // @ts-ignore
-    expect(provider._blockTracker._isRunning).toBe(false);
+    expect(provider.isRunning()).toBe(false);
   });
 
   test('should not stop engine when force logged out', () => {

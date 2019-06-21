@@ -35,6 +35,7 @@ export interface ProviderOptions extends BitskiEngineOptions {
   pollingInterval?: number;
   disableCaching?: boolean;
   disableValidation?: boolean;
+  disableBlockTracking?: boolean;
   additionalHeaders?: object;
   webBaseUrl?: string;
   apiBaseUrl?: string;
