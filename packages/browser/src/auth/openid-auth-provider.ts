@@ -108,10 +108,7 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         case AuthenticationStatus.Connected:
             return this.loadUser();
         case AuthenticationStatus.Expired:
-            return this.connect().catch((err) => {
-                // If refreshing fails, attempt to sign in
-                return this.signIn(signInMethod);
-            });
+            return this.connect();
         case AuthenticationStatus.NotConnected:
             return this.signIn(signInMethod);
         }
