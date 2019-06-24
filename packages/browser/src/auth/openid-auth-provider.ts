@@ -49,6 +49,18 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         return Promise.reject(new Error('Not signed in. Please sign in and try your request again.'));
     }
 
+    public getRefreshToken(): Promise<string> {
+        if (this.tokenStore.refreshToken) {
+            return Promise.resolve(this.tokenStore.refreshToken);
+        }
+        // Error: the user did not approve this app for offline access
+        if (this.tokenStore.currentToken) {
+            return Promise.reject(new Error('Refresh token is not available.'));
+        }
+        // Error: the user is not signed in.
+        return Promise.reject(new Error('Not signed in. Please sign in and try your request again.'));
+    }
+
     public invalidateToken(): Promise<void> {
         if (this.tokenStore.currentToken) {
             this.tokenStore.invalidateCurrentToken();

@@ -288,7 +288,24 @@ describe('authentication', () => {
       expect(callback).toHaveBeenCalledTimes(1);
     });
   });
+});
 
+describe('working with access tokens', () => {
+  test('should be able to get an access token if the user is logged in', () => {
+    const bitski = createInstance();
+    jest.spyOn(bitski.authProvider, 'getAccessToken').mockResolvedValue('test-access-token');
+    return bitski.getCurrentAccessToken().then((accessToken) => {
+      expect(accessToken).toBe('test-access-token');
+    });
+  });
+
+  test('should be able to get a refresh token if the user is logged in', () => {
+    const bitski = createInstance();
+    jest.spyOn(bitski.authProvider, 'getRefreshToken').mockResolvedValue('test-refresh-token');
+    return bitski.getCurrentRefreshToken().then((refreshToken) => {
+      expect(refreshToken).toBe('test-refresh-token');
+    });
+  });
 });
 
 describe('connect button', () => {
