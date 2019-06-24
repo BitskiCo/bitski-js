@@ -185,6 +185,21 @@ export class Bitski {
   }
 
   /**
+   * Retrieves the current access token for the user, if logged in.
+   */
+  public getCurrentAccessToken(): Promise<string> {
+    return this.authProvider.getAccessToken();
+  }
+
+  /**
+   * Retrieves the current refresh token for the user, if logged in.
+   * Requires that the user has approved your application for offline access.
+   */
+  public getCurrentRefreshToken(): Promise<string> {
+    return this.authProvider.getRefreshToken();
+  }
+
+  /**
    * Register a callback to be called on sign out. This is a good practice,
    * since there may be situations where you are signed out unexpectedly.
    * @param fn Your callback function

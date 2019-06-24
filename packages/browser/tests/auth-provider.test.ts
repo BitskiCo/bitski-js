@@ -116,6 +116,31 @@ describe('getting an access token', () => {
       expect(token).toBe(dummyToken.token);
     });
   });
+
+  test('should be able to get a refresh token if the user is logged in', () => {
+    const authProvider = createInstance();
+    (authProvider.tokenStore as MockTokenStore).setRefreshToken('test-refresh-token');
+    return authProvider.getRefreshToken().then((token) => {
+      expect(token).toBe('test-refresh-token');
+    });
+  });
+
+  test('should not be able to get a refresh token if the user is not logged in', (done) => {
+    const authProvider = createInstance();
+    authProvider.getRefreshToken().catch((error) => {
+      expect(error.message).toMatch(/Not signed in/);
+      done();
+    });
+  });
+
+  test('should not be able to get a refresh token if the user did not approve offline access', (done) => {
+    const authProvider = createInstance();
+    (authProvider.tokenStore as MockTokenStore).setToken(dummyToken);
+    authProvider.getRefreshToken().catch((error) => {
+      expect(error.message).toMatch(/Refresh token is not available/);
+      done();
+    });
+  });
 });
 
 describe('refreshing access tokens', () => {
