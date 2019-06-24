@@ -1,7 +1,7 @@
 import { AccessTokenProvider } from 'bitski-provider';
 import { AuthenticationStatus, BitskiSDKOptions, OAuthSignInMethod } from '../bitski';
 import { AuthProvider } from './auth-provider';
-import { OAuthManager, OAuthManagerOptions } from './oauth-manager';
+import { OAuthManager, OAuthManagerOptions, SignInOptions } from './oauth-manager';
 import { TokenStore } from './token-store';
 import { User } from './user';
 import { UserStore } from './user-store';
@@ -86,16 +86,16 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         return Promise.reject(new Error('No refresh token available'));
     }
 
-    public signIn(method: OAuthSignInMethod): Promise<User> {
+    public signIn(method: OAuthSignInMethod, opts?: SignInOptions): Promise<User> {
         let promise: Promise<any>;
         switch (method) {
             case OAuthSignInMethod.Redirect:
-                promise = this.oauthManager.signInRedirect();
+                promise = this.oauthManager.signInRedirect(opts);
                 break;
             case OAuthSignInMethod.Silent:
                 return Promise.reject(new Error('Silent is no longer supported'));
             default:
-                promise = this.oauthManager.signInPopup();
+                promise = this.oauthManager.signInPopup(opts);
                 break;
         }
 
@@ -115,14 +115,14 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         return this.getOrFetchUser();
     }
 
-    public signInOrConnect(signInMethod: OAuthSignInMethod = OAuthSignInMethod.Popup): Promise<User> {
+    public signInOrConnect(signInMethod: OAuthSignInMethod = OAuthSignInMethod.Popup, opts?: SignInOptions): Promise<User> {
         switch (this.authStatus) {
         case AuthenticationStatus.Connected:
             return this.loadUser();
         case AuthenticationStatus.Expired:
             return this.connect();
         case AuthenticationStatus.NotConnected:
-            return this.signIn(signInMethod);
+            return this.signIn(signInMethod, opts);
         }
     }
 
