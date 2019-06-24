@@ -288,26 +288,6 @@ describe('sign in or connect', () => {
     });
   });
 
-  test('should sign in popup when refreshing access token fails', () => {
-    expect.assertions(4);
-    const authProvider = createInstance();
-    (authProvider.tokenStore as MockTokenStore).setRefreshToken('test-refresh-token');
-    const connectMock = jest.spyOn(authProvider, 'connect').mockRejectedValue(new Error('Async error'));
-    const tokenResponse = new TokenResponse({
-      access_token: 'test-access-token',
-    });
-    const signinMock = jest.spyOn(authProvider.oauthManager, 'signInPopup').mockResolvedValue(tokenResponse);
-    const getUserMock = jest.spyOn(authProvider.oauthManager, 'requestUserInfo').mockResolvedValue({
-      sub: 'test-user',
-    });
-    return authProvider.signInOrConnect().then((user) => {
-      expect(user).toMatchObject(dummyUser);
-      expect(connectMock).toHaveBeenCalled();
-      expect(signinMock).toHaveBeenCalled();
-      expect(getUserMock).toHaveBeenCalled();
-    });
-  });
-
   test('should sign in popup if not connected', () => {
     expect.assertions(3);
     const authProvider = createInstance();

@@ -6,7 +6,6 @@ import {
   SanitizerSubprovider,
   SubscriptionSubprovider,
 } from '@bitski/provider-engine';
-import { JSONRPCRequestPayload } from 'ethereum-protocol';
 
 import { NonceTrackerSubprovider } from './subproviders/nonce-tracker';
 import { TransactionValidatorSubprovider } from './subproviders/transaction-validator';
@@ -18,12 +17,16 @@ export interface BitskiEngineOptions {
   disableCaching?: boolean;
   // Disable transaction validation
   disableValidation?: boolean;
+  // Disable polling for new blocks
+  disableBlockTracking?: boolean;
 }
 
 export class BitskiEngine extends Web3ProviderEngine {
 
   constructor(options?: BitskiEngineOptions) {
     super(options);
+    options = options || {};
+
     // Handles static responses
     this.addProvider(new DefaultFixtureSubprovider());
 
@@ -48,8 +51,10 @@ export class BitskiEngine extends Web3ProviderEngine {
 
     // Handles subscriptions and filters
     const filterAndSubsSubprovider = new SubscriptionSubprovider();
-    filterAndSubsSubprovider.on('data', (err, notification) => {
-      this.emit('data', err, notification);
+
+    // Watch for updates from subscriptions
+    filterAndSubsSubprovider.on('data', (_, notification) => {
+      this.onMessage(notification);
     });
 
     this.addProvider(filterAndSubsSubprovider);
@@ -60,13 +65,32 @@ export class BitskiEngine extends Web3ProviderEngine {
     }
   }
 
-  // Some versions of web3 prefer to use send(payload, callback) instead of sendAsync() with a callback.
-  public send(payload: JSONRPCRequestPayload) {
-    // Typescript doesn't like overrides with overloads, so use arguments array.
-    if (typeof arguments[1] === 'function') {
-      this.sendAsync(payload, arguments[1]);
-    } else {
-      throw new Error('synchronous requests are not supported');
+  public supportsSubscriptions(): boolean {
+    return this._pollForBlocks;
+  }
+
+  public subscribe(subscribeMethod: string = 'eth_subscribe', subscriptionMethod: string, parameters: any[]): Promise<string> {
+    if (!this._pollForBlocks) { return Promise.reject(new Error('Subscriptions are not supported')); }
+    parameters.unshift(subscriptionMethod);
+    return this.send(subscribeMethod, parameters);
+  }
+
+  public unsubscribe(subscriptionId: string, unsubscribeMethod: string = 'eth_unsubscribe'): Promise<boolean> {
+    if (!this._pollForBlocks) { return Promise.reject(new Error('Subscriptions are not supported')); }
+    return this.send(unsubscribeMethod, [subscriptionId]).then((response) => {
+      if (response) {
+          this.removeAllListeners(subscriptionId);
+      }
+      return response;
+    });
+  }
+
+  protected onMessage(notification) {
+    // Re-emit (previous behavior ~ web3 1.0.0-beta.37)
+    this.emit('data', null, notification);
+    if (notification && notification.params && notification.params.subscription) {
+      // Current web3 behavior - emit subscription id
+      this.emit(notification.params.subscription, notification.params);
     }
   }
 
