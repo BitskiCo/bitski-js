@@ -1,8 +1,9 @@
-import { OAuthManager } from '../src/auth/oauth-manager';
 import { NoHashQueryStringUtils } from '../src/utils/no-hash-query-string-utils';
+import { MockOAuthManager } from './util/mock-oauth-manager';
+import { LOGIN_HINT_SIGNUP } from '../src/bitski';
 
 function createInstance() {
-  return new OAuthManager({ clientId: 'test-client-id', redirectUri: 'http://localhost:3000' });
+  return new MockOAuthManager({ clientId: 'test-client-id', redirectUri: 'http://localhost:3000' });
 }
 
 beforeEach(() => {
@@ -52,7 +53,7 @@ test('sign in popup opens popup', () => {
   const manager = createInstance();
 
   // Spy on window open
-  jest.spyOn(window, 'open').mockImplementation((url, target, features) => {
+  jest.spyOn(window, 'open').mockImplementationOnce((url, target, features) => {
     // Assert the URL is something we expect
     expect(url).toMatch(manager.configuration.authorizationEndpoint);
     // Hack to create an object that is similar to Location in JSDom
@@ -69,6 +70,22 @@ test('sign in popup opens popup', () => {
   return manager.signInPopup().then((tokenResponse) => {
     expect(tokenResponse.accessToken).toBe('test-token');
   });
+});
+
+test('signInPopup passes options to authorization request', () => {
+  expect.assertions(2);
+  const manager = createInstance();
+  manager.signInPopup({ login_hint: LOGIN_HINT_SIGNUP });
+  expect(manager.currentAuthRequest).toBeDefined();
+  expect(manager.currentAuthRequest.extras.login_hint).toBe(LOGIN_HINT_SIGNUP);
+});
+
+test('signInRedirect passes options to authorization request', () => {
+  expect.assertions(2);
+  const manager = createInstance();
+  manager.signInRedirect({ login_hint: LOGIN_HINT_SIGNUP });
+  expect(manager.currentAuthRequest).toBeDefined();
+  expect(manager.currentAuthRequest.extras.login_hint).toBe(LOGIN_HINT_SIGNUP);
 });
 
 test('can handle oauth error response', () => {
