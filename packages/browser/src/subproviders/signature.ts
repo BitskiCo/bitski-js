@@ -241,7 +241,7 @@ export class SignatureSubprovider extends Subprovider {
         if (request.params && request.params.length > 0) {
           return { from: request.params[0] };
         }
-        throw new Error('Invalid request: No from address specified');
+        throw SignerError.MissingFrom();
       default:
         // Other transaction types do not need context
         return {};
@@ -278,7 +278,7 @@ export class SignatureSubprovider extends Subprovider {
         if (request.params && request.params.length > 1) {
           return request.params[1] as TypedDataPayload;
         } else {
-          throw new Error('Invalid request: Could not find typed data to sign.');
+          throw SignerError.MissingTypedData();
         }
       default:
         throw SignerError.UnsupportedMethod();

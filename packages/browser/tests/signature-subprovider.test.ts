@@ -222,7 +222,7 @@ test('should sign messages with personal_sign', (done) => {
 });
 
 test('it validates parameters for requests when creating transaction', () => {
-    expect.assertions(14);
+    expect.assertions(18);
 
     const { instance } = createProvider();
 
@@ -286,6 +286,7 @@ test('it validates parameters for requests when creating transaction', () => {
         instance.createPayload(noParamsTypedData);
     } catch (error) {
         expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingTypedData);
     }
 
     const missingParamsTypedData = createRequest('eth_signTypedData', []);
@@ -294,6 +295,7 @@ test('it validates parameters for requests when creating transaction', () => {
         instance.createPayload(missingParamsTypedData);
     } catch (error) {
         expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingTypedData);
     }
 
     const invalidMethod = createRequest('eth_signTypedData_v1', []);
