@@ -1,6 +1,6 @@
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { OAuthSignInMethod } from '../src/bitski';
-import { ConnectButton, ConnectButtonSize } from '../src/components/connect-button';
+import { ConnectButton, ConnectButtonSize, ConnectButtonOptions } from '../src/components/connect-button';
 
 const clientID = 'test-client-id';
 
@@ -9,13 +9,13 @@ function createAuthProvider(): OpenidAuthProvider {
 }
 test('it sets small attributes', () => {
   const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.Small);
+  const button = new ConnectButton(authProvider, { size: ConnectButtonSize.Small });
   expect(button.element.classList.contains('size-small')).toBe(true);
 });
 
 test('it sets large attributes', () => {
   const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, undefined, ConnectButtonSize.Large);
+  const button = new ConnectButton(authProvider, { size: ConnectButtonSize.Large });
   expect(button.element.classList.contains('size-large')).toBe(true);
 });
 
@@ -28,7 +28,7 @@ test('it defaults to medium', () => {
 test('it inserts itself into an existing HTMLElement', () => {
   const element = document.createElement('div');
   const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, element);
+  const button = new ConnectButton(authProvider, { container: element });
   expect(element.firstChild).toBe(button.element);
 });
 
@@ -54,7 +54,7 @@ test('it calls the callback on success', (done) => {
     expect(user).toBeDefined();
     done();
   };
-  const button = new ConnectButton(authProvider, undefined, undefined, undefined, callback);
+  const button = new ConnectButton(authProvider, undefined, callback);
   button.signin();
 });
 
@@ -74,8 +74,21 @@ test('it calls the callback on error', (done) => {
 test('it uses provided authentication mode', (done) => {
   expect.assertions(1);
   const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, undefined, undefined, OAuthSignInMethod.Redirect);
+  const button = new ConnectButton(authProvider, { authMethod: OAuthSignInMethod.Redirect });
   jest.spyOn(authProvider, 'signIn').mockImplementation((method) => {
+    expect(method).toBe(OAuthSignInMethod.Redirect);
+    done();
+    return Promise.resolve();
+  });
+  button.signin();
+});
+
+test('it passes provided sign in options', (done) => {
+  expect.assertions(2);
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider, { authMethod: OAuthSignInMethod.Redirect, signInOptions: { login_hint: 'signup' } });
+  jest.spyOn(authProvider, 'signIn').mockImplementation((method, options) => {
+    expect(options.login_hint).toBe('signup');
     expect(method).toBe(OAuthSignInMethod.Redirect);
     done();
     return Promise.resolve();
