@@ -1,5 +1,6 @@
 import { AuthorizationServiceConfiguration } from '@openid/appauth';
 import { BitskiEngine, BitskiEngineOptions, Kovan, Mainnet, Network, Rinkeby } from 'bitski-provider';
+import { LOGIN_HINT_SIGNUP, SignInOptions } from './auth/oauth-manager';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
 import { ConnectButton, ConnectButtonSize } from './components/connect-button';
@@ -19,6 +20,9 @@ export enum AuthenticationStatus {
   Expired = 'EXPIRED',
   NotConnected = 'NOT_CONNECTED',
 }
+
+// Sign-in Options
+export { SignInOptions, LOGIN_HINT_SIGNUP };
 
 // Networks
 export { Network, Mainnet, Rinkeby, Kovan };
@@ -129,9 +133,10 @@ export class Bitski {
    * Signs in or connects to bitski depending on the user's auth state.
    * Since it may open a popup, this method must be called from user interaction handler,
    * such as a click or tap handler.
+   * @param options Provide SignInOptions for the sign in request. See signIn() for more info.
    */
-  public start(): Promise<User> {
-    return this.authProvider.signInOrConnect();
+  public start(options?: SignInOptions): Promise<User> {
+    return this.authProvider.signInOrConnect(undefined, options);
   }
 
   /**
@@ -142,18 +147,18 @@ export class Bitski {
   }
 
   /**
-   * DEPRECATED - use bitski.authStatus instead.
-   * Check the logged in state of the user. Either connected (have an active session), expired (connected but needs new access token), or not connected.
-   */
-  public getAuthStatus(): Promise<AuthenticationStatus> {
-    return Promise.resolve(this.authProvider.authStatus);
-  }
-
-  /**
    * Starts the sign in flow. Will trigger a popup window over your app, so it must be called within a user interaction handler such as a click.
+   * @param options Optionally provide additional options for the sign in request.
+   *
+   * You can use the options parameter to request that we show the sign up form instead of the sign in form:
+   * ```javascript
+   * import { LOGIN_HINT_SIGNUP } from 'bitski';
+   *
+   * await bitski.signIn({ login_hint: LOGIN_HINT_SIGNUP });
+   * ```
    */
-  public signIn(): Promise<User> {
-    return this.authProvider.signIn(OAuthSignInMethod.Popup);
+  public signIn(options?: SignInOptions): Promise<User> {
+    return this.authProvider.signIn(OAuthSignInMethod.Popup, options);
   }
 
   /**
@@ -172,9 +177,10 @@ export class Bitski {
 
   /**
    * Starts redirect sign in flow. This is an alternative flow to the popup that all takes place in the same browser window.
+   * @param options Optionally provide additional options for the sign in request. See signIn() for more info.
    */
-  public signInRedirect(): void {
-    this.authProvider.signIn(OAuthSignInMethod.Redirect);
+  public signInRedirect(options?: SignInOptions): void {
+    this.authProvider.signIn(OAuthSignInMethod.Redirect, options);
   }
 
   /**
@@ -182,6 +188,21 @@ export class Bitski {
    */
   public redirectCallback(): Promise<User> {
     return this.authProvider.redirectCallback();
+  }
+
+  /**
+   * Retrieves the current access token for the user, if logged in.
+   */
+  public getCurrentAccessToken(): Promise<string> {
+    return this.authProvider.getAccessToken();
+  }
+
+  /**
+   * Retrieves the current refresh token for the user, if logged in.
+   * Requires that the user has approved your application for offline access.
+   */
+  public getCurrentRefreshToken(): Promise<string> {
+    return this.authProvider.getRefreshToken();
   }
 
   /**

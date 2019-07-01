@@ -13,6 +13,7 @@ describe('managing providers', () => {
 
   beforeEach(() => {
     // This doesn't seem to be working. Instead catching network errors and silencing them.
+    // @ts-ignore
     fetch.mockResponse(JSON.stringify({ jsonrpc: '2.0', id: 0, result: null }));
   });
 
@@ -188,10 +189,9 @@ describe('authentication', () => {
     // @ts-ignore
     const spy = jest.spyOn(bitski.authProvider, 'authStatus', 'get');
     spy.mockReturnValue(AuthenticationStatus.Connected);
-    return bitski.getAuthStatus().then((authStatus) => {
-      expect(authStatus).toBe(AuthenticationStatus.Connected);
-      expect(authStatus).toBe(bitski.authStatus);
-    });
+    const authStatus = bitski.authStatus;
+    expect(authStatus).toBe(AuthenticationStatus.Connected);
+    expect(authStatus).toBe(bitski.authStatus);
   });
 
   test('should log in via popup', () => {
@@ -201,7 +201,20 @@ describe('authentication', () => {
     const spy = jest.spyOn(bitski.authProvider, 'signIn');
     spy.mockResolvedValue(dummyUser);
     return bitski.signIn().then((user) => {
-      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Popup);
+      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Popup, undefined);
+      expect(user).toBe(dummyUser);
+    });
+  });
+
+  test('should pass options when signing in', () => {
+    expect.assertions(2);
+    const bitski = createInstance();
+    // @ts-ignore
+    const spy = jest.spyOn(bitski.authProvider, 'signIn');
+    spy.mockResolvedValue(dummyUser);
+    const opts = { login_hint: 'foo' };
+    return bitski.signIn(opts).then((user) => {
+      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Popup, opts);
       expect(user).toBe(dummyUser);
     });
   });
@@ -214,7 +227,21 @@ describe('authentication', () => {
     spy.mockResolvedValue(dummyUser);
     bitski.signInRedirect();
     setTimeout(() => {
-      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect);
+      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect, undefined);
+      done();
+    }, 500);
+  });
+
+  test('should pass options when signing in via redirect', (done) => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    // @ts-ignore
+    const spy = jest.spyOn(bitski.authProvider, 'signIn');
+    spy.mockResolvedValue(dummyUser);
+    const opts = { login_hint: 'foo' };
+    bitski.signInRedirect(opts);
+    setTimeout(() => {
+      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect, opts);
       done();
     }, 500);
   });
@@ -288,7 +315,24 @@ describe('authentication', () => {
       expect(callback).toHaveBeenCalledTimes(1);
     });
   });
+});
 
+describe('working with access tokens', () => {
+  test('should be able to get an access token if the user is logged in', () => {
+    const bitski = createInstance();
+    jest.spyOn(bitski.authProvider, 'getAccessToken').mockResolvedValue('test-access-token');
+    return bitski.getCurrentAccessToken().then((accessToken) => {
+      expect(accessToken).toBe('test-access-token');
+    });
+  });
+
+  test('should be able to get a refresh token if the user is logged in', () => {
+    const bitski = createInstance();
+    jest.spyOn(bitski.authProvider, 'getRefreshToken').mockResolvedValue('test-refresh-token');
+    return bitski.getCurrentRefreshToken().then((refreshToken) => {
+      expect(refreshToken).toBe('test-refresh-token');
+    });
+  });
 });
 
 describe('connect button', () => {

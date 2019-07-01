@@ -27,6 +27,13 @@ export interface OAuthManagerOptions {
   additionalScopes?: string[];
 }
 
+export interface SignInOptions {
+  login_hint?: string;
+}
+
+// Use this constant in login_hint to indicate that the sign up UI should be displayed
+export const LOGIN_HINT_SIGNUP = 'signup';
+
 /**
  * Responsible for submitting requests to our OAuth server.
  */
@@ -66,13 +73,14 @@ export class OAuthManager {
   /**
    * Trigger a popup sign in flow (the default)
    */
-  public signInPopup(): Promise<TokenResponse> {
+  public signInPopup(opts?: SignInOptions): Promise<TokenResponse> {
+    opts = opts || {};
     const promise = new Promise<AuthorizationResponse>((fulfill, reject) => {
       this.pendingResolver = { fulfill, reject };
     });
     this.authHandler = new PopupRequestHandler();
     this.authHandler.setAuthorizationNotifier(this.notifier);
-    const request = this.createAuthRequest();
+    const request = this.createAuthRequest(opts);
     this.authHandler.performAuthorizationRequest(this.configuration, request);
     return promise.then((response) => {
       return this.requestAccessToken(response.code);
@@ -82,13 +90,14 @@ export class OAuthManager {
   /**
    * Trigger a redirect sign in flow. Promise should never fulfill, as you will be redirected.
    */
-  public signInRedirect(): Promise<AuthorizationResponse> {
+  public signInRedirect(opts?: SignInOptions): Promise<AuthorizationResponse> {
+    opts = opts || {};
     const promise = new Promise<AuthorizationResponse>((fulfill, reject) => {
       this.pendingResolver = { fulfill, reject };
     });
     this.authHandler = new RedirectRequestHandler(undefined, new NoHashQueryStringUtils());
     this.authHandler.setAuthorizationNotifier(this.notifier);
-    const request = this.createAuthRequest();
+    const request = this.createAuthRequest(opts);
     this.authHandler.performAuthorizationRequest(this.configuration, request);
     // Since this method redirects the whole window, the promise will
     // likely never complete unless we encounter an error.
@@ -187,13 +196,22 @@ export class OAuthManager {
   /**
    * Factory method to create an auth request
    */
-  protected createAuthRequest() {
-    return new AuthorizationRequest({
+  protected createAuthRequest(opts: SignInOptions): AuthorizationRequest {
+    // Create base request
+    const request = new AuthorizationRequest({
       client_id: this.clientId,
       redirect_uri: this.redirectUri,
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
       scope: this.scopes.join(' '),
     }, undefined, false);
+
+    // Pass options through
+    if (opts.login_hint) {
+      // Only assign extras if login_hint is included in the options
+      request.extras = { login_hint: opts.login_hint };
+    }
+
+    return request;
   }
 
   /**
