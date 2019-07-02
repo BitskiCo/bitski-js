@@ -21,7 +21,7 @@
     "prepack": "npm run build && npm run bundle"
   },
   "dependencies": {
-    "@bitski/provider-engine": "^0.6.0",
+    "@bitski/provider-engine": "^0.6.1",
     "@openid/appauth": "^1.2.0",
     "bitski-provider": "^0.8.0",
     "uuid": "^3.3.2"
