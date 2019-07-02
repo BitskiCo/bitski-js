@@ -1,4 +1,4 @@
-import { AuthenticatedFetchSubprovider } from '../src/index';
+import { AuthenticatedFetchSubprovider, ServerError } from '../src/index';
 import { AccessTokenProvider } from '../src/index';
 import { MockEngine } from './util/mock-engine';
 import { createRequest } from './util/rpc-utils';
@@ -110,7 +110,9 @@ describe('handles authenticated sends', () => {
     const request = createRequest('eth_peerCount', []);
 
     return engine.send('eth_peerCount', []).catch((error) => {
-      expect(error.message).toMatch(/All retries exhausted/);
+      expect(error).toBeInstanceOf(ServerError);
+      expect(error.code).toBe(200);
+      expect(error.retried).toBe(true);
       expect(fetch.mock.calls.length).toBe(5);
       done();
     });

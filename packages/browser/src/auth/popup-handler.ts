@@ -11,6 +11,13 @@ import {
 import { CHECK_FOR_POPUP_CLOSE_INTERVAL, DEFAULT_POPUP_FEATURES } from '../constants';
 import { parseUrlParams } from '../utils/callback';
 
+export class PopupClosedError extends AuthorizationError {
+  constructor() {
+    super({ error: 'The popup was dismissed.'});
+  }
+}
+
+// tslint:disable-next-line: max-classes-per-file
 export class PopupRequestHandler extends AuthorizationRequestHandler {
 
   protected pendingRequest?: AuthorizationRequest;
@@ -18,6 +25,7 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
   protected id?: string;
   protected responseUrl?: Location;
   protected closedTimer?: number;
+  protected isCancelled: boolean = false;
   protected error?: Error;
 
   constructor(utils = new BasicQueryStringUtils(), crypto = new DefaultCrypto()) {
@@ -41,12 +49,26 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     this.completeAuthorizationRequestIfPossible();
   }
 
+  // Custom implementation to remove excess log spam
+  public completeAuthorizationRequestIfPossible(): Promise<void> {
+    return this.completeAuthorizationRequest().then((result) => {
+      if (result && this.notifier) {
+        this.notifier.onAuthorizationComplete(result.request, result.response, result.error);
+      }
+    });
+  }
+
   public completeAuthorizationRequest(): Promise<AuthorizationRequestResponse | null> {
     const request = this.pendingRequest;
 
     // Assert there is a pending request
     if (!request) {
       return Promise.resolve(null);
+    }
+
+    // Assert the request wasn't cancelled
+    if (this.isCancelled === true) {
+      return this.respondWithCancelled(request);
     }
 
     // Assert there is no error
@@ -84,13 +106,20 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     return this.respondWithCode(request, code);
   }
 
+  protected respondWithCancelled(request: AuthorizationRequest): Promise<AuthorizationRequestResponse> {
+    const error = new PopupClosedError();
+    const response = { request, error, response: null };
+    this.cleanup();
+    return Promise.resolve(response);
+  }
+
   protected respondWithError(
     request: AuthorizationRequest,
     errorMessage: string,
     errorDescription?: string,
     errorUri?: string): Promise<AuthorizationRequestResponse> {
-    const error = new AuthorizationError({ error: errorMessage, error_description: errorDescription, error_uri: errorUri,  state: request.state });
-    const response = { error, request } as AuthorizationRequestResponse;
+    const error = new AuthorizationError({ error: errorMessage, error_description: errorDescription, error_uri: errorUri, state: request.state });
+    const response = { request, error, response: null };
     this.cleanup();
     return Promise.resolve(response);
   }
@@ -100,7 +129,7 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     if (code) {
       authorizationResponse = new AuthorizationResponse({ code, state: request.state });
     }
-    const response = { response: authorizationResponse, request } as AuthorizationRequestResponse;
+    const response = { request, response: authorizationResponse, error: null };
     this.cleanup();
     return Promise.resolve(response);
   }
@@ -120,7 +149,9 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
 
   protected checkPopup() {
     if (this.popupWindow && this.popupWindow.closed) {
-      this.error = new Error('Popup window closed');
+      // Stop checking
+      window.clearInterval(this.closedTimer);
+      this.isCancelled = true;
       this.completeAuthorizationRequestIfPossible();
     }
   }

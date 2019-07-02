@@ -4,6 +4,7 @@ import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { TokenStore } from '../src/auth/token-store';
 import { User } from '../src/auth/user';
 import { AuthenticationStatus, OAuthSignInMethod } from '../src/bitski';
+import { AuthenticationError, AuthenticationErrorCode } from '../src/errors/authentication-error';
 
 const dummyUser = new User('test-user');
 const dummyToken = new AccessToken('test-access-token');
@@ -128,7 +129,8 @@ describe('getting an access token', () => {
   test('should not be able to get a refresh token if the user is not logged in', (done) => {
     const authProvider = createInstance();
     authProvider.getRefreshToken().catch((error) => {
-      expect(error.message).toMatch(/Not signed in/);
+      expect(error).toBeInstanceOf(AuthenticationError);
+      expect(error.code).toBe(AuthenticationErrorCode.NotSignedIn);
       done();
     });
   });
@@ -137,7 +139,8 @@ describe('getting an access token', () => {
     const authProvider = createInstance();
     (authProvider.tokenStore as MockTokenStore).setToken(dummyToken);
     authProvider.getRefreshToken().catch((error) => {
-      expect(error.message).toMatch(/Refresh token is not available/);
+      expect(error).toBeInstanceOf(AuthenticationError);
+      expect(error.code).toBe(AuthenticationErrorCode.NoRefreshToken);
       done();
     });
   });
@@ -175,12 +178,13 @@ describe('refreshing access tokens', () => {
   });
 
   test('rejects when no refresh token is available', () => {
-    expect.assertions(2);
+    expect.assertions(3);
     const authProvider = createInstance();
     const spy = jest.spyOn(authProvider.oauthManager, 'refreshAccessToken');
     return authProvider.refreshAccessToken().catch((err) => {
       expect(spy).not.toHaveBeenCalled();
-      expect(err.message).toBe('No refresh token available');
+      expect(err).toBeInstanceOf(AuthenticationError);
+      expect(err.code).toBe(AuthenticationErrorCode.NoRefreshToken);
     });
   });
 
@@ -188,7 +192,8 @@ describe('refreshing access tokens', () => {
     const authProvider = createInstance();
     const spy = jest.spyOn(authProvider.oauthManager, 'refreshAccessToken');
     return authProvider.connect().catch((error) => {
-      expect(error.message).toBe('No refresh token available');
+      expect(error).toBeInstanceOf(AuthenticationError);
+      expect(error.code).toBe(AuthenticationErrorCode.NoRefreshToken);
       expect(spy).not.toHaveBeenCalled();
     });
   });
@@ -253,10 +258,11 @@ describe('signing in', () => {
   });
 
   test('should reject silent sign in', () => {
-    expect.assertions(1);
+    expect.assertions(2);
     const authProvider = createInstance();
     return authProvider.signIn(OAuthSignInMethod.Silent).catch((error) => {
-      expect(error.message).toBe('Silent is no longer supported');
+      expect(error).toBeInstanceOf(AuthenticationError);
+      expect(error.code).toBe(AuthenticationErrorCode.UnsupportedAuthenticationMethod);
     });
   });
 });

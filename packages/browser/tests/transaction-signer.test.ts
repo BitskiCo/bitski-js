@@ -1,3 +1,4 @@
+import { SignerError, SignerErrorCode } from '../src/errors/signer-error';
 import { BitskiTransactionSigner } from '../src/signing/transaction-signer';
 import { TransactionKind } from '../src/subproviders/signature';
 
@@ -181,7 +182,7 @@ test('should ignore messages when from same window', () => {
 });
 
 test('sign() should close existing dialog if one is already open', (done) => {
-  expect.assertions(3);
+  expect.assertions(4);
   const instance = createInstance();
 
   const transaction = {
@@ -203,7 +204,8 @@ test('sign() should close existing dialog if one is already open', (done) => {
   let dismissSpy;
   // Create the first transaction request to trigger the dialog
   instance.sign(transaction, 'test-access-token').catch((error) => {
-    expect(error.message).toMatch(/The transaction was cancelled/);
+    expect(error).toBeInstanceOf(SignerError);
+    expect(error.code).toBe(SignerErrorCode.UserCancelled);
     expect(dismissSpy).toBeCalled();
     done();
   });

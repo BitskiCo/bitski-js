@@ -30,6 +30,11 @@ export { Network, Mainnet, Rinkeby, Kovan };
 // Connect Button
 export { ConnectButtonSize, ConnectButtonOptions };
 
+// Errors
+export { AuthenticationError, AuthenticationErrorCode } from './errors/authentication-error';
+export { ParseError, ParseErrorCode } from './errors/parse-error';
+export { SignerError, SignerErrorCode } from './errors/signer-error';
+
 export interface BitskiSDKOptions {
   configuration?: AuthorizationServiceConfiguration;
 }
