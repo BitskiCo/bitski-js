@@ -1,6 +1,8 @@
+import { ServerError } from 'bitski-provider';
+import { LOGIN_HINT_SIGNUP } from '../src/bitski';
+import { AuthenticationError, AuthenticationErrorCode } from '../src/errors/authentication-error';
 import { NoHashQueryStringUtils } from '../src/utils/no-hash-query-string-utils';
 import { MockOAuthManager } from './util/mock-oauth-manager';
-import { LOGIN_HINT_SIGNUP } from '../src/bitski';
 
 function createInstance() {
   return new MockOAuthManager({ clientId: 'test-client-id', redirectUri: 'http://localhost:3000' });
@@ -89,7 +91,7 @@ test('signInRedirect passes options to authorization request', () => {
 });
 
 test('can handle oauth error response', () => {
-  expect.assertions(2);
+  expect.assertions(4);
 
   const manager = createInstance();
 
@@ -107,7 +109,9 @@ test('can handle oauth error response', () => {
   });
 
   return manager.signInPopup().catch((error) => {
-    expect(error.message).toBe('womp womp');
+    expect(error).toBeInstanceOf(AuthenticationError);
+    expect(error.code).toBe(AuthenticationErrorCode.ServerError);
+    expect(error.message).toMatch(/womp womp/);
   });
 });
 
@@ -135,7 +139,6 @@ test('it submits sign out requests', () => {
   });
 });
 
-
 test('it submits user info requests', () => {
   expect.assertions(1);
   const manager = createInstance();
@@ -149,7 +152,7 @@ test('it submits user info requests', () => {
 });
 
 test('it parses error messages returned by api', () => {
-  expect.assertions(1);
+  expect.assertions(3);
   const manager = createInstance();
   const errorResponse = {
     error: {
@@ -157,15 +160,17 @@ test('it parses error messages returned by api', () => {
     },
   };
   // @ts-ignore
-  fetch.mockResponseOnce(JSON.stringify(errorResponse), { status: 500 });
+  fetch.mockResponseOnce(JSON.stringify(errorResponse), { status: 400 });
 
   return manager.requestUserInfo('test-token').catch((error) => {
-    expect(error.message).toBe(errorResponse.error.message);
+    expect(error).toBeInstanceOf(ServerError);
+    expect(error.code).toBe(400);
+    expect(error.message).toEqual(expect.stringContaining(errorResponse.error.message));
   });
 });
 
 test('it parses poorly formed error messages returned by api', () => {
-  expect.assertions(1);
+  expect.assertions(3);
   const manager = createInstance();
   const errorResponse = {
     error: 'Oops!',
@@ -174,6 +179,8 @@ test('it parses poorly formed error messages returned by api', () => {
   fetch.mockResponseOnce(JSON.stringify(errorResponse), { status: 500 });
 
   return manager.requestUserInfo('test-token').catch((error) => {
-    expect(error.message).toBe(errorResponse.error);
+    expect(error).toBeInstanceOf(ServerError);
+    expect(error.code).toBe(500);
+    expect(error.message).toEqual(expect.stringContaining(errorResponse.error));
   });
 });

@@ -1,5 +1,6 @@
 import { Dialog } from '../components/dialog';
 import { IFRAME_MESSAGE_ORIGIN_INCLUDES } from '../constants';
+import { SignerError } from '../errors/signer-error';
 import { Transaction } from '../subproviders/signature';
 import { parseResponse } from '../utils/request-utils';
 
@@ -130,7 +131,7 @@ export class BitskiTransactionSigner {
       this.currentRequestDialog = new Dialog(iframe, true);
       this.currentRequestDialog.onClose = () => {
         // Capture reject callback
-        reject(new Error('The transaction was cancelled'));
+        reject(SignerError.UserCancelled());
       };
     });
   }

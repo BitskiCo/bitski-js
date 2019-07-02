@@ -1,5 +1,6 @@
 import { AccessTokenProvider } from 'bitski-provider';
 import { AuthenticationStatus, BitskiSDKOptions, OAuthSignInMethod } from '../bitski';
+import { AuthenticationError } from '../errors/authentication-error';
 import { AuthProvider } from './auth-provider';
 import { OAuthManager, OAuthManagerOptions, SignInOptions } from './oauth-manager';
 import { TokenStore } from './token-store';
@@ -46,7 +47,7 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         if (this.tokenStore.refreshToken) {
             return this.refreshAccessToken();
         }
-        return Promise.reject(new Error('Not signed in. Please sign in and try your request again.'));
+        return Promise.reject(AuthenticationError.NotSignedIn());
     }
 
     public getRefreshToken(): Promise<string> {
@@ -55,10 +56,10 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         }
         // Error: the user did not approve this app for offline access
         if (this.tokenStore.currentToken) {
-            return Promise.reject(new Error('Refresh token is not available.'));
+            return Promise.reject(AuthenticationError.NoRefreshToken());
         }
         // Error: the user is not signed in.
-        return Promise.reject(new Error('Not signed in. Please sign in and try your request again.'));
+        return Promise.reject(AuthenticationError.NotSignedIn());
     }
 
     public invalidateToken(): Promise<void> {
@@ -83,7 +84,7 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
                 throw error;
             });
         }
-        return Promise.reject(new Error('No refresh token available'));
+        return Promise.reject(AuthenticationError.NoRefreshToken());
     }
 
     public signIn(method: OAuthSignInMethod, opts?: SignInOptions): Promise<User> {
@@ -93,7 +94,7 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
                 promise = this.oauthManager.signInRedirect(opts);
                 break;
             case OAuthSignInMethod.Silent:
-                return Promise.reject(new Error('Silent is no longer supported'));
+                return Promise.reject(AuthenticationError.UnsupportedAuthenticationMethod());
             default:
                 promise = this.oauthManager.signInPopup(opts);
                 break;

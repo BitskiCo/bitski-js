@@ -15,9 +15,10 @@ import {
   TokenResponse,
 } from '@openid/appauth';
 import { BITSKI_USER_API_HOST, DEFAULT_OAUTH_CONFIGURATION, DEFAULT_OPTIONAL_SCOPES, DEFAULT_SCOPES } from '../constants';
+import { AuthenticationError } from '../errors/authentication-error';
 import { NoHashQueryStringUtils } from '../utils/no-hash-query-string-utils';
 import { parseResponse } from '../utils/request-utils';
-import { PopupRequestHandler } from './popup-handler';
+import { PopupClosedError, PopupRequestHandler } from './popup-handler';
 import { UserInfoResponse } from './user';
 
 export interface OAuthManagerOptions {
@@ -162,7 +163,7 @@ export class OAuthManager {
   public requestUserInfo(accessToken: string): Promise<UserInfoResponse> {
     const userInfoEndpoint = this.configuration.userInfoEndpoint;
     if (!userInfoEndpoint) {
-      return Promise.reject(new Error('Could not find userinfo endpoint'));
+      return Promise.reject(AuthenticationError.InvalidConfiguration('Could not find user info endpoint'));
     }
     return fetch(userInfoEndpoint, {
       headers: {
@@ -186,8 +187,11 @@ export class OAuthManager {
         this.pendingResolver.fulfill(response);
         this.pendingResolver = undefined;
       } else if (errorResponse) {
-        const error = new Error(errorResponse.error);
-        this.pendingResolver.reject(error);
+        if (errorResponse instanceof PopupClosedError) {
+          this.pendingResolver.reject(AuthenticationError.UserCancelled());
+        } else {
+          this.pendingResolver.reject(AuthenticationError.ServerError(errorResponse.error, errorResponse.errorDescription));
+        }
         this.pendingResolver = undefined;
       }
     }
