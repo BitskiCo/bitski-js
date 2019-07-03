@@ -91,10 +91,7 @@ export class Bitski {
 
   /**
    * Returns a new web3 provider for a given network.
-   * @param options options for the provider
-   * @param options.networkName The network name to use (defaults to mainnet)
-   * @param options.rpcUrl Use this instead of networkName to use the SDK in a dev environment
-   * @param options.pollingInterval minimum interval in milliseconds to poll for new blocks. default is 4000.
+   * @param options options for the provider, or a network name
    */
   public getProvider(options?: ProviderOptions | string): BitskiEngine {
     const network = this.networkFromProviderOptions(options);
