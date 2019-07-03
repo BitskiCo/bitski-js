@@ -74,7 +74,7 @@ Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.33/dist/web3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.5.0/dist/bitski.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.8.0/dist/bitski.min.js"></script>
 ```
 
 ### Starting the SDK
@@ -95,9 +95,19 @@ Or, if you are using the CDN version:
 const bitski = new Bitski.Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 ```
 
+#### Customizing OAuth scopes
+
+By default the SDK will request 'openid' (required), and 'offline' scopes. Offline is used to obtain a refresh token, which will allow you to request access tokens in the future without displaying a popup. There are additional possible scopes that you can request. See [our documentation](https://docs.bitski.com) for more information.
+
+To customize the scopes your app will request, pass them as an array during initialization. Note that 'openid' is always implicitly requested, and that if you customize this list, you should remember to add 'offline' unless you don't want to receive a refresh token.
+
+```javascript
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>', ['offline', 'email']);
+```
+
 ### Getting a provider
 
-Once the SDK is initialized you can get a web3 provider and start making requests.
+Once the SDK is initialized you can get a web3 provider and start making requests. Our provider is highly optimized, and supports subscriptions by default.
 
 ```javascript
 const provider = bitski.getProvider();
@@ -112,32 +122,64 @@ Unlike Metamask and other dapp browsers, you can request a provider for the netw
 const provider = bitski.getProvider({ networkName: 'rinkeby' });
 ```
 
-To use in a dev environment with a local test net, pass in your RPC url:
+To use a Bitski wallet with a custom chain, you can create a network configuration and pass that in:
 
 ```javascript
-const provider = bitski.getProvider({ rpcUrl: 'http://localhost:9545' });
+const network = {
+  rpcUrl: 'http://localhost:9545',
+  chainId: 9,
+}
+const provider = bitski.getProvider({ network: network });
 ```
+
+This works great for development blockchains, sidechains, and more.
 
 ### Authentication status
 
-In order to get access to the user's wallet you need to sign in the provider. Typically this is done as a separate popup over your app, but you can also use a redirect flow if you'd prefer.
+While you can make public blockchain requests without being signed in, in order to get access to the user's wallet you need to have the user sign in and acquire an access token.
 
-First, check the login status to see if you need to sign in or if the user is already signed in from a previous session.
+If you attempt to make a request like `eth_accounts` when the user hasn't logged in yet, you'll receive an error.
 
 ```javascript
-  if (bitski.authStatus === AuthenticationStatus.NotConnected) {
-    // Show connect button or use your own button and call bitski.signIn()
-  }
-});
+const accounts = await web3.eth.getAccounts();
+// AuthenticationError Code=1000 Message="Not signed in"
 ```
+
+#### Checking Authentication Status
+
+First, check the login status to see if you need to sign in or if the user is already signed in from a previous session.
 
 There are 3 possible values:
 
 - *Connected*: The user has an active access token. No action is needed.
-- *Expired*: The user is signed in but does not have a current access token
+- *Expired*: The user is signed in but needs a fresh access token.
 - *NotConnected*: The user has not signed in before.
 
-If the status is Expired or NotConnected, you need to call either `start()` or `signIn()` to use wallet features.
+If the status is NotConnected, the user will have to sign in before you can access their accounts, or request their signature. This is the primary state that you need to handle. For more on signing in, see the next section.
+
+```javascript
+if (bitski.authStatus === AuthenticationStatus.NotConnected) {
+  // Show connect button or use your own button and call bitski.signIn()
+}
+```
+
+If the status is Expired, that means you have a refresh token available, which can be used to acquire a fresh access token without prompting the user to sign in again. By default, when a request that requires an access token is made, the provider will attempt to get a new access token for you.
+
+```javascript
+const accounts = await web3.eth.getAccounts();
+// Provider will check authStatus
+// If expired, it will attempt to refresh, then perform the request
+```
+
+If you want to handle this request yourself, try the following:
+
+```javascript
+if (bitski.authStatus === AuthenticationStatus.Expired) {
+  // Call connect, which will refresh the access token
+  await bitski.connect();
+  // Continue with your app
+}
+```
 
 ### Signing in
 
@@ -165,15 +207,31 @@ _Note: The access token may be passed as a hash on the url (ie. #token=blah), wh
 
 #### Triggering sign in
 
-When you want to prompt the user to sign in simply call `start()` or `signIn()` from inside a click handler, or use our dedicated connect button. If you call `start()` the SDK will attempt to get a new access token if possible, while `signIn()` will always trigger the popup.
+When you want to prompt the user to sign in simply call `signIn()` from inside a click handler, or use our dedicated connect button.
 The browser will open a small popup window where the user can log in / sign up, and then approve access to your app, which will redirect to your callback page with the access token.
 
 ```javascript
+import { Bitski, AuthenticationErrorCode } from 'bitski';
+
 myBtn.addEventHandler('click', () => {
-  bitski.start().then(() => {
+  bitski.signIn().then(() => {
     //signed in!
+  }).catch((error) => {
+    if (error.code === AuthenticationErrorCode.UserCancelled) {
+      // ignore error
+    } else {
+      // display error
+    }
   });
 });
+```
+
+The `signIn()` method also allows you to specify that you would like Bitski to default to the "sign up" form instead of the "log in" form. You can trigger this behavior like this:
+
+```javascript
+import { Bitski, LOGIN_HINT_SIGNUP } from 'bitski';
+
+bitski.signIn({ login_hint: LOGIN_HINT_SIGNUP }).then(/* ... */);
 ```
 
 _Note: In order for the popup window to properly open in most browsers, this needs to be triggered with a click action. For your convenenience, we've included a standard login button that handles that for you._
@@ -222,6 +280,7 @@ There are a few optional options you can pass in:
 - container: An HTML element that you want to inject the button into. If you don't pass anything in you can inject it yourself by accessing the button's element key.
 - size: The size of the button. 'SMALL', 'MEDIUM', or 'LARGE'. Default is 'MEDIUM'.
 - authMethod: The sign in method to use. 'POPUP' or 'REDIRECT'. Default is 'POPUP'.
+- signInOptions: The options to pass during the sign in request (currently, only login_hint is supported. See above.)
 
 #### Signing in with redirect
 
@@ -264,7 +323,6 @@ bitski.redirectCallback().then(() => {
 });
 ```
 
-
 ### Sign Out
 
 If you'd like to offer the ability to sign out of your dapp, you can use the `signOut()` method. This will keep the user logged in on Bitski.com as well as other dapps, but will remove your logged in state.
@@ -274,6 +332,18 @@ bitski.signOut().then(() => {
   //signed out!
 });
 ```
+
+### Verifying credentials with your backend applications
+
+For apps that use a first-party account with a backend, you may want to ensure that the Bitski user is valid, or that they really own the account. Since the client can easily be compromised, you can't necessarily rely on the client to send these details directly. Instead, you should send the user's access token or the refresh token to your server to verify it with Bitski's endpoints directly.
+
+To retrieve the access token in this SDK:
+
+```javascript
+const accessToken = await bitski.getCurrentAccessToken();
+```
+
+Once you have the access token, submit it to your server however you like. Then, from your server you can use the access token to derive the Bitski user id by using the OAuth standard userinfo endpoint, or the user's account using the `eth_accounts` JSON-RPC method. For more info on how to do this, see [our documentation](https://docs.bitski.com/backend_verification/).
 
 ### Interaction with other wallets
 
