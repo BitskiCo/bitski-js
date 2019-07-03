@@ -3,6 +3,7 @@ import { AccessTokenProvider, JSONRPCRequestPayload, Network } from 'bitski-prov
 import JsonRpcError from 'json-rpc-error';
 import uuid from 'uuid';
 import { DEFAULT_AUTHORIZED_METHODS as DEFAULT_SIGNATURE_METHODS } from '../constants';
+import { SignerError } from '../errors/signer-error';
 import { BitskiTransactionSigner } from '../signing/transaction-signer';
 
 type JSONRPCResponseHandler = (error?: JsonRpcError, result?: any) => void;
@@ -181,22 +182,22 @@ export class SignatureSubprovider extends Subprovider {
         if (request.params && request.params.length > 0) {
           return request.params[0] as TransactionPayload;
         } else {
-          throw new Error('Invalid request: Could not find transaction values.');
+          throw SignerError.MissingTransaction();
         }
       case 'eth_sign':
         if (request.params && request.params.length > 1) {
           return { from: request.params[0], message: request.params[1] };
         } else {
-          throw new Error('Invalid request: Could not find params for signature.');
+          throw SignerError.MissingMessage();
         }
       case 'personal_sign':
         if (request.params && request.params.length > 1) {
           return { from: request.params[1], message: request.params[0] };
         } else {
-          throw new Error('Invalid request: Could not find params for signature.');
+          throw SignerError.MissingMessage();
         }
       default:
-        throw new Error('Method not supported');
+        throw SignerError.UnsupportedMethod();
     }
   }
 
@@ -215,7 +216,7 @@ export class SignatureSubprovider extends Subprovider {
       case 'personal_sign':
         return TransactionKind.Sign;
       default:
-        throw new Error('Method not supported');
+        throw SignerError.UnsupportedMethod();
     }
   }
 

@@ -2,6 +2,7 @@ import { FetchSubprovider } from '@bitski/provider-engine';
 import retry from 'async/retry';
 import { AccessTokenProvider } from '../auth/access-token-provider';
 import { AUTHENTICATED_METHODS, RETRIABLE_ERRORS, UNAUTHORIZED_ERRORS } from '../constants';
+import { ServerError } from '../errors/server-error';
 
 /*
  * Subprovider that fetches over HTTP and manages authentication headers
@@ -85,8 +86,7 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     (err, result) => {
       // ends on retriable error
       if (err && this.isErrorRetriable(err)) {
-        const errMsg = `FetchSubprovider - cannot complete request. All retries exhausted.\nOriginal Error:\n${err.toString()}\n\n`;
-        const retriesExhaustedErr = new Error(errMsg);
+        const retriesExhaustedErr = new ServerError(err.message, 200, this.rpcUrl, true);
         return end(retriesExhaustedErr);
       }
       if (err && this.isUnauthorizedError(err)) {

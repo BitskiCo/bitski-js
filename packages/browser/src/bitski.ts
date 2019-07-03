@@ -3,7 +3,7 @@ import { BitskiEngine, BitskiEngineOptions, Kovan, Mainnet, Network, Rinkeby } f
 import { LOGIN_HINT_SIGNUP, SignInOptions } from './auth/oauth-manager';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
-import { ConnectButton, ConnectButtonSize } from './components/connect-button';
+import { ConnectButton, ConnectButtonOptions, ConnectButtonSize } from './components/connect-button';
 import { SDK_VERSION } from './constants';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import css from './styles/index';
@@ -27,7 +27,13 @@ export { SignInOptions, LOGIN_HINT_SIGNUP };
 // Networks
 export { Network, Mainnet, Rinkeby, Kovan };
 
-export { ConnectButtonSize };
+// Connect Button
+export { ConnectButtonSize, ConnectButtonOptions };
+
+// Errors
+export { AuthenticationError, AuthenticationErrorCode } from './errors/authentication-error';
+export { ParseError, ParseErrorCode } from './errors/parse-error';
+export { SignerError, SignerErrorCode } from './errors/signer-error';
 
 export interface BitskiSDKOptions {
   configuration?: AuthorizationServiceConfiguration;
@@ -85,10 +91,7 @@ export class Bitski {
 
   /**
    * Returns a new web3 provider for a given network.
-   * @param options options for the provider
-   * @param options.networkName The network name to use (defaults to mainnet)
-   * @param options.rpcUrl Use this instead of networkName to use the SDK in a dev environment
-   * @param options.pollingInterval minimum interval in milliseconds to poll for new blocks. default is 4000.
+   * @param options options for the provider, or a network name
    */
   public getProvider(options?: ProviderOptions | string): BitskiEngine {
     const network = this.networkFromProviderOptions(options);
@@ -113,20 +116,11 @@ export class Bitski {
    * Creates a sign in with bitski button to add to your app. If an HTML element is passed in as the
    * first parameter, it will automatically add it to the DOM inside that element. Make sure to add
    * a callback to get notified of login events.
-   * @param options Optionally provide options for the button
-   * @param options.container Existing dom element to embed the Bitski connect button
-   * @param options.size ConnectButtonSize of button to generate. Defaults to Medium.
-   * @param options.authMethod Login method to use. Defaults to popup.
+   * @param options {ConnectButtonOptions} Optional configuration for the button
    * @param callback Post-login callback. Called when sign in is complete. Not applicable for redirect login method.
    */
-  public getConnectButton(options?: any, callback?: (error?: Error, user?: any) => void): ConnectButton {
-    let settings = {
-      authMethod: OAuthSignInMethod.Popup,
-      container: undefined,
-      size: ConnectButtonSize.Medium,
-    };
-    settings = Object.assign(settings, options);
-    return new ConnectButton(this.authProvider, settings.container, settings.size, settings.authMethod, callback);
+  public getConnectButton(options?: ConnectButtonOptions, callback?: (error?: Error, user?: any) => void): ConnectButton {
+    return new ConnectButton(this.authProvider, options, callback);
   }
 
   /**

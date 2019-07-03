@@ -1,5 +1,5 @@
 import { AuthProvider } from '../auth/auth-provider';
-import { OAuthSignInMethod } from '../bitski';
+import { OAuthSignInMethod, SignInOptions } from '../bitski';
 
 /**
  * Sizing options for the Bitski connect button.
@@ -11,6 +11,20 @@ export enum ConnectButtonSize {
 }
 
 /**
+ * Options for the connect button component
+ */
+export interface ConnectButtonOptions {
+  // The auth method to use (popup or redirect). Defaults to popup.
+  authMethod?: OAuthSignInMethod;
+  // Additional sign in options (login_hint) to call sign in with.
+  signInOptions?: SignInOptions;
+  // Existing HTML element to embed the Bitski connect button in.
+  container?: HTMLElement;
+  // The size for the button. Defaults to medium.
+  size?: ConnectButtonSize;
+}
+
+/**
  * A button used to connect to Bitski.
  */
 export class ConnectButton {
@@ -19,6 +33,7 @@ export class ConnectButton {
   public callback?: (error?: Error, user?: any) => void;
   private authProvider: AuthProvider;
   private authIntegrationType: OAuthSignInMethod;
+  private signInOptions: SignInOptions;
 
   /**
    * @param bitskiInstance An instance of Bitski to sign into
@@ -26,22 +41,27 @@ export class ConnectButton {
    */
   constructor(
     authProvider: AuthProvider,
-    existingDiv?: HTMLElement,
-    size: ConnectButtonSize = ConnectButtonSize.Medium,
-    authIntegrationType: OAuthSignInMethod = OAuthSignInMethod.Popup,
+    options?: ConnectButtonOptions,
     callback?: (error?: Error, user?: any) => void,
   ) {
-    this.authProvider = authProvider;
-    this.size = size;
-    this.authIntegrationType = authIntegrationType;
-    this.element = document.createElement('button');
-    this.callback = callback;
-    this.configureElement();
+    // Set options to object if undefined
+    options = options || {};
 
+    // Configure instance
+    this.authProvider = authProvider;
+    this.size = options.size || ConnectButtonSize.Medium;
+    this.authIntegrationType = options.authMethod || OAuthSignInMethod.Popup;
+    this.callback = callback;
+    this.signInOptions = options.signInOptions || {};
+
+    // Create the element
+    this.element = document.createElement('button');
+    this.configureElement();
     this.element.addEventListener('click', this.signin.bind(this));
 
-    if (existingDiv) {
-      existingDiv.appendChild(this.element);
+    // Embed if needed
+    if (options.container) {
+      options.container.appendChild(this.element);
     }
   }
 
@@ -55,7 +75,7 @@ export class ConnectButton {
   }
 
   private signin() {
-    this.authProvider.signInOrConnect(this.authIntegrationType).then((user) => {
+    this.authProvider.signInOrConnect(this.authIntegrationType, this.signInOptions).then((user) => {
       if (this.callback) {
         this.callback(undefined, { expired: false });
       }

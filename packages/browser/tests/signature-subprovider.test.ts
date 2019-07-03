@@ -1,6 +1,7 @@
 
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { Mainnet } from '../src/bitski';
+import { SignerError, SignerErrorCode } from '../src/errors/signer-error';
 import { SignatureSubprovider, TransactionKind } from '../src/subproviders/signature';
 import { MockEngine } from './util/mock-engine';
 import { MockSigner } from './util/mock-signer';
@@ -165,77 +166,94 @@ test('should sign messages with personal_sign', (done) => {
 });
 
 test('it validates parameters for requests when creating transaction', () => {
+    expect.assertions(14);
+
     const { instance } = createProvider();
 
     const noParamsTxn = createRequest('eth_sendTransaction');
-
-    expect(() => {
+    try {
         // @ts-ignore
         instance.createPayload(noParamsTxn);
-    }).toThrow(/Invalid request/);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingTransaction);
+    }
 
     const emptyParamsTxn = createRequest('eth_sendTransaction', []);
-
-    expect(() => {
+    try {
         // @ts-ignore
         instance.createPayload(emptyParamsTxn);
-    }).toThrow(/Invalid request/);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingTransaction);
+    }
 
     const noParamsMsg = createRequest('eth_sign');
-
-    expect(() => {
+    try {
         // @ts-ignore
         instance.createPayload(noParamsMsg);
-    }).toThrow(/Invalid request/);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingMessage);
+    }
 
     const missingParamsMsg = createRequest('eth_sign', []);
-
-    expect(() => {
+    try {
         // @ts-ignore
         instance.createPayload(missingParamsMsg);
-    }).toThrow(/Invalid request/);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingMessage);
+    }
 
     const noParamsPersonalMsg = createRequest('personal_sign');
-
-    expect(() => {
+    try {
         // @ts-ignore
         instance.createPayload(noParamsPersonalMsg);
-    }).toThrow(/Invalid request/);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingMessage);
+    }
 
     const missingParamsPersonalMsg = createRequest('personal_sign', []);
-
-    expect(() => {
+    try {
         // @ts-ignore
         instance.createPayload(missingParamsPersonalMsg);
-    }).toThrow(/Invalid request/);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingMessage);
+    }
 
     const invalidMethod = createRequest('eth_signTypedData', []);
-
-    expect(() => {
+    try {
         // @ts-ignore
         instance.createPayload(invalidMethod);
-    }).toThrow(/Method not supported/);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.UnsupportedMethod);
+    }
 });
 
 test('it validates method when creating a transaction', (done) => {
-    expect.assertions(1);
+    expect.assertions(2);
     const { instance } = createProvider();
 
     const request = createRequest('invalid_method');
 
     instance.handleSignatureRequest(request, (error) => {
-        expect(error.message).toMatch(/Method not supported/);
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.UnsupportedMethod);
         done();
     });
 });
 
 test('it loads balance when using a custom RPC endpoint', (done) => {
     expect.assertions(4);
-   const { provider, instance } = createProvider();
-   // @ts-ignore
-   instance.network.rpcUrl = 'https://custom.rpc.com';
+    const { provider, instance } = createProvider();
+    // @ts-ignore
+    instance.network.rpcUrl = 'https://custom.rpc.com';
 
-   const txn = {
+    const txn = {
         from: '0x',
         to: '0x',
         value: '0x',
@@ -254,6 +272,6 @@ test('it loads balance when using a custom RPC endpoint', (done) => {
         expect(signSpy.mock.calls[0][0].context.currentBalance).toBe('0x1'); // Default value from MockEngine
         const payload = emitPayloadSpy.mock.calls[0][0];
         expect(payload.method).toBe('eth_getBalance');
-       done();
+        done();
     });
 });
