@@ -12,6 +12,7 @@
   "version": "0.9.0",
   "scripts": {
     "test": "jest",
+    "version": "node ./scripts/version.js && git add --all",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
     "bundle": "npm run bundle:main && npm run bundle:callback && npm run minify",
     "bundle:main": "browserify -s Bitski -e dist/esm/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.bundle.js",
