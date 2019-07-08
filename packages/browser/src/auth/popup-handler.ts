@@ -1,3 +1,5 @@
+// tslint:disable max-classes-per-file
+
 import {
   AuthorizationError,
   AuthorizationRequest,
@@ -10,6 +12,10 @@ import {
 } from '@openid/appauth';
 import { CHECK_FOR_POPUP_CLOSE_INTERVAL, DEFAULT_POPUP_FEATURES } from '../constants';
 import { parseUrlParams } from '../utils/callback';
+import { PopupValidator } from '../utils/popup-validator';
+
+// Intermediate errors, since AuthorizationRequestHandler must return an AuthorizationError instance.
+// These should not be user visible.
 
 export class PopupClosedError extends AuthorizationError {
   constructor() {
@@ -17,7 +23,12 @@ export class PopupClosedError extends AuthorizationError {
   }
 }
 
-// tslint:disable-next-line: max-classes-per-file
+export class PopupBlockedError extends AuthorizationError {
+  constructor() {
+    super({ error: 'The popup was blocked.'});
+  }
+}
+
 export class PopupRequestHandler extends AuthorizationRequestHandler {
 
   protected pendingRequest?: AuthorizationRequest;
@@ -26,19 +37,33 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
   protected responseUrl?: Location;
   protected closedTimer?: number;
   protected isCancelled: boolean = false;
+  protected isBlocked: boolean = false;
   protected error?: Error;
+  protected validator: PopupValidator;
 
   constructor(utils = new BasicQueryStringUtils(), crypto = new DefaultCrypto()) {
     super(utils, crypto);
+    // Watch for the popup being blocked
+    this.validator = new PopupValidator(() => {
+      // Return a specific error if blocked, so that we can handle it appropriately.
+      this.isBlocked = true;
+      this.completeAuthorizationRequestIfPossible();
+    });
   }
 
   public performAuthorizationRequest(configuration: AuthorizationServiceConfiguration, request: AuthorizationRequest) {
     const url = this.buildRequestUrl(configuration, request);
     this.pendingRequest = request;
     this.id = request.state;
+    // Set a unique handler on the main window
     window[`popupCallback_${request.state}`] = this.callback.bind(this);
+    // Start monitoring to see if the popup has been closed
     this.closedTimer = window.setInterval(this.checkPopup.bind(this), CHECK_FOR_POPUP_CLOSE_INTERVAL);
+    // Create the popup window
     this.popupWindow = window.open(url, '_blank', DEFAULT_POPUP_FEATURES);
+    // Check if the popup we just created was blocked.
+    this.validator.check(this.popupWindow);
+    // Focus the popup to bring it to the front
     if (this.popupWindow) {
       this.popupWindow.focus();
     }
@@ -69,6 +94,10 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     // Assert the request wasn't cancelled
     if (this.isCancelled === true) {
       return this.respondWithCancelled(request);
+    }
+
+    if (this.isBlocked === true) {
+      return this.respondWithBlocked(request);
     }
 
     // Assert there is no error
@@ -104,6 +133,13 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     // Respond with a code
     const code: string | undefined = data.code;
     return this.respondWithCode(request, code);
+  }
+
+  protected respondWithBlocked(request: AuthorizationRequest): Promise<AuthorizationRequestResponse> {
+    const error = new PopupBlockedError();
+    const response = { request, error, response: null };
+    this.cleanup();
+    return Promise.resolve(response);
   }
 
   protected respondWithCancelled(request: AuthorizationRequest): Promise<AuthorizationRequestResponse> {
