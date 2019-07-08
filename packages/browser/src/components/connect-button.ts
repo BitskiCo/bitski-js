@@ -1,5 +1,6 @@
 import { AuthProvider } from '../auth/auth-provider';
 import { OAuthSignInMethod, SignInOptions } from '../bitski';
+import { AuthenticationError, AuthenticationErrorCode } from '../errors/authentication-error';
 
 /**
  * Sizing options for the Bitski connect button.
@@ -28,16 +29,27 @@ export interface ConnectButtonOptions {
  * A button used to connect to Bitski.
  */
 export class ConnectButton {
+  // The actual button element to be created
   public element: HTMLElement;
+
+  // The configured size of the button.
   public size: ConnectButtonSize;
+
+  // The callback for a typical response
   public callback?: (error?: Error, user?: any) => void;
+
+  // Set this directly to handle cancellation
+  public onCancel?: () => void;
+
   private authProvider: AuthProvider;
   private authIntegrationType: OAuthSignInMethod;
   private signInOptions: SignInOptions;
 
   /**
-   * @param bitskiInstance An instance of Bitski to sign into
-   * @param existingDiv An existing div to turn into a connect button
+   * @param authProvider An instance of an AuthProvider to process sign in requests.
+   * @param options Optional ConnectButtonOptions to configure your button.
+   * @param callback Optional callback to be called after successful or failed log in attempt.
+   * You can also set this directly later with the `callback` property.
    */
   constructor(
     authProvider: AuthProvider,
@@ -77,10 +89,17 @@ export class ConnectButton {
   private signin() {
     this.authProvider.signInOrConnect(this.authIntegrationType, this.signInOptions).then((user) => {
       if (this.callback) {
-        this.callback(undefined, { expired: false });
+        this.callback(undefined, user);
       }
     }).catch((error: Error) => {
-      if (this.callback) {
+      // Check for cancellation
+      if (error instanceof AuthenticationError && error.code === AuthenticationErrorCode.UserCancelled) {
+        // Not a real error, the user just cancelled. Trigger cancellation callback.
+        if (this.onCancel) {
+          this.onCancel();
+        }
+      } else if (this.callback) {
+        // Real error. Forward to main callback.
         this.callback(error, undefined);
       }
     });
