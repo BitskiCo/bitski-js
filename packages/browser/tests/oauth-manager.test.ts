@@ -11,6 +11,8 @@ function createInstance() {
 beforeEach(() => {
   // @ts-ignore
   fetch.resetMocks();
+  jest.resetAllMocks();
+  jest.restoreAllMocks();
 });
 
 test('sign in redirect performs redirect', (done) => {
@@ -20,7 +22,7 @@ test('sign in redirect performs redirect', (done) => {
   const originalLocation = window.location.href;
 
   // Setup a mock of window.location.assign to complete test
-  jest.spyOn(window.location, 'assign').mockImplementation((location) => {
+  const spy = jest.fn((location) => {
     // Assert location has changed (redirected)
     expect(location).not.toBe(originalLocation);
 
@@ -44,6 +46,7 @@ test('sign in redirect performs redirect', (done) => {
       done();
     });
   });
+  window.location.assign = spy;
 
   // Perform sign in request
   manager.signInRedirect();
@@ -55,7 +58,7 @@ test('sign in popup opens popup', () => {
   const manager = createInstance();
 
   // Spy on window open
-  jest.spyOn(window, 'open').mockImplementationOnce((url, target, features) => {
+  jest.spyOn(window, 'open').mockImplementation((url, target, features) => {
     // Assert the URL is something we expect
     expect(url).toMatch(manager.configuration.authorizationEndpoint);
     // Hack to create an object that is similar to Location in JSDom
@@ -77,6 +80,13 @@ test('sign in popup opens popup', () => {
 test('signInPopup passes options to authorization request', () => {
   expect.assertions(2);
   const manager = createInstance();
+  jest.spyOn(window, 'open').mockImplementation(() => {
+    return {
+      onload: jest.fn(),
+      focus: jest.fn(),
+      innerHeight: 1000,
+    };
+  });
   manager.signInPopup({ login_hint: LOGIN_HINT_SIGNUP });
   expect(manager.currentAuthRequest).toBeDefined();
   expect(manager.currentAuthRequest.extras.login_hint).toBe(LOGIN_HINT_SIGNUP);
@@ -85,6 +95,7 @@ test('signInPopup passes options to authorization request', () => {
 test('signInRedirect passes options to authorization request', () => {
   expect.assertions(2);
   const manager = createInstance();
+  window.location.assign = jest.fn();
   manager.signInRedirect({ login_hint: LOGIN_HINT_SIGNUP });
   expect(manager.currentAuthRequest).toBeDefined();
   expect(manager.currentAuthRequest.extras.login_hint).toBe(LOGIN_HINT_SIGNUP);
@@ -102,16 +113,39 @@ test('can handle oauth error response', () => {
     // Hack to create an object that is similar to Location in JSDom
     const location = document.createElement('a');
     location.href =
-      `http://localhost:3000/callback?error=womp%20womp&error_description=better%20luck%20next%20time&state=${manager.authHandler.pendingRequest.state}`;
+      `http://localhost:3000/callback?error=womp%20womp&error_description=better%20luck%20next%20time&state=${manager.currentAuthRequest.state}`;
     // Call the callback to trigger the completion handler
     // @ts-ignore
     manager.authHandler.callback.call(manager.authHandler, location);
+    return {
+      onload: jest.fn(),
+      focus: jest.fn(),
+      innerHeight: 1000,
+    };
   });
 
   return manager.signInPopup().catch((error) => {
     expect(error).toBeInstanceOf(AuthenticationError);
     expect(error.code).toBe(AuthenticationErrorCode.ServerError);
     expect(error.message).toMatch(/womp womp/);
+  });
+});
+
+test('rejects with an error if the popup is blocked', (done) => {
+  expect.assertions(2);
+
+  const manager = createInstance();
+
+  // Spy on window open
+  jest.spyOn(window, 'open').mockImplementation((url, target, features) => {
+    // Return null, simulating a blocked popup
+    return null;
+  });
+
+  manager.signInPopup().catch((error) => {
+    expect(error).toBeInstanceOf(AuthenticationError);
+    expect(error.code).toBe(AuthenticationErrorCode.PopupBlocked);
+    done();
   });
 });
 
