@@ -68,3 +68,6 @@ etc
 
 # Rollup
 .rpt2_cache/
+
+# Examples artifacts
+examples/package-lock.json
