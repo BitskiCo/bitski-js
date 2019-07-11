@@ -7,6 +7,7 @@
   "scripts": {
     "postinstall": "lerna bootstrap",
     "test": "jest --coverage --verbose",
+    "version": "npm run docs && git add --all",
     "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit",
     "build": "lerna run build",
     "lint": "tslint 'packages/*/src/**/*.ts'",
@@ -14,6 +15,7 @@
     "docs": "typedoc --options ./typedoc.js"
   },
   "devDependencies": {
+    "@strictsoftware/typedoc-plugin-monorepo": "^0.2.1",
     "@types/events": "^1.2.0",
     "@types/jest": "^23.3.2",
     "@types/jquery": "^3.3.29",
@@ -30,9 +32,8 @@
     "terser": "^3.14.1",
     "ts-jest": "^23.10.0",
     "tslint": "^5.11.0",
-    "typedoc": "^0.12.0",
+    "typedoc": "^0.14.2",
     "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
-    "typedoc-plugin-monorepo": "^0.1.0",
     "typescript": "^3.1.6",
     "xhr-mock": "^2.4.1"
   },
