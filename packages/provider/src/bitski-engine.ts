@@ -10,6 +10,7 @@ import {
 import { ProviderError } from './errors/provider-error';
 import { NonceTrackerSubprovider } from './subproviders/nonce-tracker';
 import { TransactionValidatorSubprovider } from './subproviders/transaction-validator';
+import { TypedDataSanitizerSubprovider } from './subproviders/typed-data';
 
 export interface BitskiEngineOptions {
   // Frequency to check for new blocks
@@ -42,6 +43,7 @@ export class BitskiEngine extends Web3ProviderEngine {
     if (enableValidator) {
       // Ensures that transactions are well formed (nonce, gas, gasPrice, from) before they are sent to Bitski
       this.addProvider(new TransactionValidatorSubprovider());
+      this.addProvider(new TypedDataSanitizerSubprovider());
     }
 
     const enableCache = !(options && options.disableCaching === true);

@@ -74,7 +74,7 @@ Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.33/dist/web3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.8.0/dist/bitski.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.10.0/dist/bitski.min.js"></script>
 ```
 
 ### Starting the SDK
@@ -238,8 +238,13 @@ _Note: In order for the popup window to properly open in most browsers, this nee
 
 #### Using the Bitski connect button
 
-For your convenience we provide a connect button that you can drop into your page that will trigger the sign in behavior automatically. Here's an example of how you might set that up:
+For your convenience we provide a connect button that you can drop into your page that will trigger the sign in behavior automatically when clicked.
 
+```
+const btnInstance = bitski.getConnectButton([options][, callback]);
+```
+
+Here's an example of how you might set that up:
 ```html
 <!-- my-app.html -->
 <div id="bitski-button"></div>
@@ -259,11 +264,19 @@ function checkAuthStatus() {
     //create the connect button
     const containerElement = document.querySelector('#bitski-button');
     const connectButton = bitski.getConnectButton({ container: containerElement });
-    connectButton.callback = function(error, user) {
+    connectButton.callback = (error, user) => {
+      if (error) {
+        // Handle errors
+        return;
+      }
       //Logged in!
       connectButton.remove();
       continueToApp();
-    }
+    };
+    // Optionally handle cancellation
+    connectButton.onCancel = () => {
+      // Will be called when the user clicks sign in, but dismisses popup
+    };
   } else {
     //already logged in
     continueToApp();
@@ -275,12 +288,14 @@ window.addEventListener('load', () => {
 });
 ```
 
-There are a few optional options you can pass in:
+There are a few options you can pass in. These are not required, but allow you to customize the experience:
 
 - container: An HTML element that you want to inject the button into. If you don't pass anything in you can inject it yourself by accessing the button's element key.
 - size: The size of the button. 'SMALL', 'MEDIUM', or 'LARGE'. Default is 'MEDIUM'.
 - authMethod: The sign in method to use. 'POPUP' or 'REDIRECT'. Default is 'POPUP'.
 - signInOptions: The options to pass during the sign in request (currently, only login_hint is supported. See above.)
+
+Note that the `callback` will be called for either successful or failed login attempts. To handle the case where the user cancels part way through, set the `onCancel` handler.
 
 #### Signing in with redirect
 

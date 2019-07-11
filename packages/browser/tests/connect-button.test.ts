@@ -1,5 +1,5 @@
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
-import { OAuthSignInMethod } from '../src/bitski';
+import { OAuthSignInMethod, AuthenticationError } from '../src/bitski';
 import { ConnectButton, ConnectButtonSize, ConnectButtonOptions } from '../src/components/connect-button';
 
 const clientID = 'test-client-id';
@@ -68,6 +68,19 @@ test('it calls the callback on error', (done) => {
     done();
   };
   button.callback = callback;
+  button.signin();
+});
+
+test('it calls the onCancel callback on cancellation', (done) => {
+  expect.assertions(1);
+  const authProvider = createAuthProvider();
+  const button = new ConnectButton(authProvider);
+  const spy = jest.spyOn(authProvider, 'signIn').mockRejectedValue(AuthenticationError.UserCancelled());
+  const callback = () => {
+    expect(spy).toBeCalled();
+    done();
+  };
+  button.onCancel = callback;
   button.signin();
 });
 

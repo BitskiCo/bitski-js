@@ -12,6 +12,8 @@ export enum AuthenticationErrorCode {
   ServerError = 1004,
   // The SDK is configured incorrectly
   InvalidConfiguration = 1005,
+  // Popup blocked
+  PopupBlocked = 1006,
 }
 
 /**
@@ -37,6 +39,12 @@ export class AuthenticationError extends Error {
   // throw AuthenticationError.UnsupportedAuthenticationMethod()
   public static UnsupportedAuthenticationMethod() {
     return new AuthenticationError('Sign in method not supported.', AuthenticationErrorCode.UnsupportedAuthenticationMethod);
+  }
+
+  // throw AuthenticationError.PopupBlocked()
+  public static PopupBlocked(baseUrl: string) {
+    const msg = `The popup was blocked. Please make sure ${baseUrl} is allowed to open popups.`;
+    return new AuthenticationError(msg, AuthenticationErrorCode.PopupBlocked);
   }
 
   // throw Authentication Error.ServerError(message, description)

@@ -18,7 +18,7 @@ import { BITSKI_USER_API_HOST, DEFAULT_OAUTH_CONFIGURATION, DEFAULT_OPTIONAL_SCO
 import { AuthenticationError } from '../errors/authentication-error';
 import { NoHashQueryStringUtils } from '../utils/no-hash-query-string-utils';
 import { parseResponse } from '../utils/request-utils';
-import { PopupClosedError, PopupRequestHandler } from './popup-handler';
+import { PopupBlockedError, PopupClosedError, PopupRequestHandler } from './popup-handler';
 import { UserInfoResponse } from './user';
 
 export interface OAuthManagerOptions {
@@ -189,6 +189,13 @@ export class OAuthManager {
       } else if (errorResponse) {
         if (errorResponse instanceof PopupClosedError) {
           this.pendingResolver.reject(AuthenticationError.UserCancelled());
+        } else if (errorResponse instanceof PopupBlockedError) {
+          // Parse domain of the authority, to log better context for error.
+          const urlMatch = /^(http?s:\/\/[\w.]*)\/[\w\/]*$/;
+          // Check for matches against the authority
+          const matches = this.configuration.authorizationEndpoint.match(urlMatch);
+          const baseUrl = matches && matches.length > 1 ? matches[1] : '';
+          this.pendingResolver.reject(AuthenticationError.PopupBlocked(baseUrl));
         } else {
           this.pendingResolver.reject(AuthenticationError.ServerError(errorResponse.error, errorResponse.errorDescription));
         }

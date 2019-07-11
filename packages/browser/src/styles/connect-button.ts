@@ -3,63 +3,55 @@
 const css = `
 .bitski-connect-button {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, 'Helvetica Neue', sans-serif;
-  font-weight: bold;
-  background-color: #298FFF;
+  font-weight: 500;
+  background-color: #1C11D9;
   background-repeat: no-repeat;
-  background-position-y: 50%;
+  background-position: 0px 0px;
+  border: none;
   color: #fff;
-  border: solid 1px #2288F5;
-  border-bottom-color: #1A7CE6;
   margin: 0;
   padding: 0;
   cursor: pointer;
   text-shadow: 1px 0 1px rgba(0, 0, 0, 0.03);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.14);
   transition: background 200ms linear, transform 200ms ease-out;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
-.bitski-connect-button:hover {
-  background-color: #2288F5;
-}
 .bitski-connect-button:focus,
 .bitski-connect-button:active {
-  background-color: #1A7CE6;
-  border-color: #1A7CE6;
+  background-color: #2117C7;
   transform: scale(0.99, 0.99);
   color: rgba(255, 255, 255, 0.8);
 }
 .bitski-connect-button.size-small {
-  background-image: url('https://cdn.bitskistatic.com/sdk/logo-sm.svg');
-  background-position-x: 6px;
-  border-radius: 4px;
+  background-image: url('https://cdn.bitskistatic.com/sdk/btn-v2-bg-sm.svg');
+  border-radius: 3px;
   font-size: 10px;
   height: 22px;
   line-height: 19px;
-  padding-left: 27px;
-  padding-right: 11px;
+  padding-left: 30px;
+  padding-right: 8px;
 }
 .bitski-connect-button.size-medium {
-  background-image: url('https://cdn.bitskistatic.com/sdk/logo-md.svg');
-  background-position-x: 6px;
-  border-radius: 6px;
-  font-size: 12px;
-  height: 28px;
-  line-height: 26px;
-  padding-left: 35px;
-  padding-right: 14px;
+  background-image: url('https://cdn.bitskistatic.com/sdk/btn-v2-bg-md.svg');
+  border-radius: 4px;
+  font-size: 11px;
+  height: 30px;
+  line-height: 29px;
+  padding-left: 40px;
+  padding-right: 12px;
 }
 .bitski-connect-button.size-large {
-  background-image: url('https://cdn.bitskistatic.com/sdk/logo-lg.svg');
-  background-position-x: 12px;
-  border-radius: 8px;
-  font-size: 15px;
-  height: 40px;
-  line-height: 39px;
-  padding-left: 48px;
-  padding-right: 18px;
+  background-image: url('https://cdn.bitskistatic.com/sdk/btn-v2-bg-lg.svg');
+  border-radius: 5px;
+  font-size: 14px;
+  height: 44px;
+  line-height: 44px;
+  padding-left: 57px;
+  padding-right: 15px;
 }
 `;
 

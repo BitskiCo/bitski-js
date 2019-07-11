@@ -10,6 +10,11 @@ export enum SignerErrorCode {
   // The message signature request is missing expected params.
   // Check that params is an array, and that they include both a from address, and a message to sign.
   MissingMessage = 3003,
+  // Missing from address in typed data request
+  MissingFrom = 3004,
+  // Missing typed data params. Make sure params is an array and includes
+  // both a from address, and a typed data payload.
+  MissingTypedData = 3005,
 }
 
 export class SignerError extends Error {
@@ -28,6 +33,14 @@ export class SignerError extends Error {
 
   public static MissingMessage() {
     return new SignerError('Could not find message params in request', SignerErrorCode.MissingMessage);
+  }
+
+  public static MissingFrom() {
+    return new SignerError('Could not find from address in request params.', SignerErrorCode.MissingFrom);
+  }
+
+  public static MissingTypedData() {
+    return new SignerError('Could not find data to sign in request params.', SignerErrorCode.MissingTypedData);
   }
 
   public name: string = 'TransactionError';
