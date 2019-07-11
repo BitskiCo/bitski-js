@@ -339,6 +339,20 @@ var NoErrorBody:  = 2001
 
 
 
+<a id="browser.signererrorcode.missingfrom"></a>
+
+####  MissingFrom
+
+
+```javascript
+var MissingFrom:  = 3004
+```
+<small>*Defined in [browser/src/errors/signer-error.ts:14](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L14)*</small>
+
+
+
+
+
 <a id="browser.signererrorcode.missingmessage"></a>
 
 ####  MissingMessage
@@ -362,6 +376,20 @@ var MissingMessage:  = 3003
 var MissingTransaction:  = 3002
 ```
 <small>*Defined in [browser/src/errors/signer-error.ts:9](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L9)*</small>
+
+
+
+
+
+<a id="browser.signererrorcode.missingtypeddata"></a>
+
+####  MissingTypedData
+
+
+```javascript
+var MissingTypedData:  = 3005
+```
+<small>*Defined in [browser/src/errors/signer-error.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L17)*</small>
 
 
 
@@ -442,6 +470,20 @@ var Sign:  = "ETH_SIGN"
 var SignTransaction:  = "ETH_SIGN_TRANSACTION"
 ```
 <small>*Defined in [browser/src/subproviders/signature.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L13)*</small>
+
+
+
+
+
+<a id="browser.transactionkind.signtypeddata"></a>
+
+####  SignTypedData
+
+
+```javascript
+var SignTypedData:  = "ETH_SIGN_TYPED_DATA"
+```
+<small>*Defined in [browser/src/subproviders/signature.ts:15](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L15)*</small>
 
 
 
@@ -3372,7 +3414,7 @@ Handle RPC request from engine (called by)
 ```typescript
 function handleRequest(payload: JSONRPCRequestPayload, next: function, end: JSONRPCResponseHandler)
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:77](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L77)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:136](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L136)*</small>
 
 
 
@@ -3408,7 +3450,7 @@ Called when a payload is received that needs a signature
 ```typescript
 function handleSignatureRequest(payload: JSONRPCRequestPayload, callback: JSONRPCResponseHandler): Promise<void>
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:90](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L90)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:149](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L149)*</small>
 
 
 
@@ -3489,7 +3531,7 @@ new SignerError(message: string, code: SignerErrorCode): SignerError
 ```javascript
 var code: SignerErrorCode
 ```
-<small>*Defined in [browser/src/errors/signer-error.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L34)*</small>
+<small>*Defined in [browser/src/errors/signer-error.ts:47](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L47)*</small>
 
 
 
@@ -3499,7 +3541,7 @@ var code: SignerErrorCode
 ```javascript
 var name: string = "TransactionError"
 ```
-<small>*Defined in [browser/src/errors/signer-error.ts:33](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L33)*</small>
+<small>*Defined in [browser/src/errors/signer-error.ts:46](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L46)*</small>
 
 
 
@@ -3517,6 +3559,32 @@ var Error: ErrorConstructor
 ---
 
 ### Methods
+<a id="browser.signererror.missingfrom-1"></a>
+
+#### MissingFrom
+
+
+
+
+##### Declaration
+
+
+```typescript
+function MissingFrom(): SignerError
+```
+<small>*Defined in [browser/src/errors/signer-error.ts:38](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L38)*</small>
+
+
+
+##### Return Value
+[SignerError](#browser.signererror)
+
+
+
+
+
+
+
 <a id="browser.signererror.missingmessage-1"></a>
 
 #### MissingMessage
@@ -3530,7 +3598,7 @@ var Error: ErrorConstructor
 ```typescript
 function MissingMessage(): SignerError
 ```
-<small>*Defined in [browser/src/errors/signer-error.ts:29](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L29)*</small>
+<small>*Defined in [browser/src/errors/signer-error.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L34)*</small>
 
 
 
@@ -3556,7 +3624,33 @@ function MissingMessage(): SignerError
 ```typescript
 function MissingTransaction(): SignerError
 ```
-<small>*Defined in [browser/src/errors/signer-error.ts:25](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L25)*</small>
+<small>*Defined in [browser/src/errors/signer-error.ts:30](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L30)*</small>
+
+
+
+##### Return Value
+[SignerError](#browser.signererror)
+
+
+
+
+
+
+
+<a id="browser.signererror.missingtypeddata-1"></a>
+
+#### MissingTypedData
+
+
+
+
+##### Declaration
+
+
+```typescript
+function MissingTypedData(): SignerError
+```
+<small>*Defined in [browser/src/errors/signer-error.ts:42](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L42)*</small>
 
 
 
@@ -3582,7 +3676,7 @@ function MissingTransaction(): SignerError
 ```typescript
 function UnsupportedMethod(): SignerError
 ```
-<small>*Defined in [browser/src/errors/signer-error.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L17)*</small>
+<small>*Defined in [browser/src/errors/signer-error.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L22)*</small>
 
 
 
@@ -3608,7 +3702,7 @@ function UnsupportedMethod(): SignerError
 ```typescript
 function UserCancelled(): SignerError
 ```
-<small>*Defined in [browser/src/errors/signer-error.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L21)*</small>
+<small>*Defined in [browser/src/errors/signer-error.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/errors/signer-error.ts#L26)*</small>
 
 
 
@@ -4536,7 +4630,7 @@ var login_hint: undefined | string
 ```javascript
 var from: string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:30](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L30)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L32)*</small>
 
 
 <a id="browser.signaturepayload.message-3"></a>
@@ -4545,7 +4639,7 @@ var from: string
 ```javascript
 var message: string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L31)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:33](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L33)*</small>
 
 
 
@@ -4565,7 +4659,7 @@ var message: string
 ```javascript
 var context: TransactionContext
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L21)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L22)*</small>
 
 
 <a id="browser.transaction-1.id-1"></a>
@@ -4574,7 +4668,7 @@ var context: TransactionContext
 ```javascript
 var id: string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:18](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L18)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L19)*</small>
 
 
 <a id="browser.transaction-1.kind"></a>
@@ -4583,7 +4677,7 @@ var id: string
 ```javascript
 var kind: TransactionKind
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L19)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:20](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L20)*</small>
 
 
 <a id="browser.transaction-1.payload"></a>
@@ -4592,7 +4686,7 @@ var kind: TransactionKind
 ```javascript
 var payload: TransactionPayload | SignaturePayload
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:20](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L20)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L21)*</small>
 
 
 
@@ -4610,9 +4704,9 @@ var payload: TransactionPayload | SignaturePayload
 
 #### chainId
 ```javascript
-var chainId: number
+var chainId: undefined | number
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:25](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L25)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L26)*</small>
 
 
 <a id="browser.transactioncontext.currentbalance"></a>
@@ -4621,7 +4715,16 @@ var chainId: number
 ```javascript
 var currentBalance: undefined | string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:26](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L26)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:27](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L27)*</small>
+
+
+<a id="browser.transactioncontext.from-1"></a>
+
+#### from
+```javascript
+var from: undefined | string
+```
+<small>*Defined in [browser/src/subproviders/signature.ts:28](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L28)*</small>
 
 
 
@@ -4641,16 +4744,16 @@ var currentBalance: undefined | string
 ```javascript
 var data: undefined | string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:38](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L38)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:40](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L40)*</small>
 
 
-<a id="browser.transactionpayload.from-1"></a>
+<a id="browser.transactionpayload.from-2"></a>
 
 #### from
 ```javascript
 var from: string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:35](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L35)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:37](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L37)*</small>
 
 
 <a id="browser.transactionpayload.gas"></a>
@@ -4659,7 +4762,7 @@ var from: string
 ```javascript
 var gas: undefined | string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:40](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L40)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:42](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L42)*</small>
 
 
 <a id="browser.transactionpayload.gasprice"></a>
@@ -4668,7 +4771,7 @@ var gas: undefined | string
 ```javascript
 var gasPrice: undefined | string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:41](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L41)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:43](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L43)*</small>
 
 
 <a id="browser.transactionpayload.nonce"></a>
@@ -4677,7 +4780,7 @@ var gasPrice: undefined | string
 ```javascript
 var nonce: undefined | string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:39](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L39)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:41](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L41)*</small>
 
 
 <a id="browser.transactionpayload.to"></a>
@@ -4686,7 +4789,7 @@ var nonce: undefined | string
 ```javascript
 var to: undefined | string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:36](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L36)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:38](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L38)*</small>
 
 
 <a id="browser.transactionpayload.value"></a>
@@ -4695,7 +4798,139 @@ var to: undefined | string
 ```javascript
 var value: undefined | string
 ```
-<small>*Defined in [browser/src/subproviders/signature.ts:37](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L37)*</small>
+<small>*Defined in [browser/src/subproviders/signature.ts:39](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L39)*</small>
+
+
+
+
+<a id="browser.typeddatadefinition"></a>
+
+####  TypedDataDefinition
+
+
+
+
+
+### Properties
+<a id="browser.typeddatadefinition.name-3"></a>
+
+#### name
+```javascript
+var name: string
+```
+<small>*Defined in [browser/src/subproviders/signature.ts:47](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L47)*</small>
+
+
+<a id="browser.typeddatadefinition.type"></a>
+
+#### type
+```javascript
+var type: string
+```
+<small>*Defined in [browser/src/subproviders/signature.ts:48](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L48)*</small>
+
+
+
+
+<a id="browser.typeddatapayload"></a>
+
+####  TypedDataPayload
+
+
+Example usage:
+
+    const payload: TypedDataPayload = {
+      types: {
+        EIP712Domain: [
+          { name: 'name', type: 'string' },
+          { name: 'version', type: 'string' },
+          { name: 'chainId', type: 'uint256' },
+          { name: 'verifyingContract', type: 'address' },
+        ],
+        Person: [
+          { name: 'name', type: 'string' },
+          { name: 'wallet', type: 'address' }
+        ],
+        Mail: [
+          { name: 'from', type: 'Person' },
+          { name: 'to', type: 'Person' },
+          { name: 'contents', type: 'string' }
+        ],
+      },
+      primaryType: 'Mail',
+      domain: {
+        name: 'Ether Mail',
+        version: '1',
+        chainId: 1,
+        verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+      },
+      message: {
+        from: {
+          name: 'Cow',
+          wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+        },
+        to: {
+          name: 'Bob',
+          wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+        },
+        contents: 'Hello, Bob!',
+      },
+    }
+
+
+
+
+
+
+### Properties
+<a id="browser.typeddatapayload.domain"></a>
+
+#### domain
+```javascript
+var domain: object
+```
+<small>*Defined in [browser/src/subproviders/signature.ts:98](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L98)*</small>
+
+
+<a id="browser.typeddatapayload.message-4"></a>
+
+#### message
+```javascript
+var message: object
+```
+<small>*Defined in [browser/src/subproviders/signature.ts:100](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L100)*</small>
+
+
+<a id="browser.typeddatapayload.primarytype"></a>
+
+#### primaryType
+```javascript
+var primaryType: string
+```
+<small>*Defined in [browser/src/subproviders/signature.ts:99](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L99)*</small>
+
+
+<a id="browser.typeddatapayload.types"></a>
+
+#### types
+```javascript
+var types: object
+```
+<small>*Defined in [browser/src/subproviders/signature.ts:94](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/subproviders/signature.ts#L94)*</small>
+
+##### Type declaration
+
+
+[propName: `string`]: `TypedDataDefinition[]`
+
+
+
+
+
+ EIP712Domain: `TypedDataDefinition[]`
+
+
+
 
 
 
@@ -4899,7 +5134,14 @@ var CHECK_FOR_POPUP_CLOSE_INTERVAL: 500 = 500
 
 
 ```javascript
-var DEFAULT_AUTHORIZED_METHODS: string[] =  ['eth_sendTransaction', 'eth_signTransaction', 'eth_sign', 'personal_sign']
+var DEFAULT_AUTHORIZED_METHODS: string[] =  [
+  'eth_sendTransaction',
+  'eth_signTransaction',
+  'eth_sign',
+  'personal_sign',
+  'eth_signTypedData',
+  'eth_signTypedData_v3', // For metamask compatibility
+]
 ```
 <small>*Defined in [browser/src/constants.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/constants.ts#L32)*</small>
 
@@ -4997,7 +5239,7 @@ var REFRESH_TOKEN_KEY: "bitski.refresh_token" = "bitski.refresh_token"
 
 
 ```javascript
-var SDK_VERSION: "0.5.0" = "0.5.0"
+var SDK_VERSION: "0.10.0" = "0.10.0"
 ```
 <small>*Defined in [browser/src/constants.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/constants.ts#L2)*</small>
 
@@ -5208,6 +5450,20 @@ This package includes our base Web3 provider based on web3-provider-engine. It i
 <a id="provider.providererrorcode"></a>
 
 ####  ProviderErrorCode
+
+
+
+
+
+<a id="provider.providererrorcode.invalidrequest"></a>
+
+####  InvalidRequest
+
+
+```javascript
+var InvalidRequest:  = 4001
+```
+<small>*Defined in [provider/src/errors/provider-error.ts:5](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/errors/provider-error.ts#L5)*</small>
 
 
 
@@ -5538,7 +5794,7 @@ new BitskiEngine(options?: BitskiEngineOptions): BitskiEngine
 ```typescript
 function subscribe(subscribeMethod?: string, subscriptionMethod: string, parameters: any[]): Promise<string>
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:73](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L73)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:75](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L75)*</small>
 
 
 
@@ -5574,7 +5830,7 @@ function subscribe(subscribeMethod?: string, subscriptionMethod: string, paramet
 ```typescript
 function supportsSubscriptions(): boolean
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:69](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L69)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:71](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L71)*</small>
 
 
 
@@ -5600,7 +5856,7 @@ function supportsSubscriptions(): boolean
 ```typescript
 function unsubscribe(subscriptionId: string, unsubscribeMethod?: string): Promise<boolean>
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:79](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L79)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:81](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L81)*</small>
 
 
 
@@ -5760,7 +6016,7 @@ new ProviderError(message: string, code: ProviderErrorCode): ProviderError
 ```javascript
 var code: ProviderErrorCode
 ```
-<small>*Defined in [provider/src/errors/provider-error.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/errors/provider-error.ts#L12)*</small>
+<small>*Defined in [provider/src/errors/provider-error.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/errors/provider-error.ts#L19)*</small>
 
 
 
@@ -5770,7 +6026,7 @@ var code: ProviderErrorCode
 ```javascript
 var name: string = "ProviderError"
 ```
-<small>*Defined in [provider/src/errors/provider-error.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/errors/provider-error.ts#L11)*</small>
+<small>*Defined in [provider/src/errors/provider-error.ts:18](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/errors/provider-error.ts#L18)*</small>
 
 
 
@@ -5788,6 +6044,40 @@ var Error: ErrorConstructor
 ---
 
 ### Methods
+<a id="provider.providererror.invalidrequest-1"></a>
+
+#### InvalidRequest
+
+
+
+
+##### Declaration
+
+
+```typescript
+function InvalidRequest(reason: string): ProviderError
+```
+<small>*Defined in [provider/src/errors/provider-error.ts:14](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/errors/provider-error.ts#L14)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| reason | `string`   |  - |
+
+
+
+##### Return Value
+[ProviderError](#provider.providererror)
+
+
+
+
+
+
+
 <a id="provider.providererror.subscriptionsunavailable-1"></a>
 
 #### SubscriptionsUnavailable
@@ -5801,7 +6091,7 @@ var Error: ErrorConstructor
 ```typescript
 function SubscriptionsUnavailable(): ProviderError
 ```
-<small>*Defined in [provider/src/errors/provider-error.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/errors/provider-error.ts#L8)*</small>
+<small>*Defined in [provider/src/errors/provider-error.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/errors/provider-error.ts#L10)*</small>
 
 
 
@@ -5995,6 +6285,79 @@ function handleRequest(payload: any, next: any, _: any)
 
 ---
 
+<a id="provider.typeddatasanitizersubprovider"></a>
+
+##  TypedDataSanitizerSubprovider
+
+
+### Properties
+
+
+
+---
+
+### Methods
+
+
+
+
+
+<a id="provider.typeddatasanitizersubprovider.handlerequest-3"></a>
+
+#### handleRequest
+
+
+
+
+##### Declaration
+
+
+```typescript
+function handleRequest(payload: JSONRPCRequestPayload, next: function, end: function)
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:33](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L33)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| payload | [JSONRPCRequestPayload](#provider.jsonrpcrequestpayload)   |  - |
+| next | `function`   |  - |
+| end | `function`   |  - |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+### Relationships
+##### Extends
+* Subprovider
+
+---
+
 
 <a id="provider.accesstokenprovider"></a>
 
@@ -6074,7 +6437,7 @@ function invalidateToken(): Promise<void>
 ```javascript
 var disableBlockTracking: undefined | false | true
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L22)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:23](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L23)*</small>
 
 
 <a id="provider.bitskiengineoptions.disablecaching"></a>
@@ -6083,7 +6446,7 @@ var disableBlockTracking: undefined | false | true
 ```javascript
 var disableCaching: undefined | false | true
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:18](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L18)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L19)*</small>
 
 
 <a id="provider.bitskiengineoptions.disablevalidation"></a>
@@ -6092,7 +6455,7 @@ var disableCaching: undefined | false | true
 ```javascript
 var disableValidation: undefined | false | true
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:20](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L20)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L21)*</small>
 
 
 <a id="provider.bitskiengineoptions.pollinginterval"></a>
@@ -6101,7 +6464,7 @@ var disableValidation: undefined | false | true
 ```javascript
 var pollingInterval: undefined | number
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:16](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L16)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L17)*</small>
 
 
 
@@ -6220,6 +6583,131 @@ var rpcUrl: string
 
 
 
+<a id="provider.propertydef"></a>
+
+####  PropertyDef
+
+
+
+
+
+### Properties
+<a id="provider.propertydef.name-2"></a>
+
+#### name
+```javascript
+var name: string
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:7](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L7)*</small>
+
+
+<a id="provider.propertydef.type"></a>
+
+#### type
+```javascript
+var type: string
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L8)*</small>
+
+
+
+
+<a id="provider.typemapping"></a>
+
+####  TypeMapping
+
+
+```javascript
+var TypeMapping: 
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:25](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L25)*</small>
+
+
+
+
+
+<a id="provider.typeddata"></a>
+
+####  TypedData
+
+
+
+
+
+### Properties
+<a id="provider.typeddata.domain"></a>
+
+#### domain
+```javascript
+var domain: any
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:20](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L20)*</small>
+
+
+<a id="provider.typeddata.message-2"></a>
+
+#### message
+```javascript
+var message: any
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:22](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L22)*</small>
+
+
+<a id="provider.typeddata.primarytype"></a>
+
+#### primaryType
+```javascript
+var primaryType: string
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L21)*</small>
+
+
+<a id="provider.typeddata.types"></a>
+
+#### types
+```javascript
+var types: TypedDataTypes
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:19](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L19)*</small>
+
+
+
+
+<a id="provider.typeddatatypes"></a>
+
+####  TypedDataTypes
+
+
+
+
+
+### Properties
+<a id="provider.typeddatatypes.eip712domain"></a>
+
+#### EIP712Domain
+```javascript
+var EIP712Domain: TypeDefinition
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:14](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L14)*</small>
+
+
+
+
+
+<a id="provider.typedefinition"></a>
+
+####  TypeDefinition
+
+
+```javascript
+var TypeDefinition: PropertyDef[]
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:11](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L11)*</small>
+
+
+
+
+
 
 <a id="provider.authenticated_methods"></a>
 
@@ -6278,6 +6766,315 @@ var UNAUTHORIZED_ERRORS: string[] =  [
 ]
 ```
 <small>*Defined in [provider/src/constants.ts:24](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/constants.ts#L24)*</small>
+
+
+
+
+
+
+### Functions
+<a id="provider.createtypemapping"></a>
+
+###  createTypeMapping
+
+
+
+Maps the type definitions from the typed data for easy look-up. Top level keys represent the structs defined, while top-level values are an object keyed by property with string values of the type name.
+
+For example: { EIP712Domain: { name: 'string', version: 'string', chainId: 'uint256' } }
+
+
+
+
+##### Declaration
+
+
+```typescript
+function createTypeMapping(typedData: TypedData): TypeMapping
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:175](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L175)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| typedData | [TypedData](#provider.typeddata)   |  The TypedData to map |
+
+
+
+##### Return Value
+[TypeMapping](#provider.typemapping)
+
+
+the mapped data schema
+
+
+
+
+
+
+<a id="provider.encodenumber"></a>
+
+###  encodeNumber
+
+
+
+encodeNumber Takes a decimal string, hex string, regular number, or BN instance and returns a hex string in the specified format. Typically these conversions are done in web3, but until web3 adds direct support, this is necessary for normalizing numbers eth_signTypedData payloads.
+
+
+
+
+##### Declaration
+
+
+```typescript
+function encodeNumber(num: string | number | BN, type: string, compact?: boolean): string
+```
+<small>*Defined in [provider/src/utils/parse-utils.ts:53](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/utils/parse-utils.ts#L53)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| num | `string          ⎮number          ⎮BN`  | - |   The value to convert |
+| type | `string`  | - |   The solidity ABI type to format the data as (eg. uint256, int8, etc). Only supports int and uint variants. |
+| compact | `boolean`  | false |   boolean (default false). Whether to use compact encoding for uints, or pad with zeroes. |
+
+
+
+##### Return Value
+`string`
+
+
+A hex string formatted as the specified type.
+
+
+
+
+
+
+<a id="provider.isarray"></a>
+
+###  isArray
+
+
+
+Returns true if type name indicates that an array
+
+
+
+
+##### Declaration
+
+
+```typescript
+function isArray(typeName: string): boolean
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:152](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L152)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| typeName | `string`   |  solidity type name |
+
+
+
+##### Return Value
+`boolean`
+
+
+
+
+
+
+
+<a id="provider.parsebitwidth"></a>
+
+###  parseBitWidth
+
+
+
+
+##### Declaration
+
+
+```typescript
+function parseBitWidth(type: string, offset: number): number
+```
+<small>*Defined in [provider/src/utils/parse-utils.ts:30](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/utils/parse-utils.ts#L30)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| type | `string`   |  - |
+| offset | `number`   |  - |
+
+
+
+##### Return Value
+`number`
+
+
+
+
+
+
+
+<a id="provider.parsenumber"></a>
+
+###  parseNumber
+
+
+
+parseNumber Converts a value that represents a number into a hex value.
+
+
+
+
+##### Declaration
+
+
+```typescript
+function parseNumber(arg: string | number | BN): BN
+```
+<small>*Defined in [provider/src/utils/parse-utils.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/utils/parse-utils.ts#L12)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| arg | `string          ⎮number          ⎮BN`   |  A number value to convert to hex.Can be a regular number, base-10 string, base-16 string, or BN instance. |
+
+
+
+##### Return Value
+`BN`
+
+
+BN instance representing the number
+
+(Adapted from ethereumjs-abi)
+
+
+
+
+
+
+<a id="provider.sanitizedomain"></a>
+
+###  sanitizeDomain
+
+
+
+Sanitizes the `domain` values from the TypedData
+
+
+
+
+##### Declaration
+
+
+```typescript
+function sanitizeDomain(typedData: TypedData, typeMapping: TypeMapping)
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:77](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L77)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| typedData | [TypedData](#provider.typeddata)   |  TypedData payload |
+| typeMapping | [TypeMapping](#provider.typemapping)   |  a TypeMapping pre-generated from the TypedData |
+
+
+
+
+
+
+
+
+<a id="provider.sanitizemessage"></a>
+
+###  sanitizeMessage
+
+
+
+Sanitizes the `message` values from the TypedData
+
+
+
+
+##### Declaration
+
+
+```typescript
+function sanitizeMessage(typedData: TypedData, typeMapping: TypeMapping)
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:93](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L93)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| typedData | [TypedData](#provider.typeddata)   |  TypedData payload |
+| typeMapping | [TypeMapping](#provider.typemapping)   |  a TypeMapping pre-generated from the TypedData |
+
+
+
+
+
+
+
+
+<a id="provider.sanitizetype"></a>
+
+###  sanitizeType
+
+
+
+Recursively examines each value and determines type from the type mapping to format and sanitize the value if needed.
+
+Currently this will only convert number values into a consistent hex format, but in the future additional transformations may be necessary.
+
+
+
+
+##### Declaration
+
+
+```typescript
+function sanitizeType(typeName: string, values: any, typeMapping: TypeMapping)
+```
+<small>*Defined in [provider/src/subproviders/typed-data.ts:114](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L114)*</small>
+
+
+
+##### Parameters
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| typeName | `string`   |  Name of the type we are starting from |
+| values | `any`   |  The root object containing the keys and values |
+| typeMapping | [TypeMapping](#provider.typemapping)   |  The type mapping that represents this data |
+
+
+
 
 
 
