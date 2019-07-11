@@ -11,18 +11,29 @@ function createEngine(opts?: BitskiEngineOptions): BitskiEngine {
   return engine;
 }
 
+function findProvider(engine, name) {
+  let matchingProvider;
+  engine._providers.forEach((provider) => {
+    if (provider.constructor.name === name) {
+      matchingProvider = provider;
+      return;
+    }
+  });
+  return matchingProvider;
+}
+
 describe('initialization', () => {
   test('it exists', () => {
     expect.assertions(2);
     const engine = createEngine();
     expect(engine).toBeDefined();
-    expect(engine._providers.length).toBe(8);
+    expect(engine._providers.length).toBe(9);
   });
 
   test('it respects disableCaching option', () => {
     expect.assertions(1);
     const engine = createEngine({ disableCaching: true });
-    expect(engine._providers.length).toBe(6);
+    expect(engine._providers.length).toBe(7);
   });
 });
 
@@ -55,7 +66,7 @@ describe('when handling subscriptions', () => {
   test('it emits events with subscription id', (done) => {
     expect.assertions(1);
     const engine = createEngine();
-    const subscriptionSubprovider = engine._providers[5];
+    const subscriptionSubprovider = findProvider(engine, 'SubscriptionSubprovider');
     const notification = {
       jsonrpc: '2.0',
       method: 'eth_subscription',
@@ -76,7 +87,7 @@ describe('when handling subscriptions', () => {
   test('it re-emits data events for backwards compatibility', (done) => {
     expect.assertions(1);
     const engine = createEngine();
-    const subscriptionSubprovider = engine._providers[5];
+    const subscriptionSubprovider = findProvider(engine, 'SubscriptionSubprovider');
     const notification = {
       jsonrpc: '2.0',
       method: 'eth_subscription',
@@ -97,7 +108,7 @@ describe('when handling subscriptions', () => {
   test('it does not emit subscription id events when receiving invalid data', (done) => {
     expect.assertions(1);
     const engine = createEngine();
-    const subscriptionSubprovider = engine._providers[5];
+    const subscriptionSubprovider = findProvider(engine, 'SubscriptionSubprovider');
     let called = false;
     engine.on('0x1', () => {
       called = true;

@@ -76,7 +76,7 @@ test('should handle errors when forwarding a signed transaction fails', (done) =
     // @ts-ignore
     const signSpy = jest.spyOn(instance.signer, 'sign');
     const sendSpy = jest.spyOn(instance, 'emitPayload');
-    sendSpy.mockImplementation((request, callback) => {
+    sendSpy.mockImplementation((_, callback) => {
         callback(new Error('Service Unavailable'));
     });
 
@@ -118,6 +118,62 @@ test('should sign transaction when eth_signTransaction is called', (done) => {
       done();
   });
 });
+
+test('should sign typed data', () => {
+    expect.assertions(6);
+    const { provider, instance } = createProvider();
+
+    const typedData = {
+        types: {
+            EIP712Domain: [
+                { name: 'name', type: 'string' },
+                { name: 'version', type: 'string' },
+                { name: 'chainId', type: 'uint256' },
+                { name: 'verifyingContract', type: 'address' },
+            ],
+            Person: [
+                { name: 'name', type: 'string' },
+                { name: 'wallet', type: 'address' },
+            ],
+            Mail: [
+                { name: 'from', type: 'Person' },
+                { name: 'to', type: 'Person' },
+                { name: 'contents', type: 'string' },
+            ],
+        },
+        primaryType: 'Mail',
+        domain: {
+            name: 'Ether Mail',
+            version: '1',
+            chainId: 1,
+            verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+        },
+        message: {
+            from: {
+                name: 'Cow',
+                wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+            },
+            to: {
+                name: 'Bob',
+                wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+            },
+            contents: 'Hello, Bob!',
+        },
+    };
+
+    // @ts-ignore
+    const signSpy = jest.spyOn(instance.signer, 'sign');
+
+    return provider.send('eth_signTypedData', ['0xbbbb', typedData]).then((signedData) => {
+        expect(signedData).toBe('0xf00b4r');
+        expect(signSpy).toBeCalled();
+        const transaction = signSpy.mock.calls[0][0];
+        expect(transaction).not.toBeUndefined();
+        expect(transaction.payload).toMatchObject(typedData);
+        expect(transaction.kind).toBe(TransactionKind.SignTypedData);
+        expect(transaction.context.from).toBe('0xbbbb');
+    });
+  });
 
 test('should sign messages', (done) => {
   expect.assertions(8);
@@ -166,7 +222,7 @@ test('should sign messages with personal_sign', (done) => {
 });
 
 test('it validates parameters for requests when creating transaction', () => {
-    expect.assertions(14);
+    expect.assertions(18);
 
     const { instance } = createProvider();
 
@@ -224,7 +280,25 @@ test('it validates parameters for requests when creating transaction', () => {
         expect(error.code).toBe(SignerErrorCode.MissingMessage);
     }
 
-    const invalidMethod = createRequest('eth_signTypedData', []);
+    const noParamsTypedData = createRequest('eth_signTypedData_v3');
+    try {
+        // @ts-ignore
+        instance.createPayload(noParamsTypedData);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingTypedData);
+    }
+
+    const missingParamsTypedData = createRequest('eth_signTypedData', []);
+    try {
+        // @ts-ignore
+        instance.createPayload(missingParamsTypedData);
+    } catch (error) {
+        expect(error).toBeInstanceOf(SignerError);
+        expect(error.code).toBe(SignerErrorCode.MissingTypedData);
+    }
+
+    const invalidMethod = createRequest('eth_signTypedData_v1', []);
     try {
         // @ts-ignore
         instance.createPayload(invalidMethod);
@@ -262,7 +336,7 @@ test('it loads balance when using a custom RPC endpoint', (done) => {
     };
 
     const request = createRequest('eth_sendTransaction', [txn]);
-
+    // @ts-ignore
     const signSpy = jest.spyOn(instance.signer, 'sign');
     const emitPayloadSpy = jest.spyOn(instance, 'emitPayload');
 

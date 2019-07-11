@@ -29,4 +29,11 @@ export const USER_KEY = 'bitski.user';
 
 // Methods
 export const CACHED_METHODS = ['eth_accounts'];
-export const DEFAULT_AUTHORIZED_METHODS = ['eth_sendTransaction', 'eth_signTransaction', 'eth_sign', 'personal_sign'];
+export const DEFAULT_AUTHORIZED_METHODS = [
+  'eth_sendTransaction',
+  'eth_signTransaction',
+  'eth_sign',
+  'personal_sign',
+  'eth_signTypedData',
+  'eth_signTypedData_v3', // For metamask compatibility
+];

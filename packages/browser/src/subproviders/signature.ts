@@ -12,6 +12,7 @@ export enum TransactionKind {
   SendTransaction = 'ETH_SEND_TRANSACTION',
   SignTransaction = 'ETH_SIGN_TRANSACTION',
   Sign = 'ETH_SIGN',
+  SignTypedData = 'ETH_SIGN_TYPED_DATA',
 }
 
 export interface Transaction {
@@ -22,8 +23,9 @@ export interface Transaction {
 }
 
 export interface TransactionContext {
-  chainId: number;
+  chainId?: number;
   currentBalance?: string;
+  from?: string;
 }
 
 export interface SignaturePayload {
@@ -39,6 +41,63 @@ export interface TransactionPayload {
   nonce?: string;
   gas?: string;
   gasPrice?: string;
+}
+
+export interface TypedDataDefinition {
+  name: string; // name of the property
+  type: string; // 'string', 'uint', 'address', or 'CustomType' for nested structs
+}
+/**
+ * Example usage:
+ * ```javascript
+ * const payload: TypedDataPayload = {
+ *   types: {
+ *     EIP712Domain: [
+ *       { name: 'name', type: 'string' },
+ *       { name: 'version', type: 'string' },
+ *       { name: 'chainId', type: 'uint256' },
+ *       { name: 'verifyingContract', type: 'address' },
+ *     ],
+ *     Person: [
+ *       { name: 'name', type: 'string' },
+ *       { name: 'wallet', type: 'address' }
+ *     ],
+ *     Mail: [
+ *       { name: 'from', type: 'Person' },
+ *       { name: 'to', type: 'Person' },
+ *       { name: 'contents', type: 'string' }
+ *     ],
+ *   },
+ *   primaryType: 'Mail',
+ *   domain: {
+ *     name: 'Ether Mail',
+ *     version: '1',
+ *     chainId: 1,
+ *     verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+ *   },
+ *   message: {
+ *     from: {
+ *       name: 'Cow',
+ *       wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+ *     },
+ *     to: {
+ *       name: 'Bob',
+ *       wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+ *     },
+ *     contents: 'Hello, Bob!',
+ *   },
+ * }
+ * ```
+ */
+
+export interface TypedDataPayload {
+  types: {
+    EIP712Domain: TypedDataDefinition[]; // Required. Specify the domain fields you are using.
+    [propName: string]: TypedDataDefinition[]; // Include your custom types here.
+  };
+  domain: object; // Provide object format of domain according to spec in `types`
+  primaryType: string; // The name of the top-level type being used in `message`
+  message: object; // The values for your object, starting from the `primaryType`
 }
 
 /**
@@ -158,8 +217,7 @@ export class SignatureSubprovider extends Subprovider {
    * @param payload JSON-RPC payload to extract the values from
    */
   protected async createBitskiTransaction(payload: JSONRPCRequestPayload): Promise<Transaction> {
-    const context = { chainId: this.network.chainId } as TransactionContext;
-    context.currentBalance = await this.loadBalanceIfNeeded(payload);
+    const context = await this.createContext(payload);
     const kind = this.kindForMethod(payload.method);
     const extractedPayload = this.createPayload(payload);
     const transaction = {
@@ -171,11 +229,30 @@ export class SignatureSubprovider extends Subprovider {
     return transaction as Transaction;
   }
 
+  private async createContext(request: JSONRPCRequestPayload): Promise<TransactionContext> {
+    switch (request.method) {
+      case 'eth_sendTransaction':
+      case 'eth_signTransaction':
+        const balance = await this.loadBalanceIfNeeded(request);
+        return { chainId: this.network.chainId, currentBalance: balance };
+      case 'eth_signTypedData':
+      case 'eth_signTypedData_v3':
+        // The from address should be the first parameter as a 20 byte hex string
+        if (request.params && request.params.length > 0) {
+          return { from: request.params[0] };
+        }
+        throw SignerError.MissingFrom();
+      default:
+        // Other transaction types do not need context
+        return {};
+    }
+  }
+
   /**
    * Responsible for creating the payload from a given RPC request
    * @param request JSON-RPC request to extract params from
    */
-  private createPayload(request: JSONRPCRequestPayload): TransactionPayload | SignaturePayload {
+  private createPayload(request: JSONRPCRequestPayload): TransactionPayload | SignaturePayload | TypedDataPayload {
     switch (request.method) {
       case 'eth_sendTransaction':
       case 'eth_signTransaction':
@@ -196,6 +273,13 @@ export class SignatureSubprovider extends Subprovider {
         } else {
           throw SignerError.MissingMessage();
         }
+      case 'eth_signTypedData':
+      case 'eth_signTypedData_v3':
+        if (request.params && request.params.length > 1) {
+          return request.params[1] as TypedDataPayload;
+        } else {
+          throw SignerError.MissingTypedData();
+        }
       default:
         throw SignerError.UnsupportedMethod();
     }
@@ -215,6 +299,9 @@ export class SignatureSubprovider extends Subprovider {
       case 'eth_sign':
       case 'personal_sign':
         return TransactionKind.Sign;
+      case 'eth_signTypedData':
+      case 'eth_signTypedData_v3':
+        return TransactionKind.SignTypedData;
       default:
         throw SignerError.UnsupportedMethod();
     }
