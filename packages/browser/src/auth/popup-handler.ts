@@ -29,6 +29,37 @@ export class PopupBlockedError extends AuthorizationError {
   }
 }
 
+// Create a popup feature string from an object with keys and values
+function createPopupFeatureString(features): string {
+  // Convert to array of strings
+  const featuresArray = Object.keys(features).reduce((arr, key) => {
+    const value = features[key];
+    // convert to feature string format: top=100
+    arr.push(`${key}=${value}`);
+    return arr;
+  }, Array<string>());
+  // Join strings with ',' and finish with ';'
+  return featuresArray.join(',') + ';';
+}
+
+// Returns a set of attributes for a centered popup based on
+// the default values from constants.ts
+function createCenteredPopupFeatures(): any {
+  const windowFeatures = DEFAULT_POPUP_FEATURES;
+  const w = windowFeatures.width;
+  const h = windowFeatures.height;
+  // Fixes dual-screen position
+  const dualScreenLeft = window.screenLeft || window.screenX;
+  const dualScreenTop = window.screenTop || window.screenY;
+  const windowWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+  const left = (windowWidth / 2) - (w / 2);
+  const top = (windowHeight / 2) - (h / 2);
+  windowFeatures.left = left + dualScreenLeft;
+  windowFeatures.top = top + dualScreenTop;
+  return windowFeatures;
+}
+
 export class PopupRequestHandler extends AuthorizationRequestHandler {
 
   protected pendingRequest?: AuthorizationRequest;
@@ -59,8 +90,10 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     window[`popupCallback_${request.state}`] = this.callback.bind(this);
     // Start monitoring to see if the popup has been closed
     this.closedTimer = window.setInterval(this.checkPopup.bind(this), CHECK_FOR_POPUP_CLOSE_INTERVAL);
-    // Create the popup window
-    this.popupWindow = window.open(url, '_blank', DEFAULT_POPUP_FEATURES);
+    // Create features for popup
+    const windowFeatures = createCenteredPopupFeatures();
+    // Create popup window
+    this.popupWindow = window.open(url, '_blank', createPopupFeatureString(windowFeatures));
     // Check if the popup we just created was blocked.
     this.validator.check(this.popupWindow);
     // Focus the popup to bring it to the front

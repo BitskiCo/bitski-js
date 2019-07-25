@@ -20,7 +20,14 @@ export const DEFAULT_OPTIONAL_SCOPES = ['offline']; // scopes that are included 
 
 // Popup Window
 export const CHECK_FOR_POPUP_CLOSE_INTERVAL = 500;
-export const DEFAULT_POPUP_FEATURES = 'location=no,toolbar=no,width=500,height=500,left=100,top=100;';
+export const DEFAULT_POPUP_FEATURES = {
+  location: 'no',
+  toolbar: 'no',
+  width: 500,
+  height: 500,
+  left: 100,
+  top: 100,
+};
 
 // Storage
 export const REFRESH_TOKEN_KEY = 'bitski.refresh_token';
