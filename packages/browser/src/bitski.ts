@@ -8,6 +8,8 @@ import { SDK_VERSION } from './constants';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import css from './styles/index';
 import { processCallback } from './utils/callback';
+import { LocalStorageStore } from './utils/localstorage-store';
+import { Store } from './utils/store';
 
 export enum OAuthSignInMethod {
   Redirect = 'REDIRECT',
@@ -20,6 +22,9 @@ export enum AuthenticationStatus {
   Expired = 'EXPIRED',
   NotConnected = 'NOT_CONNECTED',
 }
+
+// Customize token and user caching
+export { Store, LocalStorageStore };
 
 // Sign-in Options
 export { SignInOptions, LOGIN_HINT_SIGNUP };
@@ -36,7 +41,10 @@ export { ParseError, ParseErrorCode } from './errors/parse-error';
 export { SignerError, SignerErrorCode } from './errors/signer-error';
 
 export interface BitskiSDKOptions {
+  // Customize oauth configuration
   configuration?: AuthorizationServiceConfiguration;
+  // Customize how tokens and user data are stored.
+  store?: Store;
 }
 
 export interface ProviderOptions extends BitskiEngineOptions {

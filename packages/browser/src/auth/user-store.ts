@@ -1,4 +1,6 @@
 import { USER_KEY } from '../constants';
+import { LocalStorageStore } from '../utils/localstorage-store';
+import { Store } from '../utils/store';
 import { User } from './user';
 
 export class UserStore {
@@ -11,11 +13,13 @@ export class UserStore {
     return `${USER_KEY}.${this.clientId}`;
   }
 
+  protected store: Store;
   protected clientId: string;
   protected user?: User;
 
-  constructor(clientId: string) {
+  constructor(clientId: string, store?: Store) {
     this.clientId = clientId;
+    this.store = store || new LocalStorageStore();
     this.user = this.fetchUser();
   }
 
@@ -30,7 +34,7 @@ export class UserStore {
   }
 
   protected fetchUser(): User | undefined {
-    const userData = localStorage.getItem(this.storageKey);
+    const userData = this.store.getItem(this.storageKey);
     if (userData) {
       return User.fromString(userData);
     }
@@ -38,9 +42,9 @@ export class UserStore {
 
   protected cacheUser(user: User | undefined) {
     if (user) {
-      localStorage.setItem(this.storageKey, user.toStorageString());
+      this.store.setItem(this.storageKey, user.toStorageString());
     } else {
-      localStorage.removeItem(this.storageKey);
+      this.store.clearItem(this.storageKey);
     }
   }
 
