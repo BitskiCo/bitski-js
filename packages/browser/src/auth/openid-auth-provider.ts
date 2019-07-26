@@ -15,19 +15,18 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     public signOutCallback?: () => void;
 
     constructor(clientId: string, redirectUri: string, additionalScopes?: string[], opts?: BitskiSDKOptions) {
-        let settings: OAuthManagerOptions = {
+        opts = opts || {};
+
+        const settings: OAuthManagerOptions = {
             additionalScopes,
             clientId,
             redirectUri,
         };
-
-        if (opts) {
-            settings = Object.assign(settings, opts);
-        }
+        Object.assign(settings, opts);
 
         this.oauthManager = new OAuthManager(settings);
-        this.tokenStore = new TokenStore(clientId);
-        this.userStore = new UserStore(clientId);
+        this.tokenStore = new TokenStore(clientId, opts.store);
+        this.userStore = new UserStore(clientId, opts.store);
     }
 
     public get authStatus(): AuthenticationStatus {

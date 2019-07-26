@@ -1,5 +1,7 @@
 import { TokenResponse } from '@openid/appauth';
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants';
+import { LocalStorageStore } from '../utils/localstorage-store';
+import { Store } from '../utils/store';
 import { AccessToken } from './access-token';
 
 export class TokenStore {
@@ -11,7 +13,7 @@ export class TokenStore {
   }
 
   public get refreshToken(): string | undefined {
-    const token = localStorage.getItem(this.refreshTokenKey);
+    const token = this.store.getItem(this.refreshTokenKey);
     if (token) {
       return token;
     }
@@ -24,13 +26,14 @@ export class TokenStore {
   protected get refreshTokenKey(): string {
     return `${REFRESH_TOKEN_KEY}.${this.clientId}`;
   }
-
+  protected store: Store;
   protected accessToken?: AccessToken;
   protected clientId: string;
 
-  constructor(clientId: string) {
+  constructor(clientId: string, store?: Store) {
     this.clientId = clientId;
-    const accessTokenString = localStorage.getItem(this.accessTokenKey);
+    this.store = store || new LocalStorageStore();
+    const accessTokenString = this.store.getItem(this.accessTokenKey);
     if (accessTokenString) {
       let parsedToken: AccessToken | undefined;
       try {
@@ -43,22 +46,22 @@ export class TokenStore {
 
   public persistTokenResponse(response: TokenResponse) {
     if (response.refreshToken) {
-      localStorage.setItem(this.refreshTokenKey, response.refreshToken);
+      this.store.setItem(this.refreshTokenKey, response.refreshToken);
     }
     const parsedToken = AccessToken.fromTokenResponse(response);
-    localStorage.setItem(this.accessTokenKey, parsedToken.toStorageString());
+    this.store.setItem(this.accessTokenKey, parsedToken.toStorageString());
     this.accessToken = parsedToken;
   }
 
   public invalidateCurrentToken() {
     this.accessToken = undefined;
-    localStorage.removeItem(this.accessTokenKey);
+    this.store.clearItem(this.accessTokenKey);
   }
 
   public clear() {
     this.accessToken = undefined;
-    localStorage.removeItem(this.refreshTokenKey);
-    localStorage.removeItem(this.accessTokenKey);
+    this.store.clearItem(this.refreshTokenKey);
+    this.store.clearItem(this.accessTokenKey);
   }
 
 }
