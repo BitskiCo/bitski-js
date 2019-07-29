@@ -18,6 +18,7 @@ export const RETRIABLE_ERRORS = [
   // or truncated json responses
   'SyntaxError',
   'ECONNRESET',
+  'Timeout out while waiting for response', // Actix timeout
 ];
 
 // Errors that indicate the access token is not valid
