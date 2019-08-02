@@ -18,6 +18,7 @@ export const RETRIABLE_ERRORS = [
   // or truncated json responses
   'SyntaxError',
   'ECONNRESET',
+  'EHOSTUNREACH',
   'Timeout out while waiting for response', // Actix timeout
 ];
 
