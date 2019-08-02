@@ -17,7 +17,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@bitski/provider-engine": "^0.6.2",
+    "@bitski/provider-engine": "^0.6.3",
     "async": "3.0.1",
     "bn.js": "^4.11.8",
     "json-rpc-error": "^2.0.0"
@@ -25,5 +25,5 @@
   "devDependencies": {
     "jest": "^23.6.0"
   },
-  "gitHead": "2d22793b8c8239882aaadd6d972eb7350132f41c"
+  "gitHead": "7b9f0b01dd8a36a4294f27740ce264ecd95af35c"
 }
