@@ -205,7 +205,7 @@ export class SignatureSubprovider extends Subprovider {
         id: 0,
         jsonrpc: '2.0',
         method: 'eth_getBalance',
-        params: [transaction.from],
+        params: [transaction.from, 'latest'],
       };
       return this.performRequest(balancePayload);
     }
