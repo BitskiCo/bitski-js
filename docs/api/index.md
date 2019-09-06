@@ -873,7 +873,7 @@ var name: string = "AuthenticationError"
 ```javascript
 var Error: ErrorConstructor
 ```
-<small>*Defined in [/Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
+<small>*Defined in [/Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
 
 
 
@@ -3042,7 +3042,7 @@ var name: string = "ParseError"
 ```javascript
 var Error: ErrorConstructor
 ```
-<small>*Defined in [/Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
+<small>*Defined in [/Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
 
 
 
@@ -3707,7 +3707,7 @@ var name: string = "TransactionError"
 ```javascript
 var Error: ErrorConstructor
 ```
-<small>*Defined in [/Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
+<small>*Defined in [/Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
 
 
 
@@ -5532,7 +5532,7 @@ var REFRESH_TOKEN_KEY: "bitski.refresh_token" = "bitski.refresh_token"
 
 
 ```javascript
-var SDK_VERSION: "0.10.1" = "0.10.1"
+var SDK_VERSION: "0.10.2" = "0.10.2"
 ```
 <small>*Defined in [browser/src/constants.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/constants.ts#L2)*</small>
 
@@ -6480,7 +6480,7 @@ var name: string = "ProviderError"
 ```javascript
 var Error: ErrorConstructor
 ```
-<small>*Defined in [/Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
+<small>*Defined in [/Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
 
 
 
@@ -6638,7 +6638,7 @@ var retried: boolean
 ```javascript
 var Error: ErrorConstructor
 ```
-<small>*Defined in [/Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/jp/Work/Bitski/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
+<small>*Defined in [/Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts:974](https://github.com/BitskiCo/bitski-js/blob/master/packages//Users/ptescher/Development/BitskiCo/bitski-js/node_modules/typescript/lib/lib.es5.d.ts#L974)*</small>
 
 
 
