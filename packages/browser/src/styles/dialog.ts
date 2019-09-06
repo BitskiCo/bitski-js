@@ -81,7 +81,7 @@ const css = `
   }
   .bitski-dialog {
     position: relative;
-    width: 490px;
+    width: 400px;
     height: 420px;
   }
   .bitski-dialog-body {
