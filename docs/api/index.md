@@ -5532,7 +5532,7 @@ var REFRESH_TOKEN_KEY: "bitski.refresh_token" = "bitski.refresh_token"
 
 
 ```javascript
-var SDK_VERSION: "0.10.3" = "0.10.3"
+var SDK_VERSION: "0.10.4" = "0.10.4"
 ```
 <small>*Defined in [browser/src/constants.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/constants.ts#L2)*</small>
 
@@ -7238,7 +7238,7 @@ For example: { EIP712Domain: { name: 'string', version: 'string', chainId: 'uint
 ```typescript
 function createTypeMapping(typedData: TypedData): TypeMapping
 ```
-<small>*Defined in [provider/src/subproviders/typed-data.ts:175](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L175)*</small>
+<small>*Defined in [provider/src/subproviders/typed-data.ts:181](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L181)*</small>
 
 
 
@@ -7320,7 +7320,7 @@ Returns true if type name indicates that an array
 ```typescript
 function isArray(typeName: string): boolean
 ```
-<small>*Defined in [provider/src/subproviders/typed-data.ts:152](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L152)*</small>
+<small>*Defined in [provider/src/subproviders/typed-data.ts:158](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L158)*</small>
 
 
 
