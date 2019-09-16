@@ -12,8 +12,8 @@ import BN from 'bn.js';
 function parseNumber(arg: string | number | BN): BN {
   const type = typeof arg;
   if (type === 'string') {
-    if (type.substr(0, 2) === '0x') {
-      return new BN(type.substr(2), 16);
+    if (arg.substr(0, 2) === '0x') {
+      return new BN(arg.substr(2), 16);
     } else {
       return new BN(arg, 10);
     }
