@@ -120,16 +120,22 @@ export function sanitizeType(typeName: string, values: any, typeMapping: TypeMap
     if (isArray(type)) {
       // find the base type (left side of the brackets)
       const baseType = type.split('[')[0];
+      if (typeof values[key].length === 'undefined') {
+        throw new TypeError(`Could not parse ${values[key]} for type ${type}. Expected array.`);
+      }
       // If base type is a struct, iterate through each instance of struct
       if (typeMapping[baseType]) {
-        if (typeof values[key].length === 'undefined') {
-          throw new TypeError(`Could not parse ${values[key]} for type ${type}. Expected array.`);
-        }
         // values[key] is expected to be an array, where each element
         // is an object that represents the struct named baseType.
         values[key].forEach((itemValues) => {
           sanitizeType(baseType, itemValues, typeMapping);
         });
+      } else if (baseType.startsWith('uint') || baseType.startsWith('int')) {
+        // If we have an array of primitive types that are numbers, we need to encode the numbers as hex
+        const numberValues = values[key].map((numberValue) => {
+          return encodeNumber(numberValue, baseType, true);
+        });
+        values[key] = numberValues;
       } else {
         // Do nothing with regular array values
         // int8[], etc should already be strings

@@ -299,6 +299,38 @@ describe('sanitizing the message object', () => {
     expect(typedData.message.title).toBe('Hello World');
   });
 
+  test('it sanitizes arrays of numbers', () => {
+    expect(3);
+    const typedData = {
+      types: {
+        EIP712Domain: [
+          { name: 'name', type: 'string' },
+          { name: 'chainId', type: 'uint256' },
+        ],
+        TestStruct: [
+          { name: 'title', type: 'string' },
+          { name: 'values', type: 'uint256[]' },
+        ],
+      },
+      domain: {
+        name: 'Test Domain',
+        chainId: 1,
+      },
+      primaryType: 'TestStruct',
+      message: {
+        title: 'Hello World',
+        values: ['1000', 200, '0x0'],
+      },
+    };
+
+    const mapping = createTypeMapping(typedData);
+    sanitizeMessage(typedData, mapping);
+    expect(typedData.message.values[0]).toBe('0x3e8');
+    expect(typedData.message.values[1]).toBe('0xc8');
+    expect(typedData.message.values[2]).toBe('0x0');
+    expect(typedData.message.title).toBe('Hello World');
+  });
+
   test('it throws errors when sanitizing bad data', () => {
     expect.assertions(4);
     const mapping = {};
