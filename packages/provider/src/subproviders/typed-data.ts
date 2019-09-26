@@ -116,8 +116,9 @@ export function sanitizeType(typeName: string, values: any, typeMapping: TypeMap
   Object.keys(values).forEach((key) => {
     // Find the type name associated from the mapping
     const type = typeMapping[typeName][key];
-    // Check if the type is an array
-    if (isArray(type)) {
+    if (type === undefined) {
+      // Do nothing if we don't have a type for this key
+    } else if (isArray(type)) {
       // find the base type (left side of the brackets)
       const baseType = type.split('[')[0];
       if (typeof values[key].length === 'undefined') {
