@@ -1173,7 +1173,7 @@ Register a callback to be called on sign out. This is a good practice, since the
 ```typescript
 function addSignOutHandler(fn: function)
 ```
-<small>*Defined in [browser/src/bitski.ts:215](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L215)*</small>
+<small>*Defined in [browser/src/bitski.ts:219](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L219)*</small>
 
 
 
@@ -1207,7 +1207,7 @@ Connects to bitski to get a valid access token if possible.
 ```typescript
 function connect(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:176](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L176)*</small>
+<small>*Defined in [browser/src/bitski.ts:180](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L180)*</small>
 
 
 
@@ -1237,7 +1237,7 @@ Creates a sign in with bitski button to add to your app. If an HTML element is p
 ```typescript
 function getConnectButton(options?: ConnectButtonOptions, callback?: undefined | function): ConnectButton
 ```
-<small>*Defined in [browser/src/bitski.ts:130](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L130)*</small>
+<small>*Defined in [browser/src/bitski.ts:134](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L134)*</small>
 
 
 
@@ -1276,7 +1276,7 @@ Retrieves the current access token for the user, if logged in.
 ```typescript
 function getCurrentAccessToken(): Promise<string>
 ```
-<small>*Defined in [browser/src/bitski.ts:198](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L198)*</small>
+<small>*Defined in [browser/src/bitski.ts:202](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L202)*</small>
 
 
 
@@ -1306,7 +1306,7 @@ Retrieves the current refresh token for the user, if logged in. Requires that th
 ```typescript
 function getCurrentRefreshToken(): Promise<string>
 ```
-<small>*Defined in [browser/src/bitski.ts:206](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L206)*</small>
+<small>*Defined in [browser/src/bitski.ts:210](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L210)*</small>
 
 
 
@@ -1336,7 +1336,7 @@ Returns a new web3 provider for a given network.
 ```typescript
 function getProvider(options?: ProviderOptions | string): BitskiEngine
 ```
-<small>*Defined in [browser/src/bitski.ts:104](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L104)*</small>
+<small>*Defined in [browser/src/bitski.ts:105](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L105)*</small>
 
 
 
@@ -1374,7 +1374,7 @@ Gets the current signed in user. Will reject if we are not signed in.
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:169](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L169)*</small>
+<small>*Defined in [browser/src/bitski.ts:173](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L173)*</small>
 
 
 
@@ -1404,7 +1404,7 @@ Call from your oauth redirect page.
 ```typescript
 function redirectCallback(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:191](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L191)*</small>
+<small>*Defined in [browser/src/bitski.ts:195](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L195)*</small>
 
 
 
@@ -1434,7 +1434,7 @@ Remove a registered signout callback
 ```typescript
 function removeSignOutHandler(fn: function)
 ```
-<small>*Defined in [browser/src/bitski.ts:223](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L223)*</small>
+<small>*Defined in [browser/src/bitski.ts:227](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L227)*</small>
 
 
 
@@ -1468,7 +1468,7 @@ Starts the sign in flow. Will trigger a popup window over your app, so it must b
 ```typescript
 function signIn(options?: SignInOptions): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:162](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L162)*</small>
+<small>*Defined in [browser/src/bitski.ts:166](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L166)*</small>
 
 
 
@@ -1506,7 +1506,7 @@ Starts redirect sign in flow. This is an alternative flow to the popup that all 
 ```typescript
 function signInRedirect(options?: SignInOptions)
 ```
-<small>*Defined in [browser/src/bitski.ts:184](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L184)*</small>
+<small>*Defined in [browser/src/bitski.ts:188](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L188)*</small>
 
 
 
@@ -1540,7 +1540,7 @@ Sign the current user out of your application.
 ```typescript
 function signOut(): Promise<void>
 ```
-<small>*Defined in [browser/src/bitski.ts:233](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L233)*</small>
+<small>*Defined in [browser/src/bitski.ts:237](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L237)*</small>
 
 
 
@@ -1570,7 +1570,7 @@ Signs in or connects to bitski depending on the user's auth state. Since it may 
 ```typescript
 function start(options?: SignInOptions): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:140](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L140)*</small>
+<small>*Defined in [browser/src/bitski.ts:144](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L144)*</small>
 
 
 
@@ -1608,7 +1608,7 @@ Alternative to using our static callback.html file. Call this from your own redi
 ```typescript
 function callback()
 ```
-<small>*Defined in [browser/src/bitski.ts:69](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L69)*</small>
+<small>*Defined in [browser/src/bitski.ts:70](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L70)*</small>
 
 
 
@@ -4724,6 +4724,15 @@ var disableValidation: undefined | false | true
 <small>*Defined in [browser/src/bitski.ts:55](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L55)*</small>
 
 
+<a id="browser.provideroptions.mingasprice"></a>
+
+#### minGasPrice
+```javascript
+var minGasPrice: undefined | number
+```
+<small>*Defined in [browser/src/bitski.ts:60](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L60)*</small>
+
+
 <a id="browser.provideroptions.network"></a>
 
 #### network
@@ -5532,7 +5541,7 @@ var REFRESH_TOKEN_KEY: "bitski.refresh_token" = "bitski.refresh_token"
 
 
 ```javascript
-var SDK_VERSION: "0.10.4" = "0.10.4"
+var SDK_VERSION: "0.10.5" = "0.10.5"
 ```
 <small>*Defined in [browser/src/constants.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/constants.ts#L2)*</small>
 
@@ -6238,7 +6247,7 @@ new BitskiEngine(options?: BitskiEngineOptions): BitskiEngine
 ```typescript
 function subscribe(subscribeMethod?: string, subscriptionMethod: string, parameters: any[]): Promise<string>
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:75](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L75)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:77](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L77)*</small>
 
 
 
@@ -6274,7 +6283,7 @@ function subscribe(subscribeMethod?: string, subscriptionMethod: string, paramet
 ```typescript
 function supportsSubscriptions(): boolean
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:71](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L71)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:73](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L73)*</small>
 
 
 
@@ -6300,7 +6309,7 @@ function supportsSubscriptions(): boolean
 ```typescript
 function unsubscribe(subscriptionId: string, unsubscribeMethod?: string): Promise<boolean>
 ```
-<small>*Defined in [provider/src/bitski-engine.ts:81](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L81)*</small>
+<small>*Defined in [provider/src/bitski-engine.ts:83](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L83)*</small>
 
 
 
@@ -6661,6 +6670,28 @@ A subprovider that automatically populates missing transaction details. This is 
 
 
 
+<a id="provider.transactionvalidatorsubprovider.constructor-6"></a>
+### constructor
+```typescript
+new TransactionValidatorSubprovider(minGasPrice?: number): TransactionValidatorSubprovider
+```
+##### Parameters
+
+| Param | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| minGasPrice | `number`  | 0 |   - |
+
+
+
+##### Return Value
+[TransactionValidatorSubprovider](#provider.transactionvalidatorsubprovider)
+
+
+
+
+
+---
+
 ### Properties
 
 
@@ -6686,7 +6717,7 @@ A subprovider that automatically populates missing transaction details. This is 
 ```typescript
 function handleRequest(payload: any, next: any, _: any)
 ```
-<small>*Defined in [provider/src/subproviders/transaction-validator.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/transaction-validator.ts#L10)*</small>
+<small>*Defined in [provider/src/subproviders/transaction-validator.ts:16](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/transaction-validator.ts#L16)*</small>
 
 
 
@@ -6900,6 +6931,15 @@ var disableCaching: undefined | false | true
 var disableValidation: undefined | false | true
 ```
 <small>*Defined in [provider/src/bitski-engine.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L21)*</small>
+
+
+<a id="provider.bitskiengineoptions.mingasprice"></a>
+
+#### minGasPrice
+```javascript
+var minGasPrice: undefined | number
+```
+<small>*Defined in [provider/src/bitski-engine.ts:25](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/bitski-engine.ts#L25)*</small>
 
 
 <a id="provider.bitskiengineoptions.pollinginterval"></a>
@@ -7238,7 +7278,7 @@ For example: { EIP712Domain: { name: 'string', version: 'string', chainId: 'uint
 ```typescript
 function createTypeMapping(typedData: TypedData): TypeMapping
 ```
-<small>*Defined in [provider/src/subproviders/typed-data.ts:181](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L181)*</small>
+<small>*Defined in [provider/src/subproviders/typed-data.ts:182](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L182)*</small>
 
 
 
@@ -7320,7 +7360,7 @@ Returns true if type name indicates that an array
 ```typescript
 function isArray(typeName: string): boolean
 ```
-<small>*Defined in [provider/src/subproviders/typed-data.ts:158](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L158)*</small>
+<small>*Defined in [provider/src/subproviders/typed-data.ts:159](https://github.com/BitskiCo/bitski-js/blob/master/packages/provider/src/subproviders/typed-data.ts#L159)*</small>
 
 
 

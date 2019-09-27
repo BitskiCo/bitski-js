@@ -1,5 +1,5 @@
 // SDK
-export const SDK_VERSION = '0.10.4';
+export const SDK_VERSION = '0.10.5';
 
 // URLs
 export const BITSKI_USER_API_HOST = 'https://www.bitski.com/v1';
