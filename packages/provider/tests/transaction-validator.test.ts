@@ -4,7 +4,7 @@ import { TransactionValidatorSubprovider } from '../src/subproviders/transaction
 
 function createEngine() {
   const engine = new Web3ProviderEngine();
-  const provider = new TransactionValidatorSubprovider();
+  const provider = new TransactionValidatorSubprovider(1);
   engine.addProvider(provider);
   engine._ready.go();
   return { engine, provider };
@@ -128,6 +128,46 @@ test('it only updates values that are missing', (done) => {
       expect(payload.params[0].gas).toBe(fixtures.eth_estimateGas);
       expect(payload.params[0].gasPrice).toBe(fixtures.eth_gasPrice);
       expect(payload.params[0].nonce).toBe('0xff');
+    }
+  };
+
+  engine.addProvider(new MockFixtureProvider(fixtures, assertionsCallback));
+
+  const request = {
+    id: 1,
+    jsonrpc: '2.0',
+    method: 'eth_sendTransaction',
+    params: [{
+      amount: '0x0',
+      from: '0xf00',
+      nonce: '0xff',
+    }],
+  };
+
+  engine.sendAsync(request, (err, result) => {
+    expect(err).toBeNull();
+    done();
+  });
+
+});
+
+test('it updates gas price based on minGasPrice', (done) => {
+  expect.assertions(3);
+
+  const { engine } = createEngine();
+
+  const fixtures = {
+    eth_estimateGas: '0x01',
+    eth_gasPrice: '0x0',
+    eth_getTransactionCount: '0x0',
+    eth_sendTransaction: '0x1',
+    eth_accounts: ['0xf00'],
+  };
+
+  const assertionsCallback = (payload) => {
+    if (payload.method === 'eth_sendTransaction') {
+      expect(payload.params[0]).toBeDefined();
+      expect(payload.params[0].gasPrice).toBe('0x1');
     }
   };
 
