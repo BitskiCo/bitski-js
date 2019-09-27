@@ -6,6 +6,12 @@ import { Subprovider } from '@bitski/provider-engine';
  * only some of the parameters and rely on the provider or node to fill in the rest.
  */
 export class TransactionValidatorSubprovider extends Subprovider {
+  protected minGasPrice: number;
+
+  constructor(minGasPrice = 0) {
+    super();
+    this.minGasPrice = minGasPrice;
+  }
 
   public handleRequest(payload, next, _) {
     // Only handle transactions
@@ -111,7 +117,12 @@ export class TransactionValidatorSubprovider extends Subprovider {
       method: 'eth_gasPrice',
       params: [],
     };
-    return this.performRequest(request);
+    return this.performRequest(request).then((gasPrice) => {
+      if (gasPrice === '0x0') {
+        return `0x${this.minGasPrice.toString(16)}`;
+      }
+      return gasPrice;
+    });
   }
 
   // Wraps emitPayload in a promise

@@ -21,6 +21,8 @@ export interface BitskiEngineOptions {
   disableValidation?: boolean;
   // Disable polling for new blocks
   disableBlockTracking?: boolean;
+  // Set a minimum gas price. Useful for chains like Kovan.
+  minGasPrice?: number;
 }
 
 export class BitskiEngine extends Web3ProviderEngine {
@@ -42,7 +44,7 @@ export class BitskiEngine extends Web3ProviderEngine {
     const enableValidator = !(options && options.disableValidation === true);
     if (enableValidator) {
       // Ensures that transactions are well formed (nonce, gas, gasPrice, from) before they are sent to Bitski
-      this.addProvider(new TransactionValidatorSubprovider());
+      this.addProvider(new TransactionValidatorSubprovider(options.minGasPrice));
       this.addProvider(new TypedDataSanitizerSubprovider());
     }
 
