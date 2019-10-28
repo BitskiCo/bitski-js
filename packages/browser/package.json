@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.10.5",
+  "version": "0.10.6",
   "scripts": {
     "test": "jest",
     "version": "node ./scripts/version.js && git add --all",
@@ -24,7 +24,7 @@
   "dependencies": {
     "@bitski/provider-engine": "^0.6.3",
     "@openid/appauth": "^1.2.6",
-    "bitski-provider": "^0.10.5",
+    "bitski-provider": "^0.10.6",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
