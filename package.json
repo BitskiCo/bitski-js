@@ -15,27 +15,15 @@
     "docs": "typedoc --options ./typedoc.js"
   },
   "devDependencies": {
-    "@strictsoftware/typedoc-plugin-monorepo": "^0.2.1",
-    "@types/events": "^1.2.0",
-    "@types/jest": "^23.3.2",
-    "@types/jquery": "^3.3.29",
-    "@types/uuid": "^3.4.4",
-    "babel-preset-es2015": "^6.24.1",
-    "browserify": "^16.2.3",
-    "fetch-mock": "^7.3.0",
-    "find": "^0.2.9",
     "jest": "^23.6.0",
     "jest-fetch-mock": "^2.1.2",
     "jest-junit": "^6.4.0",
-    "lerna": "^3.13.4",
-    "node-fetch": "^2.3.0",
-    "terser": "^3.14.1",
+    "lerna": "^3.18.3",
     "ts-jest": "^23.10.0",
-    "tslint": "^5.11.0",
+    "tslint": "^5.20.0",
     "typedoc": "^0.14.2",
     "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
-    "typescript": "^3.1.6",
-    "xhr-mock": "^2.4.1"
+    "typescript": "^3.6.4"
   },
   "name": "bitski-js"
 }

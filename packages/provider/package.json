@@ -23,7 +23,26 @@
     "json-rpc-error": "^2.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "babelify": "^10.0.0",
     "jest": "^23.6.0"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "@babel/preset-env"
+          ],
+          "plugins": [
+            "@babel/plugin-transform-runtime"
+          ]
+        }
+      ]
+    ]
   },
   "gitHead": "7b9f0b01dd8a36a4294f27740ce264ecd95af35c"
 }

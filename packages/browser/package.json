@@ -15,24 +15,34 @@
     "version": "node ./scripts/version.js && git add --all",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
     "bundle": "npm run bundle:main && npm run bundle:callback && npm run minify",
-    "bundle:main": "browserify -s Bitski -e dist/esm/bitski.js -t [ babelify --presets [ es2015 ] ] > dist/bitski.bundle.js",
-    "bundle:callback": "browserify dist/esm/callback.js -t [ babelify --presets [ es2015 ] ] > dist/callback.js",
+    "bundle:main": "browserify -s Bitski -e dist/esm/bitski.js -d -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] > dist/bitski.bundle.js",
+    "bundle:callback": "browserify dist/esm/callback.js -d -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] > dist/callback.js",
     "minify": "terser dist/bitski.bundle.js -o dist/bitski.min.js",
     "prepare": "npm run build",
     "prepack": "npm run build && npm run bundle"
   },
   "dependencies": {
     "@bitski/provider-engine": "^0.6.3",
-    "@openid/appauth": "^1.2.0",
+    "@openid/appauth": "^1.2.6",
     "bitski-provider": "^0.10.5",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.24.1",
-    "babelify": "^8.0.0",
-    "browserify": "^16.2.3",
-    "jest": "^23.6.0",
-    "terser": "^3.14.1"
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "babelify": "^10.0.0",
+    "browserify": "^16.5.0",
+    "jest": "^24.9.0",
+    "terser": "^4.3.9"
   },
+  "browserslist": [
+    "last 3 chrome versions",
+    "last 3 firefox versions",
+    "last 3 safari versions",
+    "last 3 ios versions",
+    "last 3 chromeandroid versions",
+    "last 3 edge versions"
+  ],
   "gitHead": "7b9f0b01dd8a36a4294f27740ce264ecd95af35c"
 }
