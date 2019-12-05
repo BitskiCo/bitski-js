@@ -26,13 +26,17 @@ export class BitskiTransactionSigner {
   // Current Dialog instance
   private currentRequestDialog?: Dialog;
 
+  // App Callback URL
+  private callbackURL?: string;
+
   // Cache of the current request's callbacks
   private currentRequest?: [(signed: any) => void, (error: Error) => void];
 
-  constructor(webBaseUrl: string, apiBaseUrl: string, defaultHeaders: any) {
+  constructor(webBaseUrl: string, apiBaseUrl: string, defaultHeaders: any, callbackURL: string | undefined) {
     this.webBaseUrl = webBaseUrl;
     this.apiBaseUrl = apiBaseUrl;
     this.defaultHeaders = defaultHeaders;
+    this.callbackURL = callbackURL;
 
     // Watch for new messages on the window.
     window.addEventListener('message', this.receiveMessage.bind(this), false);
@@ -41,6 +45,12 @@ export class BitskiTransactionSigner {
   public async sign(transaction: Transaction, accessToken: string): Promise<string> {
     // Submit transaction to API
     const persisted = await this.submitTransaction(transaction, accessToken);
+
+    // If we have a callback URL, use the redirect flow
+    if (this.callbackURL) {
+      return this.redirectToCallbackURL(persisted.transaction);
+    }
+
     // Show the modal (await response)
     return this.showAuthorizationModal(persisted.transaction);
   }
@@ -136,4 +146,9 @@ export class BitskiTransactionSigner {
     });
   }
 
+  protected redirectToCallbackURL(transaction: Transaction): Promise<string> {
+    const url = `${this.webBaseUrl}/transactions/${transaction.id}?redirectURI=${this.callbackURL}`;
+    window.location.href = url;
+    return Promise.resolve('');
+  }
 }

@@ -58,6 +58,7 @@ export interface ProviderOptions extends BitskiEngineOptions {
   webBaseUrl?: string;
   apiBaseUrl?: string;
   minGasPrice?: number;
+  callbackURL?: string;
 }
 
 /**
@@ -103,9 +104,8 @@ export class Bitski {
    * @param options options for the provider, or a network name
    */
   public getProvider(options?: ProviderOptions | string): BitskiEngine {
-    const network = this.networkFromProviderOptions(options);
     // Check cache for existing provider
-    const existingProvider = this.engines.get(network.rpcUrl);
+    const existingProvider = this.engines.get(JSON.stringify(options));
     if (existingProvider) {
       existingProvider.start();
       return existingProvider;
@@ -115,12 +115,13 @@ export class Bitski {
     if (options && typeof options !== 'string') {
       normalizedOptions = options;
     }
+    const network = this.networkFromProviderOptions(options);
     if (network === Kovan && normalizedOptions.minGasPrice == null) {
       normalizedOptions.minGasPrice = 1;
     }
     const newProvider = this.createProvider(network, normalizedOptions);
     newProvider.start();
-    this.engines.set(network.rpcUrl, newProvider);
+    this.engines.set(JSON.stringify(options), newProvider);
     return newProvider;
   }
 

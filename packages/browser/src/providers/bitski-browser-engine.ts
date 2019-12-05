@@ -63,7 +63,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
       this.rpcHeaders = Object.assign({}, this.rpcHeaders, defaultBitskiHeaders);
     }
 
-    this.signer = new BitskiTransactionSigner(this.webBaseUrl, this.apiBaseUrl, this.headers);
+    this.signer = new BitskiTransactionSigner(this.webBaseUrl, this.apiBaseUrl, this.headers, options.callbackURL);
 
     this.addSubproviders();
   }
