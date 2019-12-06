@@ -2290,7 +2290,7 @@ Register a callback to be called on sign out. This is a good practice, since the
 ```typescript
 function addSignOutHandler(fn: function)
 ```
-<small>*Defined in [browser/src/bitski.ts:219](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L219)*</small>
+<small>*Defined in [browser/src/bitski.ts:220](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L220)*</small>
 
 
 
@@ -2324,7 +2324,7 @@ Connects to bitski to get a valid access token if possible.
 ```typescript
 function connect(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:180](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L180)*</small>
+<small>*Defined in [browser/src/bitski.ts:181](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L181)*</small>
 
 
 
@@ -2354,7 +2354,7 @@ Creates a sign in with bitski button to add to your app. If an HTML element is p
 ```typescript
 function getConnectButton(options?: ConnectButtonOptions, callback?: undefined | function): ConnectButton
 ```
-<small>*Defined in [browser/src/bitski.ts:134](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L134)*</small>
+<small>*Defined in [browser/src/bitski.ts:135](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L135)*</small>
 
 
 
@@ -2393,7 +2393,7 @@ Retrieves the current access token for the user, if logged in.
 ```typescript
 function getCurrentAccessToken(): Promise<string>
 ```
-<small>*Defined in [browser/src/bitski.ts:202](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L202)*</small>
+<small>*Defined in [browser/src/bitski.ts:203](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L203)*</small>
 
 
 
@@ -2423,7 +2423,7 @@ Retrieves the current refresh token for the user, if logged in. Requires that th
 ```typescript
 function getCurrentRefreshToken(): Promise<string>
 ```
-<small>*Defined in [browser/src/bitski.ts:210](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L210)*</small>
+<small>*Defined in [browser/src/bitski.ts:211](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L211)*</small>
 
 
 
@@ -2453,7 +2453,7 @@ Returns a new web3 provider for a given network.
 ```typescript
 function getProvider(options?: ProviderOptions | string): BitskiEngine
 ```
-<small>*Defined in [browser/src/bitski.ts:105](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L105)*</small>
+<small>*Defined in [browser/src/bitski.ts:106](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L106)*</small>
 
 
 
@@ -2491,7 +2491,7 @@ Gets the current signed in user. Will reject if we are not signed in.
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:173](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L173)*</small>
+<small>*Defined in [browser/src/bitski.ts:174](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L174)*</small>
 
 
 
@@ -2521,7 +2521,7 @@ Call from your oauth redirect page.
 ```typescript
 function redirectCallback(): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:195](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L195)*</small>
+<small>*Defined in [browser/src/bitski.ts:196](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L196)*</small>
 
 
 
@@ -2551,7 +2551,7 @@ Remove a registered signout callback
 ```typescript
 function removeSignOutHandler(fn: function)
 ```
-<small>*Defined in [browser/src/bitski.ts:227](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L227)*</small>
+<small>*Defined in [browser/src/bitski.ts:228](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L228)*</small>
 
 
 
@@ -2585,7 +2585,7 @@ Starts the sign in flow. Will trigger a popup window over your app, so it must b
 ```typescript
 function signIn(options?: SignInOptions): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:166](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L166)*</small>
+<small>*Defined in [browser/src/bitski.ts:167](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L167)*</small>
 
 
 
@@ -2623,7 +2623,7 @@ Starts redirect sign in flow. This is an alternative flow to the popup that all 
 ```typescript
 function signInRedirect(options?: SignInOptions)
 ```
-<small>*Defined in [browser/src/bitski.ts:188](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L188)*</small>
+<small>*Defined in [browser/src/bitski.ts:189](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L189)*</small>
 
 
 
@@ -2657,7 +2657,7 @@ Sign the current user out of your application.
 ```typescript
 function signOut(): Promise<void>
 ```
-<small>*Defined in [browser/src/bitski.ts:237](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L237)*</small>
+<small>*Defined in [browser/src/bitski.ts:238](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L238)*</small>
 
 
 
@@ -2687,7 +2687,7 @@ Signs in or connects to bitski depending on the user's auth state. Since it may 
 ```typescript
 function start(options?: SignInOptions): Promise<User>
 ```
-<small>*Defined in [browser/src/bitski.ts:144](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L144)*</small>
+<small>*Defined in [browser/src/bitski.ts:145](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L145)*</small>
 
 
 
@@ -2725,7 +2725,7 @@ Alternative to using our static callback.html file. Call this from your own redi
 ```typescript
 function callback()
 ```
-<small>*Defined in [browser/src/bitski.ts:70](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L70)*</small>
+<small>*Defined in [browser/src/bitski.ts:71](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L71)*</small>
 
 
 
@@ -2797,6 +2797,15 @@ var additionalHeaders: undefined | object
 var apiBaseUrl: undefined | string
 ```
 <small>*Defined in [browser/src/bitski.ts:59](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L59)*</small>
+
+
+<a id="_browser_src_bitski_.provideroptions.callbackurl"></a>
+
+#### callbackURL
+```javascript
+var callbackURL: undefined | string
+```
+<small>*Defined in [browser/src/bitski.ts:61](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/bitski.ts#L61)*</small>
 
 
 <a id="_browser_src_bitski_.provideroptions.disableblocktracking"></a>
@@ -3517,7 +3526,7 @@ var REFRESH_TOKEN_KEY: "bitski.refresh_token" = "bitski.refresh_token"
 
 
 ```javascript
-var SDK_VERSION: "0.10.6" = "0.10.6"
+var SDK_VERSION: "0.10.7" = "0.10.7"
 ```
 <small>*Defined in [browser/src/constants.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/constants.ts#L2)*</small>
 
@@ -4749,7 +4758,7 @@ This class is responsible for signing transactions. It only knows about Bitski's
 <a id="_browser_src_signing_transaction_signer_.bitskitransactionsigner.constructor"></a>
 ### constructor
 ```typescript
-new BitskiTransactionSigner(webBaseUrl: string, apiBaseUrl: string, defaultHeaders: any): BitskiTransactionSigner
+new BitskiTransactionSigner(webBaseUrl: string, apiBaseUrl: string, defaultHeaders: any, callbackURL: string | undefined): BitskiTransactionSigner
 ```
 ##### Parameters
 
@@ -4758,6 +4767,7 @@ new BitskiTransactionSigner(webBaseUrl: string, apiBaseUrl: string, defaultHeade
 | webBaseUrl | `string`   |  - |
 | apiBaseUrl | `string`   |  - |
 | defaultHeaders | `any`   |  - |
+| callbackURL | `string          ⎮undefined`   |  - |
 
 
 
@@ -4784,7 +4794,7 @@ new BitskiTransactionSigner(webBaseUrl: string, apiBaseUrl: string, defaultHeade
 ```typescript
 function sign(transaction: Transaction, accessToken: string): Promise<string>
 ```
-<small>*Defined in [browser/src/signing/transaction-signer.ts:41](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/signing/transaction-signer.ts#L41)*</small>
+<small>*Defined in [browser/src/signing/transaction-signer.ts:45](https://github.com/BitskiCo/bitski-js/blob/master/packages/browser/src/signing/transaction-signer.ts#L45)*</small>
 
 
 
