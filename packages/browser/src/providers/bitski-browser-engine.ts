@@ -5,6 +5,7 @@ import { BITSKI_RPC_BASE_URL, BITSKI_TRANSACTION_API_BASE_URL, BITSKI_WEB_BASE_U
 import { BitskiTransactionSigner } from '../signing/transaction-signer';
 import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cache';
 import { RemoteAccountSubprovider } from '../subproviders/remote-accounts';
+import { RestFetchSubprovider } from '../subproviders/rest-fetch';
 import { SignatureSubprovider } from '../subproviders/signature';
 
 // Predicate to determine if the token provider is an AuthProvider
@@ -97,6 +98,12 @@ export class BitskiBrowserEngine extends BitskiEngine {
     // Respond to requests that need signed with an iframe
     const signatureSubprovider = new SignatureSubprovider(this.network, this.signer, this.tokenProvider);
     this.addProvider(signatureSubprovider);
+
+    // Respond to block request via REST is using Bitski RPC endpoint
+    if (this.network.rpcUrl.startsWith('https://api.bitski.com')) {
+      const blockProvider = new RestFetchSubprovider({rpcUrl: this.network.rpcUrl, defaultHeaders: this.headers});
+      this.addProvider(blockProvider);
+    }
 
     // Finally, add our basic HTTP provider
     this.addProvider(fetchSubprovider);
