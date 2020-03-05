@@ -43,16 +43,18 @@ export class BitskiTransactionSigner {
   }
 
   public async sign(transaction: Transaction, accessToken: string): Promise<string> {
-    // Submit transaction to API
-    const persisted = await this.submitTransaction(transaction, accessToken);
-
     // If we have a callback URL, use the redirect flow
     if (this.callbackURL) {
+      const persisted = await this.submitTransaction(transaction, accessToken);
       return this.redirectToCallbackURL(persisted.transaction);
     }
 
+    this.submitTransaction(transaction, accessToken).catch((error) => {
+      return this.handleCallback({error});
+    });
+
     // Show the modal (await response)
-    return this.showAuthorizationModal(persisted.transaction);
+    return this.showAuthorizationModal(transaction);
   }
 
   /**
@@ -72,6 +74,10 @@ export class BitskiTransactionSigner {
       return;
     }
 
+    this.handleCallback(data);
+  }
+
+  protected handleCallback(callback: any): void {
     // Ignore messages when we don't have a current request in flight
     if (this.currentRequest === undefined) {
       return;
@@ -85,10 +91,10 @@ export class BitskiTransactionSigner {
     }
 
     // Call the callback to complete the request
-    if (data.error) {
-      reject(data.error);
+    if (callback.error) {
+      reject(callback.error);
     } else {
-      fulfill(data.result);
+      fulfill(callback.result);
     }
 
     // Clear state
