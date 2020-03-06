@@ -25,7 +25,7 @@
     "@bitski/provider-engine": "^0.6.3",
     "@openid/appauth": "^1.2.6",
     "bitski-provider": "^0.10.6",
-    "uuid": "^3.3.3"
+    "uuid": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",

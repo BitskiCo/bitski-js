@@ -15,13 +15,13 @@
     "docs": "typedoc --options ./typedoc.js"
   },
   "devDependencies": {
-    "jest": "^23.6.0",
+    "jest": "^25.1.0",
     "jest-fetch-mock": "^2.1.2",
     "jest-junit": "^6.4.0",
     "lerna": "^3.18.3",
     "ts-jest": "^23.10.0",
     "tslint": "^5.20.0",
-    "typedoc": "^0.14.2",
+    "typedoc": "^0.16.11",
     "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
     "typescript": "^3.6.4"
   },
