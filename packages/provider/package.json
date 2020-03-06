@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.10.6",
+  "version": "0.10.8",
   "scripts": {
     "test": "jest",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
