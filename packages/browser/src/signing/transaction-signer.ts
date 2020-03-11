@@ -1,3 +1,4 @@
+import { retry } from 'async';
 import { Dialog } from '../components/dialog';
 import { IFRAME_MESSAGE_ORIGIN_INCLUDES } from '../constants';
 import { SignerError } from '../errors/signer-error';
@@ -113,12 +114,25 @@ export class BitskiTransactionSigner {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     });
-    const response = await fetch(`${this.apiBaseUrl}/transactions`, {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers,
+    return new Promise((resolve, reject) => {
+      retry({times: 5}, () => {
+        return fetch(`${this.apiBaseUrl}/transactions`, {
+          method: 'POST',
+          body: JSON.stringify(requestBody),
+          headers,
+        }).then((response) => {
+          return parseResponse<JSONTransactionObject>(response);
+        });
+      }, (error, result) => {
+        if (error) {
+          reject(error);
+        }
+
+        if (result) {
+          resolve(result);
+        }
+      });
     });
-    return parseResponse<JSONTransactionObject>(response);
   }
 
   /**
