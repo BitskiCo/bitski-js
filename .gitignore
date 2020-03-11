@@ -71,3 +71,5 @@ etc
 
 # Examples artifacts
 examples/package-lock.json
+packages/browser/package-lock.json
+packages/provider/package-lock.json
