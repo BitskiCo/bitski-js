@@ -24,6 +24,7 @@
   "dependencies": {
     "@bitski/provider-engine": "^0.6.3",
     "@openid/appauth": "^1.2.6",
+    "async": "^3.0.0",
     "bitski-provider": "^0.10.8",
     "uuid": "^7.0.0"
   },
