@@ -66,7 +66,7 @@ describe('when handling subscriptions', () => {
   test('it emits events with subscription id', (done) => {
     expect.assertions(1);
     const engine = createEngine();
-    const subscriptionSubprovider = findProvider(engine, 'SubscriptionSubprovider');
+    const subscriptionSubprovider = findProvider(engine, 'SubscriptionsSubprovider');
     const notification = {
       jsonrpc: '2.0',
       method: 'eth_subscription',
@@ -87,7 +87,7 @@ describe('when handling subscriptions', () => {
   test('it re-emits data events for backwards compatibility', (done) => {
     expect.assertions(1);
     const engine = createEngine();
-    const subscriptionSubprovider = findProvider(engine, 'SubscriptionSubprovider');
+    const subscriptionSubprovider = findProvider(engine, 'SubscriptionsSubprovider');
     const notification = {
       jsonrpc: '2.0',
       method: 'eth_subscription',
@@ -108,7 +108,7 @@ describe('when handling subscriptions', () => {
   test('it does not emit subscription id events when receiving invalid data', (done) => {
     expect.assertions(1);
     const engine = createEngine();
-    const subscriptionSubprovider = findProvider(engine, 'SubscriptionSubprovider');
+    const subscriptionSubprovider = findProvider(engine, 'SubscriptionsSubprovider');
     let called = false;
     engine.on('0x1', () => {
       called = true;

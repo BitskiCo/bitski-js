@@ -12,16 +12,16 @@ import BN from 'bn.js';
 function parseNumber(arg: string | number | BN): BN {
   const type = typeof arg;
   if (type === 'string') {
-    if (arg.substr(0, 2) === '0x') {
-      return new BN(arg.substr(2), 16);
+    if ((arg as string).substr(0, 2) === '0x') {
+      return new BN((arg as string).substr(2), 16);
     } else {
       return new BN(arg, 10);
     }
   } else if (type === 'number') {
     return new BN(arg);
-  } else if (arg.toArray) {
+  } else if ((arg as any).toArray) {
     // assume this is a BN for the moment, replace with BN.isBN soon
-    return arg;
+    return arg as BN;
   } else {
     throw new Error('Argument is not a number');
   }

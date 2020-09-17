@@ -4,7 +4,7 @@ import {
   DefaultFixtureSubprovider,
   InflightCacheSubprovider,
   SanitizerSubprovider,
-  SubscriptionSubprovider,
+  SubscriptionsSubprovider,
 } from '@bitski/provider-engine';
 
 import { ProviderError } from './errors/provider-error';
@@ -55,7 +55,7 @@ export class BitskiEngine extends Web3ProviderEngine {
     }
 
     // Handles subscriptions and filters
-    const filterAndSubsSubprovider = new SubscriptionSubprovider();
+    const filterAndSubsSubprovider = new SubscriptionsSubprovider();
 
     // Watch for updates from subscriptions
     filterAndSubsSubprovider.on('data', (_, notification) => {
