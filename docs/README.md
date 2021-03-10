@@ -234,7 +234,7 @@ import { Bitski, LOGIN_HINT_SIGNUP } from 'bitski';
 bitski.signIn({ login_hint: LOGIN_HINT_SIGNUP }).then(/* ... */);
 ```
 
-_Note: In order for the popup window to properly open in most browsers, this needs to be triggered with a click action. For your convenenience, we've included a standard login button that handles that for you._
+_Note: In order for the popup window to properly open in most browsers, this needs to be triggered with a click action. For your convenience, we've included a standard login button that handles that for you._
 
 #### Using the Bitski connect button
 
