@@ -5,12 +5,13 @@ export interface UserInfoResponse {
   phone_number?: string;
   phone_number_verified?: boolean;
   email_verified?: boolean;
+  preferred_username?: string;
 }
 
 export class User {
 
   public static fromJson(json: UserInfoResponse): User {
-    return new User(json.sub, json.accounts, json.email, json.email_verified, json.phone_number, json.phone_number_verified);
+    return new User(json.sub, json.accounts, json.email, json.email_verified, json.phone_number, json.phone_number_verified, json.preferred_username);
   }
 
   public static fromString(s: string): User | undefined {
@@ -21,7 +22,7 @@ export class User {
       return;
     }
     if (parsed.id) {
-      return new User(parsed.id, parsed.accounts, parsed.email, parsed.emailVerified, parsed.phoneNumber, parsed.phoneNumberVerified);
+      return new User(parsed.id, parsed.accounts, parsed.email, parsed.emailVerified, parsed.phoneNumber, parsed.phoneNumberVerified, parsed.preferredUsername);
     }
     return;
   }
@@ -32,14 +33,16 @@ export class User {
   public emailVerified?: boolean;
   public phoneNumber?: string;
   public phoneNumberVerified?: boolean;
+  public preferredUsername?: string;
 
-  constructor(id: string, accounts?: string[], email?: string, emailVerified?: boolean, phone?: string, phoneNumberVerified?: boolean) {
+  constructor(id: string, accounts?: string[], email?: string, emailVerified?: boolean, phone?: string, phoneNumberVerified?: boolean, preferredUsername?: string) {
     this.id = id;
     this.accounts = accounts;
     this.email = email;
     this.emailVerified = emailVerified;
     this.phoneNumber = phone;
     this.phoneNumberVerified = phoneNumberVerified;
+    this.preferredUsername = preferredUsername;
   }
 
   public toStorageString() {
