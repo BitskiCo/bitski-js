@@ -205,6 +205,13 @@ export class Bitski {
   }
 
   /**
+   * Retrieves the current ID token for the user, if logged in.
+   */
+  public getCurrentIdToken(): Promise<string | undefined> {
+    return this.authProvider.getIdToken();
+  }
+
+  /**
    * Retrieves the current refresh token for the user, if logged in.
    * Requires that the user has approved your application for offline access.
    */
