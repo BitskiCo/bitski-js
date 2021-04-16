@@ -1,5 +1,5 @@
 import { TokenResponse } from '@openid/appauth';
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, ID_TOKEN_KEY } from '../constants';
 import { LocalStorageStore } from '../utils/localstorage-store';
 import { Store } from '../utils/store';
 import { AccessToken } from './access-token';
@@ -12,11 +12,21 @@ export class TokenStore {
     }
   }
 
+  public get currentIdToken(): string | undefined {
+    if (this.idToken && this.accessToken && !this.accessToken.expired) {
+      return this.idToken;
+    }
+  }
+
   public get refreshToken(): string | undefined {
     const token = this.store.getItem(this.refreshTokenKey);
     if (token) {
       return token;
     }
+  }
+
+  protected get idTokenKey(): string {
+    return `${ID_TOKEN_KEY}.${this.clientId}`;
   }
 
   protected get accessTokenKey(): string {
@@ -28,6 +38,7 @@ export class TokenStore {
   }
   protected store: Store;
   protected accessToken?: AccessToken;
+  protected idToken?: string;
   protected clientId: string;
 
   constructor(clientId: string, store?: Store) {
@@ -50,18 +61,24 @@ export class TokenStore {
     }
     const parsedToken = AccessToken.fromTokenResponse(response);
     this.store.setItem(this.accessTokenKey, parsedToken.toStorageString());
+    this.store.setItem(this.idTokenKey, response.idToken);
     this.accessToken = parsedToken;
+    this.idToken = response.idToken;
   }
 
   public invalidateCurrentToken() {
     this.accessToken = undefined;
+    this.idToken = undefined;
     this.store.clearItem(this.accessTokenKey);
+    this.store.clearItem(this.idTokenKey);
   }
 
   public clear() {
     this.accessToken = undefined;
+    this.idToken = undefined;
     this.store.clearItem(this.refreshTokenKey);
     this.store.clearItem(this.accessTokenKey);
+    this.store.clearItem(this.idTokenKey);
   }
 
 }
