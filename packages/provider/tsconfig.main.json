@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "lib",
-    "module": "umd",
+    "module": "commonjs",
     "declaration": true,
     "sourceMap": true
   }
