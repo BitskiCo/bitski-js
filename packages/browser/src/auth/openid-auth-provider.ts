@@ -49,6 +49,16 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         return Promise.reject(AuthenticationError.NotSignedIn());
     }
 
+    public getIdToken(): Promise<string | undefined> {
+        if (this.tokenStore.currentIdToken) {
+            return Promise.resolve(this.tokenStore.currentIdToken);
+        }
+        if (this.tokenStore.refreshToken) {
+            return this.refreshIdToken();
+        }
+        return Promise.reject(AuthenticationError.NotSignedIn());
+    }
+
     public getRefreshToken(): Promise<string> {
         if (this.tokenStore.refreshToken) {
             return Promise.resolve(this.tokenStore.refreshToken);
@@ -76,6 +86,21 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
             return this.oauthManager.refreshAccessToken(this.tokenStore.refreshToken).then((tokenResponse) => {
                 this.tokenStore.persistTokenResponse(tokenResponse);
                 return tokenResponse.accessToken;
+            }).catch((error) => {
+                // If we can't renew, we likely have bad data
+                this.tokenStore.clear();
+                this.userStore.clear();
+                throw error;
+            });
+        }
+        return Promise.reject(AuthenticationError.NoRefreshToken());
+    }
+
+    public refreshIdToken(): Promise<string | undefined> {
+        if (this.tokenStore.refreshToken) {
+            return this.oauthManager.refreshAccessToken(this.tokenStore.refreshToken).then((tokenResponse) => {
+                this.tokenStore.persistTokenResponse(tokenResponse);
+                return tokenResponse.idToken;
             }).catch((error) => {
                 // If we can't renew, we likely have bad data
                 this.tokenStore.clear();

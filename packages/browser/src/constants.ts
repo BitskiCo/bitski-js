@@ -32,6 +32,7 @@ export const DEFAULT_POPUP_FEATURES = {
 // Storage
 export const REFRESH_TOKEN_KEY = 'bitski.refresh_token';
 export const ACCESS_TOKEN_KEY = 'bitski.access_token';
+export const ID_TOKEN_KEY = 'bitski.id_token';
 export const USER_KEY = 'bitski.user';
 
 // Methods
