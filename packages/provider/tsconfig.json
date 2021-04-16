@@ -7,11 +7,6 @@
     "lib": ["es2017", "dom"],
     "target": "ES2017",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": ["*", "types/*"]
-    },
     "typeRoots": [
       "./node_modules/@types", "./types"
     ]
