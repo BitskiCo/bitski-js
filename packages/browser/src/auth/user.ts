@@ -53,6 +53,7 @@ export class User {
       id: this.id,
       phoneNumber: this.phoneNumber,
       phoneNumberVerified: this.phoneNumberVerified,
+      preferredUsername: this.preferredUsername,
     });
   }
 }
