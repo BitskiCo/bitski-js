@@ -53,6 +53,7 @@ export class TokenStore {
         this.accessToken = parsedToken;
       }
     }
+    this.idToken = this.store.getItem(this.idTokenKey);
   }
 
   public persistTokenResponse(response: TokenResponse) {
