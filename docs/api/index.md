@@ -922,7 +922,7 @@ var authStatus:
 ```typescript
 function connect(): Promise<User>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:108](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L108)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:133](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L133)*</small>
 
 
 
@@ -961,6 +961,32 @@ function getAccessToken(): Promise<string>
 
 
 
+<a id="_browser_src_auth_openid_auth_provider_.openidauthprovider.getidtoken"></a>
+
+#### getIdToken
+
+
+
+
+##### Declaration
+
+
+```typescript
+function getIdToken(): Promise<string | undefined>
+```
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:52](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L52)*</small>
+
+
+
+##### Return Value
+`Promise<string          ⎮undefined>`
+
+
+
+
+
+
+
 <a id="_browser_src_auth_openid_auth_provider_.openidauthprovider.getrefreshtoken"></a>
 
 #### getRefreshToken
@@ -974,7 +1000,7 @@ function getAccessToken(): Promise<string>
 ```typescript
 function getRefreshToken(): Promise<string>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:52](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L52)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:62](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L62)*</small>
 
 
 
@@ -1000,7 +1026,7 @@ function getRefreshToken(): Promise<string>
 ```typescript
 function getUser(): Promise<User>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:114](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L114)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:139](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L139)*</small>
 
 
 
@@ -1026,7 +1052,7 @@ function getUser(): Promise<User>
 ```typescript
 function invalidateToken(): Promise<void>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:64](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L64)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:74](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L74)*</small>
 
 
 
@@ -1052,7 +1078,7 @@ function invalidateToken(): Promise<void>
 ```typescript
 function redirectCallback(): Promise<User>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:129](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L129)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:154](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L154)*</small>
 
 
 
@@ -1078,12 +1104,38 @@ function redirectCallback(): Promise<User>
 ```typescript
 function refreshAccessToken(): Promise<string>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:74](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L74)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:84](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L84)*</small>
 
 
 
 ##### Return Value
 `Promise<string>`
+
+
+
+
+
+
+
+<a id="_browser_src_auth_openid_auth_provider_.openidauthprovider.refreshidtoken"></a>
+
+#### refreshIdToken
+
+
+
+
+##### Declaration
+
+
+```typescript
+function refreshIdToken(): Promise<string | undefined>
+```
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:99](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L99)*</small>
+
+
+
+##### Return Value
+`Promise<string          ⎮undefined>`
 
 
 
@@ -1104,7 +1156,7 @@ function refreshAccessToken(): Promise<string>
 ```typescript
 function signIn(method: OAuthSignInMethod, opts: SignInOptions): Promise<User>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:89](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L89)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:114](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L114)*</small>
 
 
 
@@ -1139,7 +1191,7 @@ function signIn(method: OAuthSignInMethod, opts: SignInOptions): Promise<User>
 ```typescript
 function signInOrConnect(signInMethod?: OAuthSignInMethod, opts: SignInOptions): Promise<User>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:118](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L118)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:143](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L143)*</small>
 
 
 
@@ -1174,7 +1226,7 @@ function signInOrConnect(signInMethod?: OAuthSignInMethod, opts: SignInOptions):
 ```typescript
 function signOut(): Promise<any>
 ```
-<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:136](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L136)*</small>
+<small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:161](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L161)*</small>
 
 
 
@@ -1545,6 +1597,20 @@ new TokenStore(clientId: string, store: Store): TokenStore
 
 ---
 
+<a id="_browser_src_auth_token_store_.tokenstore.currentidtoken"></a>
+
+####  currentIdToken
+
+
+```javascript
+var currentIdToken: 
+```
+<small>*Defined in [packages/browser/src/auth/token-store.ts:15](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L15)*</small>
+
+
+
+
+
 <a id="_browser_src_auth_token_store_.tokenstore.currenttoken"></a>
 
 ####  currentToken
@@ -1567,7 +1633,7 @@ var currentToken:
 ```javascript
 var refreshToken: 
 ```
-<small>*Defined in [packages/browser/src/auth/token-store.ts:15](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L15)*</small>
+<small>*Defined in [packages/browser/src/auth/token-store.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L21)*</small>
 
 
 
@@ -1591,7 +1657,7 @@ var refreshToken:
 ```typescript
 function clear()
 ```
-<small>*Defined in [packages/browser/src/auth/token-store.ts:61](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L61)*</small>
+<small>*Defined in [packages/browser/src/auth/token-store.ts:77](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L77)*</small>
 
 
 
@@ -1613,7 +1679,7 @@ function clear()
 ```typescript
 function invalidateCurrentToken()
 ```
-<small>*Defined in [packages/browser/src/auth/token-store.ts:56](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L56)*</small>
+<small>*Defined in [packages/browser/src/auth/token-store.ts:70](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L70)*</small>
 
 
 
@@ -1635,7 +1701,7 @@ function invalidateCurrentToken()
 ```typescript
 function persistTokenResponse(response: TokenResponse)
 ```
-<small>*Defined in [packages/browser/src/auth/token-store.ts:47](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L47)*</small>
+<small>*Defined in [packages/browser/src/auth/token-store.ts:59](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L59)*</small>
 
 
 
@@ -1675,7 +1741,7 @@ function persistTokenResponse(response: TokenResponse)
 <a id="_browser_src_auth_user_.user.constructor"></a>
 ### constructor
 ```typescript
-new User(id: string, accounts: string[], email: undefined | string, emailVerified: undefined | false | true, phone: undefined | string, phoneNumberVerified: undefined | false | true): User
+new User(id: string, accounts: string[], email: undefined | string, emailVerified: undefined | false | true, phone: undefined | string, phoneNumberVerified: undefined | false | true, preferredUsername: undefined | string): User
 ```
 ##### Parameters
 
@@ -1687,6 +1753,7 @@ new User(id: string, accounts: string[], email: undefined | string, emailVerifie
 | emailVerified | `undefined          ⎮false          ⎮true`   |  - |
 | phone | `undefined          ⎮string`   |  - |
 | phoneNumberVerified | `undefined          ⎮false          ⎮true`   |  - |
+| preferredUsername | `undefined          ⎮string`   |  - |
 
 
 
@@ -1706,7 +1773,7 @@ new User(id: string, accounts: string[], email: undefined | string, emailVerifie
 ```javascript
 var accounts: string[]
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:30](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L30)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L31)*</small>
 
 
 <a id="_browser_src_auth_user_.user.email"></a>
@@ -1715,7 +1782,7 @@ var accounts: string[]
 ```javascript
 var email: undefined | string
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:31](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L31)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L32)*</small>
 
 
 <a id="_browser_src_auth_user_.user.emailverified"></a>
@@ -1724,7 +1791,7 @@ var email: undefined | string
 ```javascript
 var emailVerified: undefined | false | true
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L32)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:33](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L33)*</small>
 
 
 <a id="_browser_src_auth_user_.user.id"></a>
@@ -1733,7 +1800,7 @@ var emailVerified: undefined | false | true
 ```javascript
 var id: string
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:29](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L29)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:30](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L30)*</small>
 
 
 <a id="_browser_src_auth_user_.user.phonenumber"></a>
@@ -1742,7 +1809,7 @@ var id: string
 ```javascript
 var phoneNumber: undefined | string
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:33](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L33)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L34)*</small>
 
 
 <a id="_browser_src_auth_user_.user.phonenumberverified"></a>
@@ -1751,7 +1818,16 @@ var phoneNumber: undefined | string
 ```javascript
 var phoneNumberVerified: undefined | false | true
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:34](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L34)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:35](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L35)*</small>
+
+
+<a id="_browser_src_auth_user_.user.preferredusername"></a>
+
+#### preferredUsername
+```javascript
+var preferredUsername: undefined | string
+```
+<small>*Defined in [packages/browser/src/auth/user.ts:36](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L36)*</small>
 
 
 
@@ -1772,7 +1848,7 @@ var phoneNumberVerified: undefined | false | true
 ```typescript
 function toStorageString(): string
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:45](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L45)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:48](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L48)*</small>
 
 
 
@@ -1798,7 +1874,7 @@ function toStorageString(): string
 ```typescript
 function fromJson(json: UserInfoResponse): User
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:12](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L12)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:13](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L13)*</small>
 
 
 
@@ -1832,7 +1908,7 @@ function fromJson(json: UserInfoResponse): User
 ```typescript
 function fromString(s: string): User | undefined
 ```
-<small>*Defined in [packages/browser/src/auth/user.ts:16](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L16)*</small>
+<small>*Defined in [packages/browser/src/auth/user.ts:17](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L17)*</small>
 
 
 
@@ -1914,6 +1990,15 @@ var phone_number: undefined | string
 var phone_number_verified: undefined | false | true
 ```
 <small>*Defined in [packages/browser/src/auth/user.ts:6](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L6)*</small>
+
+
+<a id="_browser_src_auth_user_.userinforesponse.preferred_username"></a>
+
+#### preferred_username
+```javascript
+var preferred_username: undefined | string
+```
+<small>*Defined in [packages/browser/src/auth/user.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user.ts#L8)*</small>
 
 
 <a id="_browser_src_auth_user_.userinforesponse.sub"></a>
@@ -2215,7 +2300,7 @@ var authStatus:
 ```typescript
 function addSignOutHandler(fn: function)
 ```
-<small>*Defined in [packages/browser/src/bitski.ts:220](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L220)*</small>
+<small>*Defined in [packages/browser/src/bitski.ts:227](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L227)*</small>
 
 
 
@@ -2319,6 +2404,32 @@ function getCurrentAccessToken(): Promise<string>
 
 
 
+<a id="_browser_src_bitski_.bitski.getcurrentidtoken"></a>
+
+#### getCurrentIdToken
+
+
+
+
+##### Declaration
+
+
+```typescript
+function getCurrentIdToken(): Promise<string | undefined>
+```
+<small>*Defined in [packages/browser/src/bitski.ts:210](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L210)*</small>
+
+
+
+##### Return Value
+`Promise<string          ⎮undefined>`
+
+
+
+
+
+
+
 <a id="_browser_src_bitski_.bitski.getcurrentrefreshtoken"></a>
 
 #### getCurrentRefreshToken
@@ -2332,7 +2443,7 @@ function getCurrentAccessToken(): Promise<string>
 ```typescript
 function getCurrentRefreshToken(): Promise<string>
 ```
-<small>*Defined in [packages/browser/src/bitski.ts:211](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L211)*</small>
+<small>*Defined in [packages/browser/src/bitski.ts:218](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L218)*</small>
 
 
 
@@ -2444,7 +2555,7 @@ function redirectCallback(): Promise<User>
 ```typescript
 function removeSignOutHandler(fn: function)
 ```
-<small>*Defined in [packages/browser/src/bitski.ts:228](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L228)*</small>
+<small>*Defined in [packages/browser/src/bitski.ts:235](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L235)*</small>
 
 
 
@@ -2538,7 +2649,7 @@ function signInRedirect(options: SignInOptions)
 ```typescript
 function signOut(): Promise<void>
 ```
-<small>*Defined in [packages/browser/src/bitski.ts:238](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L238)*</small>
+<small>*Defined in [packages/browser/src/bitski.ts:245](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L245)*</small>
 
 
 
@@ -3256,7 +3367,7 @@ var BITSKI_WEB_BASE_URL: "https://sign.bitski.com" = "https://sign.bitski.com"
 ```javascript
 var CACHED_METHODS: string[] =  ['eth_accounts']
 ```
-<small>*Defined in [packages/browser/src/constants.ts:38](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L38)*</small>
+<small>*Defined in [packages/browser/src/constants.ts:39](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L39)*</small>
 
 
 
@@ -3291,7 +3402,7 @@ var DEFAULT_AUTHORIZED_METHODS: string[] =  [
   'eth_signTypedData_v3', // For metamask compatibility
 ]
 ```
-<small>*Defined in [packages/browser/src/constants.ts:39](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L39)*</small>
+<small>*Defined in [packages/browser/src/constants.ts:40](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L40)*</small>
 
 
 
@@ -3320,6 +3431,20 @@ var DEFAULT_OPTIONAL_SCOPES: string[] =  ['offline']
 var DEFAULT_SCOPES: string[] =  ['openid']
 ```
 <small>*Defined in [packages/browser/src/constants.ts:18](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L18)*</small>
+
+
+
+
+
+<a id="_browser_src_constants_.id_token_key"></a>
+
+#### «Const» ID_TOKEN_KEY
+
+
+```javascript
+var ID_TOKEN_KEY: "bitski.id_token" = "bitski.id_token"
+```
+<small>*Defined in [packages/browser/src/constants.ts:35](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L35)*</small>
 
 
 
@@ -3359,7 +3484,7 @@ var REFRESH_TOKEN_KEY: "bitski.refresh_token" = "bitski.refresh_token"
 
 
 ```javascript
-var SDK_VERSION: "0.10.8" = "0.10.8"
+var SDK_VERSION: "0.11.0-beta.4" = "0.11.0-beta.4"
 ```
 <small>*Defined in [packages/browser/src/constants.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L2)*</small>
 
@@ -3375,7 +3500,7 @@ var SDK_VERSION: "0.10.8" = "0.10.8"
 ```javascript
 var USER_KEY: "bitski.user" = "bitski.user"
 ```
-<small>*Defined in [packages/browser/src/constants.ts:35](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L35)*</small>
+<small>*Defined in [packages/browser/src/constants.ts:36](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L36)*</small>
 
 
 
@@ -4519,6 +4644,7 @@ new BitskiBrowserEngine(clientId: string, tokenProvider: AccessTokenProvider, sd
 
 
 
+
 ---
 
 
@@ -4615,7 +4741,7 @@ new BitskiTransactionSigner(webBaseUrl: string, apiBaseUrl: string, defaultHeade
 ```typescript
 function sign(transaction: Transaction, accessToken: string): Promise<string>
 ```
-<small>*Defined in [packages/browser/src/signing/transaction-signer.ts:45](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/signing/transaction-signer.ts#L45)*</small>
+<small>*Defined in [packages/browser/src/signing/transaction-signer.ts:46](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/signing/transaction-signer.ts#L46)*</small>
 
 
 
@@ -4661,7 +4787,7 @@ function sign(transaction: Transaction, accessToken: string): Promise<string>
 ```javascript
 var transaction: Transaction
 ```
-<small>*Defined in [packages/browser/src/signing/transaction-signer.ts:9](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/signing/transaction-signer.ts#L9)*</small>
+<small>*Defined in [packages/browser/src/signing/transaction-signer.ts:10](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/signing/transaction-signer.ts#L10)*</small>
 
 
 
@@ -4681,13 +4807,14 @@ var transaction: Transaction
 <a id="_browser_src_subproviders_authenticated_cache_.authenticatedcachesubprovider.constructor"></a>
 ### constructor
 ```typescript
-new AuthenticatedCacheSubprovider(authProvider: AuthProvider): AuthenticatedCacheSubprovider
+new AuthenticatedCacheSubprovider(authProvider: AuthProvider, engine: Web3ProviderEngine): AuthenticatedCacheSubprovider
 ```
 ##### Parameters
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | authProvider | [AuthProvider](#_browser_src_auth_auth_provider_.authprovider)   |  - |
+| engine | `Web3ProviderEngine`   |  - |
 
 
 
@@ -4725,7 +4852,7 @@ new AuthenticatedCacheSubprovider(authProvider: AuthProvider): AuthenticatedCach
 ```typescript
 function handleRequest(payload: any, next: any, end: any): any
 ```
-<small>*Defined in [packages/browser/src/subproviders/authenticated-cache.ts:18](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/subproviders/authenticated-cache.ts#L18)*</small>
+<small>*Defined in [packages/browser/src/subproviders/authenticated-cache.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/subproviders/authenticated-cache.ts#L21)*</small>
 
 
 
@@ -4741,6 +4868,8 @@ function handleRequest(payload: any, next: any, end: any): any
 
 ##### Return Value
 `any`
+
+
 
 
 
@@ -4850,6 +4979,8 @@ function handleRequest(payload: any, next: any, end: any)
 
 
 
+
+
 ---
 
 
@@ -4929,6 +5060,8 @@ function handleRequest(payload: JSONRPCRequest, next: NextHandler, end: Completi
 | payload | `JSONRPCRequest`   |  - |
 | next | `NextHandler`   |  - |
 | end | `CompletionHandler`   |  - |
+
+
 
 
 
@@ -5300,6 +5433,8 @@ function handleSignatureRequest(payload: JSONRPCRequestPayload, callback: JSONRP
 
 ##### Return Value
 `Promise<void>`
+
+
 
 
 
@@ -6343,6 +6478,7 @@ new BitskiEngine(options: BitskiEngineOptions): BitskiEngine
 
 
 
+
 <a id="_provider_src_bitski_engine_.bitskiengine.subscribe"></a>
 
 #### subscribe
@@ -7250,6 +7386,8 @@ function handleUnauthenticatedRequest(payload: any, next: any, end: any)
 
 
 
+
+
 ---
 
 
@@ -7321,6 +7459,8 @@ function handleRequest(payload: any, next: any, end: any)
 | payload | `any`   |  - |
 | next | `any`   |  - |
 | end | `any`   |  - |
+
+
 
 
 
@@ -7446,6 +7586,8 @@ function handleRequest(payload: any, next: any, _: any)
 
 
 
+
+
 ---
 
 
@@ -7503,6 +7645,8 @@ function handleRequest(payload: JSONRPCRequestPayload, next: function, end: func
 | payload | [JSONRPCRequestPayload](#_provider_src_index_.jsonrpcrequestpayload)   |  - |
 | next | `function`   |  - |
 | end | `function`   |  - |
+
+
 
 
 
