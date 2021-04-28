@@ -10,6 +10,7 @@
     "paths": {
       "bitski": ["packages/browser"],
       "bitski-provider": ["packages/provider"]
-    }
+    },
+    "baseUrl": "."
   }
 }
