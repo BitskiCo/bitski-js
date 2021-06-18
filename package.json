@@ -18,7 +18,7 @@
     "jest": "^25.1.0",
     "jest-fetch-mock": "^2.1.2",
     "jest-junit": "^6.4.0",
-    "lerna": "^3.18.3",
+    "lerna": "^4.0.0",
     "ts-jest": "^23.10.0",
     "tslint": "^5.20.0",
     "typedoc": "^0.15.0",
