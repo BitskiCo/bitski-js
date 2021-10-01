@@ -114,25 +114,17 @@ export class BitskiTransactionSigner {
       'Authorization': `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     });
-    return new Promise((resolve, reject) => {
-      retry({times: 5}, () => {
-        return fetch(`${this.apiBaseUrl}/transactions`, {
-          method: 'POST',
-          body: JSON.stringify(requestBody),
-          headers,
-        }).then((response) => {
-          return parseResponse<JSONTransactionObject>(response);
-        });
-      }, (error, result) => {
-        if (error) {
-          reject(error);
-        }
-
-        if (result) {
-          resolve(result);
-        }
+    const parsed = await retry({ times: 5 }, async () => {
+      const response = await fetch(`${this.apiBaseUrl}/transactions`, {
+        method: 'POST',
+        body: JSON.stringify(requestBody),
+        headers,
       });
+
+      return parseResponse(response);
     });
+
+    return parsed;
   }
 
   /**
