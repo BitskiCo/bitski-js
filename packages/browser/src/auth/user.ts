@@ -35,7 +35,15 @@ export class User {
   public phoneNumberVerified?: boolean;
   public preferredUsername?: string;
 
-  constructor(id: string, accounts?: string[], email?: string, emailVerified?: boolean, phone?: string, phoneNumberVerified?: boolean, preferredUsername?: string) {
+  constructor(
+    id: string,
+    accounts?: string[],
+    email?: string,
+    emailVerified?: boolean,
+    phone?: string,
+    phoneNumberVerified?: boolean,
+    preferredUsername?: string,
+  ) {
     this.id = id;
     this.accounts = accounts;
     this.email = email;
