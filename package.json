@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "test": "jest --coverage --verbose",
+    "test": "lerna run test",
     "version": "npm run docs && git add --all",
     "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit",
     "build": "lerna run build",
@@ -25,5 +25,9 @@
     "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
     "typescript": "^3.6.4"
   },
-  "name": "bitski-js"
+  "name": "bitski-js",
+  "volta": {
+    "node": "14.17.5",
+    "npm": "7.24.2"
+  }
 }

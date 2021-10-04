@@ -13,9 +13,9 @@ export class AuthenticatedCacheSubprovider extends Subprovider {
         super();
         this.authProvider = authProvider;
         this.cachedValues = new Map<string, any>();
-	if (engine) {
-	  engine.on('signOut', () => this.cachedValues.clear());
-	}
+        if (engine) {
+          engine.on('signOut', () => this.cachedValues.clear());
+        }
     }
 
     public handleRequest(payload, next, end) {

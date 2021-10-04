@@ -1,5 +1,5 @@
 import { TokenResponse } from '@openid/appauth';
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, ID_TOKEN_KEY } from '../constants';
+import { ACCESS_TOKEN_KEY, ID_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants';
 import { LocalStorageStore } from '../utils/localstorage-store';
 import { Store } from '../utils/store';
 import { AccessToken } from './access-token';
