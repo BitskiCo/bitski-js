@@ -50,7 +50,7 @@ function parseBitWidth(type: string, offset: number): number {
  * @param compact boolean (default false). Whether to use compact encoding for uints, or pad with zeroes.
  * @returns {string} A hex string formatted as the specified type.
  */
-export function encodeNumber(num: string | number | BN, type: string, compact: boolean = false): string {
+export function encodeNumber(num: string | number | BN, type: string, compact = false): string {
   if (type.startsWith('uint')) {
     const size = parseBitWidth(type, 4); // start after 'uint'
     const length = size / 4; // length in characters for the string. hex is 1 character for 4 bits.

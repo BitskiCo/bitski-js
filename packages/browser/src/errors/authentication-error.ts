@@ -1,4 +1,3 @@
-
 export enum AuthenticationErrorCode {
   // The user is not currently signed in
   NotSignedIn = 1000,
@@ -20,7 +19,6 @@ export enum AuthenticationErrorCode {
  * Represents an error that is thrown during the authentication process
  */
 export class AuthenticationError extends Error {
-
   // throw AuthenticationError.NotSignedIn()
   public static NotSignedIn() {
     return new AuthenticationError('Not signed in.', AuthenticationErrorCode.NotSignedIn);
@@ -28,17 +26,26 @@ export class AuthenticationError extends Error {
 
   // throw AuthenticationError.UserCancelled()
   public static UserCancelled() {
-    return new AuthenticationError('Sign in request was cancelled.', AuthenticationErrorCode.UserCancelled);
+    return new AuthenticationError(
+      'Sign in request was cancelled.',
+      AuthenticationErrorCode.UserCancelled,
+    );
   }
 
   // throw AuthenticationError.NoRefreshToken()
   public static NoRefreshToken() {
-    return new AuthenticationError('Refresh token is not available.', AuthenticationErrorCode.NoRefreshToken);
+    return new AuthenticationError(
+      'Refresh token is not available.',
+      AuthenticationErrorCode.NoRefreshToken,
+    );
   }
 
   // throw AuthenticationError.UnsupportedAuthenticationMethod()
   public static UnsupportedAuthenticationMethod() {
-    return new AuthenticationError('Sign in method not supported.', AuthenticationErrorCode.UnsupportedAuthenticationMethod);
+    return new AuthenticationError(
+      'Sign in method not supported.',
+      AuthenticationErrorCode.UnsupportedAuthenticationMethod,
+    );
   }
 
   // throw AuthenticationError.PopupBlocked()
@@ -49,14 +56,20 @@ export class AuthenticationError extends Error {
 
   // throw Authentication Error.ServerError(message, description)
   public static ServerError(message: string, description?: string) {
-    const err = new AuthenticationError(`Error from the server: ${message}`, AuthenticationErrorCode.ServerError);
+    const err = new AuthenticationError(
+      `Error from the server: ${message}`,
+      AuthenticationErrorCode.ServerError,
+    );
     err.description = description;
     return err;
   }
 
   // throw AuthenticationError.InvalidConfiguration()
   public static InvalidConfiguration(reason: string) {
-    return new AuthenticationError(`The OAuth Configuration is invalid: ${reason}`, AuthenticationErrorCode.InvalidConfiguration);
+    return new AuthenticationError(
+      `The OAuth Configuration is invalid: ${reason}`,
+      AuthenticationErrorCode.InvalidConfiguration,
+    );
   }
 
   public name = 'AuthenticationError';

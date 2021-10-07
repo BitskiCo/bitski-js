@@ -1,5 +1,10 @@
 import { ProviderError, ProviderErrorCode } from '../src/errors/provider-error';
-import { createTypeMapping, sanitizeDomain, sanitizeMessage, TypedDataSanitizerSubprovider } from '../src/subproviders/typed-data';
+import {
+  createTypeMapping,
+  sanitizeDomain,
+  sanitizeMessage,
+  TypedDataSanitizerSubprovider,
+} from '../src/subproviders/typed-data';
 
 describe('creating a mapping schema', () => {
   test('Can create a simple schema', () => {
@@ -46,9 +51,7 @@ describe('creating a mapping schema', () => {
           { name: 'title', type: 'string' },
           { name: 'value', type: 'TestNestedStruct' },
         ],
-        TestNestedStruct: [
-          { name: 'name', type: 'string' },
-        ],
+        TestNestedStruct: [{ name: 'name', type: 'string' }],
       },
       domain: {
         name: 'Test Domain',
@@ -86,11 +89,10 @@ describe('creating a mapping schema', () => {
       },
     };
     try {
-      // @ts-ignore
       createTypeMapping(typedData);
     } catch (error) {
       expect(error).toBeInstanceOf(ProviderError);
-      expect(error.code).toBe(ProviderErrorCode.InvalidRequest);
+      expect((error as ProviderError).code).toBe(ProviderErrorCode.InvalidRequest);
     }
   });
 });
@@ -108,9 +110,7 @@ describe('sanitizing the domain object', () => {
           { name: 'title', type: 'string' },
           { name: 'value', type: 'TestNestedStruct' },
         ],
-        TestNestedStruct: [
-          { name: 'name', type: 'string' },
-        ],
+        TestNestedStruct: [{ name: 'name', type: 'string' }],
       },
       domain: {
         name: 'Test Domain',
@@ -143,15 +143,12 @@ describe('sanitizing the domain object', () => {
           { name: 'title', type: 'string' },
           { name: 'value', type: 'TestNestedStruct' },
         ],
-        TestNestedStruct: [
-          { name: 'name', type: 'string' },
-        ],
+        TestNestedStruct: [{ name: 'name', type: 'string' }],
       },
     };
     const mapping = {};
 
     try {
-      // @ts-ignore
       sanitizeDomain(noDomainObject, mapping);
     } catch (error) {
       expect(error).toBeInstanceOf(ProviderError);
@@ -177,7 +174,6 @@ describe('sanitizing the domain object', () => {
       },
     };
     try {
-      // @ts-ignore
       sanitizeDomain(noDomainTypeObject, mapping);
     } catch (error) {
       expect(error).toBeInstanceOf(ProviderError);
@@ -187,7 +183,6 @@ describe('sanitizing the domain object', () => {
 });
 
 describe('sanitizing the message object', () => {
-
   test('it sanitizes numbers in message into hex strings', () => {
     expect(2);
     const typedData = {
@@ -198,12 +193,10 @@ describe('sanitizing the message object', () => {
         ],
         TestStruct: [
           { name: 'title', type: 'string' },
-          { name: 'favNumber', type: 'int16'},
+          { name: 'favNumber', type: 'int16' },
           { name: 'value', type: 'TestNestedStruct' },
         ],
-        TestNestedStruct: [
-          { name: 'name', type: 'string' },
-        ],
+        TestNestedStruct: [{ name: 'name', type: 'string' }],
       },
       domain: {
         name: 'Test Domain',
@@ -236,9 +229,7 @@ describe('sanitizing the message object', () => {
           { name: 'title', type: 'string' },
           { name: 'value', type: 'TestNestedStruct' },
         ],
-        TestNestedStruct: [
-          { name: 'favNumber', type: 'uint16'},
-        ],
+        TestNestedStruct: [{ name: 'favNumber', type: 'uint16' }],
       },
       domain: {
         name: 'Test Domain',
@@ -270,9 +261,7 @@ describe('sanitizing the message object', () => {
           { name: 'title', type: 'string' },
           { name: 'value', type: 'TestNestedStruct[]' },
         ],
-        TestNestedStruct: [
-          { name: 'favNumber', type: 'uint16'},
-        ],
+        TestNestedStruct: [{ name: 'favNumber', type: 'uint16' }],
       },
       domain: {
         name: 'Test Domain',
@@ -355,7 +344,6 @@ describe('sanitizing the message object', () => {
     };
 
     try {
-      // @ts-ignore
       sanitizeMessage(noMessageData, mapping);
     } catch (error) {
       expect(error).toBeInstanceOf(ProviderError);
@@ -384,7 +372,6 @@ describe('sanitizing the message object', () => {
       },
     };
     try {
-      // @ts-ignore
       sanitizeMessage(noPrimaryTypeData, mapping);
     } catch (error) {
       expect(error).toBeInstanceOf(ProviderError);
@@ -394,14 +381,12 @@ describe('sanitizing the message object', () => {
 });
 
 describe('handling JSON-RPC requests', () => {
-
   const provider = new TypedDataSanitizerSubprovider();
 
   test('it ignores requests that are not for typed data', () => {
     const payload = { jsonrpc: '2.0', id: 0, method: 'eth_blockNumber', params: [] };
     const next = jest.fn();
     const end = jest.fn();
-    // @ts-ignore
     const spy = jest.spyOn(provider, 'sanitizePayload');
     provider.handleRequest(payload, next, end);
     expect(next).toBeCalled();
@@ -431,10 +416,14 @@ describe('handling JSON-RPC requests', () => {
         value: 42,
       },
     };
-    const payload = { jsonrpc: '2.0', id: 0, method: 'eth_signTypedData', params: ['0xf00', typedData] };
+    const payload = {
+      jsonrpc: '2.0',
+      id: 0,
+      method: 'eth_signTypedData',
+      params: ['0xf00', typedData],
+    };
     const next = jest.fn();
     const end = jest.fn();
-    // @ts-ignore
     const spy = jest.spyOn(provider, 'sanitizePayload');
     provider.handleRequest(payload, next, end);
     expect(next).toBeCalled();
@@ -465,10 +454,14 @@ describe('handling JSON-RPC requests', () => {
         value: 42,
       },
     };
-    const payload = { jsonrpc: '2.0', id: 0, method: 'eth_signTypedData_v3', params: ['0xf00', typedData] };
+    const payload = {
+      jsonrpc: '2.0',
+      id: 0,
+      method: 'eth_signTypedData_v3',
+      params: ['0xf00', typedData],
+    };
     const next = jest.fn();
     const end = jest.fn();
-    // @ts-ignore
     const spy = jest.spyOn(provider, 'sanitizePayload');
     provider.handleRequest(payload, next, end);
     expect(next).toBeCalled();
@@ -499,16 +492,19 @@ describe('handling JSON-RPC requests', () => {
         value: 42,
       },
     };
-    const payload = { jsonrpc: '2.0', id: 0, method: 'eth_signTypedData', params: ['0xf00', JSON.stringify(typedData)] };
+    const payload = {
+      jsonrpc: '2.0',
+      id: 0,
+      method: 'eth_signTypedData',
+      params: ['0xf00', JSON.stringify(typedData)],
+    };
     const next = jest.fn();
     const end = jest.fn();
-    // @ts-ignore
     const spy = jest.spyOn(provider, 'sanitizePayload');
     provider.handleRequest(payload, next, end);
     expect(next).toBeCalled();
     expect(end).not.toBeCalled();
     expect(spy).toBeCalled();
-    // @ts-ignore
     expect(payload.params[1].message.value).toBe('0x2a');
   });
 
@@ -516,7 +512,6 @@ describe('handling JSON-RPC requests', () => {
     const payload = { jsonrpc: '2.0', id: 0, method: 'eth_signTypedData_v3', params: ['0xf00'] };
     const next = jest.fn();
     const end = jest.fn();
-    // @ts-ignore
     const spy = jest.spyOn(provider, 'sanitizePayload');
     provider.handleRequest(payload, next, end);
     expect(next).not.toBeCalled();

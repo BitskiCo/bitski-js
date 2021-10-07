@@ -33,7 +33,12 @@ export class BitskiTransactionSigner {
   // Cache of the current request's callbacks
   private currentRequest?: [(signed: any) => void, (error: Error) => void];
 
-  constructor(webBaseUrl: string, apiBaseUrl: string, defaultHeaders: any, callbackURL: string | undefined) {
+  constructor(
+    webBaseUrl: string,
+    apiBaseUrl: string,
+    defaultHeaders: any,
+    callbackURL: string | undefined,
+  ) {
     this.webBaseUrl = webBaseUrl;
     this.apiBaseUrl = apiBaseUrl;
     this.defaultHeaders = defaultHeaders;
@@ -51,7 +56,7 @@ export class BitskiTransactionSigner {
     }
 
     this.submitTransaction(transaction, accessToken).catch((error) => {
-      return this.handleCallback({error});
+      return this.handleCallback({ error });
     });
 
     // Show the modal (await response)
@@ -108,10 +113,13 @@ export class BitskiTransactionSigner {
    * @param transaction The Transaction object to submit
    * @param accessToken The current user's access token
    */
-  protected async submitTransaction(transaction: Transaction, accessToken: string): Promise<JSONTransactionObject> {
+  protected async submitTransaction(
+    transaction: Transaction,
+    accessToken: string,
+  ): Promise<JSONTransactionObject> {
     const requestBody = { transaction };
     const headers = Object.assign({}, this.defaultHeaders, {
-      'Authorization': `Bearer ${accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     });
     const parsed = await retry({ times: 5 }, async () => {

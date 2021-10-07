@@ -12,7 +12,6 @@ function createAuthProvider(): OpenidAuthProvider {
 }
 
 describe('authorization handler', () => {
-
   test('it ignores methods outside of scope', (done) => {
     const authProvider = createAuthProvider();
     const provider = new AuthenticatedCacheSubprovider(authProvider);
@@ -50,7 +49,6 @@ describe('authorization handler', () => {
       params: [],
     };
 
-    // @ts-ignore
     jest.spyOn(provider, 'checkCachedValues').mockResolvedValue(undefined);
 
     const next = () => {
@@ -97,7 +95,6 @@ describe('authorization handler', () => {
     const authProvider = createAuthProvider();
 
     const provider = new AuthenticatedCacheSubprovider(authProvider);
-    // @ts-ignore
     provider.cachedValues.set('eth_accounts', ['1234']);
 
     const payload = {
@@ -211,7 +208,9 @@ describe('authorization handler', () => {
     const authProvider = createAuthProvider();
 
     // getUser will return user with no accounts value
-    const getUserSpy = jest.spyOn(authProvider, 'getUser').mockRejectedValue(new Error('Unauthorized'));
+    const getUserSpy = jest
+      .spyOn(authProvider, 'getUser')
+      .mockRejectedValue(new Error('Unauthorized'));
 
     const provider = new AuthenticatedCacheSubprovider(authProvider);
 
@@ -233,5 +232,4 @@ describe('authorization handler', () => {
 
     provider.handleRequest(payload, next, end);
   });
-
 });

@@ -6,7 +6,6 @@ function createEngine() {
   const engine = new Web3ProviderEngine();
   const provider = new NonceTrackerSubprovider();
   engine.addProvider(provider);
-  // @ts-ignore
   engine._ready.go();
   return { engine, provider };
 }
@@ -14,9 +13,11 @@ function createEngine() {
 test('it forwards requests when cache is empty', (done) => {
   const { engine, provider } = createEngine();
 
-  engine.addProvider(new FixtureSubprovider({
-    eth_getTransactionCount: '0x0',
-  }));
+  engine.addProvider(
+    new FixtureSubprovider({
+      eth_getTransactionCount: '0x0',
+    }),
+  );
 
   const request = {
     id: 1,
@@ -56,9 +57,11 @@ test('it responds from cache when cache is present', (done) => {
 test('it updates nonce when transaction is successful', (done) => {
   const { engine, provider } = createEngine();
 
-  engine.addProvider(new FixtureSubprovider({
-    eth_sendTransaction: '0xf00',
-  }));
+  engine.addProvider(
+    new FixtureSubprovider({
+      eth_sendTransaction: '0xf00',
+    }),
+  );
 
   provider.nonceCache.set('0xf00', '0x00');
 
@@ -66,11 +69,13 @@ test('it updates nonce when transaction is successful', (done) => {
     id: 1,
     jsonrpc: '2.0',
     method: 'eth_sendTransaction',
-    params: [{
-      amount: '0x0',
-      from: '0xf00',
-      nonce: '0x01',
-    }],
+    params: [
+      {
+        amount: '0x0',
+        from: '0xf00',
+        nonce: '0x01',
+      },
+    ],
   };
 
   engine.sendAsync(request, (err, result) => {
@@ -83,9 +88,11 @@ test('it updates nonce when transaction is successful', (done) => {
 test('it ignores irrellevant requests', (done) => {
   const { engine, provider } = createEngine();
 
-  engine.addProvider(new FixtureSubprovider({
-    eth_accounts: [],
-  }));
+  engine.addProvider(
+    new FixtureSubprovider({
+      eth_accounts: [],
+    }),
+  );
 
   const request = {
     id: 1,
@@ -99,5 +106,4 @@ test('it ignores irrellevant requests', (done) => {
     expect(result.result).toEqual([]);
     done();
   });
-
 });

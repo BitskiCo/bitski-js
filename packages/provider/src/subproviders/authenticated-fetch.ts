@@ -10,9 +10,14 @@ import { ServerError } from '../errors/server-error';
 export class AuthenticatedFetchSubprovider extends FetchSubprovider {
   protected authenticatedMethods: string[];
   protected accessTokenProvider: AccessTokenProvider;
-  protected defaultHeaders: object;
+  protected defaultHeaders: Record<string, unknown>;
 
-  constructor(rpcUrl: string, debug: boolean, accessTokenProvider: AccessTokenProvider, defaultHeaders: object = {}) {
+  constructor(
+    rpcUrl: string,
+    debug: boolean,
+    accessTokenProvider: AccessTokenProvider,
+    defaultHeaders: Record<string, unknown> = {},
+  ) {
     super({ rpcUrl });
     this.authenticatedMethods = AUTHENTICATED_METHODS;
     this.accessTokenProvider = accessTokenProvider;
@@ -28,12 +33,15 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
   }
 
   public handleAuthenticatedRequest(payload, next, end) {
-    this.accessTokenProvider.getAccessToken().then((accessToken) => {
-      const parameters = this.generateParameters(payload, accessToken);
-      return this.sendRequest(parameters, next, end);
-    }).catch((error) => {
-      end(error);
-    });
+    this.accessTokenProvider
+      .getAccessToken()
+      .then((accessToken) => {
+        const parameters = this.generateParameters(payload, accessToken);
+        return this.sendRequest(parameters, next, end);
+      })
+      .catch((error) => {
+        end(error);
+      });
   }
 
   public handleUnauthenticatedRequest(payload, next, end) {
@@ -45,14 +53,14 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     return this.authenticatedMethods.some((method) => method === payload.method);
   }
 
-  protected generateParameters(payload, accessToken?: string): object {
+  protected generateParameters(payload, accessToken?: string): Record<string, unknown> {
     // overwrite id to not conflict with other concurrent users
     const newPayload = this.createPayload(payload);
     // remove extra parameter from request
     delete newPayload.origin;
 
     let headers: any = {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     };
 
@@ -76,27 +84,29 @@ export class AuthenticatedFetchSubprovider extends FetchSubprovider {
     return requestParameters;
   }
 
-  protected sendRequest(parameters: object, next, end) {
-    retry({
-      errorFilter: this.isErrorRetriable,
-      interval: 1000,
-      times: 5,
-    },
-    (cb) => this._submitRequest(parameters, cb),
-    (err, result) => {
-      // ends on retriable error
-      if (err && this.isErrorRetriable(err)) {
-        const retriesExhaustedErr = new ServerError(err.message, 200, this.rpcUrl, true);
-        return end(retriesExhaustedErr);
-      }
-      if (err && this.isUnauthorizedError(err)) {
-        return this.accessTokenProvider.invalidateToken().then(() => {
-          return end(err);
-        });
-      }
-      // otherwise continue normally
-      return end(err, result);
-    });
+  protected sendRequest(parameters: Record<string, unknown>, next, end) {
+    retry(
+      {
+        errorFilter: this.isErrorRetriable,
+        interval: 1000,
+        times: 5,
+      },
+      (cb) => this._submitRequest(parameters, cb),
+      (err, result) => {
+        // ends on retriable error
+        if (err && this.isErrorRetriable(err)) {
+          const retriesExhaustedErr = new ServerError(err.message, 200, this.rpcUrl, true);
+          return end(retriesExhaustedErr);
+        }
+        if (err && this.isUnauthorizedError(err)) {
+          return this.accessTokenProvider.invalidateToken().then(() => {
+            return end(err);
+          });
+        }
+        // otherwise continue normally
+        return end(err, result);
+      },
+    );
   }
 
   private isErrorRetriable(err) {

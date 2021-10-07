@@ -87,22 +87,28 @@ export class ConnectButton {
   }
 
   private signin() {
-    this.authProvider.signInOrConnect(this.authIntegrationType, this.signInOptions).then((user) => {
-      if (this.callback) {
-        this.callback(undefined, user);
-      }
-    }).catch((error: Error) => {
-      // Check for cancellation
-      if (error instanceof AuthenticationError && error.code === AuthenticationErrorCode.UserCancelled) {
-        // Not a real error, the user just cancelled. Trigger cancellation callback.
-        if (this.onCancel) {
-          this.onCancel();
+    this.authProvider
+      .signInOrConnect(this.authIntegrationType, this.signInOptions)
+      .then((user) => {
+        if (this.callback) {
+          this.callback(undefined, user);
         }
-      } else if (this.callback) {
-        // Real error. Forward to main callback.
-        this.callback(error, undefined);
-      }
-    });
+      })
+      .catch((error: Error) => {
+        // Check for cancellation
+        if (
+          error instanceof AuthenticationError &&
+          error.code === AuthenticationErrorCode.UserCancelled
+        ) {
+          // Not a real error, the user just cancelled. Trigger cancellation callback.
+          if (this.onCancel) {
+            this.onCancel();
+          }
+        } else if (this.callback) {
+          // Real error. Forward to main callback.
+          this.callback(error, undefined);
+        }
+      });
   }
 
   private configureElement() {

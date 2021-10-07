@@ -1,4 +1,9 @@
-import { CompletionHandler, JSONRPCRequest, NextHandler, Subprovider } from '@bitski/provider-engine';
+import {
+  CompletionHandler,
+  JSONRPCRequest,
+  NextHandler,
+  Subprovider,
+} from '@bitski/provider-engine';
 import asyncify from 'async/asyncify';
 import retry from 'async/retry';
 import waterfall from 'async/waterfall';
@@ -19,14 +24,13 @@ const MATCHING_METHODS = ['eth_getBlockByNumber', 'eth_blockNumber', 'net_Versio
 
 export interface RestFetchSubproviderOptions {
   rpcUrl: string;
-  defaultHeaders?: object;
+  defaultHeaders?: Record<string, unknown>;
   originHttpHeaderKey?: string;
 }
 
 export class RestFetchSubprovider extends Subprovider {
-
   protected rpcUrl: string;
-  protected defaultHeaders?: object;
+  protected defaultHeaders?: Record<string, unknown>;
   protected originHttpHeaderKey?: string;
 
   constructor(opts: RestFetchSubproviderOptions) {
@@ -47,16 +51,22 @@ export class RestFetchSubprovider extends Subprovider {
   protected handleRestRequest(payload: JSONRPCRequest, end: CompletionHandler): void {
     const originDomain = payload.origin;
 
-    const query = payload.params.length > 0 ? `?params=${encodeURIComponent(JSON.stringify(payload.params))}` : '';
+    const query =
+      payload.params.length > 0
+        ? `?params=${encodeURIComponent(JSON.stringify(payload.params))}`
+        : '';
 
     const url = `${this.rpcUrl}/${payload.method}${query}`;
 
     const reqParams = {
       method: 'GET',
-      headers: Object.assign({
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }, this.defaultHeaders),
+      headers: Object.assign(
+        {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        this.defaultHeaders,
+      ),
       credentials: 'omit',
     };
 
@@ -64,38 +74,44 @@ export class RestFetchSubprovider extends Subprovider {
       reqParams.headers[this.originHttpHeaderKey] = originDomain;
     }
 
-    retry({
-      times: 5,
-      interval: 1000,
-      errorFilter: isErrorRetriable,
-    },
-    (cb) => this._submitRequest(url, reqParams, cb),
-    (err, result) => {
-      // ends on retriable error
-      if (err && isErrorRetriable(err)) {
-        const errMsg =
-          `FetchSubprovider - cannot complete request. All retries exhausted.\nOriginal Error:\n${err.toString()}\n\n`;
-        const retriesExhaustedErr = new Error(errMsg);
-        return end(retriesExhaustedErr);
-      }
-      // otherwise continue normally
-      return end(err, result);
-    });
+    retry(
+      {
+        times: 5,
+        interval: 1000,
+        errorFilter: isErrorRetriable,
+      },
+      (cb) => this._submitRequest(url, reqParams, cb),
+      (err, result) => {
+        // ends on retriable error
+        if (err && isErrorRetriable(err)) {
+          const errMsg = `FetchSubprovider - cannot complete request. All retries exhausted.\nOriginal Error:\n${err.toString()}\n\n`;
+          const retriesExhaustedErr = new Error(errMsg);
+          return end(retriesExhaustedErr);
+        }
+        // otherwise continue normally
+        return end(err, result);
+      },
+    );
   }
 
   protected _submitRequest(targetUrl, reqParams, done) {
     promiseToCallback(fetch(targetUrl, reqParams))((err, res) => {
-      if (err) { return done(err); }
+      if (err) {
+        return done(err);
+      }
 
       // continue parsing result
-      waterfall([
-        checkForHttpErrors,
-        // buffer body
-        (cb) => promiseToCallback(res.text())(cb),
-        // parse body
-        asyncify((rawBody) => JSON.parse(rawBody)),
-        parseResponse,
-      ], done);
+      waterfall(
+        [
+          checkForHttpErrors,
+          // buffer body
+          (cb) => promiseToCallback(res.text())(cb),
+          // parse body
+          asyncify((rawBody) => JSON.parse(rawBody)),
+          parseResponse,
+        ],
+        done,
+      );
 
       function checkForHttpErrors(cb) {
         // check for errors
@@ -124,7 +140,6 @@ export class RestFetchSubprovider extends Subprovider {
       }
     });
   }
-
 }
 
 function isErrorRetriable(err) {

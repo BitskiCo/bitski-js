@@ -15,7 +15,7 @@ export class ServerError extends Error {
   // The request URI
   public requestURI: string;
 
-  constructor(message: string, code: number, requestURI: string, retried: boolean = false) {
+  constructor(message: string, code: number, requestURI: string, retried = false) {
     super(message);
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {

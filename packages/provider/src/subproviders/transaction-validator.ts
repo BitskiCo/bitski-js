@@ -16,13 +16,15 @@ export class TransactionValidatorSubprovider extends Subprovider {
   public handleRequest(payload, next, _) {
     // Only handle transactions
     if (payload.method === 'eth_sendTransaction' || payload.method === 'eth_signTransaction') {
-      this.populateTransactionFields(payload).then(() => {
-        // Payload was modified. Continue.
-        next();
-      }).catch(() => {
-        // Fall through if we cannot populate fields
-        next();
-      });
+      this.populateTransactionFields(payload)
+        .then(() => {
+          // Payload was modified. Continue.
+          next();
+        })
+        .catch(() => {
+          // Fall through if we cannot populate fields
+          next();
+        });
     } else {
       next();
     }

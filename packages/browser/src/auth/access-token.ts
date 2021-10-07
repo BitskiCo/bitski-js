@@ -3,7 +3,6 @@ import { TokenResponse } from '@openid/appauth';
  * Represents a Bitski access token
  */
 export class AccessToken {
-
   /**
    * Creates a token from a TokenResponse object
    * @param tokenResponse The token response object to build a token from
@@ -82,5 +81,4 @@ export class AccessToken {
       token: this.token,
     });
   }
-
 }

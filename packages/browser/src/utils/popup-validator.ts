@@ -26,12 +26,12 @@ export class PopupValidator {
         };
       }
     } else {
-        this.handleBlocked();
+      this.handleBlocked();
     }
   }
 
   protected isPopupBlocked(popup: Window) {
-    if ((popup.innerHeight > 0) === false) {
+    if (popup.innerHeight > 0 === false) {
       this.handleBlocked();
     }
   }

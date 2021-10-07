@@ -8,11 +8,17 @@ function createInstance() {
   return new MockOAuthManager({ clientId: 'test-client-id', redirectUri: 'http://localhost:3000' });
 }
 
-beforeEach(() => {
-  // @ts-ignore
-  fetch.resetMocks();
-  jest.resetAllMocks();
-  jest.restoreAllMocks();
+const { location } = window;
+
+beforeAll((): void => {
+  delete window.location;
+  window.location = {
+    href: '',
+  };
+});
+
+afterAll((): void => {
+  window.location = location;
 });
 
 test('sign in redirect performs redirect', (done) => {
@@ -32,11 +38,9 @@ test('sign in redirect performs redirect', (done) => {
 
     // Delete window location and assign a mock with the expected end state
     delete window.location;
-    // @ts-ignore
     window.location = { search: `?code=foo&state=${parsed.state}` };
 
     // Mock API request for token
-    // @ts-ignore
     fetch.mockResponseOnce(JSON.stringify({ access_token: 'test-token' }));
 
     // Call the callback (which will look at window.location.search)
@@ -65,11 +69,8 @@ test('sign in popup opens popup', () => {
     const location = document.createElement('a');
     location.href = `http://localhost:3000/callback?code=foo&state=${manager.authHandler.pendingRequest.state}`;
     // Call the callback to trigger the completion handler
-    // @ts-ignore
     manager.authHandler.callback.call(manager.authHandler, location);
   });
-
-  // @ts-ignore
   fetch.mockResponseOnce(JSON.stringify({ access_token: 'test-token' }));
 
   return manager.signInPopup().then((tokenResponse) => {
@@ -112,10 +113,8 @@ test('can handle oauth error response', () => {
     expect(url).toMatch(manager.configuration.authorizationEndpoint);
     // Hack to create an object that is similar to Location in JSDom
     const location = document.createElement('a');
-    location.href =
-      `http://localhost:3000/callback?error=womp%20womp&error_description=better%20luck%20next%20time&state=${manager.currentAuthRequest.state}`;
+    location.href = `http://localhost:3000/callback?error=womp%20womp&error_description=better%20luck%20next%20time&state=${manager.currentAuthRequest.state}`;
     // Call the callback to trigger the completion handler
-    // @ts-ignore
     manager.authHandler.callback.call(manager.authHandler, location);
     return {
       onload: jest.fn(),
@@ -152,8 +151,6 @@ test('rejects with an error if the popup is blocked', (done) => {
 test('it submits refresh token requests', () => {
   expect.assertions(1);
   const manager = createInstance();
-
-  // @ts-ignore
   fetch.mockResponseOnce(JSON.stringify({ access_token: 'refreshed-token' }));
 
   return manager.refreshAccessToken('old-token').then((tokenResponse) => {
@@ -164,8 +161,6 @@ test('it submits refresh token requests', () => {
 test('it submits sign out requests', () => {
   expect.assertions(1);
   const manager = createInstance();
-
-  // @ts-ignore
   fetch.mockResponseOnce(JSON.stringify({}));
 
   return manager.requestSignOut('old-token').then((response) => {
@@ -176,8 +171,6 @@ test('it submits sign out requests', () => {
 test('it submits user info requests', () => {
   expect.assertions(1);
   const manager = createInstance();
-
-  // @ts-ignore
   fetch.mockResponseOnce(JSON.stringify({ sub: 'test-user' }));
 
   return manager.requestUserInfo('test-token').then((userInfo) => {
@@ -193,7 +186,6 @@ test('it parses error messages returned by api', () => {
       message: 'Oops!',
     },
   };
-  // @ts-ignore
   fetch.mockResponseOnce(JSON.stringify(errorResponse), { status: 400 });
 
   return manager.requestUserInfo('test-token').catch((error) => {
@@ -209,7 +201,6 @@ test('it parses poorly formed error messages returned by api', () => {
   const errorResponse = {
     error: 'Oops!',
   };
-  // @ts-ignore
   fetch.mockResponseOnce(JSON.stringify(errorResponse), { status: 500 });
 
   return manager.requestUserInfo('test-token').catch((error) => {

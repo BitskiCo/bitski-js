@@ -1,31 +1,10 @@
 {
+  "name": "bitski-js",
   "private": true,
   "workspaces": [
     "packages/browser",
     "packages/provider"
   ],
-  "scripts": {
-    "postinstall": "lerna bootstrap",
-    "test": "lerna run test",
-    "version": "npm run docs && git add --all",
-    "test:ci": "jest --coverage --ci --reporters=default --reporters=jest-junit",
-    "build": "lerna run build",
-    "lint": "tslint 'packages/*/src/**/*.ts'",
-    "lint:tests": "tslint 'packages/*/tests/**/*.ts'",
-    "docs": "typedoc --options ./typedoc.js"
-  },
-  "devDependencies": {
-    "jest": "^25.1.0",
-    "jest-fetch-mock": "^2.1.2",
-    "jest-junit": "^6.4.0",
-    "lerna": "^4.0.0",
-    "ts-jest": "^23.10.0",
-    "tslint": "^5.20.0",
-    "typedoc": "^0.15.0",
-    "typedoc-plugin-markdown": "github:OutThereLabs/typedoc-plugin-markdown",
-    "typescript": "^3.6.4"
-  },
-  "name": "bitski-js",
   "volta": {
     "node": "14.17.5",
     "npm": "7.24.2"

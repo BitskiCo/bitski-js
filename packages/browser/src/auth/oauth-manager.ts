@@ -14,7 +14,12 @@ import {
   TokenRequestHandler,
   TokenResponse,
 } from '@openid/appauth';
-import { BITSKI_USER_API_HOST, DEFAULT_OAUTH_CONFIGURATION, DEFAULT_OPTIONAL_SCOPES, DEFAULT_SCOPES } from '../constants';
+import {
+  BITSKI_USER_API_HOST,
+  DEFAULT_OAUTH_CONFIGURATION,
+  DEFAULT_OPTIONAL_SCOPES,
+  DEFAULT_SCOPES,
+} from '../constants';
 import { AuthenticationError } from '../errors/authentication-error';
 import { NoHashQueryStringUtils } from '../utils/no-hash-query-string-utils';
 import { parseResponse } from '../utils/request-utils';
@@ -39,7 +44,6 @@ export const LOGIN_HINT_SIGNUP = 'signup';
  * Responsible for submitting requests to our OAuth server.
  */
 export class OAuthManager {
-
   // Represents the oauth endpoints and settings
   public configuration: AuthorizationServiceConfiguration;
 
@@ -48,7 +52,10 @@ export class OAuthManager {
   protected tokenHandler: TokenRequestHandler;
   protected notifier: AuthorizationNotifier;
   protected authHandler?: AuthorizationRequestHandler;
-  protected pendingResolver?: { fulfill: (value: AuthorizationResponse) => void, reject: (error: Error) => void };
+  protected pendingResolver?: {
+    fulfill: (value: AuthorizationResponse) => void;
+    reject: (error: Error) => void;
+  };
   protected scopes: string[];
 
   /**
@@ -63,7 +70,8 @@ export class OAuthManager {
   constructor(options: OAuthManagerOptions) {
     this.clientId = options.clientId;
     this.redirectUri = options.redirectUri;
-    this.configuration = options.configuration || new AuthorizationServiceConfiguration(DEFAULT_OAUTH_CONFIGURATION);
+    this.configuration =
+      options.configuration || new AuthorizationServiceConfiguration(DEFAULT_OAUTH_CONFIGURATION);
     const additionalScopes = options.additionalScopes || DEFAULT_OPTIONAL_SCOPES;
     this.scopes = DEFAULT_SCOPES.concat(additionalScopes);
     this.tokenHandler = new BaseTokenRequestHandler(new FetchRequestor());
@@ -145,14 +153,14 @@ export class OAuthManager {
    */
   public requestSignOut(accessToken: string): Promise<any> {
     return fetch(`${BITSKI_USER_API_HOST}/logout`, {
-        headers: {
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-        },
-        method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
     }).then((response) => {
-        return parseResponse<any>(response);
+      return parseResponse<any>(response);
     });
   }
 
@@ -163,7 +171,9 @@ export class OAuthManager {
   public requestUserInfo(accessToken: string): Promise<UserInfoResponse> {
     const userInfoEndpoint = this.configuration.userInfoEndpoint;
     if (!userInfoEndpoint) {
-      return Promise.reject(AuthenticationError.InvalidConfiguration('Could not find user info endpoint'));
+      return Promise.reject(
+        AuthenticationError.InvalidConfiguration('Could not find user info endpoint'),
+      );
     }
     return fetch(userInfoEndpoint, {
       headers: {
@@ -181,7 +191,11 @@ export class OAuthManager {
    * @param response The auth response if it was successful
    * @param errorResponse The error response if it failed
    */
-  protected didCompleteAuthorizationFlow(request: AuthorizationRequest, response: AuthorizationResponse | null, errorResponse: AuthorizationError | null) {
+  protected didCompleteAuthorizationFlow(
+    request: AuthorizationRequest,
+    response: AuthorizationResponse | null,
+    errorResponse: AuthorizationError | null,
+  ) {
     if (this.pendingResolver) {
       if (response) {
         this.pendingResolver.fulfill(response);
@@ -191,13 +205,15 @@ export class OAuthManager {
           this.pendingResolver.reject(AuthenticationError.UserCancelled());
         } else if (errorResponse instanceof PopupBlockedError) {
           // Parse domain of the authority, to log better context for error.
-          const urlMatch = /^(http?s:\/\/[\w.]*)\/[\w\/]*$/;
+          const urlMatch = /^(http?s:\/\/[\w.]*)\/[\w/]*$/;
           // Check for matches against the authority
           const matches = this.configuration.authorizationEndpoint.match(urlMatch);
           const baseUrl = matches && matches.length > 1 ? matches[1] : '';
           this.pendingResolver.reject(AuthenticationError.PopupBlocked(baseUrl));
         } else {
-          this.pendingResolver.reject(AuthenticationError.ServerError(errorResponse.error, errorResponse.errorDescription));
+          this.pendingResolver.reject(
+            AuthenticationError.ServerError(errorResponse.error, errorResponse.errorDescription),
+          );
         }
         this.pendingResolver = undefined;
       }
@@ -209,12 +225,16 @@ export class OAuthManager {
    */
   protected createAuthRequest(opts: SignInOptions): AuthorizationRequest {
     // Create base request
-    const request = new AuthorizationRequest({
-      client_id: this.clientId,
-      redirect_uri: this.redirectUri,
-      response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
-      scope: this.scopes.join(' '),
-    }, undefined, false);
+    const request = new AuthorizationRequest(
+      {
+        client_id: this.clientId,
+        redirect_uri: this.redirectUri,
+        response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
+        scope: this.scopes.join(' '),
+      },
+      undefined,
+      false,
+    );
 
     // Pass options through
     if (opts.login_hint) {
@@ -250,5 +270,4 @@ export class OAuthManager {
       redirect_uri: this.redirectUri,
     });
   }
-
 }
