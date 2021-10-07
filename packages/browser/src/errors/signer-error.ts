@@ -1,4 +1,3 @@
-
 export enum SignerErrorCode {
   // The signer module received a request to sign via an unsupported RPC method
   UnsupportedMethod = 3000,
@@ -18,9 +17,11 @@ export enum SignerErrorCode {
 }
 
 export class SignerError extends Error {
-
   public static UnsupportedMethod() {
-    return new SignerError('The method requested is not currently supported.', SignerErrorCode.UnsupportedMethod);
+    return new SignerError(
+      'The method requested is not currently supported.',
+      SignerErrorCode.UnsupportedMethod,
+    );
   }
 
   public static UserCancelled() {
@@ -28,22 +29,34 @@ export class SignerError extends Error {
   }
 
   public static MissingTransaction() {
-    return new SignerError('Could not find transaction in request', SignerErrorCode.MissingTransaction);
+    return new SignerError(
+      'Could not find transaction in request',
+      SignerErrorCode.MissingTransaction,
+    );
   }
 
   public static MissingMessage() {
-    return new SignerError('Could not find message params in request', SignerErrorCode.MissingMessage);
+    return new SignerError(
+      'Could not find message params in request',
+      SignerErrorCode.MissingMessage,
+    );
   }
 
   public static MissingFrom() {
-    return new SignerError('Could not find from address in request params.', SignerErrorCode.MissingFrom);
+    return new SignerError(
+      'Could not find from address in request params.',
+      SignerErrorCode.MissingFrom,
+    );
   }
 
   public static MissingTypedData() {
-    return new SignerError('Could not find data to sign in request params.', SignerErrorCode.MissingTypedData);
+    return new SignerError(
+      'Could not find data to sign in request params.',
+      SignerErrorCode.MissingTypedData,
+    );
   }
 
-  public name: string = 'TransactionError';
+  public name = 'TransactionError';
   public code: SignerErrorCode;
 
   constructor(message: string, code: SignerErrorCode) {

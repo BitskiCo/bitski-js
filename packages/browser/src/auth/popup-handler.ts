@@ -19,13 +19,13 @@ import { PopupValidator } from '../utils/popup-validator';
 
 export class PopupClosedError extends AuthorizationError {
   constructor() {
-    super({ error: 'The popup was dismissed.'});
+    super({ error: 'The popup was dismissed.' });
   }
 }
 
 export class PopupBlockedError extends AuthorizationError {
   constructor() {
-    super({ error: 'The popup was blocked.'});
+    super({ error: 'The popup was blocked.' });
   }
 }
 
@@ -53,22 +53,21 @@ function createCenteredPopupFeatures(): any {
   const dualScreenTop = window.screenTop || window.screenY;
   const windowWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
   const windowHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
-  const left = (windowWidth / 2) - (w / 2);
-  const top = (windowHeight / 2) - (h / 2);
+  const left = windowWidth / 2 - w / 2;
+  const top = windowHeight / 2 - h / 2;
   windowFeatures.left = left + dualScreenLeft;
   windowFeatures.top = top + dualScreenTop;
   return windowFeatures;
 }
 
 export class PopupRequestHandler extends AuthorizationRequestHandler {
-
   protected pendingRequest?: AuthorizationRequest;
   protected popupWindow: Window | null = null;
   protected id?: string;
   protected responseUrl?: Location;
   protected closedTimer?: number;
-  protected isCancelled: boolean = false;
-  protected isBlocked: boolean = false;
+  protected isCancelled = false;
+  protected isBlocked = false;
   protected error?: Error;
   protected validator: PopupValidator;
 
@@ -82,14 +81,20 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     });
   }
 
-  public performAuthorizationRequest(configuration: AuthorizationServiceConfiguration, request: AuthorizationRequest) {
+  public performAuthorizationRequest(
+    configuration: AuthorizationServiceConfiguration,
+    request: AuthorizationRequest,
+  ) {
     const url = this.buildRequestUrl(configuration, request);
     this.pendingRequest = request;
     this.id = request.state;
     // Set a unique handler on the main window
     window[`popupCallback_${request.state}`] = this.callback.bind(this);
     // Start monitoring to see if the popup has been closed
-    this.closedTimer = window.setInterval(this.checkPopup.bind(this), CHECK_FOR_POPUP_CLOSE_INTERVAL);
+    this.closedTimer = window.setInterval(
+      this.checkPopup.bind(this),
+      CHECK_FOR_POPUP_CLOSE_INTERVAL,
+    );
     // Create features for popup
     const windowFeatures = createCenteredPopupFeatures();
     // Create popup window
@@ -168,14 +173,18 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     return this.respondWithCode(request, code);
   }
 
-  protected respondWithBlocked(request: AuthorizationRequest): Promise<AuthorizationRequestResponse> {
+  protected respondWithBlocked(
+    request: AuthorizationRequest,
+  ): Promise<AuthorizationRequestResponse> {
     const error = new PopupBlockedError();
     const response = { request, error, response: null };
     this.cleanup();
     return Promise.resolve(response);
   }
 
-  protected respondWithCancelled(request: AuthorizationRequest): Promise<AuthorizationRequestResponse> {
+  protected respondWithCancelled(
+    request: AuthorizationRequest,
+  ): Promise<AuthorizationRequestResponse> {
     const error = new PopupClosedError();
     const response = { request, error, response: null };
     this.cleanup();
@@ -186,14 +195,23 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
     request: AuthorizationRequest,
     errorMessage: string,
     errorDescription?: string,
-    errorUri?: string): Promise<AuthorizationRequestResponse> {
-    const error = new AuthorizationError({ error: errorMessage, error_description: errorDescription, error_uri: errorUri, state: request.state });
+    errorUri?: string,
+  ): Promise<AuthorizationRequestResponse> {
+    const error = new AuthorizationError({
+      error: errorMessage,
+      error_description: errorDescription,
+      error_uri: errorUri,
+      state: request.state,
+    });
     const response = { request, error, response: null };
     this.cleanup();
     return Promise.resolve(response);
   }
 
-  protected respondWithCode(request: AuthorizationRequest, code?: string): Promise<AuthorizationRequestResponse> {
+  protected respondWithCode(
+    request: AuthorizationRequest,
+    code?: string,
+  ): Promise<AuthorizationRequestResponse> {
     let authorizationResponse: AuthorizationResponse | null = null;
     if (code) {
       authorizationResponse = new AuthorizationResponse({ code, state: request.state });
@@ -224,5 +242,4 @@ export class PopupRequestHandler extends AuthorizationRequestHandler {
       this.completeAuthorizationRequestIfPossible();
     }
   }
-
 }

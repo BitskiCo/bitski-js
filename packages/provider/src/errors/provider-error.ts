@@ -6,16 +6,18 @@ export enum ProviderErrorCode {
 }
 
 export class ProviderError extends Error {
-
   public static SubscriptionsUnavailable() {
-    return new ProviderError('Subscriptions are disabled. Enable block polling to use this feature.', ProviderErrorCode.SubscriptionsUnavailable);
+    return new ProviderError(
+      'Subscriptions are disabled. Enable block polling to use this feature.',
+      ProviderErrorCode.SubscriptionsUnavailable,
+    );
   }
 
   public static InvalidRequest(reason: string) {
     return new ProviderError(`Invalid request: ${reason}`, ProviderErrorCode.InvalidRequest);
   }
 
-  public name: string = 'ProviderError';
+  public name = 'ProviderError';
   public code: ProviderErrorCode;
 
   constructor(message: string, code: ProviderErrorCode) {
@@ -26,5 +28,4 @@ export class ProviderError extends Error {
     }
     this.code = code;
   }
-
 }

@@ -1,7 +1,16 @@
-import { AccessTokenProvider, AuthenticatedFetchSubprovider, BitskiEngine, Network } from 'bitski-provider';
+import {
+  AccessTokenProvider,
+  AuthenticatedFetchSubprovider,
+  BitskiEngine,
+  Network,
+} from 'bitski-provider';
 import { AuthProvider } from '../auth/auth-provider';
 import { ProviderOptions } from '../bitski';
-import { BITSKI_RPC_BASE_URL, BITSKI_TRANSACTION_API_BASE_URL, BITSKI_WEB_BASE_URL } from '../constants';
+import {
+  BITSKI_RPC_BASE_URL,
+  BITSKI_TRANSACTION_API_BASE_URL,
+  BITSKI_WEB_BASE_URL,
+} from '../constants';
 import { BitskiTransactionSigner } from '../signing/transaction-signer';
 import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cache';
 import { RemoteAccountSubprovider } from '../subproviders/remote-accounts';
@@ -14,7 +23,6 @@ function isAuthProvider(object: any): object is AuthProvider {
 }
 
 export class BitskiBrowserEngine extends BitskiEngine {
-
   private network: Network;
   private webBaseUrl: string;
   private apiBaseUrl: string;
@@ -23,10 +31,10 @@ export class BitskiBrowserEngine extends BitskiEngine {
   private sdkVersion: string;
 
   // Headers for bitski endpoints
-  private headers: object;
+  private headers: Record<string, unknown>;
 
   // Headers specifically for rpc endpoint
-  private rpcHeaders: object;
+  private rpcHeaders: Record<string, unknown>;
 
   private signer: BitskiTransactionSigner;
 
@@ -57,14 +65,19 @@ export class BitskiBrowserEngine extends BitskiEngine {
 
     if (options && options.additionalHeaders) {
       this.headers = Object.assign({}, options.additionalHeaders, this.headers);
-      this.rpcHeaders = options.additionalHeaders;
+      this.rpcHeaders = options.additionalHeaders as Record<string, unknown>;
     }
 
     if (this.network && this.network.rpcUrl.includes('bitski.com')) {
       this.rpcHeaders = Object.assign({}, this.rpcHeaders, defaultBitskiHeaders);
     }
 
-    this.signer = new BitskiTransactionSigner(this.webBaseUrl, this.apiBaseUrl, this.headers, options.callbackURL);
+    this.signer = new BitskiTransactionSigner(
+      this.webBaseUrl,
+      this.apiBaseUrl,
+      this.headers,
+      options.callbackURL,
+    );
 
     this.addSubproviders();
   }
@@ -96,17 +109,23 @@ export class BitskiBrowserEngine extends BitskiEngine {
     this.addProvider(accountsProvider);
 
     // Respond to requests that need signed with an iframe
-    const signatureSubprovider = new SignatureSubprovider(this.network, this.signer, this.tokenProvider);
+    const signatureSubprovider = new SignatureSubprovider(
+      this.network,
+      this.signer,
+      this.tokenProvider,
+    );
     this.addProvider(signatureSubprovider);
 
     // Respond to block request via REST is using Bitski RPC endpoint
     if (this.network.rpcUrl.startsWith('https://api.bitski.com')) {
-      const blockProvider = new RestFetchSubprovider({rpcUrl: this.network.rpcUrl, defaultHeaders: this.headers});
+      const blockProvider = new RestFetchSubprovider({
+        rpcUrl: this.network.rpcUrl,
+        defaultHeaders: this.headers,
+      });
       this.addProvider(blockProvider);
     }
 
     // Finally, add our basic HTTP provider
     this.addProvider(fetchSubprovider);
   }
-
 }

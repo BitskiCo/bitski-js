@@ -4,7 +4,7 @@ import { MockEngine } from './util/mock-engine';
 import { createRequest } from './util/rpc-utils';
 
 class MockProvider implements AccessTokenProvider {
-  public loggedIn: boolean = true;
+  public loggedIn = true;
 
   public getAccessToken(): Promise<string> {
     if (this.loggedIn) {
@@ -21,7 +21,12 @@ class MockProvider implements AccessTokenProvider {
 
 function createFetchProvider(): AuthenticatedFetchSubprovider {
   const tokenProvider = new MockProvider();
-  return new AuthenticatedFetchSubprovider('https://localhost:56610/v1/web3/kovan', true, tokenProvider, { 'X-API-KEY': 'test-client-id' });
+  return new AuthenticatedFetchSubprovider(
+    'https://localhost:56610/v1/web3/kovan',
+    true,
+    tokenProvider,
+    { 'X-API-KEY': 'test-client-id' },
+  );
 }
 
 function createEngine(fetchProvider: AuthenticatedFetchSubprovider): MockEngine {
@@ -32,7 +37,6 @@ function createEngine(fetchProvider: AuthenticatedFetchSubprovider): MockEngine 
 }
 
 beforeEach(() => {
-  // @ts-ignore
   fetch.resetMocks();
 });
 
@@ -40,15 +44,13 @@ describe('handles authenticated sends', () => {
   test('should send request with headers when signed in', (done) => {
     const provider = createFetchProvider();
     const engine = createEngine(provider);
-
-    // @ts-ignore
-    fetch.mockResponse(JSON.stringify({
-      id: 0,
-      jsonrpc: '2.0',
-      result: 'foo',
-    }));
-
-    // @ts-ignore
+    fetch.mockResponse(
+      JSON.stringify({
+        id: 0,
+        jsonrpc: '2.0',
+        result: 'foo',
+      }),
+    );
     const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
     engine.send('eth_accounts', []).then((value) => {
       expect(sendRequestSpy).toHaveBeenCalled();
@@ -75,11 +77,12 @@ describe('handles authenticated sends', () => {
   test('retries requests when receiving errors that match the criteria', (done) => {
     const provider = createFetchProvider();
     const engine = createEngine(provider);
+    fetch
+      .once('ECONNRESET', { status: 500 })
+      .once('ECONNRESET', { status: 500 })
+      .once(JSON.stringify({ id: 0, jsonrpc: '2.0', result: 'foo' }));
 
-    // @ts-ignore
-    fetch.once('ECONNRESET', { status: 500 }).once('ECONNRESET', { status: 500 }).once(JSON.stringify({ id: 0, jsonrpc: '2.0', result: 'foo' }));
-
-    return engine.send('eth_peerCount', []).then((value) => {
+    engine.send('eth_peerCount', []).then((value) => {
       expect(fetch.mock.calls.length).toBe(3);
       expect(value).toBe('foo');
       done();
@@ -89,9 +92,7 @@ describe('handles authenticated sends', () => {
   test('does not retry for non-retryable errors', (done) => {
     const provider = createFetchProvider();
     const engine = createEngine(provider);
-
-    // @ts-ignore
-    fetch.mockResponse(JSON.stringify({ error: { message: 'Not Authorized' }}));
+    fetch.mockResponse(JSON.stringify({ error: { message: 'Not Authorized' } }));
 
     engine.send('eth_peerCount', []).catch((error) => {
       expect(fetch.mock.calls.length).toBe(1);
@@ -103,13 +104,10 @@ describe('handles authenticated sends', () => {
   test('retries only 5 times', (done) => {
     const provider = createFetchProvider();
     const engine = createEngine(provider);
-
-    // @ts-ignore
     fetch.mockReject(new Error('ECONNRESET'));
-    // @ts-ignore
     const request = createRequest('eth_peerCount', []);
 
-    return engine.send('eth_peerCount', []).catch((error) => {
+    engine.send('eth_peerCount', []).catch((error) => {
       expect(error).toBeInstanceOf(ServerError);
       expect(error.code).toBe(200);
       expect(error.retried).toBe(true);
@@ -121,15 +119,13 @@ describe('handles authenticated sends', () => {
   test('sends that dont require authentication should work without a user', (done) => {
     const provider = createFetchProvider();
     const engine = createEngine(provider);
-
-    // @ts-ignore
-    fetch.mockResponse(JSON.stringify({
-      id: 0,
-      jsonrpc: '2.0',
-      result: 'foo',
-    }));
-
-    // @ts-ignore
+    fetch.mockResponse(
+      JSON.stringify({
+        id: 0,
+        jsonrpc: '2.0',
+        result: 'foo',
+      }),
+    );
     const sendRequestSpy = jest.spyOn(provider, 'sendRequest');
 
     engine.send('eth_peerCount', []).then((value) => {
@@ -145,17 +141,15 @@ describe('handles authenticated sends', () => {
   test('unauthorized requests should request token invalidation', (done) => {
     const provider = createFetchProvider();
     const engine = createEngine(provider);
-
-    // @ts-ignore
-    fetch.mockResponse(JSON.stringify({
-      error: {
-        message: 'Not Authorized',
-      },
-      id: 0,
-      jsonrpc: '2.0',
-    }));
-
-    // @ts-ignore
+    fetch.mockResponse(
+      JSON.stringify({
+        error: {
+          message: 'Not Authorized',
+        },
+        id: 0,
+        jsonrpc: '2.0',
+      }),
+    );
     const invalidateTokenSpy = jest.spyOn(provider.accessTokenProvider, 'invalidateToken');
 
     engine.send('eth_peerCount', []).catch((error) => {

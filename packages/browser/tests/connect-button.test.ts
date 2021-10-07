@@ -1,6 +1,10 @@
 import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
 import { OAuthSignInMethod, AuthenticationError } from '../src/bitski';
-import { ConnectButton, ConnectButtonSize, ConnectButtonOptions } from '../src/components/connect-button';
+import {
+  ConnectButton,
+  ConnectButtonSize,
+  ConnectButtonOptions,
+} from '../src/components/connect-button';
 
 const clientID = 'test-client-id';
 
@@ -36,14 +40,18 @@ test('it does not throw when no callback', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider);
   jest.spyOn(authProvider, 'signInOrConnect').mockResolvedValue({});
-  expect(() => { button.signin(); }).not.toThrow();
+  expect(() => {
+    button.signin();
+  }).not.toThrow();
 });
 
 test('it does not throw when received error and no callback', () => {
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider);
   jest.spyOn(authProvider, 'signInOrConnect').mockRejectedValue('foo');
-  expect(() => { button.signin(); }).not.toThrow();
+  expect(() => {
+    button.signin();
+  }).not.toThrow();
 });
 
 test('it calls the callback on success', (done) => {
@@ -75,7 +83,9 @@ test('it calls the onCancel callback on cancellation', (done) => {
   expect.assertions(1);
   const authProvider = createAuthProvider();
   const button = new ConnectButton(authProvider);
-  const spy = jest.spyOn(authProvider, 'signIn').mockRejectedValue(AuthenticationError.UserCancelled());
+  const spy = jest
+    .spyOn(authProvider, 'signIn')
+    .mockRejectedValue(AuthenticationError.UserCancelled());
   const callback = () => {
     expect(spy).toBeCalled();
     done();
@@ -99,7 +109,10 @@ test('it uses provided authentication mode', (done) => {
 test('it passes provided sign in options', (done) => {
   expect.assertions(2);
   const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, { authMethod: OAuthSignInMethod.Redirect, signInOptions: { login_hint: 'signup' } });
+  const button = new ConnectButton(authProvider, {
+    authMethod: OAuthSignInMethod.Redirect,
+    signInOptions: { login_hint: 'signup' },
+  });
   jest.spyOn(authProvider, 'signIn').mockImplementation((method, options) => {
     expect(options.login_hint).toBe('signup');
     expect(method).toBe(OAuthSignInMethod.Redirect);

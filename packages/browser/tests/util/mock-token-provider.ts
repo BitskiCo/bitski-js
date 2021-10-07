@@ -1,8 +1,7 @@
 import { AccessTokenProvider } from 'bitski-provider';
 
 export class MockTokenProvider implements AccessTokenProvider {
-
-  public loggedIn: boolean = true;
+  public loggedIn = true;
 
   public getAccessToken(): Promise<string> {
     if (this.loggedIn) {
@@ -15,5 +14,4 @@ export class MockTokenProvider implements AccessTokenProvider {
     this.loggedIn = false;
     return Promise.resolve();
   }
-
 }

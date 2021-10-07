@@ -29,8 +29,11 @@ interface TypeMapping {
 }
 
 export class TypedDataSanitizerSubprovider extends Subprovider {
-
-  public handleRequest(payload: JSONRPCRequestPayload, next: () => void, end: (error, response) => void) {
+  public handleRequest(
+    payload: JSONRPCRequestPayload,
+    next: () => void,
+    end: (error, response) => void,
+  ) {
     if (payload.method === 'eth_signTypedData' || payload.method === 'eth_signTypedData_v3') {
       try {
         this.sanitizePayload(payload);
@@ -65,7 +68,6 @@ export class TypedDataSanitizerSubprovider extends Subprovider {
     }
     return payload.params[1];
   }
-
 }
 
 /**

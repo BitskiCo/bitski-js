@@ -22,5 +22,4 @@ export class MockOAuthManager extends OAuthManager {
     this.currentTokenRequest = request;
     return request;
   }
-
 }

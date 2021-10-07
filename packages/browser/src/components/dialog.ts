@@ -8,7 +8,6 @@ const TEMPLATE = `
  * Basic modal dialog
  */
 export class Dialog {
-
   public onClose?: () => void;
 
   private content: HTMLElement;
@@ -19,7 +18,7 @@ export class Dialog {
    * @param content The content (HTMLElement, selector, or text) to embed in the dialog
    * @param dynamicContent Set to true to show loading state
    */
-  constructor(content: HTMLElement | string, dynamicContent: boolean = false) {
+  constructor(content: HTMLElement | string, dynamicContent = false) {
     // check for an element passed as content or a selector corresponding to an element
     this.content = this.parseContent(content);
 
@@ -38,7 +37,9 @@ export class Dialog {
     this.addCloseHandlers();
 
     // A short delay is required before triggering animations
-    setTimeout(() => { this.show(); }, 10);
+    setTimeout(() => {
+      this.show();
+    }, 10);
   }
 
   /**
@@ -59,7 +60,9 @@ export class Dialog {
    */
   public dismiss() {
     // Allow 500ms for the animations to finish before removing elements from DOM
-    setTimeout(() => { this.container.remove(); }, 500);
+    setTimeout(() => {
+      this.container.remove();
+    }, 500);
     this.hide();
   }
 
@@ -159,5 +162,4 @@ export class Dialog {
       closeButton.addEventListener('click', this.close.bind(this));
     }
   }
-
 }

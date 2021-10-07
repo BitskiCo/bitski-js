@@ -48,7 +48,9 @@ export function parseUrlParams(url: Location): any {
     params = url.search.split('?').pop();
   }
 
-  if (!params) { throw new Error('No params found in result'); }
+  if (!params) {
+    throw new Error('No params found in result');
+  }
 
   return params.split('&').reduce((prev, item) => {
     const [key, value] = item.split('=');
@@ -60,6 +62,8 @@ export function parseUrlParams(url: Location): any {
 }
 
 function extractQuery(url): string {
-  if (!url.includes('#')) { throw new Error('No params found in result'); }
+  if (!url.includes('#')) {
+    throw new Error('No params found in result');
+  }
   return url.split('#').pop();
 }

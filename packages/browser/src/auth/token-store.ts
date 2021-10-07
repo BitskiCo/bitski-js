@@ -5,7 +5,6 @@ import { Store } from '../utils/store';
 import { AccessToken } from './access-token';
 
 export class TokenStore {
-
   public get currentToken(): string | undefined {
     if (this.accessToken && !this.accessToken.expired) {
       return this.accessToken.token;
@@ -81,5 +80,4 @@ export class TokenStore {
     this.store.clearItem(this.accessTokenKey);
     this.store.clearItem(this.idTokenKey);
   }
-
 }

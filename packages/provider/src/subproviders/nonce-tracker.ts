@@ -6,7 +6,6 @@ import { Subprovider } from '@bitski/provider-engine';
  * Bitski's transaction flow.
  */
 export class NonceTrackerSubprovider extends Subprovider {
-
   protected nonceCache: Map<string, string>;
 
   constructor() {
@@ -94,5 +93,4 @@ export class NonceTrackerSubprovider extends Subprovider {
       cb();
     });
   }
-
 }

@@ -3,10 +3,12 @@ import { BitskiEngine, BitskiEngineOptions } from '../src/bitski-engine';
 
 function createEngine(opts?: BitskiEngineOptions): BitskiEngine {
   const engine = new BitskiEngine(opts);
-  engine.addProvider(new FixtureSubprovider({
-    eth_blockNumber: '0x0',
-    eth_getBlockByNumber: false,
-  }));
+  engine.addProvider(
+    new FixtureSubprovider({
+      eth_blockNumber: '0x0',
+      eth_getBlockByNumber: false,
+    }),
+  );
   engine.start();
   return engine;
 }
@@ -28,12 +30,14 @@ describe('initialization', () => {
     const engine = createEngine();
     expect(engine).toBeDefined();
     expect(engine._providers.length).toBe(9);
+    engine.stop();
   });
 
   test('it respects disableCaching option', () => {
     expect.assertions(1);
     const engine = createEngine({ disableCaching: true });
     expect(engine._providers.length).toBe(7);
+    engine.stop();
   });
 });
 
@@ -41,6 +45,7 @@ describe('when handling subscriptions', () => {
   test('it has support for subscriptions', () => {
     const engine = createEngine();
     expect(engine.supportsSubscriptions()).toBe(true);
+    engine.stop();
   });
 
   test('it can subscribe to events', (done) => {
@@ -49,6 +54,7 @@ describe('when handling subscriptions', () => {
     engine.subscribe('eth_subscribe', 'logs', []).then((result) => {
       expect(result).toBe('0x1');
       expect(spy).toBeCalled();
+      engine.stop();
       done();
     });
   });
@@ -59,6 +65,7 @@ describe('when handling subscriptions', () => {
     engine.unsubscribe('0x1').then((result) => {
       expect(result).toBe(true);
       expect(spy).toBeCalled();
+      engine.stop();
       done();
     });
   });
@@ -79,6 +86,7 @@ describe('when handling subscriptions', () => {
     };
     engine.on('0x1', (result) => {
       expect(result).toEqual(notification.params);
+      engine.stop();
       done();
     });
     subscriptionSubprovider.emit('data', null, notification);
@@ -100,6 +108,7 @@ describe('when handling subscriptions', () => {
     };
     engine.on('data', (err, result) => {
       expect(result).toEqual(notification);
+      engine.stop();
       done();
     });
     subscriptionSubprovider.emit('data', null, notification);
@@ -116,6 +125,7 @@ describe('when handling subscriptions', () => {
     subscriptionSubprovider.emit('data', null, {});
     setTimeout(() => {
       expect(called).toBe(false);
+      engine.stop();
       done();
     }, 200);
   });
