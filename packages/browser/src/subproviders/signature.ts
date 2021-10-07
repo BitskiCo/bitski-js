@@ -95,9 +95,9 @@ export interface TypedDataPayload {
     EIP712Domain: TypedDataDefinition[]; // Required. Specify the domain fields you are using.
     [propName: string]: TypedDataDefinition[]; // Include your custom types here.
   };
-  domain: object; // Provide object format of domain according to spec in `types`
+  domain: Record<string, unknown>; // Provide object format of domain according to spec in `types`
   primaryType: string; // The name of the top-level type being used in `message`
-  message: object; // The values for your object, starting from the `primaryType`
+  message: Record<string, unknown>; // The values for your object, starting from the `primaryType`
 }
 
 /**
@@ -133,7 +133,11 @@ export class SignatureSubprovider extends Subprovider {
    * @param next Callback to skip handling this request
    * @param end Completion handler
    */
-  public handleRequest(payload: JSONRPCRequestPayload, next: () => void, end: JSONRPCResponseHandler): void {
+  public handleRequest(
+    payload: JSONRPCRequestPayload,
+    next: () => void,
+    end: JSONRPCResponseHandler,
+  ): void {
     if (this.requiresSignature(payload.method)) {
       this.handleSignatureRequest(payload, end);
       return;
@@ -146,7 +150,10 @@ export class SignatureSubprovider extends Subprovider {
    * @param payload The JSON-RPC request
    * @param callback The callback to call when the request has been handled
    */
-  public async handleSignatureRequest(payload: JSONRPCRequestPayload, callback: JSONRPCResponseHandler) {
+  public async handleSignatureRequest(
+    payload: JSONRPCRequestPayload,
+    callback: JSONRPCResponseHandler,
+  ) {
     try {
       // Get access token
       const accessToken = await this.tokenProvider.getAccessToken();
@@ -197,7 +204,8 @@ export class SignatureSubprovider extends Subprovider {
    */
   protected loadBalanceIfNeeded(payload: JSONRPCRequestPayload): Promise<any> {
     // Only necessary if this is a transaction
-    const isTransaction = payload.method === 'eth_sendTransaction' || payload.method === 'eth_signTransaction';
+    const isTransaction =
+      payload.method === 'eth_sendTransaction' || payload.method === 'eth_signTransaction';
     const isCustomRPC = !this.network.rpcUrl.includes('api.bitski.com');
     if (isTransaction && isCustomRPC) {
       const transaction = payload.params[0];
@@ -232,9 +240,10 @@ export class SignatureSubprovider extends Subprovider {
   private async createContext(request: JSONRPCRequestPayload): Promise<TransactionContext> {
     switch (request.method) {
       case 'eth_sendTransaction':
-      case 'eth_signTransaction':
+      case 'eth_signTransaction': {
         const balance = await this.loadBalanceIfNeeded(request);
         return { chainId: this.network.chainId, currentBalance: balance };
+      }
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
         // The from address should be the first parameter as a 20 byte hex string
@@ -252,7 +261,9 @@ export class SignatureSubprovider extends Subprovider {
    * Responsible for creating the payload from a given RPC request
    * @param request JSON-RPC request to extract params from
    */
-  private createPayload(request: JSONRPCRequestPayload): TransactionPayload | SignaturePayload | TypedDataPayload {
+  private createPayload(
+    request: JSONRPCRequestPayload,
+  ): TransactionPayload | SignaturePayload | TypedDataPayload {
     switch (request.method) {
       case 'eth_sendTransaction':
       case 'eth_signTransaction':

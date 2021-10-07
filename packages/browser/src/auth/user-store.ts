@@ -4,7 +4,6 @@ import { Store } from '../utils/store';
 import { User } from './user';
 
 export class UserStore {
-
   public get currentUser(): User | undefined {
     return this.user || this.fetchUser();
   }
@@ -47,5 +46,4 @@ export class UserStore {
       this.store.clearItem(this.storageKey);
     }
   }
-
 }

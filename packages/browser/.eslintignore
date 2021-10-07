@@ -1,0 +1,14 @@
+# compiled output
+/dist/
+/lib/
+
+# dependencies
+/node_modules/
+
+# misc
+/coverage/
+.eslintcache
+
+# scripts
+jest.config.js
+scripts/version.js

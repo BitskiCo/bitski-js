@@ -1,4 +1,3 @@
-
 export enum ParseErrorCode {
   // Could not parse response as JSON
   InvalidJSON = 2000,

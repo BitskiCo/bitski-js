@@ -1,9 +1,20 @@
 import { AuthorizationServiceConfiguration } from '@openid/appauth';
-import { BitskiEngine, BitskiEngineOptions, Kovan, Mainnet, Network, Rinkeby } from 'bitski-provider';
+import {
+  BitskiEngine,
+  BitskiEngineOptions,
+  Kovan,
+  Mainnet,
+  Network,
+  Rinkeby,
+} from 'bitski-provider';
 import { LOGIN_HINT_SIGNUP, SignInOptions } from './auth/oauth-manager';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
-import { ConnectButton, ConnectButtonOptions, ConnectButtonSize } from './components/connect-button';
+import {
+  ConnectButton,
+  ConnectButtonOptions,
+  ConnectButtonSize,
+} from './components/connect-button';
 import { SDK_VERSION } from './constants';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import css from './styles/index';
@@ -54,7 +65,7 @@ export interface ProviderOptions extends BitskiEngineOptions {
   disableCaching?: boolean;
   disableValidation?: boolean;
   disableBlockTracking?: boolean;
-  additionalHeaders?: object;
+  additionalHeaders?: Record<string, unknown>;
   webBaseUrl?: string;
   apiBaseUrl?: string;
   minGasPrice?: number;
@@ -85,10 +96,20 @@ export class Bitski {
    * Note: Make sure your app is approved for the scopes you are requesting first.
    * @param options Other OAuth settings. Don't change these unless you know what you are doing.
    */
-  constructor(clientId: string, redirectUri?: string, additionalScopes?: string[], options?: BitskiSDKOptions) {
+  constructor(
+    clientId: string,
+    redirectUri?: string,
+    additionalScopes?: string[],
+    options?: BitskiSDKOptions,
+  ) {
     this.clientId = clientId;
     this.sdkVersion = SDK_VERSION;
-    this.authProvider = new OpenidAuthProvider(clientId, redirectUri || window.location.href, additionalScopes, options);
+    this.authProvider = new OpenidAuthProvider(
+      clientId,
+      redirectUri || window.location.href,
+      additionalScopes,
+      options,
+    );
     if (document && document.body) {
       this.injectStyles();
     } else {
@@ -132,7 +153,10 @@ export class Bitski {
    * @param options {ConnectButtonOptions} Optional configuration for the button
    * @param callback Post-login callback. Called when sign in is complete. Not applicable for redirect login method.
    */
-  public getConnectButton(options?: ConnectButtonOptions, callback?: (error?: Error, user?: any) => void): ConnectButton {
+  public getConnectButton(
+    options?: ConnectButtonOptions,
+    callback?: (error?: Error, user?: any) => void,
+  ): ConnectButton {
     return new ConnectButton(this.authProvider, options, callback);
   }
 
@@ -248,20 +272,28 @@ export class Bitski {
   }
 
   private createProvider(network: Network, options: ProviderOptions = {}): BitskiEngine {
-    return new BitskiBrowserEngine(this.clientId, this.authProvider, this.sdkVersion, network, options);
+    return new BitskiBrowserEngine(
+      this.clientId,
+      this.authProvider,
+      this.sdkVersion,
+      network,
+      options,
+    );
   }
 
   private networkFromName(networkName: string): Network {
     switch (networkName) {
-    case '':
-    case 'mainnet':
-      return Mainnet;
-    case 'rinkeby':
-      return Rinkeby;
-    case 'kovan':
-      return Kovan;
-    default:
-      throw new Error(`Unsupported network name ${networkName}. Try passing a \`network\` in the options instead.`);
+      case '':
+      case 'mainnet':
+        return Mainnet;
+      case 'rinkeby':
+        return Rinkeby;
+      case 'kovan':
+        return Kovan;
+      default:
+        throw new Error(
+          `Unsupported network name ${networkName}. Try passing a \`network\` in the options instead.`,
+        );
     }
   }
 
@@ -301,5 +333,4 @@ export class Bitski {
     const head = document.head || document.getElementsByTagName('head')[0];
     head.appendChild(style);
   }
-
 }

@@ -11,7 +11,6 @@ function createEngine() {
 }
 
 class MockFixtureProvider extends FixtureSubprovider {
-
   // Callback is called when we handle any request to inspect the payload
   public callback: (payload: any) => void;
 
@@ -55,16 +54,17 @@ test('it updates missing values', (done) => {
     id: 1,
     jsonrpc: '2.0',
     method: 'eth_sendTransaction',
-    params: [{
-      amount: '0x0',
-    }],
+    params: [
+      {
+        amount: '0x0',
+      },
+    ],
   };
 
   engine.sendAsync(request, (err, result) => {
     expect(err).toBeNull();
     done();
   });
-
 });
 
 test('it ignores errors when trying to set values', (done) => {
@@ -96,16 +96,17 @@ test('it ignores errors when trying to set values', (done) => {
     id: 1,
     jsonrpc: '2.0',
     method: 'eth_sendTransaction',
-    params: [{
-      amount: '0x0',
-    }],
+    params: [
+      {
+        amount: '0x0',
+      },
+    ],
   };
 
   engine.sendAsync(request, (err, result) => {
     expect(err).toBeNull();
     done();
   });
-
 });
 
 test('it only updates values that are missing', (done) => {
@@ -137,18 +138,19 @@ test('it only updates values that are missing', (done) => {
     id: 1,
     jsonrpc: '2.0',
     method: 'eth_sendTransaction',
-    params: [{
-      amount: '0x0',
-      from: '0xf00',
-      nonce: '0xff',
-    }],
+    params: [
+      {
+        amount: '0x0',
+        from: '0xf00',
+        nonce: '0xff',
+      },
+    ],
   };
 
   engine.sendAsync(request, (err, result) => {
     expect(err).toBeNull();
     done();
   });
-
 });
 
 test('it updates gas price based on minGasPrice', (done) => {
@@ -177,18 +179,19 @@ test('it updates gas price based on minGasPrice', (done) => {
     id: 1,
     jsonrpc: '2.0',
     method: 'eth_sendTransaction',
-    params: [{
-      amount: '0x0',
-      from: '0xf00',
-      nonce: '0xff',
-    }],
+    params: [
+      {
+        amount: '0x0',
+        from: '0xf00',
+        nonce: '0xff',
+      },
+    ],
   };
 
   engine.sendAsync(request, (err, result) => {
     expect(err).toBeNull();
     done();
   });
-
 });
 
 test('it ignores transactions that already have all values', (done) => {
@@ -220,28 +223,31 @@ test('it ignores transactions that already have all values', (done) => {
     id: 1,
     jsonrpc: '2.0',
     method: 'eth_sendTransaction',
-    params: [{
-      amount: '0x0',
-      from: '0xff',
-      gas: '0x02',
-      gasPrice: '0x003',
-      nonce: '0xff',
-    }],
+    params: [
+      {
+        amount: '0x0',
+        from: '0xff',
+        gas: '0x02',
+        gasPrice: '0x003',
+        nonce: '0xff',
+      },
+    ],
   };
 
   engine.sendAsync(request, (err, result) => {
     expect(err).toBeNull();
     done();
   });
-
 });
 
 test('it ignores non-transaction requests', (done) => {
   const { engine } = createEngine();
 
-  engine.addProvider(new FixtureSubprovider({
-    eth_accounts: [],
-  }));
+  engine.addProvider(
+    new FixtureSubprovider({
+      eth_accounts: [],
+    }),
+  );
 
   const request = {
     id: 1,
@@ -255,5 +261,4 @@ test('it ignores non-transaction requests', (done) => {
     expect(result.result).toEqual([]);
     done();
   });
-
 });

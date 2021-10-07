@@ -26,7 +26,6 @@ export interface BitskiEngineOptions {
 }
 
 export class BitskiEngine extends Web3ProviderEngine {
-
   constructor(options?: BitskiEngineOptions) {
     super(options);
     options = options || {};
@@ -74,17 +73,28 @@ export class BitskiEngine extends Web3ProviderEngine {
     return this._pollForBlocks;
   }
 
-  public subscribe(subscribeMethod: string = 'eth_subscribe', subscriptionMethod: string, parameters: any[]): Promise<string> {
-    if (!this._pollForBlocks) { return Promise.reject(ProviderError.SubscriptionsUnavailable()); }
+  public subscribe(
+    subscribeMethod = 'eth_subscribe',
+    subscriptionMethod: string,
+    parameters: any[],
+  ): Promise<string> {
+    if (!this._pollForBlocks) {
+      return Promise.reject(ProviderError.SubscriptionsUnavailable());
+    }
     parameters.unshift(subscriptionMethod);
     return this.send(subscribeMethod, parameters);
   }
 
-  public unsubscribe(subscriptionId: string, unsubscribeMethod: string = 'eth_unsubscribe'): Promise<boolean> {
-    if (!this._pollForBlocks) { return Promise.reject(ProviderError.SubscriptionsUnavailable()); }
+  public unsubscribe(
+    subscriptionId: string,
+    unsubscribeMethod = 'eth_unsubscribe',
+  ): Promise<boolean> {
+    if (!this._pollForBlocks) {
+      return Promise.reject(ProviderError.SubscriptionsUnavailable());
+    }
     return this.send(unsubscribeMethod, [subscriptionId]).then((response) => {
       if (response) {
-          this.removeAllListeners(subscriptionId);
+        this.removeAllListeners(subscriptionId);
       }
       return response;
     });
@@ -98,5 +108,4 @@ export class BitskiEngine extends Web3ProviderEngine {
       this.emit(notification.params.subscription, notification.params);
     }
   }
-
 }

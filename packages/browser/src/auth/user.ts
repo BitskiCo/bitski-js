@@ -9,9 +9,16 @@ export interface UserInfoResponse {
 }
 
 export class User {
-
   public static fromJson(json: UserInfoResponse): User {
-    return new User(json.sub, json.accounts, json.email, json.email_verified, json.phone_number, json.phone_number_verified, json.preferred_username);
+    return new User(
+      json.sub,
+      json.accounts,
+      json.email,
+      json.email_verified,
+      json.phone_number,
+      json.phone_number_verified,
+      json.preferred_username,
+    );
   }
 
   public static fromString(s: string): User | undefined {
@@ -22,7 +29,15 @@ export class User {
       return;
     }
     if (parsed.id) {
-      return new User(parsed.id, parsed.accounts, parsed.email, parsed.emailVerified, parsed.phoneNumber, parsed.phoneNumberVerified, parsed.preferredUsername);
+      return new User(
+        parsed.id,
+        parsed.accounts,
+        parsed.email,
+        parsed.emailVerified,
+        parsed.phoneNumber,
+        parsed.phoneNumberVerified,
+        parsed.preferredUsername,
+      );
     }
     return;
   }
@@ -35,7 +50,15 @@ export class User {
   public phoneNumberVerified?: boolean;
   public preferredUsername?: string;
 
-  constructor(id: string, accounts?: string[], email?: string, emailVerified?: boolean, phone?: string, phoneNumberVerified?: boolean, preferredUsername?: string) {
+  constructor(
+    id: string,
+    accounts?: string[],
+    email?: string,
+    emailVerified?: boolean,
+    phone?: string,
+    phoneNumberVerified?: boolean,
+    preferredUsername?: string,
+  ) {
     this.id = id;
     this.accounts = accounts;
     this.email = email;

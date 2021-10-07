@@ -12,7 +12,6 @@ const expiredToken = new AccessToken('test-expired-access-token', 2);
 const clientID = 'test-client-id';
 
 class MockTokenStore extends TokenStore {
-
   public setToken(accessToken?: AccessToken) {
     this.accessToken = accessToken;
   }
@@ -229,7 +228,9 @@ describe('signing in', () => {
     const tokenResponse = new TokenResponse({
       access_token: 'test-access-token',
     });
-    const popupMock = jest.spyOn(authProvider.oauthManager, 'signInPopup').mockResolvedValue(tokenResponse);
+    const popupMock = jest
+      .spyOn(authProvider.oauthManager, 'signInPopup')
+      .mockResolvedValue(tokenResponse);
     const userMock = jest.spyOn(authProvider.oauthManager, 'requestUserInfo').mockResolvedValue({
       sub: 'test-user',
     });
@@ -246,7 +247,9 @@ describe('signing in', () => {
     const tokenResponse = new TokenResponse({
       access_token: 'test-access-token',
     });
-    const redirectMock = jest.spyOn(authProvider.oauthManager, 'signInRedirect').mockResolvedValue(tokenResponse);
+    const redirectMock = jest
+      .spyOn(authProvider.oauthManager, 'signInRedirect')
+      .mockResolvedValue(tokenResponse);
     const userMock = jest.spyOn(authProvider.oauthManager, 'requestUserInfo').mockResolvedValue({
       sub: 'test-user',
     });
@@ -274,7 +277,9 @@ describe('sign in callback', () => {
     const tokenResponse = new TokenResponse({
       access_token: 'test-user',
     });
-    const callbackMock = jest.spyOn(authProvider.oauthManager, 'redirectCallback').mockResolvedValue(tokenResponse);
+    const callbackMock = jest
+      .spyOn(authProvider.oauthManager, 'redirectCallback')
+      .mockResolvedValue(tokenResponse);
     const userMock = jest.spyOn(authProvider.oauthManager, 'requestUserInfo').mockResolvedValue({
       sub: 'test-user',
     });
@@ -308,7 +313,9 @@ describe('sign in or connect', () => {
     const tokenResponse = new TokenResponse({
       access_token: 'refreshed-access-token',
     });
-    const refreshTokenMock = jest.spyOn(authProvider.oauthManager, 'refreshAccessToken').mockResolvedValue(tokenResponse);
+    const refreshTokenMock = jest
+      .spyOn(authProvider.oauthManager, 'refreshAccessToken')
+      .mockResolvedValue(tokenResponse);
     const getUserMock = jest.spyOn(authProvider.oauthManager, 'requestUserInfo').mockResolvedValue({
       sub: 'test-user',
     });
@@ -325,7 +332,9 @@ describe('sign in or connect', () => {
     const tokenResponse = new TokenResponse({
       access_token: 'test-access-token',
     });
-    const signInMock = jest.spyOn(authProvider.oauthManager, 'signInPopup').mockResolvedValue(tokenResponse);
+    const signInMock = jest
+      .spyOn(authProvider.oauthManager, 'signInPopup')
+      .mockResolvedValue(tokenResponse);
     const getUserMock = jest.spyOn(authProvider.oauthManager, 'requestUserInfo').mockResolvedValue({
       sub: 'test-user',
     });
@@ -338,7 +347,6 @@ describe('sign in or connect', () => {
 });
 
 describe('sign out', () => {
-
   test('should call signout callback', () => {
     expect.assertions(1);
     const authProvider = createInstance();

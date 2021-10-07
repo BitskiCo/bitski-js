@@ -1,11 +1,10 @@
 import { TokenResponse } from '@openid/appauth';
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, ID_TOKEN_KEY } from '../constants';
+import { ACCESS_TOKEN_KEY, ID_TOKEN_KEY, REFRESH_TOKEN_KEY } from '../constants';
 import { LocalStorageStore } from '../utils/localstorage-store';
 import { Store } from '../utils/store';
 import { AccessToken } from './access-token';
 
 export class TokenStore {
-
   public get currentToken(): string | undefined {
     if (this.accessToken && !this.accessToken.expired) {
       return this.accessToken.token;
@@ -81,5 +80,4 @@ export class TokenStore {
     this.store.clearItem(this.accessTokenKey);
     this.store.clearItem(this.idTokenKey);
   }
-
 }

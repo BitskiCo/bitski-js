@@ -3,7 +3,6 @@ import { Store } from './store';
 // Default implementation of generic store interface.
 // Uses localStorage or sessionStorage (pass which one you want in constructor).
 export class LocalStorageStore implements Store {
-
   protected storage: Storage;
 
   constructor(storage: Storage = localStorage) {
@@ -25,5 +24,4 @@ export class LocalStorageStore implements Store {
   public clearItem(key: string) {
     this.storage.removeItem(key);
   }
-
 }

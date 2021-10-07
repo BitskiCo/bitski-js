@@ -1,0 +1,25 @@
+name: Node.js CI
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ['14']
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm i -g npm@7
+    - run: npm ci
+    - run: npm run lint --workspaces
+    - run: npm run test --workspaces
+      timeout-minutes: 5
+      env:
+        CI: true
