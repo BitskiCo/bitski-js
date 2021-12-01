@@ -7121,12 +7121,12 @@ var rpcUrl: string
 
 
 
-<a id="_provider_src_network_.kovan"></a>
+<a id="_provider_src_network_.polygon"></a>
 
-## Kovan
+## Polygon
 
 
-<a id="_provider_src_network_.kovan.chainid-1"></a>
+<a id="_provider_src_network_.polygon.chainid-1"></a>
 
 ####  chainId
 
@@ -7140,13 +7140,13 @@ var chainId: number = 42
 
 
 
-<a id="_provider_src_network_.kovan.rpcurl-1"></a>
+<a id="_provider_src_network_.polygon.rpcurl-1"></a>
 
 ####  rpcUrl
 
 
 ```javascript
-var rpcUrl: string = "https://api.bitski.com/v1/web3/kovan"
+var rpcUrl: string = "https://api.bitski.com/v1/web3/polygon"
 ```
 <small>*Defined in [packages/provider/src/network.ts:18](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/provider/src/network.ts#L18)*</small>
 

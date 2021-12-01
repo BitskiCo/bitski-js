@@ -2,7 +2,8 @@ import { AuthorizationServiceConfiguration } from '@openid/appauth';
 import {
   BitskiEngine,
   BitskiEngineOptions,
-  Kovan,
+  Polygon,,
+  Mumbai,
   Mainnet,
   Network,
   Rinkeby,
@@ -41,7 +42,7 @@ export { Store, LocalStorageStore };
 export { SignInOptions, LOGIN_HINT_SIGNUP };
 
 // Networks
-export { Network, Mainnet, Rinkeby, Kovan };
+export { Network, Mainnet, Rinkeby, Polygon, Mumbai };
 
 // Connect Button
 export { ConnectButtonSize, ConnectButtonOptions };
@@ -137,9 +138,6 @@ export class Bitski {
       normalizedOptions = options;
     }
     const network = this.networkFromProviderOptions(options);
-    if (network === Kovan && normalizedOptions.minGasPrice == null) {
-      normalizedOptions.minGasPrice = 1;
-    }
     const newProvider = this.createProvider(network, normalizedOptions);
     newProvider.start();
     this.engines.set(JSON.stringify(options), newProvider);
@@ -288,8 +286,10 @@ export class Bitski {
         return Mainnet;
       case 'rinkeby':
         return Rinkeby;
-      case 'kovan':
-        return Kovan;
+      case 'polygon':
+        return Polygon;
+      case 'mumbai':
+        return Mumbai;
       default:
         throw new Error(
           `Unsupported network name ${networkName}. Try passing a \`network\` in the options instead.`,

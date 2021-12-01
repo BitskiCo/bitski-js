@@ -22,7 +22,7 @@ class MockProvider implements AccessTokenProvider {
 function createFetchProvider(): AuthenticatedFetchSubprovider {
   const tokenProvider = new MockProvider();
   return new AuthenticatedFetchSubprovider(
-    'https://localhost:56610/v1/web3/kovan',
+    'https://localhost:56610/v1/web3/polygon',
     true,
     tokenProvider,
     { 'X-API-KEY': 'test-client-id' },

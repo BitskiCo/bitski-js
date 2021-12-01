@@ -108,7 +108,7 @@ describe('managing providers', () => {
   test('should create new provider if one doesnt yet exist', () => {
     const bitski = createInstance();
     expect(bitski.engines.size).toBe(0);
-    const provider = bitski.getProvider('kovan');
+    const provider = bitski.getProvider('polygon');
     provider.on('error', (error) => {});
     expect(bitski.engines.size).toBe(1);
   });
@@ -116,16 +116,16 @@ describe('managing providers', () => {
   test('should not create a new provider if one already exists for that network', () => {
     const bitski = createInstance();
     expect(bitski.engines.size).toBe(0);
-    bitski.getProvider('kovan');
+    bitski.getProvider('polygon');
     expect(bitski.engines.size).toBe(1);
-    bitski.getProvider('kovan');
+    bitski.getProvider('polygon');
     expect(bitski.engines.size).toBe(1);
   });
 
   test('should not stop engine when force logged out', () => {
     expect.assertions(2);
     const bitski = createInstance();
-    const provider = bitski.getProvider('kovan');
+    const provider = bitski.getProvider('polygon');
 
     // Assert the error is passed through
     provider.on('error', (error) => {
