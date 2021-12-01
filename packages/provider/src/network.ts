@@ -16,7 +16,7 @@ export const Rinkeby: Network = {
 export const Polygon: Network = {
   chainId: 137,
   rpcUrl: 'https://api.bitski.com/v1/web3/polygon',
-}
+};
 
 export const Mumbai: Network = {
   chainId: 80001,
