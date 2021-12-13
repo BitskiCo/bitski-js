@@ -13,7 +13,12 @@ export const Rinkeby: Network = {
   rpcUrl: 'https://api.bitski.com/v1/web3/rinkeby',
 };
 
-export const Kovan: Network = {
-  chainId: 42,
-  rpcUrl: 'https://api.bitski.com/v1/web3/kovan',
+export const Polygon: Network = {
+  chainId: 137,
+  rpcUrl: 'https://api.bitski.com/v1/web3/polygon',
+};
+
+export const Mumbai: Network = {
+  chainId: 80001,
+  rpcUrl: 'https://api.bitski.com/v1/web3/mumbai',
 };

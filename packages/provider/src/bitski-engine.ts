@@ -1,10 +1,10 @@
 import {
   BlockCacheSubprovider,
-  default as Web3ProviderEngine,
   DefaultFixtureSubprovider,
   InflightCacheSubprovider,
   SanitizerSubprovider,
   SubscriptionsSubprovider,
+  default as Web3ProviderEngine,
 } from '@bitski/provider-engine';
 
 import { ProviderError } from './errors/provider-error';
@@ -21,7 +21,7 @@ export interface BitskiEngineOptions {
   disableValidation?: boolean;
   // Disable polling for new blocks
   disableBlockTracking?: boolean;
-  // Set a minimum gas price. Useful for chains like Kovan.
+  // Set a minimum gas price.
   minGasPrice?: number;
 }
 

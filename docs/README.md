@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/bitski.svg)](https://www.npmjs.com/package/bitski)
 
-The official Bitski Javascript SDK for the browser. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain. We currently support mainnet, as well as Kovan and Rinkeby test networks.
+The official Bitski Javascript SDK for the browser. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain. We currently support mainnet for Ethereum and Polygon, and Rinkeby and Mumbai test networks respectively.
 
 *Note: These docs are for version 0.4.x. Upgrading from 0.3.x or earlier? Please see our [Migration Guide](https://github.com/BitskiCo/bitski-js/tree/develop/MIGRATING.md)*
 
@@ -116,7 +116,7 @@ const web3 = new Web3(provider);
 const network = await web3.eth.net.getId();
 ```
 
-Unlike Metamask and other dapp browsers, you can request a provider for the network you are on. To use a different network pass in a network name ("rinkeby", "kovan") in the options as the first argument.
+Unlike Metamask and other dapp browsers, you can request a provider for the network you are on. To use a different network pass in a network name ("rinkeby", "polygon", "mumbai") in the options as the first argument.
 
 ```javascript
 const provider = bitski.getProvider({ networkName: 'rinkeby' });
