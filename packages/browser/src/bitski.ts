@@ -2,12 +2,13 @@ import { AuthorizationServiceConfiguration } from '@openid/appauth';
 import {
   BitskiEngine,
   BitskiEngineOptions,
-  Polygon,,
-  Mumbai,
   Mainnet,
+  Mumbai,
   Network,
+  Polygon,
   Rinkeby,
 } from 'bitski-provider';
+
 import { LOGIN_HINT_SIGNUP, SignInOptions } from './auth/oauth-manager';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
