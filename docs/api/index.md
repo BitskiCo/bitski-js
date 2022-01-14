@@ -124,7 +124,7 @@ var token: string
 
 
 ```javascript
-var expired: 
+var expired:
 ```
 <small>*Defined in [packages/browser/src/auth/access-token.ts:54](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/access-token.ts#L54)*</small>
 
@@ -896,7 +896,7 @@ var userStore: UserStore
 
 
 ```javascript
-var authStatus: 
+var authStatus:
 ```
 <small>*Defined in [packages/browser/src/auth/openid-auth-provider.ts:32](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/openid-auth-provider.ts#L32)*</small>
 
@@ -1603,7 +1603,7 @@ new TokenStore(clientId: string, store: Store): TokenStore
 
 
 ```javascript
-var currentIdToken: 
+var currentIdToken:
 ```
 <small>*Defined in [packages/browser/src/auth/token-store.ts:15](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L15)*</small>
 
@@ -1617,7 +1617,7 @@ var currentIdToken:
 
 
 ```javascript
-var currentToken: 
+var currentToken:
 ```
 <small>*Defined in [packages/browser/src/auth/token-store.ts:9](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L9)*</small>
 
@@ -1631,7 +1631,7 @@ var currentToken:
 
 
 ```javascript
-var refreshToken: 
+var refreshToken:
 ```
 <small>*Defined in [packages/browser/src/auth/token-store.ts:21](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/token-store.ts#L21)*</small>
 
@@ -2053,7 +2053,7 @@ new UserStore(clientId: string, store: Store): UserStore
 
 
 ```javascript
-var currentUser: 
+var currentUser:
 ```
 <small>*Defined in [packages/browser/src/auth/user-store.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/auth/user-store.ts#L8)*</small>
 
@@ -2274,7 +2274,7 @@ new Bitski(clientId: string, redirectUri: undefined | string, additionalScopes: 
 
 
 ```javascript
-var authStatus: 
+var authStatus:
 ```
 <small>*Defined in [packages/browser/src/bitski.ts:152](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/bitski.ts#L152)*</small>
 
@@ -3484,7 +3484,7 @@ var REFRESH_TOKEN_KEY: "bitski.refresh_token" = "bitski.refresh_token"
 
 
 ```javascript
-var SDK_VERSION: "0.11.0-beta.4" = "0.11.0-beta.4"
+var SDK_VERSION: "0.11.0" = "0.11.0"
 ```
 <small>*Defined in [packages/browser/src/constants.ts:2](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L2)*</small>
 
@@ -6100,7 +6100,7 @@ function parseResponseT(response: Response): Promise<T>
 
 ##### Type parameters
 
-#### T 
+#### T
 ##### Parameters
 
 | Param | Type | Description |
@@ -6329,7 +6329,7 @@ var token: string
 
 
 ```javascript
-var expired: 
+var expired:
 ```
 <small>*Defined in [packages/provider/src/auth/access-token.ts:8](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/provider/src/auth/access-token.ts#L8)*</small>
 
@@ -7715,7 +7715,7 @@ var type: string
 
 
 ```javascript
-var TypeMapping: 
+var TypeMapping:
 ```
 <small>*Defined in [packages/provider/src/subproviders/typed-data.ts:25](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/provider/src/subproviders/typed-data.ts#L25)*</small>
 
