@@ -1,5 +1,6 @@
 // JSON-RPC methods that require Authorization header
 export const AUTHENTICATED_METHODS = [
+  'eth_requestAccounts',
   'eth_accounts',
   'eth_sendTransaction',
   'eth_signTransaction',
