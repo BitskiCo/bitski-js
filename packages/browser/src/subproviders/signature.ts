@@ -2,7 +2,6 @@ import { Subprovider } from '@bitski/provider-engine';
 import { AccessTokenProvider, JSONRPCRequestPayload, Network } from 'bitski-provider';
 import JsonRpcError from 'json-rpc-error';
 import { v4 as uuidv4 } from 'uuid';
-
 import { DEFAULT_AUTHORIZED_METHODS as DEFAULT_SIGNATURE_METHODS } from '../constants';
 import { SignerError } from '../errors/signer-error';
 import { BitskiTransactionSigner } from '../signing/transaction-signer';
