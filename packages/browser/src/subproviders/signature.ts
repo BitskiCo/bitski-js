@@ -41,6 +41,9 @@ export interface TransactionPayload {
   nonce?: string;
   gas?: string;
   gasPrice?: string;
+  maxFeePerGas?: string;
+  maxPriorityFeePerGas?: string;
+  type?: string;
 }
 
 export interface TypedDataDefinition {
