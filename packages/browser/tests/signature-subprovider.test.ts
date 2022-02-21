@@ -214,7 +214,7 @@ test('should sign messages with personal_sign', (done) => {
 });
 
 test('it validates parameters for requests when creating transaction', () => {
-  expect.assertions(18);
+  expect.assertions(20);
 
   const { instance } = createProvider();
 
