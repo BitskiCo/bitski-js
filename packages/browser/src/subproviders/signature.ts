@@ -2,6 +2,7 @@ import { Subprovider } from '@bitski/provider-engine';
 import { AccessTokenProvider, JSONRPCRequestPayload, Network } from 'bitski-provider';
 import JsonRpcError from 'json-rpc-error';
 import { v4 as uuidv4 } from 'uuid';
+
 import { DEFAULT_AUTHORIZED_METHODS as DEFAULT_SIGNATURE_METHODS } from '../constants';
 import { SignerError } from '../errors/signer-error';
 import { BitskiTransactionSigner } from '../signing/transaction-signer';
@@ -249,6 +250,7 @@ export class SignatureSubprovider extends Subprovider {
       }
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
+      case 'eth_signTypedData_v4':
         // The from address should be the first parameter as a 20 byte hex string
         if (request.params && request.params.length > 0) {
           return { from: request.params[0] };
@@ -289,6 +291,7 @@ export class SignatureSubprovider extends Subprovider {
         }
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
+      case 'eth_signTypedData_v4':
         if (request.params && request.params.length > 1) {
           return request.params[1] as TypedDataPayload;
         } else {
@@ -315,6 +318,7 @@ export class SignatureSubprovider extends Subprovider {
         return TransactionKind.Sign;
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
+      case 'eth_signTypedData_v4':
         return TransactionKind.SignTypedData;
       default:
         throw SignerError.UnsupportedMethod();

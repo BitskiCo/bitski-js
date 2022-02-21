@@ -1,4 +1,5 @@
 import { Subprovider } from '@bitski/provider-engine';
+
 import { ProviderError } from '../errors/provider-error';
 import { JSONRPCRequestPayload } from '../index';
 import { encodeNumber } from '../utils/parse-utils';
@@ -34,7 +35,7 @@ export class TypedDataSanitizerSubprovider extends Subprovider {
     next: () => void,
     end: (error, response) => void,
   ) {
-    if (payload.method === 'eth_signTypedData' || payload.method === 'eth_signTypedData_v3') {
+    if (payload.method === 'eth_signTypedData' || payload.method === 'eth_signTypedData_v3' || payload.method === 'eth_signTypedData_v4') {
       try {
         this.sanitizePayload(payload);
       } catch (err) {

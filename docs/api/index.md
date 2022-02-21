@@ -3400,6 +3400,7 @@ var DEFAULT_AUTHORIZED_METHODS: string[] =  [
   'personal_sign',
   'eth_signTypedData',
   'eth_signTypedData_v3', // For metamask compatibility
+  'eth_signTypedData_v4',
 ]
 ```
 <small>*Defined in [packages/browser/src/constants.ts:40](https://github.com/BitskiCo/bitski-js/blob/master/packages/packages/browser/src/constants.ts#L40)*</small>
