@@ -274,9 +274,9 @@ test('it validates parameters for requests when creating transaction', () => {
     expect(error.code).toBe(SignerErrorCode.MissingTypedData);
   }
 
-  const noParamsTypedData = createRequest('eth_signTypedData_v4');
+  const noParamsTypedDataV4 = createRequest('eth_signTypedData_v4');
   try {
-    instance.createPayload(noParamsTypedData);
+    instance.createPayload(noParamsTypedDataV4);
   } catch (error) {
     expect(error).toBeInstanceOf(SignerError);
     expect(error.code).toBe(SignerErrorCode.MissingTypedData);
