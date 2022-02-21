@@ -1,9 +1,9 @@
 import { ProviderError, ProviderErrorCode } from '../src/errors/provider-error';
 import {
+  TypedDataSanitizerSubprovider,
   createTypeMapping,
   sanitizeDomain,
   sanitizeMessage,
-  TypedDataSanitizerSubprovider,
 } from '../src/subproviders/typed-data';
 
 describe('creating a mapping schema', () => {
@@ -458,6 +458,44 @@ describe('handling JSON-RPC requests', () => {
       jsonrpc: '2.0',
       id: 0,
       method: 'eth_signTypedData_v3',
+      params: ['0xf00', typedData],
+    };
+    const next = jest.fn();
+    const end = jest.fn();
+    const spy = jest.spyOn(provider, 'sanitizePayload');
+    provider.handleRequest(payload, next, end);
+    expect(next).toBeCalled();
+    expect(end).not.toBeCalled();
+    expect(spy).toBeCalled();
+    expect(typedData.message.value).toBe('0x2a');
+  });
+
+  test('it handles v4 suffix', () => {
+    const typedData = {
+      types: {
+        EIP712Domain: [
+          { name: 'name', type: 'string' },
+          { name: 'chainId', type: 'uint256' },
+        ],
+        TestStruct: [
+          { name: 'title', type: 'string' },
+          { name: 'value', type: 'uint16' },
+        ],
+      },
+      domain: {
+        name: 'Test Domain',
+        chainId: 1,
+      },
+      primaryType: 'TestStruct',
+      message: {
+        title: 'Hello World',
+        value: 42,
+      },
+    };
+    const payload = {
+      jsonrpc: '2.0',
+      id: 0,
+      method: 'eth_signTypedData_v4',
       params: ['0xf00', typedData],
     };
     const next = jest.fn();
