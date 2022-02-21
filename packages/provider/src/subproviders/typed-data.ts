@@ -35,7 +35,11 @@ export class TypedDataSanitizerSubprovider extends Subprovider {
     next: () => void,
     end: (error, response) => void,
   ) {
-    if (payload.method === 'eth_signTypedData' || payload.method === 'eth_signTypedData_v3' || payload.method === 'eth_signTypedData_v4') {
+    if (
+      payload.method === 'eth_signTypedData' ||
+      payload.method === 'eth_signTypedData_v3' ||
+      payload.method === 'eth_signTypedData_v4'
+    ) {
       try {
         this.sanitizePayload(payload);
       } catch (err) {
