@@ -44,5 +44,5 @@ export const DEFAULT_AUTHORIZED_METHODS = [
   'personal_sign',
   'eth_signTypedData',
   'eth_signTypedData_v3', // For metamask compatibility
-  'eth_signTypedData_V4',
+  'eth_signTypedData_v4',
 ];
