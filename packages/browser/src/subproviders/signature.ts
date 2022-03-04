@@ -14,6 +14,8 @@ export enum TransactionKind {
   SignTransaction = 'ETH_SIGN_TRANSACTION',
   Sign = 'ETH_SIGN',
   SignTypedData = 'ETH_SIGN_TYPED_DATA',
+  SignTypedDataV3 = 'ETH_SIGN_TYPED_DATA_V3',
+  SignTypedDataV4 = 'ETH_SIGN_TYPED_DATA_V4',
 }
 
 export interface Transaction {
@@ -317,9 +319,11 @@ export class SignatureSubprovider extends Subprovider {
       case 'personal_sign':
         return TransactionKind.Sign;
       case 'eth_signTypedData':
-      case 'eth_signTypedData_v3':
-      case 'eth_signTypedData_v4':
         return TransactionKind.SignTypedData;
+      case 'eth_signTypedData_v3':
+        return TransactionKind.SignTypedDataV3;
+      case 'eth_signTypedData_v4':
+        return TransactionKind.SignTypedDataV4;
       default:
         throw SignerError.UnsupportedMethod();
     }
