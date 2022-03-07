@@ -74,7 +74,7 @@ Alternatively you can add this script tag to your app’s `<head>`:
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.33/dist/web3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bitski@0.13.1/dist/bitski.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bitski@0.14.0/dist/bitski.min.js"></script>
 ```
 
 ### Starting the SDK
