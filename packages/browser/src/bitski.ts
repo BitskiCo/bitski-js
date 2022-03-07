@@ -45,6 +45,10 @@ export { SignInOptions, LOGIN_HINT_SIGNUP };
 // Networks
 export { Network, Mainnet, Rinkeby, Polygon, Mumbai };
 
+// Type-only for a User. Can be passed around in TypeScript,
+// but not constructed outside this library.
+export type { User };
+
 // Connect Button
 export { ConnectButtonSize, ConnectButtonOptions };
 
