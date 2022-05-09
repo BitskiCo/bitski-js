@@ -136,6 +136,7 @@ export class Bitski {
     const existingProvider = this.engines.get(JSON.stringify(options));
     if (existingProvider) {
       existingProvider.start();
+      return existingProvider;
     }
     // Create a new provider if one does not exist
     let normalizedOptions: ProviderOptions = {};
