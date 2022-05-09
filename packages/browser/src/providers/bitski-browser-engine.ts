@@ -92,16 +92,15 @@ export class BitskiBrowserEngine extends BitskiEngine {
           const engine = this.metaProviders.get(currentEngineKey);
           this.currentProvider = engine ? engine : this;
         } else {
-          const newOptions = { ...options, network: networkFromId(chainId) };
           const newEngine = new BitskiBrowserEngine(
             this.clientId,
             this.tokenProvider,
             this.sdkVersion,
             networkFromId(chainId),
-            newOptions,
+            options,
             this.metaProviders,
           );
-          this.metaProviders.set(JSON.stringify(newOptions), newEngine);
+          this.metaProviders.set(JSON.stringify(options), newEngine);
           this.currentProvider = newEngine;
         }
       },
