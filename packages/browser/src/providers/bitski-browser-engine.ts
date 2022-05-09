@@ -32,7 +32,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
   private clientId: string;
   private sdkVersion: string;
   private currentProvider: BitskiEngine;
-  private metaProviders: Map<string, BitskiEngine>
+  private metaProviders: Map<string, BitskiEngine>;
 
   // Headers for bitski endpoints
   private headers: Record<string, unknown>;
@@ -61,47 +61,52 @@ export class BitskiBrowserEngine extends BitskiEngine {
     this.currentProvider = this;
     this.metaProviders = engines;
 
-    window.addEventListener('message', (event) => {
-      if (event.origin !== window.location.origin) {
-        return;
-      }
-
-      const { chainId } = event.data;
-      const engines = this.metaProviders.keys();
-
-      let currentEngineKey = '';
-
-      /*
-       *  A network can be specified in the SDK via Network 
-       *  or networkName in ProviderOptions. 
-       */
-      for (const engineOptions of engines) {
-        const hasProviderForNetworkId =
-          engineOptions.includes(
-            JSON.stringify(networkFromId(chainId))
-          ) ||
-          engineOptions.includes(
-            `chainId: ${chainId}`
-          ) ||
-          engineOptions.includes(
-            JSON.stringify({ networkName: networkNameFromId(chainId) })
-          );
-
-        if (hasProviderForNetworkId) {
-          currentEngineKey = engineOptions;
+    window.addEventListener(
+      'message',
+      (event) => {
+        if (event.origin !== window.location.origin) {
+          return;
         }
-      }
 
-      if (currentEngineKey) {
-        const engine = this.metaProviders.get(currentEngineKey);
-        this.currentProvider = engine ? engine : this;
-      } else {
-        const newOptions = { ...options, network: networkFromId(chainId) };
-        const newEngine = new BitskiBrowserEngine(this.clientId, this.tokenProvider, this.sdkVersion, networkFromId(chainId), newOptions, this.metaProviders);
-        this.metaProviders.set(JSON.stringify(newOptions), newEngine);
-        this.currentProvider = newEngine;
-      }
-    }, false)
+        const { chainId } = event.data;
+        const engines = this.metaProviders.keys();
+
+        let currentEngineKey = '';
+
+        /*
+         *  A network can be specified in the SDK via Network
+         *  or networkName in ProviderOptions.
+         */
+        for (const engineOptions of engines) {
+          const hasProviderForNetworkId =
+            engineOptions.includes(JSON.stringify(networkFromId(chainId))) ||
+            engineOptions.includes(`chainId: ${chainId}`) ||
+            engineOptions.includes(JSON.stringify({ networkName: networkNameFromId(chainId) }));
+
+          if (hasProviderForNetworkId) {
+            currentEngineKey = engineOptions;
+          }
+        }
+
+        if (currentEngineKey) {
+          const engine = this.metaProviders.get(currentEngineKey);
+          this.currentProvider = engine ? engine : this;
+        } else {
+          const newOptions = { ...options, network: networkFromId(chainId) };
+          const newEngine = new BitskiBrowserEngine(
+            this.clientId,
+            this.tokenProvider,
+            this.sdkVersion,
+            networkFromId(chainId),
+            newOptions,
+            this.metaProviders,
+          );
+          this.metaProviders.set(JSON.stringify(newOptions), newEngine);
+          this.currentProvider = newEngine;
+        }
+      },
+      false,
+    );
 
     const defaultBitskiHeaders = {
       'X-API-KEY': this.clientId,

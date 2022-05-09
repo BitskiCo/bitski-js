@@ -6,10 +6,7 @@ import { isSupportedNetworkId } from '../utils/network-utils';
 const HEX_RADIX = 16;
 
 export class NetworkSwitcherSubprovider extends Subprovider {
-  public handleRequest(
-    payload: JSONRPCRequestPayload,
-    end: (error, response) => void,
-  ) {
+  public handleRequest(payload: JSONRPCRequestPayload, end: (error, response) => void) {
     if (payload.method === 'wallet_switchEthereumChain') {
       try {
         const networkId = parseInt(payload.params[0].chainId, HEX_RADIX);

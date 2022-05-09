@@ -1,15 +1,11 @@
-import {
-  Mainnet,
-  Mumbai,
-  Network,
-  Polygon,
-  Rinkeby,
-} from 'bitski-provider';
+import { Mainnet, Mumbai, Network, Polygon, Rinkeby } from 'bitski-provider';
 
 import { ProviderOptions } from '../bitski';
 import { SUPPORTED_CHAIN_IDS } from '../constants';
 
-export const networkFromProviderOptions = (options: ProviderOptions | string | undefined): Network => {
+export const networkFromProviderOptions = (
+  options: ProviderOptions | string | undefined,
+): Network => {
   if (!options) {
     return Mainnet;
   }
@@ -23,11 +19,11 @@ export const networkFromProviderOptions = (options: ProviderOptions | string | u
     return networkFromName(options.networkName);
   }
   return Mainnet;
-}
+};
 
 export const isSupportedNetworkId = (networkId: number): boolean => {
   return SUPPORTED_CHAIN_IDS.includes(networkId);
-}
+};
 
 export const networkNameFromId = (networkId: number): string => {
   switch (networkId) {
@@ -44,7 +40,7 @@ export const networkNameFromId = (networkId: number): string => {
         `Unsupported chain id ${networkId}. Try passing a \`network\` in the options instead.`,
       );
   }
-}
+};
 
 export const networkFromId = (networkId: number): Network => {
   switch (networkId) {
@@ -61,7 +57,7 @@ export const networkFromId = (networkId: number): Network => {
         `Unsupported chain id ${networkId}. Try passing a \`network\` in the options instead.`,
       );
   }
-}
+};
 
 const networkFromName = (networkName: string): Network => {
   switch (networkName) {
@@ -79,5 +75,4 @@ const networkFromName = (networkName: string): Network => {
         `Unsupported network name ${networkName}. Try passing a \`network\` in the options instead.`,
       );
   }
-}
-
+};
