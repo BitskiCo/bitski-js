@@ -46,3 +46,5 @@ export const DEFAULT_AUTHORIZED_METHODS = [
   'eth_signTypedData_v3', // For metamask compatibility
   'eth_signTypedData_v4',
 ];
+
+export const SUPPORTED_CHAIN_IDS = [1, 4, 137, 80001];

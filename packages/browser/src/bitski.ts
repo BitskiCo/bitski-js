@@ -22,6 +22,7 @@ import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import css from './styles/index';
 import { processCallback } from './utils/callback';
 import { LocalStorageStore } from './utils/localstorage-store';
+import { networkFromId, networkFromProviderOptions } from './utils/network-utils';
 import { Store } from './utils/store';
 
 export enum OAuthSignInMethod {
@@ -135,14 +136,13 @@ export class Bitski {
     const existingProvider = this.engines.get(JSON.stringify(options));
     if (existingProvider) {
       existingProvider.start();
-      return existingProvider;
     }
     // Create a new provider if one does not exist
     let normalizedOptions: ProviderOptions = {};
     if (options && typeof options !== 'string') {
       normalizedOptions = options;
     }
-    const network = this.networkFromProviderOptions(options);
+    const network = networkFromProviderOptions(options);
     const newProvider = this.createProvider(network, normalizedOptions);
     newProvider.start();
     this.engines.set(JSON.stringify(options), newProvider);
@@ -281,41 +281,8 @@ export class Bitski {
       this.sdkVersion,
       network,
       options,
+      this.engines,
     );
-  }
-
-  private networkFromName(networkName: string): Network {
-    switch (networkName) {
-      case '':
-      case 'mainnet':
-        return Mainnet;
-      case 'rinkeby':
-        return Rinkeby;
-      case 'polygon':
-        return Polygon;
-      case 'mumbai':
-        return Mumbai;
-      default:
-        throw new Error(
-          `Unsupported network name ${networkName}. Try passing a \`network\` in the options instead.`,
-        );
-    }
-  }
-
-  private networkFromProviderOptions(options: ProviderOptions | string | undefined): Network {
-    if (!options) {
-      return Mainnet;
-    }
-    if (typeof options === 'string') {
-      return this.networkFromName(options);
-    }
-    if (options.network) {
-      return options.network;
-    }
-    if (options.networkName) {
-      return this.networkFromName(options.networkName);
-    }
-    return Mainnet;
   }
 
   private onSignOut() {
