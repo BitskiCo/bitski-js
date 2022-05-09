@@ -17,7 +17,7 @@ import { AuthenticatedCacheSubprovider } from '../subproviders/authenticated-cac
 import { RemoteAccountSubprovider } from '../subproviders/remote-accounts';
 import { RestFetchSubprovider } from '../subproviders/rest-fetch';
 import { SignatureSubprovider } from '../subproviders/signature';
-import { networkFromId } from '../utils/network-utils';
+import { networkFromId, networkNameFromId } from '../utils/network-utils';
 
 // Predicate to determine if the token provider is an AuthProvider
 function isAuthProvider(object: any): object is AuthProvider {
@@ -71,6 +71,10 @@ export class BitskiBrowserEngine extends BitskiEngine {
 
       let currentEngineKey = '';
 
+      /*
+       *  A network can be specified in the SDK via Network 
+       *  or networkName in ProviderOptions. 
+       */
       for (const engineOptions of engines) {
         const hasProviderForNetworkId =
           engineOptions.includes(
@@ -78,8 +82,10 @@ export class BitskiBrowserEngine extends BitskiEngine {
           ) ||
           engineOptions.includes(
             `chainId: ${chainId}`
+          ) ||
+          engineOptions.includes(
+            JSON.stringify({ networkName: networkNameFromId(chainId) })
           );
-
 
         if (hasProviderForNetworkId) {
           currentEngineKey = engineOptions;
