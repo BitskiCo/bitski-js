@@ -15,5 +15,4 @@ import { BitskiEngine } from 'bitski-provider';
 
 const provider = new BitskiEngine();
 provider.start();
-
 ```

@@ -1,33 +1,19 @@
 module.exports = {
-  roots: [
-    "<rootDir>/src",
-    "<rootDir>/tests"
-  ],
+  roots: ["<rootDir>/src", "<rootDir>/tests"],
   transform: {
-    "^.+\\.ts$": "ts-jest"
+    "^.+\\.ts$": "ts-jest",
   },
   testRegex: "(/tests/.*.(test|spec)).(jsx?|tsx?)$",
   automock: false,
   collectCoverage: true,
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!**/node_modules/**'
-  ],
+  collectCoverageFrom: ["src/**/*.ts", "!**/node_modules/**"],
   coveragePathIgnorePatterns: [],
-  moduleFileExtensions: [
-    "js",
-    "ts"
-  ],
-  coverageReporters: [
-    "json",
-    "text",
-    "html",
-    "cobertura"
-  ],
+  moduleFileExtensions: ["js", "ts"],
+  coverageReporters: ["json", "text", "html", "cobertura"],
   verbose: true,
   globals: {
     "ts-jest": {
-      diagnostics: false
-    }
+      diagnostics: false,
+    },
   },
 };
