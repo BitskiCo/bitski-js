@@ -1,14 +1,14 @@
 module.exports = {
   module: "commonjs",
   target: "ES5",
-  includes: './',
+  includes: "./",
   exclude: [
     "**/tests/**/*",
     "**/dist/**/*",
     "**/lib/**/*",
     "**/node_modules/**/*.*",
     "**/src/utils/callback.*",
-    "**/src/styles/*.*"
+    "**/src/styles/*.*",
   ],
   experimentalDecorators: true,
   excludeExternals: true,
