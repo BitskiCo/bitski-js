@@ -69,7 +69,25 @@ etc
 # Rollup
 .rpt2_cache/
 
-# Examples artifacts
+# package locks
 examples/package-lock.json
 packages/browser/package-lock.json
 packages/provider/package-lock.json
+
+.turbo
+build/**
+dist/**
+
+# compiled output
+packages/**/dist/
+packages/**/lib/
+
+examples/**
+docs/**
+
+# dependencies
+packages/**/node_modules/
+
+# misc
+packages/**/coverage/
+.eslintcache

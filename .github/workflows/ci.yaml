@@ -1,25 +1,54 @@
-name: Node.js CI
+name: CI
 
-on: [pull_request]
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
-  test:
+  build:
+    name: Build and Test
+    timeout-minutes: 15
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: ['14']
+        node-version: ["14"]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm i -g npm@7
-    - run: npm ci
-    - run: npm run lint --workspaces
-    - run: npm run test --workspaces
-      timeout-minutes: 5
-      env:
-        CI: true
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules/.cache/turbo
+          key: ${{ runner.os }}-${{ matrix.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.os }}-
+            ${{ runner.os }}-
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      
+      - name: Use npm 7.24.2
+        run: npm install -g npm@7.24.2
+
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Format code
+        run: npm run format
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
