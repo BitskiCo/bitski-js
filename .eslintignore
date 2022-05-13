@@ -1,0 +1,16 @@
+examples
+docs
+
+# compiled output
+packages/**/dist/
+packages/**/lib/
+
+# misc
+packages/**/coverage/
+
+# Jest
+jest.config.base.js
+**/jest.config.js
+packages/browser/scripts/version.js
+
+typedoc.js
