@@ -95,6 +95,10 @@ export class BitskiTransactionSigner {
     if (this.currentRequestDialog) {
       this.currentRequestDialog.dismiss();
     }
+    
+    // Clear state
+    this.currentRequest = undefined;
+    this.currentRequestDialog = undefined;
 
     // Call the callback to complete the request
     if (callback.error) {
@@ -102,10 +106,6 @@ export class BitskiTransactionSigner {
     } else {
       fulfill(callback.result);
     }
-
-    // Clear state
-    this.currentRequest = undefined;
-    this.currentRequestDialog = undefined;
   }
 
   /**
