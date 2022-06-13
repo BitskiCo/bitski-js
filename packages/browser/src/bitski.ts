@@ -45,7 +45,7 @@ export { Store, LocalStorageStore };
 export { SignInOptions, LOGIN_HINT_SIGNUP };
 
 // Networks
-export { Network, Mainnet, Rinkeby, Polygon, Mumbai, BinanceSmartChain, BinanceSmartChainTestnet };
+export { Network, BinanceSmartChain, BinanceSmartChainTestnet, Mainnet, Rinkeby, Polygon, Mumbai };
 
 // Type-only for a User. Can be passed around in TypeScript,
 // but not constructed outside this library.
