@@ -1,12 +1,14 @@
 import { AuthorizationServiceConfiguration } from '@openid/appauth';
 import {
+  BinanceSmartChain,
+  BinanceSmartChainTestnet,
   BitskiEngine,
   BitskiEngineOptions,
   Mainnet,
   Mumbai,
   Network,
   Polygon,
-  Rinkeby,
+  Rinkeby
 } from 'bitski-provider';
 
 import { LOGIN_HINT_SIGNUP, SignInOptions } from './auth/oauth-manager';
@@ -43,7 +45,7 @@ export { Store, LocalStorageStore };
 export { SignInOptions, LOGIN_HINT_SIGNUP };
 
 // Networks
-export { Network, Mainnet, Rinkeby, Polygon, Mumbai };
+export { Network, Mainnet, Rinkeby, Polygon, Mumbai, BinanceSmartChain, BinanceSmartChainTestnet };
 
 // Type-only for a User. Can be passed around in TypeScript,
 // but not constructed outside this library.
