@@ -12,7 +12,6 @@ interface PropertyDef {
 type TypeDefinition = PropertyDef[];
 
 interface TypedDataTypes {
-  EIP712Domain: TypeDefinition;
   [typeName: string]: TypeDefinition;
 }
 
@@ -53,8 +52,10 @@ export class TypedDataSanitizerSubprovider extends Subprovider {
     const typedData = this.extractTypedData(payload);
     // create map of types
     const typeMapping = createTypeMapping(typedData);
-    // sanitize domain
-    sanitizeDomain(typedData, typeMapping);
+    // sanitize domain if available
+    if (typedData.domain || typedData.types.EIP712Domain) {
+      sanitizeDomain(typedData, typeMapping);
+    }
     // sanitize message
     sanitizeMessage(typedData, typeMapping);
     // Re-assign typed data to params in case it has been parsed
@@ -84,9 +85,6 @@ export class TypedDataSanitizerSubprovider extends Subprovider {
 export function sanitizeDomain(typedData: TypedData, typeMapping: TypeMapping) {
   if (typeof typedData.domain === 'undefined') {
     throw ProviderError.InvalidRequest('Missing domain for typed data');
-  }
-  if (typeof typedData.types.EIP712Domain === 'undefined') {
-    throw ProviderError.InvalidRequest('Missing type definition for domain');
   }
   sanitizeType('EIP712Domain', typedData.domain, typeMapping);
 }
