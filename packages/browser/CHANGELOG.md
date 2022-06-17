@@ -1,5 +1,12 @@
 # bitski
 
+## 0.0.0-dvision-20220617033240
+
+### Patch Changes
+
+- Updated dependencies []:
+  - bitski-provider@0.0.0-dvision-20220617033240
+
 ## 0.15.0
 
 ### Minor Changes

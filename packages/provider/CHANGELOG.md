@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 0.0.0-dvision-20220617033240
+
+### Minor Changes
+
+- Remove requirement on EIP712Domain for typed data
+
 ## 0.15.0
 
 ### Minor Changes
