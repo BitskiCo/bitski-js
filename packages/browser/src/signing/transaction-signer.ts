@@ -1,4 +1,5 @@
 import { retry } from 'async';
+
 import { Dialog } from '../components/dialog';
 import { IFRAME_MESSAGE_ORIGIN_INCLUDES } from '../constants';
 import { SignerError } from '../errors/signer-error';
@@ -55,9 +56,11 @@ export class BitskiTransactionSigner {
       return this.redirectToCallbackURL(persisted.transaction);
     }
 
-    this.submitTransaction(transaction, accessToken).catch((error) => {
-      return this.handleCallback({ error });
-    });
+    try {
+      await this.submitTransaction(transaction, accessToken);
+    } catch (error) {
+      this.handleCallback({ error });
+    }
 
     // Show the modal (await response)
     return this.showAuthorizationModal(transaction);
@@ -95,7 +98,7 @@ export class BitskiTransactionSigner {
     if (this.currentRequestDialog) {
       this.currentRequestDialog.dismiss();
     }
-    
+
     // Clear state
     this.currentRequest = undefined;
     this.currentRequestDialog = undefined;
