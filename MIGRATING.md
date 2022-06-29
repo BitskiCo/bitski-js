@@ -19,8 +19,8 @@ We made it slightly more obvious how to request custom scopes, and removed the o
 You can now pass in an array at the top level:
 
 ```javascript
-import { Bitski } from "bitski";
-const bitski = new Bitski("client-id", "redirect-url", ["offline", "email"]);
+import { Bitski } from 'bitski';
+const bitski = new Bitski('client-id', 'redirect-url', ['offline', 'email']);
 ```
 
 ## User object has been modified
@@ -30,8 +30,8 @@ Our previous library had a different model for user. In most cases, you don't ne
 **Solution**:
 
 ```javascript
-import { Bitski } from "bitski";
-const bitski = new Bitski("client-id", "redirect-url");
+import { Bitski } from 'bitski';
+const bitski = new Bitski('client-id', 'redirect-url');
 // Access user id, or email address:
 const user = await bitski.getUser();
 const id = user.id; // user id (previously user.profile.sub)
@@ -77,10 +77,10 @@ Previously we suggested calling `bitski.getWeb3()` in order to get a web3 instan
 Import web3 directly and initialize an instance using a provider from `bitski.getProvider()`.
 
 ```javascript
-import { Bitski } from "bitski";
-import Web3 from "web3";
+import { Bitski } from 'bitski';
+import Web3 from 'web3';
 
-const bitski = new Bitski("client-id", "redirect-url");
+const bitski = new Bitski('client-id', 'redirect-url');
 const web3 = new Web3(bitski.getProvider());
 ```
 
@@ -117,14 +117,14 @@ Previously you would initialize Bitski with a client id, callback url, and logou
 Update your code to use only the 2 parameters:
 
 ```javascript
-const bitski = new Bitski("CLIENT-ID", "CALLBACK-URL");
+const bitski = new Bitski('CLIENT-ID', 'CALLBACK-URL');
 ```
 
 If you would like to navigate somewhere after log out, just use the signOut promise:
 
 ```javascript
 bitski.signOut().then(() => {
-  window.location.href = "http://my-logged-out-url.com";
+  window.location.href = 'http://my-logged-out-url.com';
 });
 ```
 

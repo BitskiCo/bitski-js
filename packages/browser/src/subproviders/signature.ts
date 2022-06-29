@@ -245,10 +245,17 @@ export class SignatureSubprovider extends Subprovider {
 
   private async createContext(request: JSONRPCRequestPayload): Promise<TransactionContext> {
     switch (request.method) {
+      case 'personal_sign':
+      case 'eth_sign':
       case 'eth_sendTransaction':
       case 'eth_signTransaction': {
         const balance = await this.loadBalanceIfNeeded(request);
-        return { chainId: this.network.chainId, currentBalance: balance };
+
+        if (balance) {
+          return { chainId: this.network.chainId, currentBalance: balance };
+        }
+
+        return { chainId: this.network.chainId };
       }
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':

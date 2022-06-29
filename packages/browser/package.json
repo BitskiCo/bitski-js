@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "0.0.0-dvision-20220617033240",
+  "version": "0.16.0",
   "scripts": {
     "lint": "eslint . --cache",
     "test": "jest",
@@ -23,8 +23,9 @@
     "prettier": "prettier --config .prettierrc '{src,tests}/**/*.ts' --write"
   },
   "dependencies": {
+    "@bitski/provider-engine": "^0.7.0-beta.5",
     "@openid/appauth": "^1.2.6",
-    "bitski-provider": "^0.0.0-dvision-20220617033240",
+    "bitski-provider": "^0.16.0",
     "uuid": "^8.0.0"
   },
   "devDependencies": {

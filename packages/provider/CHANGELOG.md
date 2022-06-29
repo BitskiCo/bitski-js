@@ -1,10 +1,10 @@
 # bitski-provider
 
-## 0.0.0-dvision-20220617033240
+## 0.16.0
 
 ### Minor Changes
 
-- Remove requirement on EIP712Domain for typed data
+- [#240](https://github.com/BitskiCo/bitski-js/pull/240) [`881c76d`](https://github.com/BitskiCo/bitski-js/commit/881c76d76e22097ea22b23cf83c2af4ac12e8a63) Thanks [@imthinhvu](https://github.com/imthinhvu)! - Update to latest provider-engine
 
 ## 0.15.0
 
