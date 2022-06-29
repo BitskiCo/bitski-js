@@ -8,7 +8,7 @@ import {
   Mumbai,
   Network,
   Polygon,
-  Rinkeby
+  Rinkeby,
 } from 'bitski-provider';
 
 import { LOGIN_HINT_SIGNUP, SignInOptions } from './auth/oauth-manager';

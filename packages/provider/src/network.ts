@@ -26,9 +26,9 @@ export const Mumbai: Network = {
 export const BinanceSmartChain: Network = {
   chainId: 56,
   rpcUrl: 'https://api.bitski.com/v1/web3/bsc',
-}
+};
 
 export const BinanceSmartChainTestnet: Network = {
   chainId: 97,
   rpcUrl: 'https://api.bitski.com/v1/web3/bnbt',
-}
+};
