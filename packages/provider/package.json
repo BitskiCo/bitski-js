@@ -19,6 +19,7 @@
     "prettier": "prettier --config .prettierrc '{src,tests}/**/*.ts' --write"
   },
   "dependencies": {
+    "@bitski/provider-engine": "^0.7.0-beta.5",
     "bn.js": "^4.11.8",
     "json-rpc-error": "^2.0.0"
   },
