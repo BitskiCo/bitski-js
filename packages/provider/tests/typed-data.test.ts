@@ -131,7 +131,7 @@ describe('sanitizing the domain object', () => {
   });
 
   test('it throws errors if required data is not present', () => {
-    expect.assertions(4);
+    expect.assertions(2);
     // Missing domain values
     const noDomainObject = {
       types: {
@@ -150,31 +150,6 @@ describe('sanitizing the domain object', () => {
 
     try {
       sanitizeDomain(noDomainObject, mapping);
-    } catch (error) {
-      expect(error).toBeInstanceOf(ProviderError);
-      expect(error.code).toBe(ProviderErrorCode.InvalidRequest);
-    }
-
-    // Missing type definition for EIP712Domain
-    const noDomainTypeObject = {
-      types: {
-        TestStruct: [
-          { name: 'title', type: 'string' },
-          { name: 'value', type: 'string' },
-        ],
-      },
-      domain: {
-        name: 'Test Domain',
-        chainId: 1,
-      },
-      primaryType: 'TestStruct',
-      message: {
-        title: 'Hello World',
-        value: 'Foo',
-      },
-    };
-    try {
-      sanitizeDomain(noDomainTypeObject, mapping);
     } catch (error) {
       expect(error).toBeInstanceOf(ProviderError);
       expect(error.code).toBe(ProviderErrorCode.InvalidRequest);
