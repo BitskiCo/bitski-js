@@ -19,8 +19,7 @@
   },
   "version": "0.0.0",
   "dependencies": {
-    "@bitski/provider-engine": "^0.7.0-beta.2",
-    "async": "^3.2.2"
+    "@bitski/provider-engine": "^0.7.0-beta.5"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.4",
