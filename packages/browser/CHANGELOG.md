@@ -1,5 +1,11 @@
 # bitski
 
+## 0.16.1
+
+### Patch Changes
+
+- [#237](https://github.com/BitskiCo/bitski-js/pull/237) [`31e5db0`](https://github.com/BitskiCo/bitski-js/commit/31e5db05001c00ffba66a7d310674c3298bc7d02) Thanks [@imthinhvu](https://github.com/imthinhvu)! - Remove requirement of EIP712Domain in typed signature requests as this is an optional field
+
 ## 0.16.0
 
 ### Minor Changes
