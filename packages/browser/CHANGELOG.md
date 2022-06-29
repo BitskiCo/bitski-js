@@ -1,5 +1,16 @@
 # bitski
 
+## 0.16.0
+
+### Minor Changes
+
+- [#239](https://github.com/BitskiCo/bitski-js/pull/239) [`0754343`](https://github.com/BitskiCo/bitski-js/commit/075434361d5793c2552afa05f8d4d816e20f3875) Thanks [@imthinhvu](https://github.com/imthinhvu)! - Add context to signature requests
+
+### Patch Changes
+
+- Updated dependencies [[`881c76d`](https://github.com/BitskiCo/bitski-js/commit/881c76d76e22097ea22b23cf83c2af4ac12e8a63)]:
+  - bitski-provider@0.16.0
+
 ## 0.15.0
 
 ### Minor Changes
