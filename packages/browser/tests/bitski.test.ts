@@ -1,5 +1,5 @@
 import { User } from '../src/auth/user';
-import { AuthenticationStatus, Bitski, Mainnet, OAuthSignInMethod, Rinkeby } from '../src/bitski';
+import { AuthenticationStatus, Bitski, Goerli, Mainnet, OAuthSignInMethod } from '../src/bitski';
 
 const clientID = 'test-client-id';
 
@@ -34,18 +34,18 @@ describe('managing providers', () => {
 
   test('should be able to pass a network name as a string', () => {
     const bitski = createInstance();
-    const provider = bitski.getProvider('rinkeby');
+    const provider = bitski.getProvider('goerli');
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
-    expect(provider.network).toBe(Rinkeby);
+    expect(provider.network).toBe(Goerli);
   });
 
   test('should be able to pass a network name in options', () => {
     const bitski = createInstance();
-    const provider = bitski.getProvider({ networkName: 'rinkeby' });
+    const provider = bitski.getProvider({ networkName: 'goerli' });
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
-    expect(provider.network).toBe(Rinkeby);
+    expect(provider.network).toBe(Goerli);
   });
 
   test('passing an invalid network name results in an error', () => {
@@ -72,7 +72,7 @@ describe('managing providers', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({
       network: {
-        rpcUrl: 'https://api-v2.otl.com/web3/rinkeby',
+        rpcUrl: 'https://api-v2.otl.com/web3/goerli',
         chainId: 4,
       },
       webBaseUrl: 'https://next.bitski.com',
@@ -82,7 +82,7 @@ describe('managing providers', () => {
     expect(provider.rpcHeaders['X-CLIENT-ID']).toBeUndefined();
     expect(provider.network.chainId).toBe(4);
     expect(provider.webBaseUrl).toBe('https://next.bitski.com');
-    expect(provider.network.rpcUrl).toBe('https://api-v2.otl.com/web3/rinkeby');
+    expect(provider.network.rpcUrl).toBe('https://api-v2.otl.com/web3/goerli');
   });
 
   test('should pass settings to provider-engine', () => {
@@ -95,7 +95,7 @@ describe('managing providers', () => {
   test('should pass additional headers to providers', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({
-      networkName: 'rinkeby',
+      networkName: 'goerli',
       additionalHeaders: {
         'X-FOO-FEATURE': 'ENABLED',
       },

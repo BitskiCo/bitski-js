@@ -4,11 +4,11 @@ import {
   BinanceSmartChainTestnet,
   BitskiEngine,
   BitskiEngineOptions,
+  Goerli,
   Mainnet,
   Mumbai,
   Network,
   Polygon,
-  Rinkeby,
 } from 'bitski-provider';
 
 import { LOGIN_HINT_SIGNUP, SignInOptions } from './auth/oauth-manager';
@@ -45,7 +45,7 @@ export { Store, LocalStorageStore };
 export { SignInOptions, LOGIN_HINT_SIGNUP };
 
 // Networks
-export { Network, BinanceSmartChain, BinanceSmartChainTestnet, Mainnet, Rinkeby, Polygon, Mumbai };
+export { Network, BinanceSmartChain, BinanceSmartChainTestnet, Mainnet, Goerli, Polygon, Mumbai };
 
 // Type-only for a User. Can be passed around in TypeScript,
 // but not constructed outside this library.
@@ -291,8 +291,8 @@ export class Bitski {
       case '':
       case 'mainnet':
         return Mainnet;
-      case 'rinkeby':
-        return Rinkeby;
+      case 'goerli':
+        return Goerli;
       case 'polygon':
         return Polygon;
       case 'mumbai':
