@@ -8,9 +8,9 @@ export const Mainnet: Network = {
   rpcUrl: 'https://api.bitski.com/v1/web3/mainnet',
 };
 
-export const Rinkeby: Network = {
-  chainId: 4,
-  rpcUrl: 'https://api.bitski.com/v1/web3/rinkeby',
+export const Goerli: Network = {
+  chainId: 5,
+  rpcUrl: 'https://api.bitski.com/v1/web3/goerli',
 };
 
 export const Polygon: Network = {

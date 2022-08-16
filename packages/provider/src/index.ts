@@ -7,7 +7,7 @@ export {
   BinanceSmartChain,
   BinanceSmartChainTestnet,
   Mainnet,
-  Rinkeby,
+  Goerli,
   Polygon,
   Mumbai,
 } from './network';
