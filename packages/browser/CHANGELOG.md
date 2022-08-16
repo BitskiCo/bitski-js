@@ -1,5 +1,11 @@
 # bitski
 
+## 2.0.0
+
+### Major Changes
+
+- [#249](https://github.com/BitskiCo/bitski-js/pull/249) [`9d85623`](https://github.com/BitskiCo/bitski-js/commit/9d85623e156e7a67982085c0a50e627b7979543b) Thanks [@imthinhvu](https://github.com/imthinhvu)! - Promote to production version; remove Rinkeby; add Goerli
+
 ## 0.16.1
 
 ### Patch Changes
