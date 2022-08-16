@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 1.0.0
+
+### Major Changes
+
+- [#247](https://github.com/BitskiCo/bitski-js/pull/247) [`f8e37d3`](https://github.com/BitskiCo/bitski-js/commit/f8e37d331924764e91852be7c699186e9f63c39b) Thanks [@imthinhvu](https://github.com/imthinhvu)! - Promote to production; remove Rinkeby; add Goerli
+
 ## 0.16.0
 
 ### Minor Changes
