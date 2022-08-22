@@ -9,6 +9,7 @@ import {
   FetchRequestor,
   GRANT_TYPE_AUTHORIZATION_CODE,
   GRANT_TYPE_REFRESH_TOKEN,
+  LocationLike,
   RedirectRequestHandler,
   TokenRequest,
   TokenRequestHandler,
@@ -35,6 +36,7 @@ export interface OAuthManagerOptions {
 
 export interface SignInOptions {
   login_hint?: string;
+  location?: LocationLike;
 }
 
 // Use this constant in login_hint to indicate that the sign up UI should be displayed
@@ -104,7 +106,11 @@ export class OAuthManager {
     const promise = new Promise<AuthorizationResponse>((fulfill, reject) => {
       this.pendingResolver = { fulfill, reject };
     });
-    this.authHandler = new RedirectRequestHandler(undefined, new NoHashQueryStringUtils());
+    this.authHandler = new RedirectRequestHandler(
+      undefined,
+      new NoHashQueryStringUtils(),
+      opts.location,
+    );
     this.authHandler.setAuthorizationNotifier(this.notifier);
     const request = this.createAuthRequest(opts);
     this.authHandler.performAuthorizationRequest(this.configuration, request);
