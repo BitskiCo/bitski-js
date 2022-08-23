@@ -1,5 +1,19 @@
 # bitski
 
+## 2.0.0
+
+### Major Changes
+
+- [#252](https://github.com/BitskiCo/bitski-js/pull/252) [`c272b2d`](https://github.com/BitskiCo/bitski-js/commit/c272b2d0f75a040e9a64e3b34d0e87563cd079d3) Thanks [@pzuraq](https://github.com/pzuraq)! - Makes all storage APIs (and APIs which access storage) async. This allows
+  different storage mechanisms to be used besides local storage.
+
+  ## Breaking Changes
+
+  - The `authStatus` property has been changed to the `getAuthStatus()`, which now
+    returns a promise instead of the auth status directly.
+  - The `Store` interface must now return promises for all of its functions. The
+    default behavior still uses local storage.
+
 ## 1.0.0
 
 ### Major Changes
