@@ -13,13 +13,15 @@ const clientID = 'test-client-id';
 
 class MockTokenStore extends TokenStore {
   public setToken(accessToken?: AccessToken) {
-    this.accessToken = accessToken;
+    this.accessToken = Promise.resolve(accessToken);
   }
 
   public setRefreshToken(refreshToken?: string) {
     if (refreshToken) {
+      this.refreshToken = Promise.resolve(refreshToken);
       localStorage.setItem(this.refreshTokenKey, refreshToken);
     } else {
+      this.refreshToken = Promise.resolve(undefined);
       localStorage.removeItem(this.refreshTokenKey);
     }
   }
@@ -45,32 +47,32 @@ afterEach(() => {
 });
 
 describe('getAuthStatus', () => {
-  test('should be connected when access token exists', () => {
+  test('should be connected when access token exists', async () => {
     expect.assertions(1);
     const authProvider = createInstance();
     (authProvider.tokenStore as MockTokenStore).setToken(dummyToken);
-    expect(authProvider.authStatus).toBe(AuthenticationStatus.Connected);
+    expect(await authProvider.getAuthStatus()).toBe(AuthenticationStatus.Connected);
   });
 
-  test('should be expired when access token is expired and refresh token exists', () => {
+  test('should be expired when access token is expired and refresh token exists', async () => {
     expect.assertions(1);
     const authProvider = createInstance();
     (authProvider.tokenStore as MockTokenStore).setToken(expiredToken);
     (authProvider.tokenStore as MockTokenStore).setRefreshToken('test-refresh-token');
-    expect(authProvider.authStatus).toBe(AuthenticationStatus.Expired);
+    expect(await authProvider.getAuthStatus()).toBe(AuthenticationStatus.Expired);
   });
 
-  test('should be expired when refresh token exists', () => {
+  test('should be expired when refresh token exists', async () => {
     expect.assertions(1);
     const authProvider = createInstance();
     (authProvider.tokenStore as MockTokenStore).setRefreshToken('test-refresh-token');
-    expect(authProvider.authStatus).toBe(AuthenticationStatus.Expired);
+    expect(await authProvider.getAuthStatus()).toBe(AuthenticationStatus.Expired);
   });
 
-  test('should be not connected when no tokens are available', () => {
+  test('should be not connected when no tokens are available', async () => {
     expect.assertions(1);
     const authProvider = createInstance();
-    expect(authProvider.authStatus).toBe(AuthenticationStatus.NotConnected);
+    expect(await authProvider.getAuthStatus()).toBe(AuthenticationStatus.NotConnected);
   });
 });
 
@@ -161,18 +163,18 @@ describe('refreshing access tokens', () => {
     });
   });
 
-  test('clears caches when refreshing token fails', () => {
+  test('clears caches when refreshing token fails', async () => {
     expect.assertions(4);
     const authProvider = createInstance();
     (authProvider.tokenStore as MockTokenStore).setRefreshToken('test-refresh-token');
     authProvider.userStore.set(dummyUser);
     const spy = jest.spyOn(authProvider.oauthManager, 'refreshAccessToken');
     spy.mockRejectedValue(new Error('Test error'));
-    return authProvider.refreshAccessToken().catch((err) => {
+    return authProvider.refreshAccessToken().catch(async () => {
       expect(spy).toBeCalled();
-      expect(authProvider.tokenStore.currentToken).toBeUndefined();
-      expect(authProvider.tokenStore.refreshToken).toBeUndefined();
-      expect(authProvider.userStore.currentUser).toBeUndefined();
+      expect(await authProvider.tokenStore.getCurrentToken()).toBeUndefined();
+      expect(await authProvider.tokenStore.getRefreshToken()).toBeUndefined();
+      expect(await authProvider.userStore.getCurrentUser()).toBeUndefined();
     });
   });
 
@@ -283,8 +285,8 @@ describe('sign in callback', () => {
     const userMock = jest.spyOn(authProvider.oauthManager, 'requestUserInfo').mockResolvedValue({
       sub: 'test-user',
     });
-    return authProvider.redirectCallback().then((user) => {
-      expect(authProvider.authStatus).toBe(AuthenticationStatus.Connected);
+    return authProvider.redirectCallback().then(async (user) => {
+      expect(await authProvider.getAuthStatus()).toBe(AuthenticationStatus.Connected);
       expect(user).toMatchObject(dummyUser);
       expect(callbackMock).toHaveBeenCalled();
       expect(userMock).toHaveBeenCalled();
@@ -365,11 +367,11 @@ describe('sign out', () => {
     (authProvider.tokenStore as MockTokenStore).setRefreshToken('test-refresh-token');
     authProvider.userStore.set(dummyUser);
     const spy = jest.spyOn(authProvider.oauthManager, 'requestSignOut').mockResolvedValue({});
-    return authProvider.signOut().then(() => {
+    return authProvider.signOut().then(async () => {
       expect(spy).not.toHaveBeenCalled();
-      expect(authProvider.tokenStore.currentToken).toBeUndefined();
-      expect(authProvider.tokenStore.refreshToken).toBeUndefined();
-      expect(authProvider.userStore.currentUser).toBeUndefined();
+      expect(await authProvider.tokenStore.getCurrentToken()).toBeUndefined();
+      expect(await authProvider.tokenStore.getRefreshToken()).toBeUndefined();
+      expect(await authProvider.userStore.getCurrentUser()).toBeUndefined();
     });
   });
 

@@ -4,8 +4,10 @@ import { Store } from '../utils/store';
 import { User } from './user';
 
 export class UserStore {
-  public get currentUser(): User | undefined {
-    return this.user || this.fetchUser();
+  public async getCurrentUser(): Promise<User | undefined> {
+    const user = await this.user;
+
+    return user ?? this.fetchUser();
   }
 
   protected get storageKey(): string {
@@ -14,7 +16,7 @@ export class UserStore {
 
   protected store: Store;
   protected clientId: string;
-  protected user?: User;
+  protected user: Promise<User | undefined>;
 
   constructor(clientId: string, store?: Store) {
     this.clientId = clientId;
@@ -22,28 +24,28 @@ export class UserStore {
     this.user = this.fetchUser();
   }
 
-  public set(user: User | undefined) {
-    this.user = user;
-    this.cacheUser(user);
+  public async set(user: User | undefined): Promise<void> {
+    this.user = Promise.resolve(user);
+    await this.cacheUser(user);
   }
 
-  public clear() {
-    this.user = undefined;
-    this.cacheUser(undefined);
+  public async clear(): Promise<void> {
+    this.user = Promise.resolve(undefined);
+    await this.cacheUser(undefined);
   }
 
-  protected fetchUser(): User | undefined {
-    const userData = this.store.getItem(this.storageKey);
+  protected async fetchUser(): Promise<User | undefined> {
+    const userData = await this.store.getItem(this.storageKey);
     if (userData) {
       return User.fromString(userData);
     }
   }
 
-  protected cacheUser(user: User | undefined) {
+  protected async cacheUser(user: User | undefined): Promise<void> {
     if (user) {
-      this.store.setItem(this.storageKey, user.toStorageString());
+      await this.store.setItem(this.storageKey, user.toStorageString());
     } else {
-      this.store.clearItem(this.storageKey);
+      await this.store.clearItem(this.storageKey);
     }
   }
 }

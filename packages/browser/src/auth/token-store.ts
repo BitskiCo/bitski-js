@@ -5,23 +5,24 @@ import { Store } from '../utils/store';
 import { AccessToken } from './access-token';
 
 export class TokenStore {
-  public get currentToken(): string | undefined {
-    if (this.accessToken && !this.accessToken.expired) {
-      return this.accessToken.token;
+  public async getCurrentToken(): Promise<string | undefined> {
+    const accessToken = await this.accessToken;
+    if (accessToken && !accessToken.expired) {
+      return accessToken.token;
     }
   }
 
-  public get currentIdToken(): string | undefined {
-    if (this.idToken && this.accessToken && !this.accessToken.expired) {
-      return this.idToken;
+  public async getCurrentIdToken(): Promise<string | undefined> {
+    const idToken = await this.idToken;
+    const accessToken = await this.accessToken;
+
+    if (idToken && accessToken && !accessToken.expired) {
+      return idToken;
     }
   }
 
-  public get refreshToken(): string | undefined {
-    const token = this.store.getItem(this.refreshTokenKey);
-    if (token) {
-      return token;
-    }
+  public getRefreshToken(): Promise<string | undefined> {
+    return this.refreshToken;
   }
 
   protected get idTokenKey(): string {
@@ -36,48 +37,56 @@ export class TokenStore {
     return `${REFRESH_TOKEN_KEY}.${this.clientId}`;
   }
   protected store: Store;
-  protected accessToken?: AccessToken;
-  protected idToken?: string;
+  protected accessToken: Promise<AccessToken | undefined>;
+  protected refreshToken: Promise<string | undefined>;
+  protected idToken: Promise<string | undefined>;
   protected clientId: string;
 
   constructor(clientId: string, store?: Store) {
     this.clientId = clientId;
     this.store = store || new LocalStorageStore();
-    const accessTokenString = this.store.getItem(this.accessTokenKey);
-    if (accessTokenString) {
-      let parsedToken: AccessToken | undefined;
-      try {
-        parsedToken = AccessToken.fromString(accessTokenString);
-      } finally {
-        this.accessToken = parsedToken;
-      }
-    }
+    this.accessToken = Promise.resolve(this.store.getItem(this.accessTokenKey)).then(
+      (accessTokenString) => {
+        if (accessTokenString) {
+          return AccessToken.fromString(accessTokenString);
+        }
+      },
+    );
+
     this.idToken = this.store.getItem(this.idTokenKey);
+    this.refreshToken = this.store.getItem(this.refreshTokenKey);
   }
 
-  public persistTokenResponse(response: TokenResponse) {
+  public persistTokenResponse(response: TokenResponse): void {
     if (response.refreshToken) {
       this.store.setItem(this.refreshTokenKey, response.refreshToken);
     }
     const parsedToken = AccessToken.fromTokenResponse(response);
     this.store.setItem(this.accessTokenKey, parsedToken.toStorageString());
     this.store.setItem(this.idTokenKey, response.idToken);
-    this.accessToken = parsedToken;
-    this.idToken = response.idToken;
+    this.accessToken = Promise.resolve(parsedToken);
+    this.idToken = Promise.resolve(response.idToken);
   }
 
-  public invalidateCurrentToken() {
-    this.accessToken = undefined;
-    this.idToken = undefined;
-    this.store.clearItem(this.accessTokenKey);
-    this.store.clearItem(this.idTokenKey);
+  public async invalidateCurrentToken(): Promise<void> {
+    this.accessToken = Promise.resolve(undefined);
+    this.idToken = Promise.resolve(undefined);
+
+    await Promise.all([
+      this.store.clearItem(this.accessTokenKey),
+      this.store.clearItem(this.idTokenKey),
+    ]);
   }
 
-  public clear() {
-    this.accessToken = undefined;
-    this.idToken = undefined;
-    this.store.clearItem(this.refreshTokenKey);
-    this.store.clearItem(this.accessTokenKey);
-    this.store.clearItem(this.idTokenKey);
+  public async clear(): Promise<void> {
+    this.accessToken = Promise.resolve(undefined);
+    this.idToken = Promise.resolve(undefined);
+    this.refreshToken = Promise.resolve(undefined);
+
+    await Promise.all([
+      this.store.clearItem(this.refreshTokenKey),
+      this.store.clearItem(this.accessTokenKey),
+      this.store.clearItem(this.idTokenKey),
+    ]);
   }
 }
