@@ -11,17 +11,20 @@ export class LocalStorageStore implements Store {
 
   public clear() {
     this.storage.clear();
+    return Promise.resolve();
   }
 
-  public getItem(key: string): any {
-    return this.storage.getItem(key);
+  public getItem(key: string): Promise<string | undefined> {
+    return Promise.resolve(this.storage.getItem(key) ?? undefined);
   }
 
-  public setItem(key: string, value: any) {
+  public setItem(key: string, value: string) {
     this.storage.setItem(key, value);
+    return Promise.resolve();
   }
 
   public clearItem(key: string) {
     this.storage.removeItem(key);
+    return Promise.resolve();
   }
 }

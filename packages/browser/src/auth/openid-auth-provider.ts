@@ -1,3 +1,4 @@
+import { TokenResponse } from '@openid/appauth';
 import { AccessTokenProvider } from 'bitski-provider';
 import { AuthenticationStatus, BitskiSDKOptions, OAuthSignInMethod } from '../bitski';
 import { AuthenticationError } from '../errors/authentication-error';
@@ -33,92 +34,88 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     this.userStore = new UserStore(clientId, opts.store);
   }
 
-  public get authStatus(): AuthenticationStatus {
-    if (this.tokenStore.currentToken) {
+  public async getAuthStatus(): Promise<AuthenticationStatus> {
+    if (await this.tokenStore.getCurrentToken()) {
       return AuthenticationStatus.Connected;
-    } else if (this.tokenStore.refreshToken) {
+    } else if (await this.tokenStore.getRefreshToken()) {
       return AuthenticationStatus.Expired;
     } else {
       return AuthenticationStatus.NotConnected;
     }
   }
 
-  public getAccessToken(): Promise<string> {
-    if (this.tokenStore.currentToken) {
-      return Promise.resolve(this.tokenStore.currentToken);
+  public async getAccessToken(): Promise<string> {
+    const currentToken = await this.tokenStore.getCurrentToken();
+
+    if (currentToken) {
+      return currentToken;
     }
-    if (this.tokenStore.refreshToken) {
+
+    if (await this.tokenStore.getRefreshToken()) {
       return this.refreshAccessToken();
     }
-    return Promise.reject(AuthenticationError.NotSignedIn());
+
+    throw AuthenticationError.NotSignedIn();
   }
 
-  public getIdToken(): Promise<string | undefined> {
-    if (this.tokenStore.currentIdToken) {
-      return Promise.resolve(this.tokenStore.currentIdToken);
+  public async getIdToken(): Promise<string | undefined> {
+    const currentIdToken = await this.tokenStore.getCurrentToken();
+
+    if (currentIdToken) {
+      return currentIdToken;
     }
-    if (this.tokenStore.refreshToken) {
+    if (await this.tokenStore.getRefreshToken()) {
       return this.refreshIdToken();
     }
     return Promise.reject(AuthenticationError.NotSignedIn());
   }
 
-  public getRefreshToken(): Promise<string> {
-    if (this.tokenStore.refreshToken) {
-      return Promise.resolve(this.tokenStore.refreshToken);
+  public async getRefreshToken(): Promise<string> {
+    const refreshToken = await this.tokenStore.getRefreshToken();
+
+    if (refreshToken) {
+      return refreshToken;
     }
     // Error: the user did not approve this app for offline access
-    if (this.tokenStore.currentToken) {
+    if (await this.tokenStore.getCurrentToken()) {
       return Promise.reject(AuthenticationError.NoRefreshToken());
     }
     // Error: the user is not signed in.
     return Promise.reject(AuthenticationError.NotSignedIn());
   }
 
-  public invalidateToken(): Promise<void> {
-    if (this.tokenStore.currentToken) {
-      this.tokenStore.invalidateCurrentToken();
-    }
+  public async invalidateToken(): Promise<void> {
+    await this.tokenStore.invalidateCurrentToken();
     if (this.signOutCallback) {
       this.signOutCallback();
     }
-    return Promise.resolve();
   }
 
-  public refreshAccessToken(): Promise<string> {
-    if (this.tokenStore.refreshToken) {
-      return this.oauthManager
-        .refreshAccessToken(this.tokenStore.refreshToken)
-        .then((tokenResponse) => {
-          this.tokenStore.persistTokenResponse(tokenResponse);
-          return tokenResponse.accessToken;
-        })
-        .catch((error) => {
-          // If we can't renew, we likely have bad data
-          this.tokenStore.clear();
-          this.userStore.clear();
-          throw error;
-        });
+  private async refreshTokens(): Promise<TokenResponse> {
+    const refreshToken = await this.tokenStore.getRefreshToken();
+    if (!refreshToken) {
+      throw AuthenticationError.NoRefreshToken();
     }
-    return Promise.reject(AuthenticationError.NoRefreshToken());
+
+    try {
+      const tokenResponse = await this.oauthManager.refreshAccessToken(refreshToken);
+      this.tokenStore.persistTokenResponse(tokenResponse);
+      return tokenResponse;
+    } catch (error) {
+      await this.tokenStore.clear();
+      await this.userStore.clear();
+      throw error;
+    }
   }
 
-  public refreshIdToken(): Promise<string | undefined> {
-    if (this.tokenStore.refreshToken) {
-      return this.oauthManager
-        .refreshAccessToken(this.tokenStore.refreshToken)
-        .then((tokenResponse) => {
-          this.tokenStore.persistTokenResponse(tokenResponse);
-          return tokenResponse.idToken;
-        })
-        .catch((error) => {
-          // If we can't renew, we likely have bad data
-          this.tokenStore.clear();
-          this.userStore.clear();
-          throw error;
-        });
-    }
-    return Promise.reject(AuthenticationError.NoRefreshToken());
+  public async refreshAccessToken(): Promise<string> {
+    const tokenResponse = await this.refreshTokens();
+    return tokenResponse.accessToken;
+  }
+
+  public async refreshIdToken(): Promise<string | undefined> {
+    const tokenResponse = await this.refreshTokens();
+    return tokenResponse.idToken;
   }
 
   public signIn(method: OAuthSignInMethod, opts?: SignInOptions): Promise<User> {
@@ -150,11 +147,11 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     return this.getOrFetchUser();
   }
 
-  public signInOrConnect(
+  public async signInOrConnect(
     signInMethod: OAuthSignInMethod = OAuthSignInMethod.Popup,
     opts?: SignInOptions,
   ): Promise<User> {
-    switch (this.authStatus) {
+    switch (await this.getAuthStatus()) {
       case AuthenticationStatus.Connected:
         return this.loadUser();
       case AuthenticationStatus.Expired:
@@ -171,9 +168,9 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     });
   }
 
-  public signOut(): Promise<any> {
-    this.tokenStore.clear();
-    this.userStore.clear();
+  public async signOut(): Promise<any> {
+    await this.tokenStore.clear();
+    await this.userStore.clear();
     // Call the sign out callback if one has been provided
     if (this.signOutCallback) {
       this.signOutCallback();
@@ -183,10 +180,10 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     return Promise.resolve();
   }
 
-  private getOrFetchUser(): Promise<User> {
-    const currentUser = this.userStore.currentUser;
+  private async getOrFetchUser(): Promise<User> {
+    const currentUser = await this.userStore.getCurrentUser();
     if (currentUser) {
-      return Promise.resolve(currentUser);
+      return currentUser;
     }
     return this.loadUser();
   }

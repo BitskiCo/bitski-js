@@ -158,13 +158,13 @@ describe('authentication', () => {
     });
   });
 
-  test('should get auth status from auth provider', () => {
+  test('should get auth status from auth provider', async () => {
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'authStatus', 'get');
-    spy.mockReturnValue(AuthenticationStatus.Connected);
-    const authStatus = bitski.authStatus;
+    const spy = jest.spyOn(bitski.authProvider, 'getAuthStatus');
+    spy.mockReturnValue(Promise.resolve(AuthenticationStatus.Connected));
+    const authStatus = await bitski.getAuthStatus();
     expect(authStatus).toBe(AuthenticationStatus.Connected);
-    expect(authStatus).toBe(bitski.authStatus);
+    expect(authStatus).toBe(await bitski.getAuthStatus());
   });
 
   test('should log in via popup', () => {

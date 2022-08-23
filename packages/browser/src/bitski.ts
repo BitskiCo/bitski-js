@@ -178,8 +178,8 @@ export class Bitski {
   /**
    * Check the logged in state of the user
    */
-  public get authStatus(): AuthenticationStatus {
-    return this.authProvider.authStatus;
+  public getAuthStatus(): Promise<AuthenticationStatus> {
+    return this.authProvider.getAuthStatus();
   }
 
   /**

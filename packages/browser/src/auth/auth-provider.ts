@@ -3,7 +3,7 @@ import { SignInOptions } from './oauth-manager';
 import { User } from './user';
 
 export interface AuthProvider {
-  readonly authStatus: AuthenticationStatus;
+  getAuthStatus(): Promise<AuthenticationStatus>;
   signIn(method: OAuthSignInMethod, opts?: SignInOptions): Promise<User>;
   connect(): Promise<User>;
   signInOrConnect(signInMethod?: OAuthSignInMethod, opts?: SignInOptions): Promise<User>;
