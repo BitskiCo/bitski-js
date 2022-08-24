@@ -118,13 +118,17 @@ export class Bitski {
       additionalScopes,
       options,
     );
-    if (document && document.body) {
-      this.injectStyles();
-    } else {
-      window.addEventListener('load', () => {
+
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      if (document && document.body) {
         this.injectStyles();
-      });
+      } else {
+        window.addEventListener('load', () => {
+          this.injectStyles();
+        });
+      }
     }
+
     this.authProvider.signOutCallback = this.onSignOut.bind(this);
   }
 
