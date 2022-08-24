@@ -1,5 +1,11 @@
 # bitski
 
+## 2.0.1
+
+### Patch Changes
+
+- [#254](https://github.com/BitskiCo/bitski-js/pull/254) [`89a6a62`](https://github.com/BitskiCo/bitski-js/commit/89a6a6224778d13c48269d15007548c3b4c00705) Thanks [@pzuraq](https://github.com/pzuraq)! - Check for window/document before running browser code
+
 ## 2.0.0
 
 ### Major Changes
