@@ -13,7 +13,10 @@
   "scripts": {
     "lint": "eslint . --cache",
     "test": "jest",
-    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
+    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json && npm run bundle",
+    "bundle": "npm run bundle:main && npm run bundle:callback && npm run minify",
+    "bundle:main": "browserify -s Bitski -e dist/esm/bitski.js -d -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] > dist/bitski.bundle.js",
+    "bundle:callback": "browserify dist/esm/callback.js -d -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] > dist/callback.js",
     "prettier": "prettier --config .prettierrc '{src,tests}/**/*.ts' --write"
   },
   "dependencies": {
