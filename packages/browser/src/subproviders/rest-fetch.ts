@@ -7,7 +7,6 @@ import {
 import asyncify from 'async/asyncify';
 import retry from 'async/retry';
 import waterfall from 'async/waterfall';
-import fetch from 'cross-fetch';
 import JsonRpcError from 'json-rpc-error';
 import promiseToCallback from 'promise-to-callback';
 

@@ -14,12 +14,11 @@
     "release": "changeset publish"
   },
   "volta": {
-    "node": "14.17.5",
-    "npm": "7.24.2"
+    "node": "16.17.0"
   },
   "version": "0.0.0",
   "dependencies": {
-    "@bitski/provider-engine": "^0.7.0-beta.5"
+    "@bitski/provider-engine": "^0.8.0"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.4",

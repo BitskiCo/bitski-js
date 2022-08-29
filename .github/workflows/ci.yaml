@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['14']
+        node-version: ['16']
 
     steps:
       - name: Check out code
@@ -34,9 +34,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-
-      - name: Use npm 7.24.2
-        run: npm install -g npm@7.24.2
 
       - name: Install dependencies
         run: npm install
