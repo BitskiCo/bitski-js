@@ -14,12 +14,10 @@
     "test": "jest",
     "lint": "eslint . --cache",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
-    "prepare": "npm run build",
-    "prepack": "npm run build",
     "prettier": "prettier --config .prettierrc '{src,tests}/**/*.ts' --write"
   },
   "dependencies": {
-    "@bitski/provider-engine": "^0.7.0-beta.5",
+    "@bitski/provider-engine": "^0.8.0",
     "bn.js": "^4.11.8",
     "json-rpc-error": "^2.0.0"
   },
