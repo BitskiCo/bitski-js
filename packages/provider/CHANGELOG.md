@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 1.1.0
+
+### Minor Changes
+
+- [#256](https://github.com/BitskiCo/bitski-js/pull/256) [`f726275`](https://github.com/BitskiCo/bitski-js/commit/f7262757a6351f61a81398d4e24e1c756adbea53) Thanks [@imthinhvu](https://github.com/imthinhvu)! - Update provider-engine to remove cross-fetch dependency
+
 ## 1.0.0
 
 ### Major Changes
