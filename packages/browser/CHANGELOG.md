@@ -1,5 +1,14 @@
 # bitski
 
+## 2.1.3
+
+### Patch Changes
+
+- [#262](https://github.com/BitskiCo/bitski-js/pull/262) [`60825e2`](https://github.com/BitskiCo/bitski-js/commit/60825e2de11ca598050587756ec7798b86598177) Thanks [@pzuraq](https://github.com/pzuraq)! - Fix publish setup
+
+- Updated dependencies [[`60825e2`](https://github.com/BitskiCo/bitski-js/commit/60825e2de11ca598050587756ec7798b86598177)]:
+  - bitski-provider@1.1.1
+
 ## 2.1.2
 
 ### Patch Changes
