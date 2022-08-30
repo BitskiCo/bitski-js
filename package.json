@@ -11,7 +11,7 @@
     "package": "turbo run package",
     "lint": "eslint .",
     "format": "prettier --write --plugin-search-dir=. .",
-    "release": "changeset publish"
+    "release": "turbo run build && changeset publish"
   },
   "volta": {
     "node": "16.17.0"
