@@ -1,5 +1,11 @@
 # bitski
 
+## 2.1.2
+
+### Patch Changes
+
+- [#260](https://github.com/BitskiCo/bitski-js/pull/260) [`ac0ebef`](https://github.com/BitskiCo/bitski-js/commit/ac0ebefd1967019c2fdf2ce927c4540226dfd45e) Thanks [@pzuraq](https://github.com/pzuraq)! - Wrap window usage in undefined check for worker/node contexts
+
 ## 2.1.0
 
 ### Minor Changes
