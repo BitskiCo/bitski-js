@@ -14,7 +14,8 @@
     "test": "jest",
     "lint": "eslint . --cache",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json",
-    "prettier": "prettier --config .prettierrc '{src,tests}/**/*.ts' --write"
+    "prettier": "prettier --config .prettierrc '{src,tests}/**/*.ts' --write",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "@bitski/provider-engine": "^0.8.0",
