@@ -45,8 +45,10 @@ export class BitskiTransactionSigner {
     this.defaultHeaders = defaultHeaders;
     this.callbackURL = callbackURL;
 
-    // Watch for new messages on the window.
-    window.addEventListener('message', this.receiveMessage.bind(this), false);
+    if (typeof window !== 'undefined') {
+      // Watch for new messages on the window.
+      window.addEventListener('message', this.receiveMessage.bind(this), false);
+    }
   }
 
   public async sign(transaction: Transaction, accessToken: string): Promise<string> {
