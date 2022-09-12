@@ -1,5 +1,11 @@
 # bitski
 
+## 2.1.4
+
+### Patch Changes
+
+- [#264](https://github.com/BitskiCo/bitski-js/pull/264) [`35dacef`](https://github.com/BitskiCo/bitski-js/commit/35dacef4f758bb171b03d3de0a411e195cc07daa) Thanks [@imthinhvu](https://github.com/imthinhvu)! - Adds missing BNB and BNBT references to get network from name
+
 ## 2.1.3
 
 ### Patch Changes
