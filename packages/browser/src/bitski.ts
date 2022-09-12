@@ -301,6 +301,10 @@ export class Bitski {
         return Polygon;
       case 'mumbai':
         return Mumbai;
+      case 'bnb':
+        return BinanceSmartChain;
+      case 'bnbt':
+        return BinanceSmartChainTestnet;
       default:
         throw new Error(
           `Unsupported network name ${networkName}. Try passing a \`network\` in the options instead.`,
