@@ -1,6 +1,6 @@
-import { SignerError, SignerErrorCode } from '../src/errors/signer-error';
-import { BitskiTransactionSigner } from '../src/signing/transaction-signer';
-import { TransactionKind } from '../src/subproviders/signature';
+import { SignerError, SignerErrorCode } from '../src/-private/errors/signer-error';
+import { BitskiTransactionSigner } from '../src/-private/signing/transaction-signer';
+import { TransactionKind } from '../src/-private/subproviders/signature';
 
 function createInstance() {
   return new BitskiTransactionSigner(

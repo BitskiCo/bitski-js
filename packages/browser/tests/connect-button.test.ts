@@ -1,10 +1,10 @@
-import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
-import { OAuthSignInMethod, AuthenticationError } from '../src/bitski';
+import { OpenidAuthProvider } from '../src/-private/auth/openid-auth-provider';
+import { OAuthSignInMethod, AuthenticationError } from '../src/-private/bitski';
 import {
   ConnectButton,
   ConnectButtonSize,
   ConnectButtonOptions,
-} from '../src/components/connect-button';
+} from '../src/-private/components/connect-button';
 
 const clientID = 'test-client-id';
 

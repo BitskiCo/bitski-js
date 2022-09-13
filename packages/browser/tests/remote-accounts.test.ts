@@ -1,4 +1,4 @@
-import { RemoteAccountSubprovider } from '../src/subproviders/remote-accounts';
+import { RemoteAccountSubprovider } from '../src/-private/subproviders/remote-accounts';
 import { MockEngine } from './util/mock-engine';
 import { MockTokenProvider } from './util/mock-token-provider';
 import { createRequest } from './util/rpc-utils';

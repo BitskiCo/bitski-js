@@ -22,7 +22,6 @@ import {
 import { SDK_VERSION } from './constants';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import css from './styles/index';
-import { processCallback } from './utils/callback';
 import { LocalStorageStore } from './utils/localstorage-store';
 import { Store } from './utils/store';
 
@@ -84,13 +83,6 @@ export interface ProviderOptions extends BitskiEngineOptions {
  * Bitski SDK
  */
 export class Bitski {
-  /**
-   * Alternative to using our static callback.html file. Call this from your own redirect page.
-   */
-  public static callback(): void {
-    processCallback();
-  }
-
   private engines = new Map<string, BitskiEngine>();
   private clientId: string;
   private authProvider: OpenidAuthProvider;

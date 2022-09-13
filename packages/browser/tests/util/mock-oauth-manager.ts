@@ -1,5 +1,5 @@
 import { AuthorizationRequest, TokenRequest } from '@openid/appauth';
-import { OAuthManager, SignInOptions } from '../../src/auth/oauth-manager';
+import { OAuthManager, SignInOptions } from '../../src/-private/auth/oauth-manager';
 
 export class MockOAuthManager extends OAuthManager {
   public currentAuthRequest?: AuthorizationRequest;

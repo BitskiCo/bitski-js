@@ -1,10 +1,13 @@
 import { TokenResponse } from '@openid/appauth';
-import { AccessToken } from '../src/auth/access-token';
-import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
-import { TokenStore } from '../src/auth/token-store';
-import { User } from '../src/auth/user';
-import { AuthenticationStatus, OAuthSignInMethod } from '../src/bitski';
-import { AuthenticationError, AuthenticationErrorCode } from '../src/errors/authentication-error';
+import { AccessToken } from '../src/-private/auth/access-token';
+import { OpenidAuthProvider } from '../src/-private/auth/openid-auth-provider';
+import { TokenStore } from '../src/-private/auth/token-store';
+import { User } from '../src/-private/auth/user';
+import { AuthenticationStatus, OAuthSignInMethod } from '../src/-private/bitski';
+import {
+  AuthenticationError,
+  AuthenticationErrorCode,
+} from '../src/-private/errors/authentication-error';
 
 const dummyUser = new User('test-user');
 const dummyToken = new AccessToken('test-access-token');

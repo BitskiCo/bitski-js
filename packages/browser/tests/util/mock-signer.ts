@@ -1,5 +1,5 @@
-import { BitskiTransactionSigner } from '../../src/signing/transaction-signer';
-import { Transaction } from '../../src/subproviders/signature';
+import { BitskiTransactionSigner } from '../../src/-private/signing/transaction-signer';
+import { Transaction } from '../../src/-private/subproviders/signature';
 
 export class MockSigner extends BitskiTransactionSigner {
   private result: string;

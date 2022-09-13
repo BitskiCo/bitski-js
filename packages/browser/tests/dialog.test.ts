@@ -1,4 +1,4 @@
-import { Dialog } from '../src/components/dialog';
+import { Dialog } from '../src/-private/components/dialog';
 
 test('renders prebuilt content', () => {
   const div = document.createElement('div');
