@@ -1,5 +1,5 @@
-import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
-import { AuthenticatedCacheSubprovider } from '../src/subproviders/authenticated-cache';
+import { OpenidAuthProvider } from '../src/-private/auth/openid-auth-provider';
+import { AuthenticatedCacheSubprovider } from '../src/-private/subproviders/authenticated-cache';
 
 const mockUser = {
   accounts: ['test-account'],

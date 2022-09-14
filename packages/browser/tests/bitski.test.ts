@@ -1,5 +1,11 @@
-import { User } from '../src/auth/user';
-import { AuthenticationStatus, Bitski, Goerli, Mainnet, OAuthSignInMethod } from '../src/bitski';
+import { User } from '../src/-private/auth/user';
+import {
+  AuthenticationStatus,
+  Bitski,
+  Goerli,
+  Mainnet,
+  OAuthSignInMethod,
+} from '../src/-private/bitski';
 
 const clientID = 'test-client-id';
 

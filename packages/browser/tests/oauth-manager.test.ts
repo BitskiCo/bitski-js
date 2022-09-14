@@ -1,7 +1,10 @@
 import { ServerError } from 'bitski-provider';
-import { LOGIN_HINT_SIGNUP } from '../src/bitski';
-import { AuthenticationError, AuthenticationErrorCode } from '../src/errors/authentication-error';
-import { NoHashQueryStringUtils } from '../src/utils/no-hash-query-string-utils';
+import { LOGIN_HINT_SIGNUP } from '../src/-private/bitski';
+import {
+  AuthenticationError,
+  AuthenticationErrorCode,
+} from '../src/-private/errors/authentication-error';
+import { NoHashQueryStringUtils } from '../src/-private/utils/no-hash-query-string-utils';
 import { MockOAuthManager } from './util/mock-oauth-manager';
 
 function createInstance() {

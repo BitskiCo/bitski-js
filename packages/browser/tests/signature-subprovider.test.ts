@@ -1,7 +1,7 @@
-import { OpenidAuthProvider } from '../src/auth/openid-auth-provider';
-import { Mainnet } from '../src/bitski';
-import { SignerError, SignerErrorCode } from '../src/errors/signer-error';
-import { SignatureSubprovider, TransactionKind } from '../src/subproviders/signature';
+import { OpenidAuthProvider } from '../src/-private/auth/openid-auth-provider';
+import { Mainnet } from '../src/-private/bitski';
+import { SignerError, SignerErrorCode } from '../src/-private/errors/signer-error';
+import { SignatureSubprovider, TransactionKind } from '../src/-private/subproviders/signature';
 import { MockEngine } from './util/mock-engine';
 import { MockSigner } from './util/mock-signer';
 import { createRequest } from './util/rpc-utils';
