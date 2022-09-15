@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "3.0.0-v3.0.0-beta.0.0",
+  "version": "2.1.4",
   "scripts": {
     "lint": "eslint . --cache",
     "test": "jest",
