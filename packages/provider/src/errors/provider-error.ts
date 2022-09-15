@@ -3,6 +3,8 @@ export enum ProviderErrorCode {
   SubscriptionsUnavailable = 4000,
   // Thrown when request is missing required params or data
   InvalidRequest = 4001,
+  // Ethereum chain doesn't exist when attempting to switch
+  ChainDoesNotExist = 4902,
 }
 
 export class ProviderError extends Error {

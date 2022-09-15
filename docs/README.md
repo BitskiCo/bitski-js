@@ -4,8 +4,7 @@
 
 The official Bitski Javascript SDK for the browser. Bitski connects your DApp with a user, a wallet, and a connection to the Ethereum blockchain. We currently support mainnet for Ethereum and Polygon, and Rinkeby and Mumbai test networks respectively.
 
-*Note: These docs are for version 0.4.x. Upgrading from 0.3.x or earlier? Please see our [Migration Guide](https://github.com/BitskiCo/bitski-js/tree/develop/MIGRATING.md)*
-
+*Note: These docs are for version 3.x. Upgrading from 2.x or earlier? Please see our [Migration Guide](https://github.com/BitskiCo/bitski-js/tree/develop/MIGRATING.md)*
 
 ### Packages
 
@@ -468,6 +467,16 @@ if (window.ethereum) {
   window.web3 = new Web3(bitskiProvider);
 }
 ```
+
+### Content Security Policy
+
+If you have a content security policy in place on your site, you will need to
+enable exceptions for the SDK. The SDK requires `connect-src` in order to
+connect to the Bitski API for loading wallet details, and `script-src` in order
+to load the full SDK dynamically.
+
+  - `connect-src`: `https://api.bitski.com`
+  - `script-src`: `https://cdn.bitskistatic.com`
 
 ### Report Vulnerabilities
 Bitski provides a “bug bounty” to engage with the security researchers in the community. If you have found a vulnerability in our product or service, please [submit a vulnerability report](https://www.bitski.com/bounty) to the Bitski security team.

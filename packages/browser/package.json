@@ -15,7 +15,7 @@
     "test": "jest",
     "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json && npm run bundle",
     "bundle": "mkdir -p dist/bundled && npm run bundle:main && npm run bundle:callback && npm run minify",
-    "bundle:main": "browserify -s Bitski -e dist/esm/-private/bitski.js -d -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] > dist/bundled/bitski.bundle.js",
+    "bundle:main": "browserify -s Bitski -e dist/esm/-private/sdk.js -d -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] > dist/bundled/bitski.bundle.js",
     "bundle:callback": "browserify dist/esm/-private/callback.js -d -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] > dist/bundled/callback.js",
     "minify": "terser dist/bundled/bitski.bundle.js -o dist/bundled/bitski.min.js",
     "prettier": "prettier --config .prettierrc '{src,tests}/**/*.ts' --write"
@@ -30,6 +30,7 @@
     "@babel/core": "^7.8.7",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
+    "@metamask/safe-event-emitter": "^2.0.0",
     "@types/jest": "^27.0.2",
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",

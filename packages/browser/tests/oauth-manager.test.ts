@@ -1,5 +1,5 @@
 import { ServerError } from 'bitski-provider';
-import { LOGIN_HINT_SIGNUP } from '../src/-private/bitski';
+import { LOGIN_HINT_SIGNUP } from '../src/index';
 import {
   AuthenticationError,
   AuthenticationErrorCode,

@@ -1,75 +1,75 @@
-import { OpenidAuthProvider } from '../src/-private/auth/openid-auth-provider';
-import { OAuthSignInMethod, AuthenticationError } from '../src/-private/bitski';
+import { OAuthSignInMethod, AuthenticationError } from '../src/index';
 import {
   ConnectButton,
   ConnectButtonSize,
   ConnectButtonOptions,
 } from '../src/-private/components/connect-button';
+import { BitskiSDK } from '../src/-private/sdk';
 
 const clientID = 'test-client-id';
 
-function createAuthProvider(): OpenidAuthProvider {
-  return new OpenidAuthProvider(clientID, '');
+function createSDK(): BitskiSDK {
+  return new BitskiSDK(clientID);
 }
 test('it sets small attributes', () => {
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, { size: ConnectButtonSize.Small });
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk), { size: ConnectButtonSize.Small });
   expect(button.element.classList.contains('size-small')).toBe(true);
 });
 
 test('it sets large attributes', () => {
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, { size: ConnectButtonSize.Large });
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk), { size: ConnectButtonSize.Large });
   expect(button.element.classList.contains('size-large')).toBe(true);
 });
 
 test('it defaults to medium', () => {
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider);
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk));
   expect(button.size).toBe(ConnectButtonSize.Medium);
 });
 
 test('it inserts itself into an existing HTMLElement', () => {
   const element = document.createElement('div');
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, { container: element });
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk), { container: element });
   expect(element.firstChild).toBe(button.element);
 });
 
 test('it does not throw when no callback', () => {
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider);
-  jest.spyOn(authProvider, 'signInOrConnect').mockResolvedValue({});
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk));
+  jest.spyOn(sdk, 'signInOrConnect').mockResolvedValue({});
   expect(() => {
     button.signin();
   }).not.toThrow();
 });
 
 test('it does not throw when received error and no callback', () => {
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider);
-  jest.spyOn(authProvider, 'signInOrConnect').mockRejectedValue('foo');
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk));
+  jest.spyOn(sdk, 'signInOrConnect').mockRejectedValue('foo');
   expect(() => {
     button.signin();
   }).not.toThrow();
 });
 
 test('it calls the callback on success', (done) => {
-  const authProvider = createAuthProvider();
-  jest.spyOn(authProvider, 'signIn').mockResolvedValue({});
+  const sdk = createSDK();
+  jest.spyOn(sdk, 'signInOrConnect').mockResolvedValue({});
   const callback = (error, user) => {
     expect(error).toBeUndefined();
     expect(user).toBeDefined();
     done();
   };
-  const button = new ConnectButton(authProvider, undefined, callback);
+  const button = new ConnectButton(Promise.resolve(sdk), undefined, callback);
   button.signin();
 });
 
 test('it calls the callback on error', (done) => {
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider);
-  jest.spyOn(authProvider, 'signIn').mockRejectedValue(new Error('foo error'));
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk));
+  jest.spyOn(sdk, 'signInOrConnect').mockRejectedValue(new Error('foo error'));
   const callback = (error, user) => {
     expect(error).toBeDefined();
     expect(user).toBeUndefined();
@@ -81,10 +81,10 @@ test('it calls the callback on error', (done) => {
 
 test('it calls the onCancel callback on cancellation', (done) => {
   expect.assertions(1);
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider);
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk));
   const spy = jest
-    .spyOn(authProvider, 'signIn')
+    .spyOn(sdk, 'signInOrConnect')
     .mockRejectedValue(AuthenticationError.UserCancelled());
   const callback = () => {
     expect(spy).toBeCalled();
@@ -96,9 +96,11 @@ test('it calls the onCancel callback on cancellation', (done) => {
 
 test('it uses provided authentication mode', (done) => {
   expect.assertions(1);
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, { authMethod: OAuthSignInMethod.Redirect });
-  jest.spyOn(authProvider, 'signIn').mockImplementation((method) => {
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk), {
+    authMethod: OAuthSignInMethod.Redirect,
+  });
+  jest.spyOn(sdk, 'signInOrConnect').mockImplementation((method) => {
     expect(method).toBe(OAuthSignInMethod.Redirect);
     done();
     return Promise.resolve();
@@ -108,12 +110,12 @@ test('it uses provided authentication mode', (done) => {
 
 test('it passes provided sign in options', (done) => {
   expect.assertions(2);
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider, {
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk), {
     authMethod: OAuthSignInMethod.Redirect,
     signInOptions: { login_hint: 'signup' },
   });
-  jest.spyOn(authProvider, 'signIn').mockImplementation((method, options) => {
+  jest.spyOn(sdk, 'signInOrConnect').mockImplementation((method, options) => {
     expect(options.login_hint).toBe('signup');
     expect(method).toBe(OAuthSignInMethod.Redirect);
     done();
@@ -124,8 +126,8 @@ test('it passes provided sign in options', (done) => {
 
 test('it can remove itself from the DOM', () => {
   expect.assertions(2);
-  const authProvider = createAuthProvider();
-  const button = new ConnectButton(authProvider);
+  const sdk = createSDK();
+  const button = new ConnectButton(Promise.resolve(sdk));
   const parent = document.createElement('div');
   parent.appendChild(button.element);
   expect(button.element.parentElement).toBe(parent);
