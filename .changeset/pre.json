@@ -5,5 +5,7 @@
     "bitski": "2.1.4",
     "bitski-provider": "1.1.1"
   },
-  "changesets": []
+  "changesets": [
+    "fifty-vans-winks"
+  ]
 }
