@@ -1,12 +1,12 @@
-import type { Bitski } from './-private/bitski';
+import type { BitskiSDK } from './-private/sdk';
 
-type BitskiConstructor = typeof Bitski;
+type BitskiSDKConstructor = typeof BitskiSDK;
 
 declare global {
   interface Window {
     Bitski:
       | {
-          Bitski: BitskiConstructor;
+          BitskiSDK: BitskiSDKConstructor;
         }
       | undefined;
   }
@@ -49,9 +49,9 @@ const injectScript = (): HTMLScriptElement => {
   return script;
 };
 
-let bitskiPromise: Promise<BitskiConstructor | null> | null = null;
+let bitskiPromise: Promise<BitskiSDKConstructor | null> | null = null;
 
-export const loadScript = (): Promise<BitskiConstructor | null> => {
+export const loadScript = (): Promise<BitskiSDKConstructor | null> => {
   // Ensure that we only attempt to load Stripe.js at most once
   if (bitskiPromise !== null) {
     return bitskiPromise;
@@ -66,7 +66,7 @@ export const loadScript = (): Promise<BitskiConstructor | null> => {
     }
 
     if (window.Bitski) {
-      resolve(window.Bitski.Bitski);
+      resolve(window.Bitski.BitskiSDK);
       return;
     }
 
@@ -79,7 +79,7 @@ export const loadScript = (): Promise<BitskiConstructor | null> => {
 
       script.addEventListener('load', () => {
         if (window.Bitski) {
-          resolve(window.Bitski.Bitski);
+          resolve(window.Bitski.BitskiSDK);
         } else {
           reject(new Error('Bitski SDK not available'));
         }

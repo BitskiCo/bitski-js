@@ -5,7 +5,7 @@ import {
   Network,
 } from 'bitski-provider';
 import { AuthProvider } from '../auth/auth-provider';
-import { ProviderOptions } from '../bitski';
+import { ProviderOptions } from '../sdk';
 import {
   BITSKI_RPC_BASE_URL,
   BITSKI_TRANSACTION_API_BASE_URL,
@@ -23,20 +23,20 @@ function isAuthProvider(object: any): object is AuthProvider {
 }
 
 export class BitskiBrowserEngine extends BitskiEngine {
-  private network: Network;
-  private webBaseUrl: string;
-  private apiBaseUrl: string;
-  private tokenProvider: AccessTokenProvider;
-  private clientId: string;
-  private sdkVersion: string;
+  protected network: Network;
+  protected webBaseUrl: string;
+  protected apiBaseUrl: string;
+  protected tokenProvider: AccessTokenProvider;
+  protected clientId: string;
+  protected sdkVersion: string;
 
   // Headers for bitski endpoints
-  private headers: Record<string, unknown>;
+  protected headers: Record<string, unknown>;
 
   // Headers specifically for rpc endpoint
-  private rpcHeaders: Record<string, unknown>;
+  protected rpcHeaders: Record<string, unknown>;
 
-  private signer: BitskiTransactionSigner;
+  protected signer: BitskiTransactionSigner;
 
   constructor(
     clientId: string,
@@ -44,6 +44,9 @@ export class BitskiBrowserEngine extends BitskiEngine {
     sdkVersion: string,
     network: Network,
     options: ProviderOptions = {},
+
+    // This allows the extension to sub out a different signer class
+    TransactionSignerClass = BitskiTransactionSigner,
   ) {
     super(options);
     options = options || {};
@@ -72,7 +75,7 @@ export class BitskiBrowserEngine extends BitskiEngine {
       this.rpcHeaders = Object.assign({}, this.rpcHeaders, defaultBitskiHeaders);
     }
 
-    this.signer = new BitskiTransactionSigner(
+    this.signer = new TransactionSignerClass(
       this.webBaseUrl,
       this.apiBaseUrl,
       this.headers,

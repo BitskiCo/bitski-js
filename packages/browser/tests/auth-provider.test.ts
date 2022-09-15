@@ -3,7 +3,7 @@ import { AccessToken } from '../src/-private/auth/access-token';
 import { OpenidAuthProvider } from '../src/-private/auth/openid-auth-provider';
 import { TokenStore } from '../src/-private/auth/token-store';
 import { User } from '../src/-private/auth/user';
-import { AuthenticationStatus, OAuthSignInMethod } from '../src/-private/bitski';
+import { AuthenticationStatus, OAuthSignInMethod } from '../src/index';
 import {
   AuthenticationError,
   AuthenticationErrorCode,

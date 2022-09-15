@@ -1,4 +1,11 @@
-# Migrating from 2.x to 3.x
+---
+'bitski': major
+---
+
+Updates the SDK to load dynamically to reduce bundle size and to make updating
+easier overall.
+
+Upgrading:
 
 - Add `https://cdn.bitskistatic.com` to your CSP to allow the full SDK to load:
 
@@ -19,19 +26,3 @@
   different networks. It instead returns a single provider instance, and if a
   network is specified, it calls `wallet_switchEthereumChain` to change the active
   chain of the provider.
-
-# Migrating from 1.x to 2.x
-
-- The `authStatus` property has been changed to the `getAuthStatus()`, which now
-  returns a promise instead of the auth status directly.
-
-  ```js
-  // before
-  const status = bitski.authStatus;
-
-  // after
-  const status = await bitski.getAuthStatus();
-  ```
-
-- The `Store` interface must now return promises for all of its functions. The
-  default behavior still uses local storage.

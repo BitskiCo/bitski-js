@@ -1,6 +1,7 @@
 import { TokenResponse } from '@openid/appauth';
 import { AccessTokenProvider } from 'bitski-provider';
-import { AuthenticationStatus, BitskiSDKOptions, OAuthSignInMethod } from '../bitski';
+import { BitskiSDKOptions } from '../sdk';
+import { AuthenticationStatus, OAuthSignInMethod } from '../constants';
 import { AuthenticationError } from '../errors/authentication-error';
 import { AuthProvider } from './auth-provider';
 import { OAuthManager, OAuthManagerOptions, SignInOptions } from './oauth-manager';

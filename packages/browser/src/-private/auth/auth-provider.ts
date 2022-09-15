@@ -1,6 +1,6 @@
-import { AuthenticationStatus, OAuthSignInMethod } from '../bitski';
-import { SignInOptions } from './oauth-manager';
-import { User } from './user';
+import type { AuthenticationStatus, OAuthSignInMethod } from '../constants';
+import type { SignInOptions } from './oauth-manager';
+import type { User } from './user';
 
 export interface AuthProvider {
   getAuthStatus(): Promise<AuthenticationStatus>;

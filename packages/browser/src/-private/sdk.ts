@@ -1,62 +1,13 @@
 import { AuthorizationServiceConfiguration } from '@openid/appauth';
-import {
-  BinanceSmartChain,
-  BinanceSmartChainTestnet,
-  BitskiEngine,
-  BitskiEngineOptions,
-  Goerli,
-  Mainnet,
-  Mumbai,
-  Network,
-  Polygon,
-} from 'bitski-provider';
+import { BitskiEngine, BitskiEngineOptions, Network } from 'bitski-provider';
 
-import { LOGIN_HINT_SIGNUP, SignInOptions } from './auth/oauth-manager';
+import { SignInOptions } from './auth/oauth-manager';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
-import {
-  ConnectButton,
-  ConnectButtonOptions,
-  ConnectButtonSize,
-} from './components/connect-button';
-import { SDK_VERSION } from './constants';
+import { AuthenticationStatus, OAuthSignInMethod, SDK_VERSION } from './constants';
 import { BitskiBrowserEngine } from './providers/bitski-browser-engine';
 import css from './styles/index';
-import { LocalStorageStore } from './utils/localstorage-store';
 import { Store } from './utils/store';
-
-export enum OAuthSignInMethod {
-  Redirect = 'REDIRECT',
-  Popup = 'POPUP',
-  Silent = 'SILENT', // Deprecated
-}
-
-export enum AuthenticationStatus {
-  Connected = 'CONNECTED',
-  Expired = 'EXPIRED',
-  NotConnected = 'NOT_CONNECTED',
-}
-
-// Customize token and user caching
-export { Store, LocalStorageStore };
-
-// Sign-in Options
-export { SignInOptions, LOGIN_HINT_SIGNUP };
-
-// Networks
-export { Network, BinanceSmartChain, BinanceSmartChainTestnet, Mainnet, Goerli, Polygon, Mumbai };
-
-// Type-only for a User. Can be passed around in TypeScript,
-// but not constructed outside this library.
-export type { User };
-
-// Connect Button
-export { ConnectButtonSize, ConnectButtonOptions };
-
-// Errors
-export { AuthenticationError, AuthenticationErrorCode } from './errors/authentication-error';
-export { ParseError, ParseErrorCode } from './errors/parse-error';
-export { SignerError, SignerErrorCode } from './errors/signer-error';
 
 export interface BitskiSDKOptions {
   // Customize oauth configuration
@@ -82,12 +33,11 @@ export interface ProviderOptions extends BitskiEngineOptions {
 /**
  * Bitski SDK
  */
-export class Bitski {
-  private engines = new Map<string, BitskiEngine>();
-  private clientId: string;
-  private authProvider: OpenidAuthProvider;
-  private signoutHandlers: Array<() => void> = [];
-  private sdkVersion: string;
+export class BitskiSDK {
+  protected clientId: string;
+  protected authProvider: OpenidAuthProvider;
+  protected signoutHandlers: Array<() => void> = [];
+  protected sdkVersion: string;
 
   /**
    * @param clientId OAuth Client ID
@@ -125,50 +75,13 @@ export class Bitski {
   }
 
   /**
-   * Returns a new web3 provider for a given network.
-   * @param options options for the provider, or a network name
-   */
-  public getProvider(options?: ProviderOptions | string): BitskiEngine {
-    // Check cache for existing provider
-    const existingProvider = this.engines.get(JSON.stringify(options));
-    if (existingProvider) {
-      existingProvider.start();
-      return existingProvider;
-    }
-    // Create a new provider if one does not exist
-    let normalizedOptions: ProviderOptions = {};
-    if (options && typeof options !== 'string') {
-      normalizedOptions = options;
-    }
-    const network = this.networkFromProviderOptions(options);
-    const newProvider = this.createProvider(network, normalizedOptions);
-    newProvider.start();
-    this.engines.set(JSON.stringify(options), newProvider);
-    return newProvider;
-  }
-
-  /**
-   * Creates a sign in with bitski button to add to your app. If an HTML element is passed in as the
-   * first parameter, it will automatically add it to the DOM inside that element. Make sure to add
-   * a callback to get notified of login events.
-   * @param options {ConnectButtonOptions} Optional configuration for the button
-   * @param callback Post-login callback. Called when sign in is complete. Not applicable for redirect login method.
-   */
-  public getConnectButton(
-    options?: ConnectButtonOptions,
-    callback?: (error?: Error, user?: any) => void,
-  ): ConnectButton {
-    return new ConnectButton(this.authProvider, options, callback);
-  }
-
-  /**
    * Signs in or connects to bitski depending on the user's auth state.
    * Since it may open a popup, this method must be called from user interaction handler,
    * such as a click or tap handler.
    * @param options Provide SignInOptions for the sign in request. See signIn() for more info.
    */
-  public start(options?: SignInOptions): Promise<User> {
-    return this.authProvider.signInOrConnect(undefined, options);
+  public signInOrConnect(method?: OAuthSignInMethod, options?: SignInOptions): Promise<User> {
+    return this.authProvider.signInOrConnect(method, options);
   }
 
   /**
@@ -249,7 +162,7 @@ export class Bitski {
    * since there may be situations where you are signed out unexpectedly.
    * @param fn Your callback function
    */
-  public addSignOutHandler(fn: () => void) {
+  public addSignOutHandler(fn: () => void): void {
     this.signoutHandlers.push(fn);
   }
 
@@ -257,7 +170,7 @@ export class Bitski {
    * Remove a registered signout callback
    * @param fn Your callback function
    */
-  public removeSignOutHandler(fn: () => void) {
+  public removeSignOutHandler(fn: () => void): void {
     const index = this.signoutHandlers.findIndex((item) => item === fn);
     if (index >= 0) {
       this.signoutHandlers.splice(index, 1);
@@ -268,11 +181,10 @@ export class Bitski {
    * Sign the current user out of your application.
    */
   public signOut(): Promise<void> {
-    this.engines.forEach((engine) => engine.emit('signOut'));
     return this.authProvider.signOut();
   }
 
-  private createProvider(network: Network, options: ProviderOptions = {}): BitskiEngine {
+  public createProvider(network: Network, options: ProviderOptions = {}): BitskiBrowserEngine {
     return new BitskiBrowserEngine(
       this.clientId,
       this.authProvider,
@@ -282,45 +194,7 @@ export class Bitski {
     );
   }
 
-  private networkFromName(networkName: string): Network {
-    switch (networkName) {
-      case '':
-      case 'mainnet':
-        return Mainnet;
-      case 'goerli':
-        return Goerli;
-      case 'polygon':
-        return Polygon;
-      case 'mumbai':
-        return Mumbai;
-      case 'bnb':
-        return BinanceSmartChain;
-      case 'bnbt':
-        return BinanceSmartChainTestnet;
-      default:
-        throw new Error(
-          `Unsupported network name ${networkName}. Try passing a \`network\` in the options instead.`,
-        );
-    }
-  }
-
-  private networkFromProviderOptions(options: ProviderOptions | string | undefined): Network {
-    if (!options) {
-      return Mainnet;
-    }
-    if (typeof options === 'string') {
-      return this.networkFromName(options);
-    }
-    if (options.network) {
-      return options.network;
-    }
-    if (options.networkName) {
-      return this.networkFromName(options.networkName);
-    }
-    return Mainnet;
-  }
-
-  private onSignOut() {
+  protected onSignOut(): void {
     this.signoutHandlers.forEach((cb) => {
       cb();
     });
@@ -329,7 +203,7 @@ export class Bitski {
   /**
    * Embeds Bitski's UI styles
    */
-  private injectStyles(): void {
+  protected injectStyles(): void {
     if (document.getElementById('BitskiEmbeddedStyles')) {
       return;
     }

@@ -1,5 +1,5 @@
 import { OpenidAuthProvider } from '../src/-private/auth/openid-auth-provider';
-import { Mainnet } from '../src/-private/bitski';
+import { Mainnet } from '../src/index';
 import { SignerError, SignerErrorCode } from '../src/-private/errors/signer-error';
 import { SignatureSubprovider, TransactionKind } from '../src/-private/subproviders/signature';
 import { MockEngine } from './util/mock-engine';

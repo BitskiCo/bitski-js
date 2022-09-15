@@ -46,3 +46,15 @@ export const DEFAULT_AUTHORIZED_METHODS = [
   'eth_signTypedData_v3', // For metamask compatibility
   'eth_signTypedData_v4',
 ];
+
+export enum OAuthSignInMethod {
+  Redirect = 'REDIRECT',
+  Popup = 'POPUP',
+  Silent = 'SILENT', // Deprecated
+}
+
+export enum AuthenticationStatus {
+  Connected = 'CONNECTED',
+  Expired = 'EXPIRED',
+  NotConnected = 'NOT_CONNECTED',
+}

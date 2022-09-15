@@ -1,17 +1,15 @@
+import { ProviderErrorCode } from 'bitski-provider';
 import { User } from '../src/-private/auth/user';
-import {
-  AuthenticationStatus,
-  Bitski,
-  Goerli,
-  Mainnet,
-  OAuthSignInMethod,
-} from '../src/-private/bitski';
+import { BitskiSDK } from '../src/-private/sdk';
+import { toHex } from '../src/-private/utils/numbers';
+import { AuthenticationStatus, Bitski, Goerli, Mainnet, OAuthSignInMethod } from '../src/index';
 
 const clientID = 'test-client-id';
 
 const dummyUser = new User('test-user');
 
 function createInstance(): Bitski {
+  window.Bitski = { BitskiSDK: BitskiSDK };
   return new Bitski(clientID, '');
 }
 
@@ -21,37 +19,46 @@ describe('managing providers', () => {
     fetch.mockResponse(JSON.stringify({ jsonrpc: '2.0', id: 0, result: null }));
   });
 
-  test('should get a mainnet provider by default', () => {
+  test('should get a mainnet provider by default', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
     provider.on('error', (error) => {});
-    expect(provider.rpcHeaders['X-CLIENT-ID']).toBe('test-client-id');
-    expect(provider).toBeDefined();
-    expect(provider.network).toBe(Mainnet);
+
+    const { result: chainId } = await provider.request({ method: 'eth_chainId' });
+
+    const innerProvider = await provider.currentProviderPromise;
+    expect(innerProvider.rpcHeaders['X-CLIENT-ID']).toBe('test-client-id');
+    expect(parseInt(chainId, 16)).toBe(Mainnet.chainId);
   });
 
-  test('should get a mainnet provider when passing options with no network name', () => {
+  test('should get a mainnet provider when passing options with no network name', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({ pollingInterval: 1000000 });
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
-    expect(provider.network).toBe(Mainnet);
+
+    const { result: chainId } = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(chainId, 16)).toBe(Mainnet.chainId);
   });
 
-  test('should be able to pass a network name as a string', () => {
+  test('should be able to pass a network name as a string', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider('goerli');
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
-    expect(provider.network).toBe(Goerli);
+
+    const { result: chainId } = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(chainId, 16)).toBe(Goerli.chainId);
   });
 
-  test('should be able to pass a network name in options', () => {
+  test('should be able to pass a network name in options', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({ networkName: 'goerli' });
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
-    expect(provider.network).toBe(Goerli);
+
+    const { result: chainId } = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(chainId, 16)).toBe(Goerli.chainId);
   });
 
   test('passing an invalid network name results in an error', () => {
@@ -61,7 +68,7 @@ describe('managing providers', () => {
     }).toThrow(/Unsupported network/);
   });
 
-  test('should be able to pass a custom network in options', () => {
+  test('should be able to pass a custom network in options', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({
       network: {
@@ -70,11 +77,14 @@ describe('managing providers', () => {
       },
     });
     provider.on('error', (error) => {});
-    expect(provider).toBeDefined();
-    expect(provider.network.rpcUrl).toBe('http://localhost:3000/web3');
+
+    const innerProvider = await provider.currentProviderPromise;
+
+    expect(innerProvider).toBeDefined();
+    expect(innerProvider.network.rpcUrl).toBe('http://localhost:3000/web3');
   });
 
-  test('should be able to pass in custom configuration', () => {
+  test('should be able to pass in custom configuration', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({
       network: {
@@ -85,20 +95,26 @@ describe('managing providers', () => {
     });
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
-    expect(provider.rpcHeaders['X-CLIENT-ID']).toBeUndefined();
-    expect(provider.network.chainId).toBe(4);
-    expect(provider.webBaseUrl).toBe('https://next.bitski.com');
-    expect(provider.network.rpcUrl).toBe('https://api-v2.otl.com/web3/goerli');
+
+    const innerProvider = await provider.currentProviderPromise;
+
+    expect(innerProvider.rpcHeaders['X-CLIENT-ID']).toBeUndefined();
+    expect(innerProvider.network.chainId).toBe(4);
+    expect(innerProvider.webBaseUrl).toBe('https://next.bitski.com');
+    expect(innerProvider.network.rpcUrl).toBe('https://api-v2.otl.com/web3/goerli');
   });
 
-  test('should pass settings to provider-engine', () => {
+  test('should pass settings to provider-engine', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({ networkName: 'mainnet', pollingInterval: 10000000 });
     provider.on('error', (error) => {});
-    expect(provider._blockTracker._blockTracker._pollingInterval).toBe(10000000);
+
+    const innerProvider = await provider.currentProviderPromise;
+
+    expect(innerProvider._blockTracker._blockTracker._pollingInterval).toBe(10000000);
   });
 
-  test('should pass additional headers to providers', () => {
+  test('should pass additional headers to providers', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider({
       networkName: 'goerli',
@@ -108,24 +124,28 @@ describe('managing providers', () => {
     });
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
-    expect(provider.headers['X-FOO-FEATURE']).toBe('ENABLED');
+
+    const innerProvider = await provider.currentProviderPromise;
+
+    expect(innerProvider.headers['X-FOO-FEATURE']).toBe('ENABLED');
   });
 
-  test('should create new provider if one doesnt yet exist', () => {
+  test('should create new provider if one doesnt yet exist', async () => {
     const bitski = createInstance();
-    expect(bitski.engines.size).toBe(0);
     const provider = bitski.getProvider('polygon');
     provider.on('error', (error) => {});
-    expect(bitski.engines.size).toBe(1);
+    await provider.currentProviderPromise;
+    expect(provider.providerMap.size).toBe(1);
   });
 
-  test('should not create a new provider if one already exists for that network', () => {
+  test('should not create a new provider if one already exists for that network', async () => {
     const bitski = createInstance();
-    expect(bitski.engines.size).toBe(0);
+    const provider = bitski.getProvider('polygon');
+    await provider.currentProviderPromise;
+    expect(provider.providerMap.size).toBe(1);
     bitski.getProvider('polygon');
-    expect(bitski.engines.size).toBe(1);
-    bitski.getProvider('polygon');
-    expect(bitski.engines.size).toBe(1);
+    await provider.currentProviderPromise;
+    expect(provider.providerMap.size).toBe(1);
   });
 
   test('should not stop engine when force logged out', () => {
@@ -153,10 +173,11 @@ describe('managing providers', () => {
 });
 
 describe('authentication', () => {
-  test('start calls signInOrConnect', () => {
+  test('start calls signInOrConnect', async () => {
     expect.assertions(2);
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'signInOrConnect');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    const spy = jest.spyOn(authProvider, 'signInOrConnect');
     spy.mockResolvedValue(dummyUser);
     return bitski.start().then((user) => {
       expect(user).toBe(dummyUser);
@@ -166,17 +187,19 @@ describe('authentication', () => {
 
   test('should get auth status from auth provider', async () => {
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'getAuthStatus');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    const spy = jest.spyOn(authProvider, 'getAuthStatus');
     spy.mockReturnValue(Promise.resolve(AuthenticationStatus.Connected));
     const authStatus = await bitski.getAuthStatus();
     expect(authStatus).toBe(AuthenticationStatus.Connected);
     expect(authStatus).toBe(await bitski.getAuthStatus());
   });
 
-  test('should log in via popup', () => {
+  test('should log in via popup', async () => {
     expect.assertions(2);
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'signIn');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    const spy = jest.spyOn(authProvider, 'signIn');
     spy.mockResolvedValue(dummyUser);
     return bitski.signIn().then((user) => {
       expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Popup, undefined);
@@ -184,10 +207,11 @@ describe('authentication', () => {
     });
   });
 
-  test('should pass options when signing in', () => {
+  test('should pass options when signing in', async () => {
     expect.assertions(2);
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'signIn');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    const spy = jest.spyOn(authProvider, 'signIn');
     spy.mockResolvedValue(dummyUser);
     const opts = { login_hint: 'foo' };
     return bitski.signIn(opts).then((user) => {
@@ -196,37 +220,46 @@ describe('authentication', () => {
     });
   });
 
-  test('can login via redirect', (done) => {
+  test('can login via redirect', async () => {
     expect.assertions(1);
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'signIn');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    const spy = jest.spyOn(authProvider, 'signIn');
     spy.mockResolvedValue(dummyUser);
     bitski.signInRedirect();
-    setTimeout(() => {
-      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect, undefined);
-      done();
-    }, 500);
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect, undefined);
+        resolve(null);
+      }, 500);
+    });
   });
 
-  test('should pass options when signing in via redirect', (done) => {
+  test('should pass options when signing in via redirect', async () => {
     expect.assertions(1);
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'signIn');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    const spy = jest.spyOn(authProvider, 'signIn');
     spy.mockResolvedValue(dummyUser);
     const opts = { login_hint: 'foo' };
     bitski.signInRedirect(opts);
-    setTimeout(() => {
-      expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect, opts);
-      done();
-    }, 500);
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Redirect, opts);
+        resolve(null);
+      }, 500);
+    });
   });
 
-  test('should connect by refreshing access token', () => {
+  test('should connect by refreshing access token', async () => {
     expect.assertions(2);
     const bitski = createInstance();
+    const authProvider = (await bitski.sdk)!.authProvider;
     localStorage.setItem('bitski.refresh_token.test-client-id', 'test-refresh-token');
-    const spy = jest.spyOn(bitski.authProvider, 'refreshAccessToken');
-    const userSpy = jest.spyOn(bitski.authProvider, 'loadUser');
+    const spy = jest.spyOn(authProvider, 'refreshAccessToken');
+    const userSpy = jest.spyOn(authProvider, 'loadUser');
     const mockUser = {
       accounts: ['test-account'],
       id: 'foo',
@@ -240,10 +273,11 @@ describe('authentication', () => {
     });
   });
 
-  test('can get user from auth provider', () => {
+  test('can get user from auth provider', async () => {
     expect.assertions(2);
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'getUser');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    const spy = jest.spyOn(authProvider, 'getUser');
     const mockUser = {
       sub: 'test-user',
     };
@@ -254,28 +288,38 @@ describe('authentication', () => {
     });
   });
 
-  test('should submit redirect callback', () => {
+  test('should submit redirect callback', async () => {
     const bitski = createInstance();
-    const spy = jest.spyOn(bitski.authProvider, 'redirectCallback');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    const spy = jest.spyOn(authProvider, 'redirectCallback');
     bitski.redirectCallback();
-    expect(spy).toHaveBeenCalled();
+
+    // wait a tick to make sure we get past all the promises in the way
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        expect(spy).toHaveBeenCalled();
+        resolve(null);
+      });
+    });
   });
 
-  test('can add and remove signout callbacks', () => {
+  test('can add and remove signout callbacks', async () => {
     expect.assertions(3);
     const bitski = createInstance();
-    expect(bitski.signoutHandlers.length).toEqual(0);
+    const sdk = await bitski.sdk;
+    expect(sdk.signoutHandlers.length).toEqual(0);
     const callback = jest.fn();
-    bitski.addSignOutHandler(callback);
-    expect(bitski.signoutHandlers.length).toEqual(1);
-    bitski.removeSignOutHandler(callback);
-    expect(bitski.signoutHandlers.length).toEqual(0);
+    await bitski.addSignOutHandler(callback);
+    expect(sdk.signoutHandlers.length).toEqual(1);
+    await bitski.removeSignOutHandler(callback);
+    expect(sdk.signoutHandlers.length).toEqual(0);
   });
 
-  test('signout callbacks are called upon sign out', () => {
+  test('signout callbacks are called upon sign out', async () => {
     expect.assertions(1);
     const bitski = createInstance();
-    jest.spyOn(bitski.authProvider.oauthManager, 'requestSignOut').mockResolvedValue({});
+    const authProvider = (await bitski.sdk)!.authProvider;
+    jest.spyOn(authProvider.oauthManager, 'requestSignOut').mockResolvedValue({});
     const callback = jest.fn();
     bitski.addSignOutHandler(callback);
     return bitski.signOut().then(() => {
@@ -285,17 +329,19 @@ describe('authentication', () => {
 });
 
 describe('working with access tokens', () => {
-  test('should be able to get an access token if the user is logged in', () => {
+  test('should be able to get an access token if the user is logged in', async () => {
     const bitski = createInstance();
-    jest.spyOn(bitski.authProvider, 'getAccessToken').mockResolvedValue('test-access-token');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    jest.spyOn(authProvider, 'getAccessToken').mockResolvedValue('test-access-token');
     return bitski.getCurrentAccessToken().then((accessToken) => {
       expect(accessToken).toBe('test-access-token');
     });
   });
 
-  test('should be able to get a refresh token if the user is logged in', () => {
+  test('should be able to get a refresh token if the user is logged in', async () => {
     const bitski = createInstance();
-    jest.spyOn(bitski.authProvider, 'getRefreshToken').mockResolvedValue('test-refresh-token');
+    const authProvider = (await bitski.sdk)!.authProvider;
+    jest.spyOn(authProvider, 'getRefreshToken').mockResolvedValue('test-refresh-token');
     return bitski.getCurrentRefreshToken().then((refreshToken) => {
       expect(refreshToken).toBe('test-refresh-token');
     });
@@ -315,5 +361,105 @@ describe('connect button', () => {
     const callback = jest.fn();
     const connectButton = bitski.getConnectButton(undefined, callback);
     expect(connectButton.callback).toBe(callback);
+  });
+});
+
+describe('network switching', () => {
+  test('should be able to get current network id via eth_chainId', async () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider();
+
+    const response = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+  });
+
+  test('should be able to switch network via wallet_switchEthereumChain', async () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider();
+
+    let response = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+
+    response = await provider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: toHex(Goerli.chainId) }],
+    });
+    expect(response.result).toBe(null);
+    expect(response.error).toBe(undefined);
+
+    response = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(response.result, 16)).toBe(Goerli.chainId);
+  });
+
+  test('should emit chainChanged event', (done) => {
+    expect.assertions(1);
+    const bitski = createInstance();
+    const provider = bitski.getProvider();
+
+    provider.on('chainChanged', async () => {
+      const response = await provider.request({ method: 'eth_chainId' });
+      expect(parseInt(response.result, 16)).toBe(Goerli.chainId);
+      done();
+    });
+
+    provider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: toHex(Goerli.chainId) }],
+    });
+  });
+
+  test('should throw an error if chain does not exist', async () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider();
+
+    let response = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+
+    response = await provider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: toHex(77) }],
+    });
+    expect(response.error.code).toBe(ProviderErrorCode.ChainDoesNotExist);
+    expect(response.result).toBe(undefined);
+  });
+
+  test('should be able to add a network via wallet_addEthereumChain', async () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider();
+
+    let response = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+
+    response = await provider.request({
+      method: 'wallet_addEthereumChain',
+      params: [{ chainId: toHex(77), rpcUrls: ['http://localhost:3000'] }],
+    });
+    expect(response.result).toBe(null);
+    expect(response.error).toBe(undefined);
+
+    response = await provider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: toHex(77) }],
+    });
+    expect(response.result).toBe(null);
+    expect(response.error).toBe(undefined);
+
+    response = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(response.result, 16)).toBe(77);
+  });
+
+  test('should not be able to override an existing network', async () => {
+    const bitski = createInstance();
+    const provider = bitski.getProvider();
+
+    let response = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+
+    response = await provider.request({
+      method: 'wallet_addEthereumChain',
+      params: [{ chainId: toHex(Mainnet.chainId) }],
+    });
+    expect(response.result).toBe(undefined);
+    expect(response.error.message).toBe('Chain already exists');
   });
 });

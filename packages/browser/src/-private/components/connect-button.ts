@@ -1,5 +1,6 @@
-import { AuthProvider } from '../auth/auth-provider';
-import { OAuthSignInMethod, SignInOptions } from '../bitski';
+import { SignInOptions } from '../auth/oauth-manager';
+import type { BitskiSDK } from '../sdk';
+import { OAuthSignInMethod } from '../constants';
 import { AuthenticationError, AuthenticationErrorCode } from '../errors/authentication-error';
 
 /**
@@ -41,7 +42,7 @@ export class ConnectButton {
   // Set this directly to handle cancellation
   public onCancel?: () => void;
 
-  private authProvider: AuthProvider;
+  private sdk: Promise<Pick<BitskiSDK, 'signInOrConnect'> | null>;
   private authIntegrationType: OAuthSignInMethod;
   private signInOptions: SignInOptions;
 
@@ -52,7 +53,7 @@ export class ConnectButton {
    * You can also set this directly later with the `callback` property.
    */
   constructor(
-    authProvider: AuthProvider,
+    sdk: Promise<Pick<BitskiSDK, 'signInOrConnect'> | null>,
     options?: ConnectButtonOptions,
     callback?: (error?: Error, user?: any) => void,
   ) {
@@ -60,7 +61,7 @@ export class ConnectButton {
     options = options || {};
 
     // Configure instance
-    this.authProvider = authProvider;
+    this.sdk = sdk;
     this.size = options.size || ConnectButtonSize.Medium;
     this.authIntegrationType = options.authMethod || OAuthSignInMethod.Popup;
     this.callback = callback;
@@ -86,29 +87,33 @@ export class ConnectButton {
     }
   }
 
-  private signin() {
-    this.authProvider
-      .signInOrConnect(this.authIntegrationType, this.signInOptions)
-      .then((user) => {
-        if (this.callback) {
-          this.callback(undefined, user);
+  private async signin() {
+    const sdk = await this.sdk;
+
+    if (sdk === null) {
+      throw new Error('Bitski SDK is not available');
+    }
+
+    try {
+      const user = await sdk.signInOrConnect(this.authIntegrationType, this.signInOptions);
+      if (this.callback) {
+        this.callback(undefined, user);
+      }
+    } catch (error) {
+      // Check for cancellation
+      if (
+        error instanceof AuthenticationError &&
+        error.code === AuthenticationErrorCode.UserCancelled
+      ) {
+        // Not a real error, the user just cancelled. Trigger cancellation callback.
+        if (this.onCancel) {
+          this.onCancel();
         }
-      })
-      .catch((error: Error) => {
-        // Check for cancellation
-        if (
-          error instanceof AuthenticationError &&
-          error.code === AuthenticationErrorCode.UserCancelled
-        ) {
-          // Not a real error, the user just cancelled. Trigger cancellation callback.
-          if (this.onCancel) {
-            this.onCancel();
-          }
-        } else if (this.callback) {
-          // Real error. Forward to main callback.
-          this.callback(error, undefined);
-        }
-      });
+      } else if (this.callback) {
+        // Real error. Forward to main callback.
+        this.callback(error as Error, undefined);
+      }
+    }
   }
 
   private configureElement() {
