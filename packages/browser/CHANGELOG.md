@@ -1,5 +1,39 @@
 # bitski
 
+## 3.0.0-beta.0
+
+### Major Changes
+
+- [#269](https://github.com/BitskiCo/bitski-js/pull/269) [`432b42c`](https://github.com/BitskiCo/bitski-js/commit/432b42cb2065e17b67bd93e5bf15bb8450166aaf) Thanks [@pzuraq](https://github.com/pzuraq)! - Updates the SDK to load dynamically to reduce bundle size and to make updating
+  easier overall.
+
+  Upgrading:
+
+  - Add `https://cdn.bitskistatic.com` to your CSP to allow the full SDK to load:
+
+    - `connect-src`: `https://api.bitski.com`
+    - `script-src`: `https://cdn.bitskistatic.com`
+
+  - The provider now implements the standard `request()` method. Users should
+    update to this method and move away from `send` and `sendAsync`, but these
+    legacy methods are still available for the time being.
+
+  - The signature and behavior of `send` and `sendAsync` has been updated to match
+    the standard behavior of other providers (see Web3 or Ethers docs for details).
+
+  - The provider now supports the `wallet_switchEthereumChain` and
+    `wallet_addEthereumChain` RPC methods.
+
+  - `Bitski.addProvider` no longer returns different instances of the provider for
+    different networks. It instead returns a single provider instance, and if a
+    network is specified, it calls `wallet_switchEthereumChain` to change the active
+    chain of the provider.
+
+### Patch Changes
+
+- Updated dependencies [[`5893336`](https://github.com/BitskiCo/bitski-js/commit/5893336ce1b2302d5cb16cca2c02883d9b850e92)]:
+  - bitski-provider@1.2.0-beta.0
+
 ## 2.1.4
 
 ### Patch Changes

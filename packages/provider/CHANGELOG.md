@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 1.2.0-beta.0
+
+### Minor Changes
+
+- [#272](https://github.com/BitskiCo/bitski-js/pull/272) [`5893336`](https://github.com/BitskiCo/bitski-js/commit/5893336ce1b2302d5cb16cca2c02883d9b850e92) Thanks [@pzuraq](https://github.com/pzuraq)! - Add new error to ProviderError
+
 ## 1.1.1
 
 ### Patch Changes
