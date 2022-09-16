@@ -1,5 +1,11 @@
 # bitski
 
+## 3.0.0-beta.1
+
+### Patch Changes
+
+- [#273](https://github.com/BitskiCo/bitski-js/pull/273) [`6a0bfcd`](https://github.com/BitskiCo/bitski-js/commit/6a0bfcdbdd3715272172fae20d2d7e897ae90aec) Thanks [@pzuraq](https://github.com/pzuraq)! - Add NetworkStore and update NetworkProviderStore
+
 ## 3.0.0-beta.0
 
 ### Major Changes
