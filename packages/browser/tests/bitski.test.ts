@@ -135,17 +135,17 @@ describe('managing providers', () => {
     const provider = bitski.getProvider('polygon');
     provider.on('error', (error) => {});
     await provider.currentProviderPromise;
-    expect(provider.providerMap.size).toBe(1);
+    expect(provider.networkProviderStore.size).toBe(1);
   });
 
   test('should not create a new provider if one already exists for that network', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider('polygon');
     await provider.currentProviderPromise;
-    expect(provider.providerMap.size).toBe(1);
+    expect(provider.networkProviderStore.size).toBe(1);
     bitski.getProvider('polygon');
     await provider.currentProviderPromise;
-    expect(provider.providerMap.size).toBe(1);
+    expect(provider.networkProviderStore.size).toBe(1);
   });
 
   test('should not stop engine when force logged out', () => {

@@ -1,5 +1,5 @@
 import { AuthorizationServiceConfiguration } from '@openid/appauth';
-import { BitskiEngine, BitskiEngineOptions, Network } from 'bitski-provider';
+import { BitskiEngineOptions, Network } from 'bitski-provider';
 
 import { SignInOptions } from './auth/oauth-manager';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';

@@ -79,14 +79,25 @@ interface SwitchEthereumChainParameter {
   chainId: string; // A 0x-prefixed hexadecimal string
 }
 
-const NETWORK_MAP: Record<string, Network> = {
-  '0x1': Mainnet,
-  '0x5': Goerli,
-  '0x89': Polygon,
-  '0x13881': Mumbai,
-  '0x38': BinanceSmartChain,
-  '0x61': BinanceSmartChainTestnet,
-};
+const DEFAULT_NETWORK_STORE = new Map([
+  ['0x1', Mainnet],
+  ['0x5', Goerli],
+  ['0x89', Polygon],
+  ['0x13881', Mumbai],
+  ['0x38', BinanceSmartChain],
+  ['0x61', BinanceSmartChainTestnet],
+]);
+
+export interface NetworkProviderStore {
+  get(key: Network): BitskiBrowserEngine | undefined;
+  set(key: Network, engine: BitskiBrowserEngine): void;
+  forEach(fn: (provider: BitskiBrowserEngine) => void): void;
+}
+
+export interface NetworkStore {
+  get(key: string): Promise<Network | undefined>;
+  set(key: string, network: Network): void;
+}
 
 export class BitskiProvider
   extends SafeEventEmitter
@@ -100,11 +111,13 @@ export class BitskiProvider
   private sdkPromise: Promise<Pick<BitskiSDK, 'createProvider'> | null>;
   private currentProviderPromise: Promise<BitskiBrowserEngine>;
 
-  private providerMap: Map<Network, BitskiBrowserEngine>;
   private providerOptions: ProviderOptions;
   private currentProvider: BitskiBrowserEngine | undefined;
   private currentChainId: string | undefined;
   private subproviders: [Subprovider, number | undefined][] = [];
+
+  private networkStore: NetworkStore | Map<string, Network>;
+  private networkProviderStore: NetworkProviderStore;
 
   private subscriptionMap = new Map<string, BitskiBrowserEngine>();
 
@@ -113,15 +126,18 @@ export class BitskiProvider
     network: Network,
     options: ProviderOptions = {},
 
-    // Provider map allows multiple instances of BitskiProvider to share state.
-    // This is used by the extension so we only have one provider per-chain, but
-    // can have different selected providers per page.
-    providerMap = new Map<Network, BitskiBrowserEngine>(),
+    // Network and network provider store allows multiple instances of
+    // BitskiProvider to share state. This is used by the extension so we only
+    // have one provider per-chain, but can have different selected providers
+    // per page.
+    networkStore?: NetworkStore,
+    networkProviderStore: NetworkProviderStore = new Map(),
   ) {
     super();
     this.sdkPromise = sdkPromise;
     this.providerOptions = options;
-    this.providerMap = providerMap;
+    this.networkStore = networkStore ?? DEFAULT_NETWORK_STORE;
+    this.networkProviderStore = networkProviderStore;
 
     this.currentProviderPromise = this.setupChain(network);
   }
@@ -169,19 +185,19 @@ export class BitskiProvider
   start(): void {
     // Wait for the provider promise so we're loaded and bootstrapped
     this.currentProviderPromise.then(() => {
-      this.providerMap.forEach((p) => p.start());
+      this.networkProviderStore.forEach((p) => p.start());
     });
   }
 
   stop(): void {
     this.currentProviderPromise.then(() => {
-      this.providerMap.forEach((p) => p.stop());
+      this.networkProviderStore.forEach((p) => p.stop());
     });
   }
 
   addProvider(source: Subprovider, index?: number): void {
     this.currentProviderPromise.then(() => {
-      this.providerMap.forEach((p) => p.addProvider(source, index));
+      this.networkProviderStore.forEach((p) => p.addProvider(source, index));
     });
 
     // Save the subprovider to add to new chains if we ever switch chains
@@ -190,7 +206,7 @@ export class BitskiProvider
 
   removeProvider(source: Subprovider): void {
     this.currentProviderPromise.then(() => {
-      this.providerMap.forEach((p) => p.removeProvider(source));
+      this.networkProviderStore.forEach((p) => p.removeProvider(source));
     });
 
     // Remove from saved subproviders
@@ -240,7 +256,7 @@ export class BitskiProvider
   }
 
   private async addChain(chainDetails: AddEthereumChainParameter) {
-    if (NETWORK_MAP[chainDetails.chainId]) {
+    if (await this.networkStore.get(chainDetails.chainId)) {
       return createResponse(Error('Chain already exists'));
     }
 
@@ -251,16 +267,16 @@ export class BitskiProvider
       return createResponse(Error('RPC url is required when adding a chain'));
     }
 
-    NETWORK_MAP[chainDetails.chainId] = {
+    await this.networkStore.set(chainDetails.chainId, {
       chainId,
       rpcUrl,
-    };
+    });
 
     return createResponse(undefined, null);
   }
 
   private async switchChain(chainDetails: SwitchEthereumChainParameter) {
-    const network = NETWORK_MAP[chainDetails.chainId];
+    const network = await this.networkStore.get(chainDetails.chainId);
 
     if (!network) {
       return createResponse(new ProviderError('Chain does not exist', 4902));
@@ -273,7 +289,7 @@ export class BitskiProvider
   }
 
   private async setupChain(network: Network) {
-    let provider = this.providerMap.get(network);
+    let provider = this.networkProviderStore.get(network);
 
     if (!provider) {
       const sdk = await this.sdkPromise;
@@ -292,7 +308,7 @@ export class BitskiProvider
       // Override provider emit so it emits directly to the wrapper/loader
       provider.emit = this.emit.bind(this);
 
-      this.providerMap.set(network, provider);
+      this.networkProviderStore.set(network, provider);
 
       provider.start();
     }
