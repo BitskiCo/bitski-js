@@ -1,5 +1,11 @@
 # bitski
 
+## 3.0.0-beta.2
+
+### Major Changes
+
+- [#275](https://github.com/BitskiCo/bitski-js/pull/275) [`cd7b69c`](https://github.com/BitskiCo/bitski-js/commit/cd7b69c63743b848bca3b7f44412db87c542ab55) Thanks [@pzuraq](https://github.com/pzuraq)! - Update request and send/sendAsync APIs to match MetaMask/EIP1193
+
 ## 3.0.0-beta.1
 
 ### Patch Changes
