@@ -38,28 +38,19 @@ interface BitskiWeb3Provider {
   removeProvider(source: Subprovider): void;
 }
 
+type JSONRPCResponseHandler = (error: null | Error, response?: JSONRPCResponse) => void;
+
 export interface LegacySendProvider {
-  send(
-    payload: JSONRPCRequest,
-    // Used "null" value to match the legacy version
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    callback: (err?: Error | null, response?: JSONRPCResponse) => void,
-  ): void;
+  send(payload: JSONRPCRequest, callback: JSONRPCResponseHandler): void;
+  send(method: string, params: unknown[]): Promise<JSONRPCResponse>;
 }
 
 export interface LegacySendAsyncProvider {
-  sendAsync(payload: JSONRPCRequest): Promise<JSONRPCResponse>;
-}
-
-export interface LegacyRequestProvider {
-  request(
-    payload: JSONRPCRequest,
-    callback: (err: Error | undefined, response: JSONRPCResponse) => void,
-  ): void;
+  sendAsync(payload: JSONRPCRequest, callback: JSONRPCResponseHandler): void;
 }
 
 export interface EIP1193Provider {
-  request(request: RequestArguments, requestOptions?: unknown): Promise<JSONRPCResponse>;
+  request(request: RequestArguments, requestOptions?: unknown): Promise<unknown>;
 }
 
 interface AddEthereumChainParameter {
@@ -101,12 +92,7 @@ export interface NetworkStore {
 
 export class BitskiProvider
   extends SafeEventEmitter
-  implements
-    BitskiWeb3Provider,
-    LegacyRequestProvider,
-    LegacySendAsyncProvider,
-    LegacySendProvider,
-    EIP1193Provider
+  implements BitskiWeb3Provider, LegacySendAsyncProvider, LegacySendProvider, EIP1193Provider
 {
   private sdkPromise: Promise<Pick<BitskiSDK, 'createProvider'> | null>;
   private currentProviderPromise: Promise<BitskiBrowserEngine>;
@@ -223,27 +209,27 @@ export class BitskiProvider
       await this.currentProviderPromise;
       return createResponse(undefined, this.currentChainId);
     } else {
-      try {
-        const provider = await this.currentProviderPromise;
-        const result = await provider.send(method, params as any);
-
-        return createResponse(undefined, result);
-      } catch (error) {
-        return createResponse(error);
-      }
+      const provider = await this.currentProviderPromise;
+      return provider.send(method, params as any);
     }
   }
 
+  public send(method: string, params: unknown[]): Promise<JSONRPCResponse>;
+  public send(payload: JSONRPCRequest, callback: JSONRPCResponseHandler): void;
   public send(
-    payload: JSONRPCRequest,
-    callback: (err?: Error | null, response?: any) => void,
-  ): void {
-    this.request(payload)
-      .then((response) => {
-        callback(undefined, response);
+    methodOrPayload: string | JSONRPCRequest,
+    paramsOrCallback: unknown[] | JSONRPCResponseHandler,
+  ): void | Promise<JSONRPCResponse> {
+    if (typeof methodOrPayload !== 'string' && !Array.isArray(paramsOrCallback)) {
+      return this.sendAsync(methodOrPayload, paramsOrCallback);
+    }
+
+    return this.request({ method: methodOrPayload as string, params: paramsOrCallback })
+      .then((result) => {
+        return createResponse(undefined, result);
       })
-      .catch((err: Error) => {
-        callback(err);
+      .catch((err) => {
+        return createResponse(err);
       });
   }
 
@@ -251,8 +237,14 @@ export class BitskiProvider
    * @deprecated Please use `.request` instead.
    * @param payload - Request Payload
    */
-  public async sendAsync(payload: JSONRPCRequest): Promise<JSONRPCResponse> {
-    return this.request(payload);
+  public sendAsync(payload: JSONRPCRequest, callback: JSONRPCResponseHandler): void {
+    this.request(payload)
+      .then((response) => {
+        callback(null, createResponse(undefined, response));
+      })
+      .catch((err: Error) => {
+        callback(err);
+      });
   }
 
   private async addChain(chainDetails: AddEthereumChainParameter) {
