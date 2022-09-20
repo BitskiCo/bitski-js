@@ -1,5 +1,11 @@
 # bitski
 
+## 3.0.0-beta.3
+
+### Patch Changes
+
+- [#277](https://github.com/BitskiCo/bitski-js/pull/277) [`c97d83d`](https://github.com/BitskiCo/bitski-js/commit/c97d83d198b798b7718289d9fbb18ce0458805df) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Extend timeout to prevent popup from being dismissed early in Chromium browsers
+
 ## 3.0.0-beta.2
 
 ### Major Changes
