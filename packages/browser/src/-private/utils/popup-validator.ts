@@ -19,7 +19,7 @@ export class PopupValidator {
       if (/chrome/.test(navigator.userAgent.toLowerCase())) {
         setTimeout(() => {
           this.isPopupBlocked(popup);
-        }, 200);
+        }, 2000);
       } else {
         popup.onload = () => {
           this.isPopupBlocked(popup);
