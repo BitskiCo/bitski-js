@@ -1,5 +1,11 @@
 # bitski
 
+## 3.0.0-beta.4
+
+### Major Changes
+
+- [#279](https://github.com/BitskiCo/bitski-js/pull/279) [`3d7995e`](https://github.com/BitskiCo/bitski-js/commit/3d7995ed186208b1c24a1c838b089fdfe9eab96e) Thanks [@pzuraq](https://github.com/pzuraq)! - Pass full network details to network store
+
 ## 3.0.0-beta.3
 
 ### Patch Changes
