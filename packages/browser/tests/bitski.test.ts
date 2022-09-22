@@ -24,11 +24,11 @@ describe('managing providers', () => {
     const provider = bitski.getProvider();
     provider.on('error', (error) => {});
 
-    const { result: chainId } = await provider.request({ method: 'eth_chainId' });
+    const chainId = await provider.request({ method: 'eth_chainId' });
 
     const innerProvider = await provider.currentProviderPromise;
     expect(innerProvider.rpcHeaders['X-CLIENT-ID']).toBe('test-client-id');
-    expect(parseInt(chainId, 16)).toBe(Mainnet.chainId);
+    expect(parseInt(chainId as string, 16)).toBe(Mainnet.chainId);
   });
 
   test('should get a mainnet provider when passing options with no network name', async () => {
@@ -37,8 +37,8 @@ describe('managing providers', () => {
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
 
-    const { result: chainId } = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(chainId, 16)).toBe(Mainnet.chainId);
+    const chainId = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(chainId as string, 16)).toBe(Mainnet.chainId);
   });
 
   test('should be able to pass a network name as a string', async () => {
@@ -47,8 +47,8 @@ describe('managing providers', () => {
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
 
-    const { result: chainId } = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(chainId, 16)).toBe(Goerli.chainId);
+    const chainId = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(chainId as string, 16)).toBe(Goerli.chainId);
   });
 
   test('should be able to pass a network name in options', async () => {
@@ -57,8 +57,8 @@ describe('managing providers', () => {
     provider.on('error', (error) => {});
     expect(provider).toBeDefined();
 
-    const { result: chainId } = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(chainId, 16)).toBe(Goerli.chainId);
+    const chainId = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(chainId as string, 16)).toBe(Goerli.chainId);
   });
 
   test('passing an invalid network name results in an error', () => {
@@ -369,26 +369,25 @@ describe('network switching', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
 
-    const response = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+    const result = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(result as string, 16)).toBe(Mainnet.chainId);
   });
 
   test('should be able to switch network via wallet_switchEthereumChain', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
 
-    let response = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+    let result = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(result as string, 16)).toBe(Mainnet.chainId);
 
-    response = await provider.request({
+    result = await provider.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: toHex(Goerli.chainId) }],
     });
-    expect(response.result).toBe(null);
-    expect(response.error).toBe(undefined);
+    expect(result).toBe(null);
 
-    response = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(response.result, 16)).toBe(Goerli.chainId);
+    result = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(result as string, 16)).toBe(Goerli.chainId);
   });
 
   test('should emit chainChanged event', (done) => {
@@ -397,8 +396,8 @@ describe('network switching', () => {
     const provider = bitski.getProvider();
 
     provider.on('chainChanged', async () => {
-      const response = await provider.request({ method: 'eth_chainId' });
-      expect(parseInt(response.result, 16)).toBe(Goerli.chainId);
+      const result = await provider.request({ method: 'eth_chainId' });
+      expect(parseInt(result as string, 16)).toBe(Goerli.chainId);
       done();
     });
 
@@ -412,54 +411,56 @@ describe('network switching', () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
 
-    let response = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+    const result = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(result as string, 16)).toBe(Mainnet.chainId);
 
-    response = await provider.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: toHex(77) }],
-    });
-    expect(response.error.code).toBe(ProviderErrorCode.ChainDoesNotExist);
-    expect(response.result).toBe(undefined);
+    try {
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: toHex(77) }],
+      });
+    } catch (e) {
+      expect(e.code).toBe(ProviderErrorCode.ChainDoesNotExist);
+    }
   });
 
   test('should be able to add a network via wallet_addEthereumChain', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
 
-    let response = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+    let result = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(result as string, 16)).toBe(Mainnet.chainId);
 
-    response = await provider.request({
+    result = await provider.request({
       method: 'wallet_addEthereumChain',
       params: [{ chainId: toHex(77), rpcUrls: ['http://localhost:3000'] }],
     });
-    expect(response.result).toBe(null);
-    expect(response.error).toBe(undefined);
+    expect(result).toBe(null);
 
-    response = await provider.request({
+    result = await provider.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: toHex(77) }],
     });
-    expect(response.result).toBe(null);
-    expect(response.error).toBe(undefined);
+    expect(result).toBe(null);
 
-    response = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(response.result, 16)).toBe(77);
+    result = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(result as string, 16)).toBe(77);
   });
 
   test('should not be able to override an existing network', async () => {
     const bitski = createInstance();
     const provider = bitski.getProvider();
 
-    let response = await provider.request({ method: 'eth_chainId' });
-    expect(parseInt(response.result, 16)).toBe(Mainnet.chainId);
+    const result = await provider.request({ method: 'eth_chainId' });
+    expect(parseInt(result as string, 16)).toBe(Mainnet.chainId);
 
-    response = await provider.request({
-      method: 'wallet_addEthereumChain',
-      params: [{ chainId: toHex(Mainnet.chainId) }],
-    });
-    expect(response.result).toBe(undefined);
-    expect(response.error.message).toBe('Chain already exists');
+    try {
+      await provider.request({
+        method: 'wallet_addEthereumChain',
+        params: [{ chainId: toHex(Mainnet.chainId) }],
+      });
+    } catch (e) {
+      expect(e.message).toBe('Chain already exists');
+    }
   });
 });

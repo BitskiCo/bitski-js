@@ -63,21 +63,37 @@ interface AddEthereumChainParameter {
     symbol: string;
     decimals: number;
   };
-  rpcUrls?: string[];
+  rpcUrls: string[];
 }
 
 interface SwitchEthereumChainParameter {
   chainId: string; // A 0x-prefixed hexadecimal string
 }
 
-const DEFAULT_NETWORK_STORE = new Map([
-  ['0x1', Mainnet],
-  ['0x5', Goerli],
-  ['0x89', Polygon],
-  ['0x13881', Mumbai],
-  ['0x38', BinanceSmartChain],
-  ['0x61', BinanceSmartChainTestnet],
-]);
+class DefaultNetworkStore implements NetworkStore {
+  #networks = new Map([
+    ['0x1', Mainnet],
+    ['0x5', Goerli],
+    ['0x89', Polygon],
+    ['0x13881', Mumbai],
+    ['0x38', BinanceSmartChain],
+    ['0x61', BinanceSmartChainTestnet],
+  ]);
+
+  async get(chainId: string) {
+    return this.#networks.get(chainId);
+  }
+
+  async add(chainDetails: AddEthereumChainParameter): Promise<void> {
+    const chainId = parseInt(chainDetails.chainId, 16);
+    const rpcUrl = chainDetails.rpcUrls[0];
+
+    this.#networks.set(chainDetails.chainId, {
+      chainId,
+      rpcUrl,
+    });
+  }
+}
 
 export interface NetworkProviderStore {
   get(key: Network): BitskiBrowserEngine | undefined;
@@ -87,7 +103,7 @@ export interface NetworkProviderStore {
 
 export interface NetworkStore {
   get(key: string): Promise<Network | undefined>;
-  set(key: string, network: Network): void;
+  add(network: AddEthereumChainParameter): Promise<void>;
 }
 
 export class BitskiProvider
@@ -102,7 +118,7 @@ export class BitskiProvider
   private currentChainId: string | undefined;
   private subproviders: [Subprovider, number | undefined][] = [];
 
-  private networkStore: NetworkStore | Map<string, Network>;
+  private networkStore: NetworkStore;
   private networkProviderStore: NetworkProviderStore;
 
   private subscriptionMap = new Map<string, BitskiBrowserEngine>();
@@ -122,7 +138,7 @@ export class BitskiProvider
     super();
     this.sdkPromise = sdkPromise;
     this.providerOptions = options;
-    this.networkStore = networkStore ?? DEFAULT_NETWORK_STORE;
+    this.networkStore = networkStore ?? new DefaultNetworkStore();
     this.networkProviderStore = networkProviderStore;
 
     this.currentProviderPromise = this.setupChain(network);
@@ -200,14 +216,14 @@ export class BitskiProvider
     this.subproviders.splice(index, 1);
   }
 
-  async request({ method, params = [] }: RequestArguments): Promise<JSONRPCResponse> {
+  async request({ method, params = [] }: RequestArguments): Promise<unknown> {
     if (method === 'wallet_addEthereumChain') {
       return this.addChain(params[0]);
     } else if (method === 'wallet_switchEthereumChain') {
       return this.switchChain(params[0]);
     } else if (method === 'eth_chainId') {
       await this.currentProviderPromise;
-      return createResponse(undefined, this.currentChainId);
+      return this.currentChainId;
     } else {
       const provider = await this.currentProviderPromise;
       return provider.send(method, params as any);
@@ -249,35 +265,29 @@ export class BitskiProvider
 
   private async addChain(chainDetails: AddEthereumChainParameter) {
     if (await this.networkStore.get(chainDetails.chainId)) {
-      return createResponse(Error('Chain already exists'));
+      throw new Error('Chain already exists');
     }
 
-    const chainId = parseInt(chainDetails.chainId, 16);
-    const rpcUrl = chainDetails.rpcUrls?.[0];
-
-    if (!rpcUrl) {
-      return createResponse(Error('RPC url is required when adding a chain'));
+    if (!(chainDetails.rpcUrls?.length > 0)) {
+      throw new Error('RPC url is required when adding a chain');
     }
 
-    await this.networkStore.set(chainDetails.chainId, {
-      chainId,
-      rpcUrl,
-    });
+    await this.networkStore.add(chainDetails);
 
-    return createResponse(undefined, null);
+    return null;
   }
 
   private async switchChain(chainDetails: SwitchEthereumChainParameter) {
     const network = await this.networkStore.get(chainDetails.chainId);
 
     if (!network) {
-      return createResponse(new ProviderError('Chain does not exist', 4902));
+      throw new ProviderError('Chain does not exist', 4902);
     }
 
     this.currentProviderPromise = this.setupChain(network);
     this.emit('chainChanged');
 
-    return createResponse(undefined, null);
+    return null;
   }
 
   private async setupChain(network: Network) {
