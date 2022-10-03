@@ -184,6 +184,14 @@ export class BitskiSDK {
     return this.authProvider.signOut();
   }
 
+  /**
+   * Used to refresh the auth provider's state if the user is logged in/out in a
+   * different process
+   */
+  public reloadAuthState(): void {
+    this.authProvider.loadFromCache();
+  }
+
   public createProvider(network: Network, options: ProviderOptions = {}): BitskiBrowserEngine {
     return new BitskiBrowserEngine(
       this.clientId,

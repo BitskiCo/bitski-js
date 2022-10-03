@@ -37,21 +37,23 @@ export class TokenStore {
     return `${REFRESH_TOKEN_KEY}.${this.clientId}`;
   }
   protected store: Store;
-  protected accessToken: Promise<AccessToken | undefined>;
-  protected refreshToken: Promise<string | undefined>;
-  protected idToken: Promise<string | undefined>;
+  protected accessToken!: Promise<AccessToken | undefined>;
+  protected refreshToken!: Promise<string | undefined>;
+  protected idToken!: Promise<string | undefined>;
   protected clientId: string;
 
   constructor(clientId: string, store?: Store) {
     this.clientId = clientId;
     this.store = store || new LocalStorageStore();
-    this.accessToken = Promise.resolve(this.store.getItem(this.accessTokenKey)).then(
-      (accessTokenString) => {
-        if (accessTokenString) {
-          return AccessToken.fromString(accessTokenString);
-        }
-      },
-    );
+    this.loadTokensFromCache();
+  }
+
+  public loadTokensFromCache(): void {
+    this.accessToken = this.store.getItem(this.accessTokenKey).then((accessTokenString) => {
+      if (accessTokenString) {
+        return AccessToken.fromString(accessTokenString);
+      }
+    });
 
     this.idToken = this.store.getItem(this.idTokenKey);
     this.refreshToken = this.store.getItem(this.refreshTokenKey);
