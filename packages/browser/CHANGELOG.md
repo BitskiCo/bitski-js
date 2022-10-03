@@ -1,5 +1,11 @@
 # bitski
 
+## 3.0.0-beta.5
+
+### Patch Changes
+
+- [#281](https://github.com/BitskiCo/bitski-js/pull/281) [`4bf1a79`](https://github.com/BitskiCo/bitski-js/commit/4bf1a799966049f8b25cd797a572ad12713a9f92) Thanks [@pzuraq](https://github.com/pzuraq)! - Add internal method for reloading auth state from cache
+
 ## 3.0.0-beta.4
 
 ### Major Changes
