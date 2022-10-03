@@ -34,6 +34,10 @@ export class UserStore {
     await this.cacheUser(undefined);
   }
 
+  public loadUserFromCache(): void {
+    this.user = this.fetchUser();
+  }
+
   protected async fetchUser(): Promise<User | undefined> {
     const userData = await this.store.getItem(this.storageKey);
     if (userData) {

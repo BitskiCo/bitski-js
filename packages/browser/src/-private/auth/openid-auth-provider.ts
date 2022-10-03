@@ -202,4 +202,9 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
         return user;
       });
   }
+
+  public loadFromCache(): void {
+    this.tokenStore.loadTokensFromCache();
+    this.userStore.loadUserFromCache();
+  }
 }
