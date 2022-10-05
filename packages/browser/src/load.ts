@@ -53,6 +53,22 @@ const injectScript = (): HTMLScriptElement => {
 
 let bitskiPromise: Promise<BitskiSDKConstructor | null> | null = null;
 
+const windowLoadPromise = new Promise((resolve) => {
+  if (typeof window === 'undefined') {
+    // Resolve to null when imported server side. This makes the module
+    // safe to import in an isomorphic code base.
+    resolve(null);
+    return;
+  }
+
+  if (window.document.readyState === 'complete') {
+    resolve(null);
+    return;
+  }
+
+  window.addEventListener('load', () => resolve(null));
+});
+
 export const loadScript = (): Promise<BitskiSDKConstructor | null> => {
   // Ensure that we only attempt to load Stripe.js at most once
   if (bitskiPromise !== null) {
@@ -67,33 +83,35 @@ export const loadScript = (): Promise<BitskiSDKConstructor | null> => {
       return;
     }
 
-    if (window.Bitski) {
-      resolve(window.Bitski.BitskiSDK);
-      return;
-    }
-
-    try {
-      let script = findScript();
-
-      if (!script) {
-        script = injectScript();
+    windowLoadPromise.then(() => {
+      if (window.Bitski) {
+        resolve(window.Bitski.BitskiSDK);
+        return;
       }
 
-      script.addEventListener('load', () => {
-        if (window.Bitski) {
-          resolve(window.Bitski.BitskiSDK);
-        } else {
-          reject(new Error('Bitski SDK not available'));
-        }
-      });
+      try {
+        let script = findScript();
 
-      script.addEventListener('error', () => {
-        reject(new Error('Failed to load Bitski SDK'));
-      });
-    } catch (error) {
-      reject(error);
-      return;
-    }
+        if (!script) {
+          script = injectScript();
+        }
+
+        script.addEventListener('load', () => {
+          if (window.Bitski) {
+            resolve(window.Bitski.BitskiSDK);
+          } else {
+            reject(new Error('Bitski SDK not available'));
+          }
+        });
+
+        script.addEventListener('error', () => {
+          reject(new Error('Failed to load Bitski SDK'));
+        });
+      } catch (error) {
+        reject(error);
+        return;
+      }
+    });
   });
 
   return bitskiPromise;
