@@ -84,6 +84,10 @@ export class Bitski {
    * @param options options for the provider, or a network name
    */
   public getProvider(options?: ProviderOptions | string): BitskiProvider {
+    if (typeof window !== 'undefined' && window.Bitski?.getProvider) {
+      return window.Bitski.getProvider(options);
+    }
+
     const network = networkFromProviderOptions(options);
 
     if (!this.provider) {
