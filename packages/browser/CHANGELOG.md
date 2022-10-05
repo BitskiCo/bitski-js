@@ -1,5 +1,53 @@
 # bitski
 
+## 3.0.0
+
+### Major Changes
+
+- [#269](https://github.com/BitskiCo/bitski-js/pull/269) [`432b42c`](https://github.com/BitskiCo/bitski-js/commit/432b42cb2065e17b67bd93e5bf15bb8450166aaf) Thanks [@pzuraq](https://github.com/pzuraq)! - Updates the SDK to load dynamically to reduce bundle size and to make updating
+  easier overall.
+
+  Upgrading:
+
+  - Add `https://cdn.bitskistatic.com` to your CSP to allow the full SDK to load:
+
+    - `connect-src`: `https://api.bitski.com`
+    - `script-src`: `https://cdn.bitskistatic.com`
+
+  - The provider now implements the standard `request()` method. Users should
+    update to this method and move away from `send` and `sendAsync`, but these
+    legacy methods are still available for the time being.
+
+  - The signature and behavior of `send` and `sendAsync` has been updated to match
+    the standard behavior of other providers (see Web3 or Ethers docs for details).
+
+  - The provider now supports the `wallet_switchEthereumChain` and
+    `wallet_addEthereumChain` RPC methods.
+
+  - `Bitski.addProvider` no longer returns different instances of the provider for
+    different networks. It instead returns a single provider instance, and if a
+    network is specified, it calls `wallet_switchEthereumChain` to change the active
+    chain of the provider.
+
+* [#279](https://github.com/BitskiCo/bitski-js/pull/279) [`3d7995e`](https://github.com/BitskiCo/bitski-js/commit/3d7995ed186208b1c24a1c838b089fdfe9eab96e) Thanks [@pzuraq](https://github.com/pzuraq)! - Pass full network details to network store
+
+- [#275](https://github.com/BitskiCo/bitski-js/pull/275) [`cd7b69c`](https://github.com/BitskiCo/bitski-js/commit/cd7b69c63743b848bca3b7f44412db87c542ab55) Thanks [@pzuraq](https://github.com/pzuraq)! - Update request and send/sendAsync APIs to match MetaMask/EIP1193
+
+### Patch Changes
+
+- [#273](https://github.com/BitskiCo/bitski-js/pull/273) [`6a0bfcd`](https://github.com/BitskiCo/bitski-js/commit/6a0bfcdbdd3715272172fae20d2d7e897ae90aec) Thanks [@pzuraq](https://github.com/pzuraq)! - Add NetworkStore and update NetworkProviderStore
+
+* [#277](https://github.com/BitskiCo/bitski-js/pull/277) [`c97d83d`](https://github.com/BitskiCo/bitski-js/commit/c97d83d198b798b7718289d9fbb18ce0458805df) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Extend timeout to prevent popup from being dismissed early in Chromium browsers
+
+- [#285](https://github.com/BitskiCo/bitski-js/pull/285) [`e59e01f`](https://github.com/BitskiCo/bitski-js/commit/e59e01f182cca4eee3110c7fda7adba5d94733ee) Thanks [@pzuraq](https://github.com/pzuraq)! - Wait for window load until checking for Bitski global
+
+* [#283](https://github.com/BitskiCo/bitski-js/pull/283) [`0d03f6a`](https://github.com/BitskiCo/bitski-js/commit/0d03f6ad7bfb53e2448867acdabf54d5b8500e6d) Thanks [@pzuraq](https://github.com/pzuraq)! - Add an internal method for getting a custom provider (used by extension)
+
+- [#281](https://github.com/BitskiCo/bitski-js/pull/281) [`4bf1a79`](https://github.com/BitskiCo/bitski-js/commit/4bf1a799966049f8b25cd797a572ad12713a9f92) Thanks [@pzuraq](https://github.com/pzuraq)! - Add internal method for reloading auth state from cache
+
+- Updated dependencies [[`5893336`](https://github.com/BitskiCo/bitski-js/commit/5893336ce1b2302d5cb16cca2c02883d9b850e92)]:
+  - bitski-provider@1.2.0
+
 ## 3.0.0-beta.7
 
 ### Patch Changes
