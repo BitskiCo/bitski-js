@@ -1,5 +1,11 @@
 # bitski
 
+## 3.0.0-beta.6
+
+### Patch Changes
+
+- [#283](https://github.com/BitskiCo/bitski-js/pull/283) [`0d03f6a`](https://github.com/BitskiCo/bitski-js/commit/0d03f6ad7bfb53e2448867acdabf54d5b8500e6d) Thanks [@pzuraq](https://github.com/pzuraq)! - Add an internal method for getting a custom provider (used by extension)
+
 ## 3.0.0-beta.5
 
 ### Patch Changes
