@@ -1,5 +1,11 @@
 # bitski
 
+## 3.0.0-beta.7
+
+### Patch Changes
+
+- [#285](https://github.com/BitskiCo/bitski-js/pull/285) [`e59e01f`](https://github.com/BitskiCo/bitski-js/commit/e59e01f182cca4eee3110c7fda7adba5d94733ee) Thanks [@pzuraq](https://github.com/pzuraq)! - Wait for window load until checking for Bitski global
+
 ## 3.0.0-beta.6
 
 ### Patch Changes
