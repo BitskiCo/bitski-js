@@ -1,4 +1,5 @@
-import type { BitskiSDK } from './-private/sdk';
+import type { BitskiSDK, ProviderOptions } from './-private/sdk';
+import { BitskiProvider } from './provider';
 
 type BitskiSDKConstructor = typeof BitskiSDK;
 
@@ -7,6 +8,7 @@ declare global {
     Bitski:
       | {
           BitskiSDK: BitskiSDKConstructor;
+          getProvider?: (options?: ProviderOptions | string) => BitskiProvider;
         }
       | undefined;
   }

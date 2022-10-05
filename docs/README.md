@@ -24,12 +24,12 @@ Want to see Bitski in action? You can check out a [full demo app using our SDK](
 A very simple integration of the Bitski would look something like this.
 
 ```javascript
-import { createBitski } from 'bitski';
+import { Bitski } from 'bitski';
 import Web3 from 'web3';
 
-const bitski = await createBitski('CLIENT-ID', 'https://myapp.com/callback.html');
+const bitski = new Bitski('CLIENT-ID', 'https://myapp.com/callback.html');
 
-const provider = bitski?.getProvider();
+const provider = bitski.getProvider();
 const web3 = new Web3(provider);
 
 // public calls are always available
@@ -69,11 +69,11 @@ Where you would normally check for an ethereum provider, you can now run the Bit
 
 Starting the SDK is as simple as creating a Bitski object with your new client id and your redirect url. Please note that your redirect url entered here must exactly match what you entered for your app's redirect urls in the Bitski developer portal.
 
-Note: In Node and other environments without access to `window`, `createBitski` will return `null` instead of a Bitski instance. This allows you to include the SDK in isomorphic server-side code without causing errors.
+Note: In Node and other environments without access to `window`, the SDK will initialize but won't be usable. This allows you to include the SDK in isomorphic server-side code without causing errors.
 
 ```javascript
-import { createBitski } from 'bitski';
-const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+import { Bitski } from 'bitski';
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 ```
 
 #### Customizing OAuth scopes
@@ -83,7 +83,7 @@ By default the SDK will request 'openid' (required), and 'offline' scopes. Offli
 To customize the scopes your app will request, pass them as an array during initialization. Note that 'openid' is always implicitly requested, and that if you customize this list, you should remember to add 'offline' unless you don't want to receive a refresh token.
 
 ```javascript
-const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>', ['offline', 'email']);
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>', ['offline', 'email']);
 ```
 
 ### Getting a provider
@@ -233,10 +233,10 @@ Here's an example of how you might set that up:
 
 ```javascript
 // my-app.js
-import { createBitski, AuthenticationStatus } from 'bitski';
+import { Bitski, AuthenticationStatus } from 'bitski';
 import Web3 from 'web3';
 
-const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL'>);
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL'>);
 const web3 = new Web3(bitski.getProvider());
 
 function checkAuthStatus() {
@@ -290,10 +290,10 @@ An example of how this might work could be the following:
 
 ```javascript
 // index.js
-import { createBitski } from 'bitski';
+import { Bitski } from 'bitski';
 
 // create instance
-const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 
 // call signInRedirect from some click handler
 document.querySelector('#sign-in').addEventHandler('click', () => {
@@ -303,11 +303,11 @@ document.querySelector('#sign-in').addEventHandler('click', () => {
 
 ```javascript
 // app.js
-import { createBitski } from 'bitski';
+import { Bitski } from 'bitski';
 import Web3 from 'web3';
 
 // create instance
-const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 const provider = bitski.getProvider();
 const web3 = new Web3(provider);
 
@@ -359,7 +359,7 @@ In this scenario, you would show a Bitski connect button and a "Use Existing Pro
 
 ```javascript
 // login.js
-const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 
 function continueToApp(provider) {
   web3 = new Web3(provider);
@@ -406,7 +406,7 @@ You would show a Bitski connect button along side either a download button (if n
 
 ```javascript
 // login.js
-const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 
 function continueToApp(provider) {
   web3 = new Web3(provider);
@@ -447,7 +447,7 @@ In some circumstances it might make sense to require a particular wallet. For ex
 simply ignore any injected providers and use Bitski.
 
 ```javascript
-const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
 var bitskiProvider = bitski.getProvider();
 const web3 = new Web3(bitskiProvider);
 ```
@@ -462,7 +462,7 @@ if (window.ethereum) {
   web3 = new Web3(window.ethereum);
 } else {
   // initialize Bitski
-  const bitski = await createBitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
+  const bitski = new Bitski('<YOUR-CLIENT-ID>', '<YOUR-REDIRECT-URL>');
   var bitskiProvider = bitski.getProvider();
   window.web3 = new Web3(bitskiProvider);
 }
