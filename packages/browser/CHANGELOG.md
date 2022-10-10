@@ -1,5 +1,11 @@
 # bitski
 
+## 3.1.0
+
+### Minor Changes
+
+- [#289](https://github.com/BitskiCo/bitski-js/pull/289) [`01ffb47`](https://github.com/BitskiCo/bitski-js/commit/01ffb47930421174b6aa7ab456c56a6b68cc00e6) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add condition to personal_sign case to recover from wrong param ordering.
+
 ## 3.0.0
 
 ### Major Changes
