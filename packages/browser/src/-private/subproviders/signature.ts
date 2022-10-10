@@ -294,6 +294,13 @@ export class SignatureSubprovider extends Subprovider {
         }
       case 'personal_sign':
         if (request.params && request.params.length > 1) {
+          // If the first param is a wallet address, flip the parameter ordering for personal_sign
+          // so that it matches eth_sign. This is to gracefully respect Dapps who adopted Metamask's
+          // API for personal_sign early, and recover from the wrong param order
+          // when it is clearly identifiable.
+          if (request.params[0].startsWith('0x') && request.params[0].length === 42) {
+            return { from: request.params[0], message: request.params[1] };
+          }
           return { from: request.params[1], message: request.params[0] };
         } else {
           throw SignerError.MissingMessage();
