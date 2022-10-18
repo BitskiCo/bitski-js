@@ -1,5 +1,11 @@
 # bitski
 
+## 3.2.0
+
+### Minor Changes
+
+- [#291](https://github.com/BitskiCo/bitski-js/pull/291) [`9e78d6e`](https://github.com/BitskiCo/bitski-js/commit/9e78d6eb4747737ff264743e5796f8af356d024f) Thanks [@pzuraq](https://github.com/pzuraq)! - Fix refresh token storage, race conditions, and add `onUpdate` to token store to signal async changes
+
 ## 3.1.0
 
 ### Minor Changes
