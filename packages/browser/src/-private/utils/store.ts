@@ -12,4 +12,6 @@ export interface Store {
 
   // Remove the key from the cache
   clearItem(key: string): Promise<void>;
+
+  onUpdate?(fn: () => void);
 }

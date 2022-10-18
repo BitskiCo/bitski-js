@@ -46,6 +46,7 @@ export class TokenStore {
     this.clientId = clientId;
     this.store = store || new LocalStorageStore();
     this.loadTokensFromCache();
+    this.store.onUpdate?.(() => this.loadTokensFromCache());
   }
 
   public loadTokensFromCache(): void {
@@ -60,14 +61,18 @@ export class TokenStore {
   }
 
   public persistTokenResponse(response: TokenResponse): void {
+    const parsedToken = AccessToken.fromTokenResponse(response);
+
+    this.store.setItem(this.accessTokenKey, parsedToken.toStorageString());
+    this.accessToken = Promise.resolve(parsedToken);
+
+    this.store.setItem(this.idTokenKey, response.idToken);
+    this.idToken = Promise.resolve(response.idToken);
+
     if (response.refreshToken) {
       this.store.setItem(this.refreshTokenKey, response.refreshToken);
+      this.refreshToken = Promise.resolve(response.refreshToken);
     }
-    const parsedToken = AccessToken.fromTokenResponse(response);
-    this.store.setItem(this.accessTokenKey, parsedToken.toStorageString());
-    this.store.setItem(this.idTokenKey, response.idToken);
-    this.accessToken = Promise.resolve(parsedToken);
-    this.idToken = Promise.resolve(response.idToken);
   }
 
   public async invalidateCurrentToken(): Promise<void> {

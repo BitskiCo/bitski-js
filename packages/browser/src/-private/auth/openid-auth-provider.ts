@@ -15,6 +15,8 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
   public userStore: UserStore;
   public signOutCallback?: () => void;
 
+  private _refreshTokensPromise: Promise<TokenResponse> | undefined;
+
   constructor(
     clientId: string,
     redirectUri: string,
@@ -92,21 +94,28 @@ export class OpenidAuthProvider implements AccessTokenProvider, AuthProvider {
     }
   }
 
-  private async refreshTokens(): Promise<TokenResponse> {
-    const refreshToken = await this.tokenStore.getRefreshToken();
-    if (!refreshToken) {
-      throw AuthenticationError.NoRefreshToken();
+  private refreshTokens(): Promise<TokenResponse> {
+    if (!this._refreshTokensPromise) {
+      this._refreshTokensPromise = this.tokenStore.getRefreshToken().then(async (refreshToken) => {
+        if (!refreshToken) {
+          throw AuthenticationError.NoRefreshToken();
+        }
+
+        try {
+          const tokenResponse = await this.oauthManager.refreshAccessToken(refreshToken);
+          this.tokenStore.persistTokenResponse(tokenResponse);
+          return tokenResponse;
+        } catch (error) {
+          await this.tokenStore.clear();
+          await this.userStore.clear();
+          throw error;
+        } finally {
+          this._refreshTokensPromise = undefined;
+        }
+      });
     }
 
-    try {
-      const tokenResponse = await this.oauthManager.refreshAccessToken(refreshToken);
-      this.tokenStore.persistTokenResponse(tokenResponse);
-      return tokenResponse;
-    } catch (error) {
-      await this.tokenStore.clear();
-      await this.userStore.clear();
-      throw error;
-    }
+    return this._refreshTokensPromise;
   }
 
   public async refreshAccessToken(): Promise<string> {
