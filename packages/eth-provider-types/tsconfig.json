@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "lib": ["es2017", "dom"],
+    "target": "ES2017"
+  },
+  "include": ["index.d.ts"]
+}
