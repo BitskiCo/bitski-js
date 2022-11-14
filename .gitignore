@@ -71,8 +71,8 @@ etc
 
 # package locks
 examples/package-lock.json
-packages/browser/package-lock.json
-packages/provider/package-lock.json
+packages/bitski/package-lock.json
+packages/bitski-provider/package-lock.json
 
 .turbo
 build/**
@@ -83,7 +83,6 @@ packages/**/dist/
 packages/**/lib/
 
 examples/**
-docs/**
 
 # dependencies
 packages/**/node_modules/
@@ -91,3 +90,6 @@ packages/**/node_modules/
 # misc
 packages/**/coverage/
 .eslintcache
+
+# Docs, this is copied on build from the root README.md
+packages/bitski/README.md

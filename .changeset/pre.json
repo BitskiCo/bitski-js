@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "v2.0.0-beta.0",
+  "initialVersions": {
+    "bitski": "3.2.0",
+    "bitski-provider": "1.2.0",
+    "eth-provider-types": "0.0.2"
+  },
+  "changesets": []
+}

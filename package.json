@@ -17,9 +17,6 @@
     "node": "16.17.0"
   },
   "version": "0.0.0",
-  "dependencies": {
-    "@bitski/provider-engine": "^0.8.0"
-  },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.4",
     "@changesets/cli": "^2.22.0",
@@ -31,7 +28,9 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^8.0.1",
+    "jest-fetch-mock": "^3.0.3",
     "prettier": "^2.4.1",
+    "replace-in-files": "^3.0.0",
     "turbo": "^1.2.4",
     "typescript": "^4.4.3"
   }

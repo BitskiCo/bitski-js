@@ -11,6 +11,6 @@ packages/**/coverage/
 # Jest
 jest.config.base.js
 **/jest.config.js
-packages/browser/scripts/version.js
+packages/bitski/scripts/version.js
 
 typedoc.js

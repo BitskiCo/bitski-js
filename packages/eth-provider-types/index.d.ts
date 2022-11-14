@@ -18,6 +18,7 @@ export const enum EthMethod {
   eth_hashrate = 'eth_hashrate',
   eth_gasPrice = 'eth_gasPrice',
   eth_accounts = 'eth_accounts',
+  eth_requestAccounts = 'eth_requestAccounts',
   eth_blockNumber = 'eth_blockNumber',
   eth_getBalance = 'eth_getBalance',
   eth_getStorageAt = 'eth_getStorageAt',
@@ -29,6 +30,10 @@ export const enum EthMethod {
   eth_getCode = 'eth_getCode',
   eth_sign = 'eth_sign',
   eth_signTransaction = 'eth_signTransaction',
+  eth_signTypedData = 'eth_signTypedData',
+  eth_signTypedData_v1 = 'eth_signTypedData_v1',
+  eth_signTypedData_v3 = 'eth_signTypedData_v3',
+  eth_signTypedData_v4 = 'eth_signTypedData_v4',
   eth_sendTransaction = 'eth_sendTransaction',
   eth_sendRawTransaction = 'eth_sendRawTransaction',
   eth_call = 'eth_call',
@@ -51,6 +56,11 @@ export const enum EthMethod {
   eth_getWork = 'eth_getWork',
   eth_submitWork = 'eth_submitWork',
   eth_submitHashrate = 'eth_submitHashrate',
+  eth_chainId = 'eth_chainId',
+  eth_subscribe = 'eth_subscribe',
+  eth_unsubscribe = 'eth_unsubscribe',
+  wallet_addEthereumChain = 'wallet_addEthereumChain',
+  wallet_switchEthereumChain = 'wallet_switchEthereumChain',
 }
 
 export const enum EthBlockNumberTag {
@@ -60,12 +70,14 @@ export const enum EthBlockNumberTag {
 }
 
 export interface EthTransactionSend {
-  from: string;
+  from?: string;
   to?: string;
   gas?: string;
   gasPrice?: string;
+  maxFeePerGas?: string;
+  maxPriorityFeePerGas?: string;
   value?: string;
-  data: string;
+  data?: string;
   nonce?: string;
 }
 
@@ -74,6 +86,8 @@ export interface EthTransactionCall {
   to: string;
   gas?: string;
   gasPrice?: string;
+  maxFeePerGas?: string;
+  maxPriorityFeePerGas?: string;
   value?: string;
   data?: string;
 }
@@ -199,6 +213,42 @@ export type EthBlock<T extends boolean = boolean> = EthBlockComplete<T> | EthBlo
 
 type EthGetBlockParams<T extends boolean> = [blockHashOrNumber: string, returnFullTransaction: T];
 
+export interface TypedPropertyDef {
+  name: string;
+  type: string;
+}
+
+export type TypedDataDefinition = TypedPropertyDef[];
+
+export interface TypedDataTypes {
+  EIP712Domain: TypedDataDefinition; // Required. Specify the domain fields you are using.
+  [typeName: string]: TypedDataDefinition;
+}
+
+export interface TypedData {
+  types: TypedDataTypes;
+  domain: Record<string, unknown>; // Provide object format of domain according to spec in `types`
+  primaryType: string; // The name of the top-level type being used in `message`
+  message: Record<string, unknown>; // The values for your object, starting from the `primaryType`
+}
+
+interface EthChainDefinition {
+  chainId: string; // A 0x-prefixed hexadecimal string
+  chainName?: string;
+  nativeCurrency?: {
+    name: string;
+    symbol: string; // 2-6 characters long
+    decimals: number;
+  };
+  rpcUrls?: string[];
+  blockExplorerUrls?: string[];
+  iconUrls?: string[]; // Currently ignored.
+}
+
+export interface SwitchEthereumChainParameter {
+  chainId: string; // A 0x-prefixed hexadecimal string
+}
+
 export type EthMethodParams = {
   [EthMethod.web3_clientVersion]: void;
   [EthMethod.web3_sha3]: void;
@@ -212,6 +262,7 @@ export type EthMethodParams = {
   [EthMethod.eth_hashrate]: void;
   [EthMethod.eth_gasPrice]: void;
   [EthMethod.eth_accounts]: void;
+  [EthMethod.eth_requestAccounts]: void;
   [EthMethod.eth_blockNumber]: void;
   [EthMethod.eth_getBalance]: [address: string, tag?: EthBlockNumberTag | string];
   [EthMethod.eth_getStorageAt]: [
@@ -220,15 +271,19 @@ export type EthMethodParams = {
     tag?: EthBlockNumberTag | string,
   ];
   [EthMethod.eth_getTransactionCount]: [address: string, tag?: EthBlockNumberTag | string];
-  [EthMethod.eth_getBlockTransactionCountByHash]: { params: [blockHash: string]; result: any };
+  [EthMethod.eth_getBlockTransactionCountByHash]: [blockHash: string];
   [EthMethod.eth_getBlockTransactionCountByNumber]: [tag: EthBlockNumberTag | string];
-  [EthMethod.eth_getUncleCountByBlockHash]: { params: [blockHash: string]; result: any };
+  [EthMethod.eth_getUncleCountByBlockHash]: [blockHash: string];
   [EthMethod.eth_getUncleCountByBlockNumber]: [tag: EthBlockNumberTag | string];
   [EthMethod.eth_getCode]: [address: string, tag?: EthBlockNumberTag | string];
-  [EthMethod.eth_sign]: { params: [address: string, data: string]; result: any };
-  [EthMethod.eth_signTransaction]: { params: [transaction: EthTransactionSend]; result: any };
-  [EthMethod.eth_sendTransaction]: { params: [transaction: EthTransactionSend]; result: any };
-  [EthMethod.eth_sendRawTransaction]: { params: [data: string]; result: any };
+  [EthMethod.eth_sign]: [address: string, data: string];
+  [EthMethod.eth_signTransaction]: [transaction: EthTransactionSend];
+  [EthMethod.eth_signTypedData]: [address: string, data: string | TypedData];
+  [EthMethod.eth_signTypedData_v1]: [address: string, data: string | TypedData];
+  [EthMethod.eth_signTypedData_v3]: [address: string, data: string | TypedData];
+  [EthMethod.eth_signTypedData_v4]: [address: string, data: string | TypedData];
+  [EthMethod.eth_sendTransaction]: [transaction: EthTransactionSend];
+  [EthMethod.eth_sendRawTransaction]: [data: string];
   [EthMethod.eth_call]: [transactionCall: EthTransactionCall, tag?: EthBlockNumberTag | string];
   [EthMethod.eth_estimateGas]: [
     transactionCall: EthTransactionCall,
@@ -267,6 +322,11 @@ export type EthMethodParams = {
   [EthMethod.eth_getWork]: void;
   [EthMethod.eth_submitWork]: [nonce: string, headerHash: string, mixDigest: string];
   [EthMethod.eth_submitHashrate]: [hashrate: string, id: string];
+  [EthMethod.eth_chainId]: void;
+  [EthMethod.eth_subscribe]: [subscriptionName: string, data?: unknown];
+  [EthMethod.eth_unsubscribe]: [subscriptionId: string];
+  [EthMethod.wallet_addEthereumChain]: [definition: EthChainDefinition];
+  [EthMethod.wallet_switchEthereumChain]: [SwitchEthereumChainParameter];
 };
 
 export type EthMethodResults = {
@@ -284,6 +344,7 @@ export type EthMethodResults = {
   [EthMethod.eth_hashrate]: string;
   [EthMethod.eth_gasPrice]: string;
   [EthMethod.eth_accounts]: string[];
+  [EthMethod.eth_requestAccounts]: string[];
   [EthMethod.eth_blockNumber]: string;
   [EthMethod.eth_getBalance]: string;
   [EthMethod.eth_getStorageAt]: string;
@@ -295,6 +356,10 @@ export type EthMethodResults = {
   [EthMethod.eth_getCode]: string;
   [EthMethod.eth_sign]: string;
   [EthMethod.eth_signTransaction]: string;
+  [EthMethod.eth_signTypedData]: string;
+  [EthMethod.eth_signTypedData_v1]: string;
+  [EthMethod.eth_signTypedData_v3]: string;
+  [EthMethod.eth_signTypedData_v4]: string;
   [EthMethod.eth_sendTransaction]: string;
   [EthMethod.eth_sendRawTransaction]: string;
   [EthMethod.eth_call]: string;
@@ -317,6 +382,11 @@ export type EthMethodResults = {
   [EthMethod.eth_getWork]: [headerHash: string, seedHash: string, boundaryCondition: string];
   [EthMethod.eth_submitWork]: boolean;
   [EthMethod.eth_submitHashrate]: true;
+  [EthMethod.eth_chainId]: string;
+  [EthMethod.eth_subscribe]: string;
+  [EthMethod.eth_unsubscribe]: boolean;
+  [EthMethod.wallet_addEthereumChain]: null;
+  [EthMethod.wallet_switchEthereumChain]: null;
 };
 
 /***** RPC Errors *****/
@@ -342,17 +412,20 @@ export const enum EthEvent {
   disconnect = 'disconnect',
   chainChanged = 'chainChanged',
   accountsChanged = 'accountsChanged',
+  data = 'data',
 }
 
 export const enum EthProviderMessageType {
   eth_subscription = 'eth_subscription',
 }
 
+export interface EthSubscriptionData {
+  readonly subscription: string;
+  readonly result: unknown;
+}
+
 export type EthProviderMessageData = {
-  [EthProviderMessageType.eth_subscription]: {
-    readonly subscription: string;
-    readonly result: unknown;
-  };
+  [EthProviderMessageType.eth_subscription]: EthSubscriptionData;
 };
 
 export interface EthProviderMessage {
@@ -370,11 +443,12 @@ export type EthEventParams = {
   [EthEvent.disconnect]: [{ error: EthProviderRpcError }];
   [EthEvent.chainChanged]: [string];
   [EthEvent.accountsChanged]: [string[]];
+  [EthEvent.data]: [null, { params: EthSubscriptionData }];
 };
 
 /***** Provider *****/
 
-export type EthRequest<T extends EthMethod> = EthMethodParams[T] extends void
+export type EthRequest<T extends EthMethod = EthMethod> = EthMethodParams[T] extends void
   ? {
       method: T;
       params?: [];
@@ -393,7 +467,7 @@ export interface EthProvider {
     method: EthMethod.eth_getBlockByHash | EthMethod.eth_getBlockByNumber;
     params: EthGetBlockParams<T>;
   }): Promise<EthBlock<T>>;
-  request<T extends EthMethod>(req: EthRequest<T>): EthMethodResults[T];
+  request<T extends EthMethod>(req: EthRequest<T>): EthResult<T>;
 
   on<T extends EthEvent>(eventName: T, listener: EthEventListener<T>): void;
   removeListener<T extends EthEvent>(eventName: T, listener: EthEventListener<T>): void;

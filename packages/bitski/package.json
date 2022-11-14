@@ -1,0 +1,55 @@
+{
+  "name": "bitski",
+  "description": "Bitski Javascript SDK",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "dist/esm/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BitskiCo/bitski-js"
+  },
+  "version": "3.2.0",
+  "scripts": {
+    "lint": "eslint . --cache",
+    "test": "jest",
+    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.module.json && node ./scripts/insert-package-version.mjs && npm run bundle && node ./scripts/copy-readme.mjs",
+    "bundle": "mkdir -p dist/bundled && npm run bundle:main && npm run bundle:callback && npm run minify",
+    "bundle:main": "rollup --config rollup.config.mjs",
+    "bundle:callback": "browserify dist/esm/-private/callback.js -d -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] > dist/bundled/callback.js",
+    "minify": "node ./scripts/minify.mjs",
+    "prettier": "prettier --config .prettierrc '{src,tests}/**/*.ts' --write"
+  },
+  "dependencies": {
+    "@openid/appauth": "^1.2.6",
+    "bitski-provider": "^1.2.0",
+    "eth-provider-types": "^0.0.2",
+    "decoders": "^2.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "@rollup/plugin-commonjs": "^23.0.4",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@types/jest": "^27.5.2",
+    "babelify": "^10.0.0",
+    "browserify": "^16.5.0",
+    "jest": "^27.2.0",
+    "jest-fetch-mock": "^3.0.3",
+    "rollup": "^3.7.1",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "terser": "^5.16.1",
+    "ts-jest": "^27.0.5"
+  },
+  "browserslist": [
+    "last 3 chrome versions",
+    "last 3 firefox versions",
+    "last 3 safari versions",
+    "last 3 ios versions",
+    "last 3 chromeandroid versions",
+    "last 3 edge versions"
+  ],
+  "gitHead": "7b9f0b01dd8a36a4294f27740ce264ecd95af35c"
+}
