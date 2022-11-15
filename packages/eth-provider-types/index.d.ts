@@ -384,7 +384,7 @@ export type EthRequest<T extends EthMethod> = EthMethodParams[T] extends void
       params: EthMethodParams[T];
     };
 
-export type EthResult<T extends EthMethod> = EthMethodResults[T];
+export type EthResult<T extends EthMethod> = Promise<EthMethodResults[T]>;
 
 export type EthEventListener<T extends EthEvent> = (...params: EthEventParams[T]) => void;
 
@@ -392,7 +392,7 @@ export interface EthProvider {
   request<T extends boolean>(request: {
     method: EthMethod.eth_getBlockByHash | EthMethod.eth_getBlockByNumber;
     params: EthGetBlockParams<T>;
-  }): EthBlock<T>;
+  }): Promise<EthBlock<T>>;
   request<T extends EthMethod>(req: EthRequest<T>): EthMethodResults[T];
 
   on<T extends EthEvent>(eventName: T, listener: EthEventListener<T>): void;
