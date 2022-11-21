@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { EventEmitter } from 'rollup-plugin-node-polyfills/polyfills/events.js';
+import { EventEmitter } from './events.js';
 
 /**
  * Inlined copy of:
