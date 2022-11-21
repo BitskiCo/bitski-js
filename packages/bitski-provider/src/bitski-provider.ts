@@ -1,4 +1,4 @@
-import SafeEventEmitter from '@metamask/safe-event-emitter';
+import SafeEventEmitter from '../../bitski/src/-private/utils/safe-event-emitter';
 import { createInflightCacheMiddleware } from 'eth-json-rpc-middleware/dist/inflight-cache';
 import {
   EthEvent,
