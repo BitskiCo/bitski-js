@@ -1,4 +1,4 @@
-import SafeEventEmitter from '@metamask/safe-event-emitter';
+import SafeEventEmitter from './-private/utils/safe-event-emitter';
 import type { JSONRPCRequest, JSONRPCResponse, Subprovider } from '@bitski/provider-engine';
 import type { BufferBlock } from '@bitski/provider-engine/dist/modules/util/block-tracker';
 import type { BitskiSDK, ProviderOptions } from './-private/sdk';
