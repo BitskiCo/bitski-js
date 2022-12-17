@@ -1,3 +1,6 @@
+// jshint esversion: 9
+const base = require('../../jest.config.base.js');
+
 module.exports = {
   roots: ['<rootDir>/src', '<rootDir>/tests'],
   transform: {
@@ -21,4 +24,8 @@ module.exports = {
       diagnostics: false,
     },
   },
+  name: 'bitski-provider',
+  displayName: 'Bitski Provider',
+  testEnvironment: 'jsdom',
+  setupFiles: ['<rootDir>/tests/util/setup-jest.ts'],
 };

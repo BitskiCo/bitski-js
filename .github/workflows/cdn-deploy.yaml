@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
           registry-url: https://npm.pkg.github.com
 
       - uses: actions/checkout@master
@@ -35,4 +35,4 @@ jobs:
           aws-region: us-west-2
 
       - name: Deploy static site to S3 bucket
-        run: aws s3 sync --acl public-read --delete --cache-control max-age=60 ./packages/browser/dist/bundled/ s3://cdn.bitskistatic.com/js/sdk/v3
+        run: aws s3 sync --acl public-read --delete --cache-control max-age=60 ./packages/bitski/dist/bundled/ s3://cdn.bitskistatic.com/js/sdk/v3.3
