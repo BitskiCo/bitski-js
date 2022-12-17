@@ -1,5 +1,11 @@
 # eth-provider-types
 
+## 0.0.2
+
+### Patch Changes
+
+- [#296](https://github.com/BitskiCo/bitski-js/pull/296) [`fb79c27`](https://github.com/BitskiCo/bitski-js/commit/fb79c27d597a19368a5b36beeffce98772ca267c) Thanks [@pzuraq](https://github.com/pzuraq)! - Make RPC results promises
+
 ## 0.0.1
 
 ### Patch Changes
