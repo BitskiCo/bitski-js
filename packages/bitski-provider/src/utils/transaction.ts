@@ -1,12 +1,7 @@
 import { EthMethod, EthTransactionSend, TypedData } from 'eth-provider-types';
 import { ethErrors } from 'eth-rpc-errors';
 import { SUPPORTED_CHAIN_IDS } from '../constants';
-import {
-  EthSignMethod,
-  EthSignMethodParams,
-  EthChainDefinitionWithRpcUrl,
-  RequestContext,
-} from '../types';
+import { EthSignMethod, EthSignMethodParams, EthChainDefinitionWithRpcUrl } from '../types';
 import { v4 as uuid } from 'uuid';
 
 export const enum TransactionKind {
@@ -44,9 +39,10 @@ export interface SignaturePayload {
 export const createBitskiTransaction = <T extends EthSignMethod>(
   method: T,
   params: EthSignMethodParams[T],
-  requestContext: Pick<RequestContext, 'chain' | 'signContext'>,
+  chain: EthChainDefinitionWithRpcUrl,
+  additionalContext?: Record<string, string>,
 ): Transaction => {
-  const context = createContext(method, params, requestContext.chain, requestContext);
+  const context = createContext(method, params, chain, additionalContext);
   const kind = kindForMethod(method);
   const extractedPayload = createPayload(method, params);
   return {
@@ -61,7 +57,7 @@ const createContext = <T extends EthSignMethod>(
   method: T,
   params: EthSignMethodParams[T],
   chain: EthChainDefinitionWithRpcUrl,
-  requestContext: Pick<RequestContext, 'chain' | 'signContext'>,
+  additionalContext?: Record<string, string>,
 ): TransactionContext => {
   switch (method) {
     case 'personal_sign':
@@ -71,7 +67,7 @@ const createContext = <T extends EthSignMethod>(
       return {
         chainId: parseInt(chain.chainId, 16),
         rpcUrl: !SUPPORTED_CHAIN_IDS.includes(chain.chainId) ? chain.rpcUrls[0] : undefined,
-        ...requestContext.signContext,
+        ...additionalContext,
       };
     }
     case EthMethod.eth_signTypedData:
@@ -82,7 +78,7 @@ const createContext = <T extends EthSignMethod>(
       if (params && params?.length > 0) {
         return {
           from: params[0] as string,
-          ...requestContext.signContext,
+          ...additionalContext,
         };
       }
       throw ethErrors.rpc.invalidParams('Missing from');

@@ -7,7 +7,7 @@ import {
   EthRequest,
   EthResult,
 } from 'eth-provider-types';
-import { JsonRpcMiddleware } from 'json-rpc-engine';
+import { JsonRpcMiddleware, JsonRpcRequest, PendingJsonRpcResponse } from 'json-rpc-engine';
 
 export interface User {
   id: string;
@@ -42,10 +42,11 @@ export interface InternalBitskiProviderConfig {
   fetch: typeof fetch;
   additionalHeaders: Record<string, string>;
 
-  prependMiddleware?: JsonRpcMiddleware<unknown[], unknown>[];
+  prependMiddleware?: ProviderMiddleware[];
   pollingInterval?: number;
   disableCaching?: boolean;
   disableValidation?: boolean;
+  additionalSigningContext?: Record<string, string>;
 
   clientId: string;
   apiBaseUrl: string;
@@ -72,16 +73,14 @@ export type BitskiProviderConfig = Optional<
  * configuration of the provider. This allows us to "switch" chains just by using
  * a different context.
  */
-export interface RequestContext {
+export interface RequestContext<T = unknown> {
   // The current chain the request is being made on
   chain: EthChainDefinitionWithRpcUrl;
 
   // The configuration of the provider
   config: InternalBitskiProviderConfig;
 
-  // Additional parameters added to the context of a sign request, e.g. the origin
-  // that is attempting to sign
-  signContext?: Record<string, string>;
+  extra?: T;
 
   // Allows middleware to emit an event on the provider
   emit: <T extends EthEvent>(eventName: T, ...params: EthEventParams[T]) => void;
@@ -99,6 +98,12 @@ export interface RequestContext {
 export interface EthSignMethodParams extends EthMethodParams {
   personal_sign: [data: string, address: string];
 }
+
+export type ProviderMiddleware<T = unknown[], U = unknown, V = unknown> = (
+  req: JsonRpcRequest<T> & { context: RequestContext<V> },
+  res: PendingJsonRpcResponse<U>,
+  next: () => Promise<void>,
+) => Promise<void>;
 
 export type EthSignMethod =
   | EthMethod.eth_sendTransaction

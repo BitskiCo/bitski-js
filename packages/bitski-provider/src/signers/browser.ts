@@ -130,7 +130,12 @@ export default function createBrowserSigner(signerConfig?: BrowserSignerConfig):
 
   return async (method, params, requestContext): Promise<string> => {
     const { config } = requestContext;
-    const transaction = await createBitskiTransaction(method, params, requestContext);
+    const transaction = await createBitskiTransaction(
+      method,
+      params,
+      requestContext.chain,
+      requestContext.config.additionalSigningContext,
+    );
 
     // If we have a callback URL, use the redirect flow
     if (config.transactionCallbackUrl) {
