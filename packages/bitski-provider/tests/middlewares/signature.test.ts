@@ -294,67 +294,61 @@ describe('signature middleware', () => {
   describe('Bitski transaction model creation', () => {
     test('it validates parameters for requests when creating transaction', () => {
       try {
-        createBitskiTransaction(EthMethod.eth_sendTransaction, undefined as any, {
-          chain: Mainnet,
-        });
+        createBitskiTransaction(EthMethod.eth_sendTransaction, undefined as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing transaction' });
       }
 
       try {
-        createBitskiTransaction(EthMethod.eth_sendTransaction, [] as any, { chain: Mainnet });
+        createBitskiTransaction(EthMethod.eth_sendTransaction, [] as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing transaction' });
       }
 
       try {
-        createBitskiTransaction(EthMethod.eth_sign, undefined as any, { chain: Mainnet });
+        createBitskiTransaction(EthMethod.eth_sign, undefined as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing message' });
       }
 
       try {
-        createBitskiTransaction(EthMethod.eth_sign, [] as any, { chain: Mainnet });
+        createBitskiTransaction(EthMethod.eth_sign, [] as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing message' });
       }
 
       try {
-        createBitskiTransaction('personal_sign', undefined as any, { chain: Mainnet });
+        createBitskiTransaction('personal_sign', undefined as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing message' });
       }
 
       try {
-        createBitskiTransaction('personal_sign', [] as any, { chain: Mainnet });
+        createBitskiTransaction('personal_sign', [] as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing message' });
       }
 
       try {
-        createBitskiTransaction(EthMethod.eth_signTypedData_v3, undefined as any, {
-          chain: Mainnet,
-        });
+        createBitskiTransaction(EthMethod.eth_signTypedData_v3, undefined as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing from' });
       }
 
       try {
-        createBitskiTransaction(EthMethod.eth_signTypedData_v4, undefined as any, {
-          chain: Mainnet,
-        });
+        createBitskiTransaction(EthMethod.eth_signTypedData_v4, undefined as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing from' });
       }
 
       try {
-        createBitskiTransaction(EthMethod.eth_signTypedData, [] as any, { chain: Mainnet });
+        createBitskiTransaction(EthMethod.eth_signTypedData, [] as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing from' });
       }
 
       try {
-        createBitskiTransaction(EthMethod.eth_signTypedData_v1, [] as any, { chain: Mainnet });
+        createBitskiTransaction(EthMethod.eth_signTypedData_v1, [] as any, Mainnet);
       } catch (error) {
         expect(error).toMatchObject({ message: 'Missing from' });
       }
@@ -369,9 +363,7 @@ describe('signature middleware', () => {
         gasPrice: '0x',
       };
 
-      const transaction = createBitskiTransaction(EthMethod.eth_sendTransaction, [txn], {
-        chain: Mainnet,
-      });
+      const transaction = createBitskiTransaction(EthMethod.eth_sendTransaction, [txn], Mainnet);
 
       expect(transaction).toMatchObject({
         context: {
@@ -398,10 +390,8 @@ describe('signature middleware', () => {
       };
 
       const transaction = createBitskiTransaction(EthMethod.eth_sendTransaction, [txn], {
-        chain: {
-          chainId: '0x12345',
-          rpcUrls: ['https://custom.rpc'],
-        },
+        chainId: '0x12345',
+        rpcUrls: ['https://custom.rpc'],
       });
 
       expect(transaction).toMatchObject({
@@ -424,7 +414,7 @@ describe('signature middleware', () => {
       const transaction = createBitskiTransaction(
         'personal_sign',
         ['0x12312312312312312312312312312312312312', '0xf00'],
-        { chain: Mainnet },
+        Mainnet,
       );
 
       expect(transaction).toMatchObject({

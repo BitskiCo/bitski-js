@@ -1,4 +1,10 @@
-import { JsonRpcEngine, JsonRpcFailure, JsonRpcSuccess, JsonRpcVersion } from 'json-rpc-engine';
+import {
+  createAsyncMiddleware,
+  JsonRpcEngine,
+  JsonRpcFailure,
+  JsonRpcSuccess,
+  JsonRpcVersion,
+} from 'json-rpc-engine';
 import {
   EthProvider,
   EthMethod,
@@ -84,7 +90,11 @@ export class BitskiProvider implements EthProvider {
     // Setup the engine
     const engine = this.engine;
 
-    config.prependMiddleware?.forEach((middleware) => engine.push(middleware));
+    config.prependMiddleware?.forEach((middleware) =>
+      // TODO: Need to typecast because JSON RPC engine middleware can't have
+      // additional props on it, can get rid of this once we get rid of JSON RPC engine
+      engine.push(createAsyncMiddleware(middleware as any)),
+    );
 
     // Handles static responses
     engine.push(createFixtureMiddleware());

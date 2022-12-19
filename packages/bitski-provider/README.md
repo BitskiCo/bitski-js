@@ -44,6 +44,10 @@ interface BitskiProviderConfig {
   // Defaults to true.
   disableValidation?: boolean;
 
+  // Additional parameters added to the context of a sign request, e.g. the origin
+  // that is attempting to sign
+  additionalSigningContext?: Record<string, string>;
+
   // The API base URL for RPC and other API requests. Defaults to
   // https://api.bitski.com
   apiBaseUrl?: string;
