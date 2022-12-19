@@ -55,18 +55,18 @@ const SUB_INTERACTION_METHODS = new Set([
 
 const UNSUB_METHODS = new Set([EthMethod.eth_unsubscribe, EthMethod.eth_uninstallFilter]);
 
-export class BitskiProvider implements EthProvider {
+export class BitskiProvider<Extra = unknown> implements EthProvider {
   private engine = new JsonRpcEngine();
   private events = new SafeEventEmitter();
   private destructors: (() => void)[] = [];
 
   private requestId = 0;
   private store: BitskiProviderStateStore;
-  private config: InternalBitskiProviderConfig;
+  private config: InternalBitskiProviderConfig<Extra>;
   private didEmitConnect = false;
   private activeSubs = new Set<string>();
 
-  constructor(config: BitskiProviderConfig) {
+  constructor(config: BitskiProviderConfig<Extra>) {
     this.config = {
       ...config,
 
@@ -122,8 +122,8 @@ export class BitskiProvider implements EthProvider {
     engine.push(createFetchRpcMiddleware());
   }
 
-  async request<T extends EthMethod>(request: EthRequest<T>): EthResult<T>;
-  async request(request: EthRequest): EthResult<typeof request.method> {
+  async requestWithExtra<T extends EthMethod>(request: EthRequest<T>, extra?: Extra): EthResult<T>;
+  async requestWithExtra(request: EthRequest, extra?: Extra): EthResult<typeof request.method> {
     const { method, params } = request;
     let chainId: string;
 
@@ -157,7 +157,7 @@ export class BitskiProvider implements EthProvider {
 
       default:
         try {
-          let result = await this.requestWithContext(chainId, request);
+          let result = await this.requestWithChain(chainId, request, { extra });
 
           if (SUB_METHODS.has(method)) {
             // Ensure the subscription id is unique across chains
@@ -175,6 +175,10 @@ export class BitskiProvider implements EthProvider {
           throw err;
         }
     }
+  }
+
+  async request<T extends EthMethod>(request: EthRequest<T>): EthResult<T> {
+    return this.requestWithExtra(request);
   }
 
   supportsSubscriptions(): boolean {
@@ -207,20 +211,21 @@ export class BitskiProvider implements EthProvider {
 
   destroy(): void {
     this.destructors.forEach((destroy) => destroy());
+    this.config.store.destroy?.();
   }
 
-  private async requestWithContext<T extends EthMethod>(
+  private async requestWithChain<T extends EthMethod>(
     chainId: string,
     { method, params }: EthRequest<T>,
-    opts?: { skipCache?: boolean },
+    opts?: { skipCache?: boolean; extra?: Extra },
   ): EthResult<T> {
     const chain = expect(await this.store.findChain(chainId), 'expected a chain');
 
-    const context: RequestContext = {
+    const context: RequestContext<Extra> = {
       chain,
       config: this.config,
       emit: this.events.emit.bind(this.events),
-      request: (req, opts) => this.requestWithContext(chainId, req, opts),
+      request: (req, opts) => this.requestWithChain(chainId, req, opts),
       addDestructor: (destroy) => this.destructors.push(destroy),
     };
 

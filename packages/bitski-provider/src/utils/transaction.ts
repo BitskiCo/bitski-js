@@ -9,6 +9,7 @@ export const enum TransactionKind {
   SignTransaction = 'ETH_SIGN_TRANSACTION',
   Sign = 'ETH_SIGN',
   SignTypedData = 'ETH_SIGN_TYPED_DATA',
+  SignTypedDataV1 = 'ETH_SIGN_TYPED_DATA_V1',
   SignTypedDataV3 = 'ETH_SIGN_TYPED_DATA_V3',
   SignTypedDataV4 = 'ETH_SIGN_TYPED_DATA_V4',
 }
@@ -129,6 +130,7 @@ const createPayload = <T extends EthSignMethod>(
       }
 
     case EthMethod.eth_signTypedData:
+    case EthMethod.eth_signTypedData_v1:
     case EthMethod.eth_signTypedData_v3:
     case EthMethod.eth_signTypedData_v4:
       if (params && params.length > 1) {
@@ -157,6 +159,8 @@ const kindForMethod = (method: string): TransactionKind => {
       return TransactionKind.Sign;
     case EthMethod.eth_signTypedData:
       return TransactionKind.SignTypedData;
+    case EthMethod.eth_signTypedData_v1:
+      return TransactionKind.SignTypedDataV1;
     case EthMethod.eth_signTypedData_v3:
       return TransactionKind.SignTypedDataV3;
     case EthMethod.eth_signTypedData_v4:

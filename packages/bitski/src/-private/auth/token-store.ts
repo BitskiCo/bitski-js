@@ -50,17 +50,21 @@ export class TokenStore {
   }
 
   public loadTokensFromCache(): void {
-    this.accessToken = this.store.getItem(this.accessTokenKey).then((accessTokenString) => {
-      const accessTokenResult = string.decode(accessTokenString);
-      if (accessTokenResult.value) {
-        return AccessToken.fromString(accessTokenResult.value);
-      }
-    });
+    this.accessToken = Promise.resolve(this.store.getItem(this.accessTokenKey)).then(
+      (accessTokenString) => {
+        const accessTokenResult = string.decode(accessTokenString);
+        if (accessTokenResult.value) {
+          return AccessToken.fromString(accessTokenResult.value);
+        }
+      },
+    );
 
-    this.idToken = this.store.getItem(this.idTokenKey).then((token) => string.decode(token).value);
-    this.refreshToken = this.store
-      .getItem(this.refreshTokenKey)
-      .then((token) => string.decode(token).value);
+    this.idToken = Promise.resolve(this.store.getItem(this.idTokenKey)).then(
+      (token) => string.decode(token).value,
+    );
+    this.refreshToken = Promise.resolve(this.store.getItem(this.refreshTokenKey)).then(
+      (token) => string.decode(token).value,
+    );
   }
 
   public persistTokenResponse(response: TokenResponse): void {

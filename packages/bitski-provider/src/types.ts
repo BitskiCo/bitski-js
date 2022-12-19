@@ -7,7 +7,7 @@ import {
   EthRequest,
   EthResult,
 } from 'eth-provider-types';
-import { JsonRpcMiddleware, JsonRpcRequest, PendingJsonRpcResponse } from 'json-rpc-engine';
+import { JsonRpcRequest, PendingJsonRpcResponse } from 'json-rpc-engine';
 
 export interface User {
   id: string;
@@ -22,27 +22,29 @@ export interface EthChainDefinitionWithRpcUrl extends EthChainDefinition {
 // flexibility in storing access tokens and other persistent data.
 export interface BitskiProviderStore {
   // Empty the cache
-  clear(): Promise<void>;
+  clear(): void | Promise<void>;
 
-  keys(): string[];
+  keys?(): string[] | Promise<string[]>;
 
   // Get an item from the cache
-  getItem(key: string): Promise<unknown | undefined>;
+  getItem(key: string): unknown | undefined | Promise<unknown | undefined>;
 
   // Set an item in the cache
-  setItem(key: string, value: unknown): Promise<void>;
+  setItem(key: string, value: unknown): void | Promise<void>;
 
   // Remove the key from the cache
-  clearItem(key: string): Promise<void>;
+  clearItem(key: string): void | Promise<void>;
 
   onUpdate?(fn: () => void);
+
+  destroy?(): void;
 }
 
-export interface InternalBitskiProviderConfig {
+export interface InternalBitskiProviderConfig<Extra = unknown> {
   fetch: typeof fetch;
   additionalHeaders: Record<string, string>;
 
-  prependMiddleware?: ProviderMiddleware[];
+  prependMiddleware?: ProviderMiddleware<Extra>[];
   pollingInterval?: number;
   disableCaching?: boolean;
   disableValidation?: boolean;
@@ -62,8 +64,8 @@ export interface InternalBitskiProviderConfig {
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 
-export type BitskiProviderConfig = Optional<
-  InternalBitskiProviderConfig,
+export type BitskiProviderConfig<Extra = unknown> = Optional<
+  InternalBitskiProviderConfig<Extra>,
   'apiBaseUrl' | 'signerBaseUrl' | 'fetch' | 'additionalHeaders' | 'sign' | 'getUser' | 'store'
 >;
 
@@ -73,14 +75,14 @@ export type BitskiProviderConfig = Optional<
  * configuration of the provider. This allows us to "switch" chains just by using
  * a different context.
  */
-export interface RequestContext<T = unknown> {
+export interface RequestContext<Extra = unknown> {
   // The current chain the request is being made on
   chain: EthChainDefinitionWithRpcUrl;
 
   // The configuration of the provider
-  config: InternalBitskiProviderConfig;
+  config: InternalBitskiProviderConfig<Extra>;
 
-  extra?: T;
+  extra?: Extra;
 
   // Allows middleware to emit an event on the provider
   emit: <T extends EthEvent>(eventName: T, ...params: EthEventParams[T]) => void;

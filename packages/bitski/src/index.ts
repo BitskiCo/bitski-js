@@ -112,7 +112,7 @@ export class Bitski {
    * This method should be called always, and immediately after the page loads.
    */
   async initialize(): Promise<void> {
-    const localStorageKeys = this.options?.store?.keys() || Object.keys(localStorage);
+    const localStorageKeys = (await this.options?.store?.keys?.()) || Object.keys(localStorage);
 
     if (!localStorageKeys.find((key) => key.startsWith('bitski'))) {
       return;
