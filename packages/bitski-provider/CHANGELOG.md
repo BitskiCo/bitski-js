@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.1
+
+### Patch Changes
+
+- [#303](https://github.com/BitskiCo/bitski-js/pull/303) [`56c7b13`](https://github.com/BitskiCo/bitski-js/commit/56c7b13b128df0d77aae1f9e2144692727a082ce) Thanks [@pzuraq](https://github.com/pzuraq)! - Update external types for prepend middleware to expose fewer implementation details
+
 ## 2.0.0-beta.0
 
 ### Major Changes
