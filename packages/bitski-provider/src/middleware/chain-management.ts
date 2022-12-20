@@ -9,7 +9,7 @@ import { createAsyncMiddleware, JsonRpcMiddleware } from 'json-rpc-engine';
 import { getRequestContext } from '../utils/request-context';
 import { expect } from '../utils/type-utils';
 
-export const createEthChainMiddleware = (): JsonRpcMiddleware<unknown[], unknown> => {
+export const createChainManagementMiddleware = (): JsonRpcMiddleware<unknown[], unknown> => {
   return createAsyncMiddleware(async (req, res, next) => {
     const { method } = req;
     const context = getRequestContext(req);
@@ -26,7 +26,7 @@ export const createEthChainMiddleware = (): JsonRpcMiddleware<unknown[], unknown
         'addEthereumChain requires a chain definition parameter',
       ) as EthChainDefinition;
 
-      context.store.addChain(definition);
+      await context.store.addChain(definition);
 
       res.result = null;
 
@@ -39,7 +39,7 @@ export const createEthChainMiddleware = (): JsonRpcMiddleware<unknown[], unknown
         'switchEthereumChain requires a chainId',
       ) as SwitchEthereumChainParameter;
 
-      const chain = context.store.findChain(chainDetails.chainId);
+      const chain = await context.store.findChain(chainDetails.chainId);
 
       if (!chain) {
         throw ethErrors.provider.userRejectedRequest({ message: 'Chain does not exist' });

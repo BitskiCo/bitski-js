@@ -31,7 +31,7 @@ import { BITSKI_API_BASE_URL, BITSKI_SIGNER_BASE_URL, UNAUTHORIZED_ERRORS } from
 import createBrowserSigner from './signers/browser';
 import { BitskiProviderStateStore, LocalStorageStore } from './store';
 import { assert, expect } from './utils/type-utils';
-import { createEthChainMiddleware } from './middleware/chain-management';
+import { createChainManagementMiddleware } from './middleware/chain-management';
 
 // global value provided by scripts/insert-package-version.mjs
 declare const BITSKI_PROVIDER_VERSION: string;
@@ -96,7 +96,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
 
     // Handles static responses
     engine.push(createFixtureMiddleware());
-    engine.push(createEthChainMiddleware());
+    engine.push(createChainManagementMiddleware());
 
     if (!config.disableValidation) {
       // Ensures that transactions are well formed (nonce, gas, gasPrice, from) before they are sent to Bitski
