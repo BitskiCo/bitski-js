@@ -78,6 +78,7 @@ describe('eth-accounts middleware', () => {
 
       expect(body).toMatchObject({
         method: 'eth_accounts',
+        params: [],
       });
 
       return JSON.stringify({

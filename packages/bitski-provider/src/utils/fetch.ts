@@ -113,10 +113,14 @@ export const fetchJsonRpcWithRetry = async (
   init: {
     method: string;
     headers: Record<string, string>;
-    body?: JsonRpcRequest<unknown>;
+    body?: JsonRpcRequest<unknown[]>;
     credentials?: string;
   },
 ): Promise<unknown> => {
+  if (init.body && !init.body.params) {
+    init.body.params = [];
+  }
+
   const { result, error } = (await fetchJsonWithRetry(fetchFn, retryCount, url, init)) as {
     result: unknown;
     error: string;
