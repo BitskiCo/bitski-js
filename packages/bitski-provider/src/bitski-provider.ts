@@ -12,8 +12,6 @@ import {
   EthResult,
   EthEvent,
   EthEventListener,
-  SwitchEthereumChainParameter,
-  EthChainDefinition,
 } from 'eth-provider-types';
 
 import { createFixtureMiddleware } from './middleware/fixture';
@@ -30,10 +28,10 @@ import { createFetchRpcMiddleware } from './middleware/fetch-rpc';
 import { BitskiProviderConfig, InternalBitskiProviderConfig, RequestContext } from './types';
 import SafeEventEmitter from '@metamask/safe-event-emitter';
 import { BITSKI_API_BASE_URL, BITSKI_SIGNER_BASE_URL, UNAUTHORIZED_ERRORS } from './constants';
-import { ethErrors } from 'eth-rpc-errors';
 import createBrowserSigner from './signers/browser';
 import { BitskiProviderStateStore, LocalStorageStore } from './store';
 import { assert, expect } from './utils/type-utils';
+import { createEthChainMiddleware } from './middleware/chain-management';
 
 // global value provided by scripts/insert-package-version.mjs
 declare const BITSKI_PROVIDER_VERSION: string;
@@ -98,6 +96,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
 
     // Handles static responses
     engine.push(createFixtureMiddleware());
+    engine.push(createEthChainMiddleware());
 
     if (!config.disableValidation) {
       // Ensures that transactions are well formed (nonce, gas, gasPrice, from) before they are sent to Bitski
@@ -145,35 +144,23 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
       chainId = await this.store.getCurrentChainId();
     }
 
-    switch (method) {
-      case EthMethod.wallet_addEthereumChain:
-        return this.addChain(params[0]);
+    try {
+      let result = await this.requestWithChain(chainId, request, { extra });
 
-      case EthMethod.wallet_switchEthereumChain:
-        return this.switchChain(params[0]);
+      if (SUB_METHODS.has(method)) {
+        // Ensure the subscription id is unique across chains
+        // by creating unique compound id
+        result = `${chainId}:${result as string}`;
+        this.activeSubs.add(result);
+      }
 
-      case EthMethod.eth_chainId:
-        return chainId;
+      return result;
+    } catch (err) {
+      if (UNAUTHORIZED_ERRORS.some((phrase) => (err as Error).message.includes(phrase))) {
+        await this.config.clearAccessToken?.();
+      }
 
-      default:
-        try {
-          let result = await this.requestWithChain(chainId, request, { extra });
-
-          if (SUB_METHODS.has(method)) {
-            // Ensure the subscription id is unique across chains
-            // by creating unique compound id
-            result = `${chainId}:${result as string}`;
-            this.activeSubs.add(result);
-          }
-
-          return result;
-        } catch (err) {
-          if (UNAUTHORIZED_ERRORS.some((phrase) => (err as Error).message.includes(phrase))) {
-            await this.config.clearAccessToken?.();
-          }
-
-          throw err;
-        }
+      throw err;
     }
   }
 
@@ -224,6 +211,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
     const context: RequestContext<Extra> = {
       chain,
       config: this.config,
+      store: this.store,
       emit: this.events.emit.bind(this.events),
       request: (req, opts) => this.requestWithChain(chainId, req, opts),
       addDestructor: (destroy) => this.destructors.push(destroy),
@@ -248,24 +236,6 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
       // TODO: Fix this type cast
       return (res as JsonRpcSuccess<unknown>).result as EthResult<T>;
     }
-  }
-
-  private async addChain(definition: EthChainDefinition): Promise<null> {
-    this.store.addChain(definition);
-    return null;
-  }
-
-  private async switchChain(chainDetails: SwitchEthereumChainParameter): Promise<null> {
-    const chain = this.store.findChain(chainDetails.chainId);
-
-    if (!chain) {
-      throw ethErrors.provider.userRejectedRequest({ message: 'Chain does not exist' });
-    }
-
-    await this.store.setCurrentChainId(chainDetails.chainId);
-    this.events.emit('chainChanged', chainDetails.chainId);
-
-    return null;
   }
 }
 

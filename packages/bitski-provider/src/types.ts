@@ -8,6 +8,7 @@ import {
   EthResult,
 } from 'eth-provider-types';
 import { JsonRpcRequest, PendingJsonRpcResponse } from 'json-rpc-engine';
+import type { BitskiProviderStateStore } from './store';
 
 export interface User {
   id: string;
@@ -82,6 +83,9 @@ export interface RequestContext<Extra = unknown> {
   // The configuration of the provider
   config: InternalBitskiProviderConfig<Extra>;
 
+  store: BitskiProviderStateStore;
+
+  // Extra information that can be added by a user of the provider
   extra?: Extra;
 
   // Allows middleware to emit an event on the provider
