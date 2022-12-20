@@ -27,12 +27,10 @@ describe('subscription middleware', () => {
 
     fetchMock.mockResponse(async (req) => {
       if (req.url.includes(EthMethod.eth_blockNumber)) {
-        return JSON.stringify({ result: toHex(currentBlockNumber) });
+        return JSON.stringify(toHex(currentBlockNumber));
       } else {
         return JSON.stringify({
-          result: {
-            number: toHex(currentBlockNumber),
-          },
+          number: toHex(currentBlockNumber),
         });
       }
     });

@@ -1,7 +1,7 @@
 import { EthMethod } from 'eth-provider-types';
 import { createAsyncMiddleware, JsonRpcMiddleware } from 'json-rpc-engine';
 import { getRequestContext } from '../utils/request-context';
-import { fetchJsonRpcWithRetry } from '../utils/fetch';
+import { fetchJsonWithRetry } from '../utils/fetch';
 
 const MATCHING_METHODS: string[] = [
   EthMethod.eth_getBlockByNumber,
@@ -27,7 +27,7 @@ export const createFetchRestMiddleware = (): JsonRpcMiddleware<unknown[], unknow
 
     const headers = { ...config.additionalHeaders };
 
-    res.result = fetchJsonRpcWithRetry(config.fetch, 5, url, {
+    res.result = fetchJsonWithRetry(config.fetch, 5, url, {
       method: 'GET',
       headers,
       credentials: 'omit',

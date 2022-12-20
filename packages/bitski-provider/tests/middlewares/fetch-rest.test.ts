@@ -14,11 +14,7 @@ describe('fetch-rest middleware', () => {
       expect(req.headers.get('X-CLIENT-ID')).toBe('test-client-id');
       expect(req.headers.get('X-CLIENT-VERSION')).toBe('test-version');
 
-      return JSON.stringify({
-        id: 0,
-        jsonrpc: '2.0',
-        result: '0x123',
-      });
+      return JSON.stringify('0x123');
     });
 
     const result = await provider.request({
@@ -46,13 +42,7 @@ describe('fetch-rest middleware', () => {
       );
       expect(req.method).toBe('GET');
 
-      return JSON.stringify({
-        id: 0,
-        jsonrpc: '2.0',
-        result: {
-          number: '0x123',
-        },
-      });
+      return JSON.stringify({ number: '0x123' });
     });
 
     const result = await provider.request({
