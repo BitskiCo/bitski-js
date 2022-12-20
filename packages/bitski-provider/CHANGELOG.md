@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.6
+
+### Patch Changes
+
+- [#315](https://github.com/BitskiCo/bitski-js/pull/315) [`7c938da`](https://github.com/BitskiCo/bitski-js/commit/7c938dab487b90e36d68fb6ccedb8ae990a14e3d) Thanks [@pzuraq](https://github.com/pzuraq)! - Move chain-management logic to middleware
+
 ## 2.0.0-beta.5
 
 ### Patch Changes
