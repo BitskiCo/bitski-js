@@ -5,7 +5,7 @@
 
 /***** JSON RPC *****/
 
-export const enum EthMethod {
+export enum EthMethod {
   web3_clientVersion = 'web3_clientVersion',
   web3_sha3 = 'web3_sha3',
   net_version = 'net_version',
@@ -65,7 +65,7 @@ export const enum EthMethod {
   wallet_getPermissions = 'wallet_getPermissions',
 }
 
-export const enum EthBlockNumberTag {
+export enum EthBlockNumberTag {
   Latest = 'latest',
   Earliest = 'earliest',
   Pending = 'pending',
@@ -125,7 +125,7 @@ export interface EthTransactionPending extends EthTransactionBase {
 
 export type EthTransaction = EthTransactionComplete | EthTransactionPending;
 
-interface EthTransactionReceipt<IsContractCreation extends boolean = boolean> {
+export interface EthTransactionReceipt<IsContractCreation extends boolean = boolean> {
   transactionHash: string;
   transactionIndex: string;
   blockHash: string;
@@ -213,7 +213,10 @@ export interface EthBlockPending<T extends boolean = boolean> extends EthBlockBa
 
 export type EthBlock<T extends boolean = boolean> = EthBlockComplete<T> | EthBlockPending<T>;
 
-type EthGetBlockParams<T extends boolean> = [blockHashOrNumber: string, returnFullTransaction: T];
+export type EthGetBlockParams<T extends boolean> = [
+  blockHashOrNumber: string,
+  returnFullTransaction: T,
+];
 
 export interface TypedPropertyDef {
   name: string;
@@ -234,7 +237,7 @@ export interface TypedData {
   message: Record<string, unknown>; // The values for your object, starting from the `primaryType`
 }
 
-interface EthChainDefinition {
+export interface EthChainDefinition {
   chainId: string; // A 0x-prefixed hexadecimal string
   chainName?: string;
   nativeCurrency?: {
@@ -410,7 +413,7 @@ export type EthMethodResults = {
 
 /***** RPC Errors *****/
 
-export const enum EthProviderRpcErrorCode {
+export enum EthProviderRpcErrorCode {
   UserRejectedRequest = 4001,
   Unauthorized = 4100,
   UnsupportedMethod = 4200,
@@ -425,7 +428,7 @@ export interface EthProviderRpcError extends Error {
 
 /***** Events *****/
 
-export const enum EthEvent {
+export enum EthEvent {
   message = 'message',
   connect = 'connect',
   disconnect = 'disconnect',
@@ -434,7 +437,7 @@ export const enum EthEvent {
   data = 'data',
 }
 
-export const enum EthProviderMessageType {
+export enum EthProviderMessageType {
   eth_subscription = 'eth_subscription',
 }
 

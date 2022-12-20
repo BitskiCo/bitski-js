@@ -1,6 +1,4 @@
 // jshint esversion: 9
-const base = require('../../jest.config.base.js');
-
 module.exports = {
   roots: ['<rootDir>/src', '<rootDir>/tests'],
   transform: {
@@ -10,6 +8,9 @@ module.exports = {
         diagnostics: false,
       },
     ],
+  },
+  moduleNameMapper: {
+    'eth-provider-types': '<rootDir>/../eth-provider-types/index.ts',
   },
   testRegex: '(/tests/.*.(test|spec)).(jsx?|tsx?)$',
   automock: false,
