@@ -61,6 +61,8 @@ export const enum EthMethod {
   eth_unsubscribe = 'eth_unsubscribe',
   wallet_addEthereumChain = 'wallet_addEthereumChain',
   wallet_switchEthereumChain = 'wallet_switchEthereumChain',
+  wallet_requestPermissions = 'wallet_requestPermissions',
+  wallet_getPermissions = 'wallet_getPermissions',
 }
 
 export const enum EthBlockNumberTag {
@@ -249,6 +251,19 @@ export interface SwitchEthereumChainParameter {
   chainId: string; // A 0x-prefixed hexadecimal string
 }
 
+export interface Web3WalletPermission {
+  // The name of the method corresponding to the permission
+  parentCapability: string;
+
+  // The date the permission was granted, in UNIX epoch time
+  date?: number;
+}
+
+export interface RequestedPermissions {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  [methodName: string]: {}; // an empty object, for future extensibility
+}
+
 export type EthMethodParams = {
   [EthMethod.web3_clientVersion]: void;
   [EthMethod.web3_sha3]: void;
@@ -327,6 +342,8 @@ export type EthMethodParams = {
   [EthMethod.eth_unsubscribe]: [subscriptionId: string];
   [EthMethod.wallet_addEthereumChain]: [definition: EthChainDefinition];
   [EthMethod.wallet_switchEthereumChain]: [SwitchEthereumChainParameter];
+  [EthMethod.wallet_getPermissions]: void;
+  [EthMethod.wallet_requestPermissions]: RequestedPermissions[];
 };
 
 export type EthMethodResults = {
@@ -387,6 +404,8 @@ export type EthMethodResults = {
   [EthMethod.eth_unsubscribe]: boolean;
   [EthMethod.wallet_addEthereumChain]: null;
   [EthMethod.wallet_switchEthereumChain]: null;
+  [EthMethod.wallet_getPermissions]: Web3WalletPermission[];
+  [EthMethod.wallet_requestPermissions]: Web3WalletPermission[];
 };
 
 /***** RPC Errors *****/

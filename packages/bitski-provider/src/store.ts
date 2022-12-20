@@ -109,14 +109,16 @@ export class BitskiProviderStateStore {
   }
 
   private load(): void {
-    this.chains = this.store.getItem(CHAINS_STORAGE_KEY).then((chains) => {
+    this.chains = Promise.resolve(this.store.getItem(CHAINS_STORAGE_KEY)).then((chains) => {
       const result = array(chainDefinitionDecoder).decode(chains);
       return result.value ?? DEFAULT_CHAINS.slice();
     });
 
-    this.currentChainId = this.store.getItem(CURRENT_CHAIN_STORAGE_KEY).then((chainId) => {
-      const result = string.decode(chainId);
-      return result.value ?? '0x1';
-    });
+    this.currentChainId = Promise.resolve(this.store.getItem(CURRENT_CHAIN_STORAGE_KEY)).then(
+      (chainId) => {
+        const result = string.decode(chainId);
+        return result.value ?? '0x1';
+      },
+    );
   }
 }
