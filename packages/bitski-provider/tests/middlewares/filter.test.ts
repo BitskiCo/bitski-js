@@ -26,15 +26,13 @@ describe('filter middleware', () => {
 
     fetchMock.mockResponse(async (req) => {
       if (req.url.includes(EthMethod.eth_blockNumber)) {
-        return JSON.stringify({ result: toHex(currentBlockNumber) });
+        return JSON.stringify(toHex(currentBlockNumber));
       } else {
-        return JSON.stringify({
-          result: [
-            {
-              topics: ['0x123'],
-            },
-          ],
-        });
+        return JSON.stringify([
+          {
+            topics: ['0x123'],
+          },
+        ]);
       }
     });
   });
