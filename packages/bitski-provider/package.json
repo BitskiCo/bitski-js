@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "scripts": {
     "test": "jest",
     "lint": "eslint . --cache",
@@ -23,7 +23,7 @@
     "eth-block-tracker": "^5.0.0",
     "eth-json-rpc-filters": "^5.0.0",
     "eth-json-rpc-middleware": "^9.0.1",
-    "eth-provider-types": "^0.1.0-beta.0",
+    "eth-provider-types": "^0.1.0-beta.1",
     "eth-rpc-errors": "^4.0.3",
     "json-rpc-engine": "^6.1.0",
     "json-rpc-error": "^2.0.0",
