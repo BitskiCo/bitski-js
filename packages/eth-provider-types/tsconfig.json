@@ -4,7 +4,9 @@
     "strict": true,
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
-    "target": "ES2017"
+    "target": "ES2017",
+    "declaration": true,
+    "sourceMap": true
   },
-  "include": ["index.d.ts"]
+  "include": ["index.ts"]
 }

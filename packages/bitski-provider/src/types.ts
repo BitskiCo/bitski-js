@@ -44,7 +44,7 @@ export interface InternalBitskiProviderConfig<Extra = unknown> {
   fetch: typeof fetch;
   additionalHeaders: Record<string, string>;
 
-  prependMiddleware?: ProviderMiddleware<Extra>[];
+  prependMiddleware?: ProviderMiddleware<unknown[], unknown, Extra>[];
   pollingInterval?: number;
   disableCaching?: boolean;
   disableValidation?: boolean;

@@ -269,6 +269,8 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
   }
 }
 
-export const createBitskiProvider = (config: BitskiProviderConfig): BitskiProvider => {
+export const createBitskiProvider = <Extra = unknown>(
+  config: BitskiProviderConfig<Extra>,
+): BitskiProvider<Extra> => {
   return new BitskiProvider(config);
 };
