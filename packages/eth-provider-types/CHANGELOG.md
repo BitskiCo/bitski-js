@@ -1,5 +1,15 @@
 # eth-provider-types
 
+## 0.1.0-beta.1
+
+### Patch Changes
+
+- [#305](https://github.com/BitskiCo/bitski-js/pull/305) [`eb505af`](https://github.com/BitskiCo/bitski-js/commit/eb505aff9cf0a3e338aec278be131df1b17fb66b) Thanks [@pzuraq](https://github.com/pzuraq)! - - Add destructor for store
+  - Also thread `Extra` type through provider and add `requestWithExtra` so
+    requests can be made with additional context. Also add a few missing eth
+    methods.
+  - Make stores able to return MaybePromise so they can be more efficient
+
 ## 0.1.0-beta.0
 
 ### Minor Changes
