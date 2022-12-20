@@ -1,9 +1,9 @@
 import { EthEvent, EthMethod } from 'eth-provider-types';
-import { Goerli, Mainnet } from '../src/constants';
-import { toHex } from '../src/utils/parse-utils';
-import { createTestProvider } from './util/create-provider';
+import { Goerli, Mainnet } from '../../src/constants';
+import { toHex } from '../../src/utils/parse-utils';
+import { createTestProvider } from '../util/create-provider';
 
-describe('chain management', () => {
+describe('chain-management middleware', () => {
   test('should be able to get current chain id via eth_chainId', async () => {
     const provider = createTestProvider();
 
