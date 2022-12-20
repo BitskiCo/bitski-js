@@ -1,5 +1,14 @@
 # bitski-provider
 
+## 2.0.0-beta.3
+
+### Patch Changes
+
+- [#307](https://github.com/BitskiCo/bitski-js/pull/307) [`b00c69e`](https://github.com/BitskiCo/bitski-js/commit/b00c69e661383c5ed8268b3de4d8a22fdd3e3929) Thanks [@pzuraq](https://github.com/pzuraq)! - Fix generics for middleware + switch to standard enums
+
+- Updated dependencies [[`b00c69e`](https://github.com/BitskiCo/bitski-js/commit/b00c69e661383c5ed8268b3de4d8a22fdd3e3929)]:
+  - eth-provider-types@0.1.0-beta.2
+
 ## 2.0.0-beta.2
 
 ### Patch Changes
