@@ -1,5 +1,11 @@
 # eth-provider-types
 
+## 0.1.0-beta.3
+
+### Minor Changes
+
+- [#309](https://github.com/BitskiCo/bitski-js/pull/309) [`868af17`](https://github.com/BitskiCo/bitski-js/commit/868af175ea21cf6a044eab519ee8f820df5657a7) Thanks [@pzuraq](https://github.com/pzuraq)! - Convert eth provider types to CJS for compat for now
+
 ## 0.1.0-beta.2
 
 ### Minor Changes
