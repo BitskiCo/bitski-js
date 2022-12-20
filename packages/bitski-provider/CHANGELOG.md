@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.5
+
+### Patch Changes
+
+- [#313](https://github.com/BitskiCo/bitski-js/pull/313) [`d75da8a`](https://github.com/BitskiCo/bitski-js/commit/d75da8ae09da9b834c519c7c7a87a10e3cc66b81) Thanks [@pzuraq](https://github.com/pzuraq)! - Always add params to RPC requests
+
 ## 2.0.0-beta.4
 
 ### Patch Changes
