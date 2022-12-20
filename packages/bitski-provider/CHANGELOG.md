@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.7
+
+### Patch Changes
+
+- [#317](https://github.com/BitskiCo/bitski-js/pull/317) [`8641004`](https://github.com/BitskiCo/bitski-js/commit/8641004ef308232f2708fc2afaeb8e6bdba0d098) Thanks [@pzuraq](https://github.com/pzuraq)! - Await properly in chain management
+
 ## 2.0.0-beta.6
 
 ### Patch Changes
