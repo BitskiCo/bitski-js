@@ -8,9 +8,6 @@ module.exports = {
       },
     ],
   },
-  moduleNameMapper: {
-    'eth-provider-types': '<rootDir>/../eth-provider-types/index.ts',
-  },
   testRegex: '(/tests/.*.(test|spec)).(jsx?|tsx?)$',
   automock: false,
   collectCoverage: true,

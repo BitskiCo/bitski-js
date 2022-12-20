@@ -4,6 +4,7 @@
     "strict": true,
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
+    "module": "commonjs",
     "target": "ES2017",
     "declaration": true,
     "sourceMap": true
