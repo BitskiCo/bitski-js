@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.4
+
+### Patch Changes
+
+- [#311](https://github.com/BitskiCo/bitski-js/pull/311) [`8c28993`](https://github.com/BitskiCo/bitski-js/commit/8c289930361aea0b3bfab2d4753908068a241e54) Thanks [@pzuraq](https://github.com/pzuraq)! - Fix fetch-rest result format
+
 ## 2.0.0-beta.3
 
 ### Patch Changes
