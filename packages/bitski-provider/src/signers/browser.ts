@@ -1,6 +1,6 @@
 import { ethErrors } from 'eth-rpc-errors';
 import { IFRAME_MESSAGE_ORIGIN_ENDS_WITH } from '../constants';
-import { InternalBitskiProviderConfig, SignFn } from '../types';
+import { InternalBitskiProviderConfig, RequestContext, SignFn } from '../types';
 import { fetchJsonWithRetry } from '../utils/fetch';
 import { Dialog } from '../components/dialog';
 import { createBitskiTransaction, Transaction } from '../utils/transaction';
@@ -66,10 +66,10 @@ const redirectToCallbackURL = (
 
 const showIframe = (
   transaction: Transaction,
-  config: InternalBitskiProviderConfig,
+  context: RequestContext<unknown>,
 ): Promise<string> => {
   return new Promise((fulfill, reject) => {
-    const url = `${config.signerBaseUrl}/transactions/${transaction.id}`;
+    const url = `${context.config.signerBaseUrl}/transactions/${transaction.id}`;
 
     const iframe = document.createElement('iframe');
     iframe.style.position = 'absolute';
@@ -122,7 +122,7 @@ const handleCallback = (callback: any): void => {
 };
 
 export interface BrowserSignerConfig {
-  showPopup: (transaction: Transaction, config: InternalBitskiProviderConfig) => Promise<string>;
+  showPopup: (transaction: Transaction, context: RequestContext<unknown>) => Promise<string>;
 }
 
 export default function createBrowserSigner(signerConfig?: BrowserSignerConfig): SignFn {
@@ -147,7 +147,7 @@ export default function createBrowserSigner(signerConfig?: BrowserSignerConfig):
       submitTransaction(transaction, config).catch((error) => handleCallback({ error }));
 
       // Show the modal (await response)
-      return showPopup(transaction, config);
+      return showPopup(transaction, requestContext);
     }
   };
 }
