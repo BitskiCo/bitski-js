@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.8
+
+### Major Changes
+
+- [#320](https://github.com/BitskiCo/bitski-js/pull/320) [`9be4413`](https://github.com/BitskiCo/bitski-js/commit/9be4413ee4d221118cb78f0b018c04e2aec04b81) Thanks [@pzuraq](https://github.com/pzuraq)! - Pass full context into showPopup rather than just the config"
+
 ## 2.0.0-beta.7
 
 ### Patch Changes
