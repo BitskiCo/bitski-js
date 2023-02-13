@@ -1,37 +1,37 @@
+import SafeEventEmitter from '@metamask/safe-event-emitter';
+import { createInflightCacheMiddleware } from 'eth-json-rpc-middleware/dist/inflight-cache';
 import {
-  createAsyncMiddleware,
+  EthEvent,
+  EthEventListener,
+  EthMethod,
+  EthProvider,
+  EthRequest,
+  EthResult,
+} from 'eth-provider-types';
+import {
   JsonRpcEngine,
   JsonRpcFailure,
   JsonRpcSuccess,
   JsonRpcVersion,
+  createAsyncMiddleware,
 } from 'json-rpc-engine';
-import {
-  EthProvider,
-  EthMethod,
-  EthRequest,
-  EthResult,
-  EthEvent,
-  EthEventListener,
-} from 'eth-provider-types';
 
-import { createFixtureMiddleware } from './middleware/fixture';
-import { createTypedDataSanitizerMiddleware } from './middleware/typed-data-sanitizer';
-import { createTransactionValidatorMiddleware } from './middleware/transaction-validator';
+import { BITSKI_API_BASE_URL, BITSKI_SIGNER_BASE_URL, UNAUTHORIZED_ERRORS } from './constants';
 import { createBlockCacheMiddleware } from './middleware/block-cache';
-import { createSubscriptionMiddleware } from './middleware/subscription';
-import { createFilterMiddleware } from './middleware/filter';
-import { createInflightCacheMiddleware } from 'eth-json-rpc-middleware/dist/inflight-cache';
+import { createChainManagementMiddleware } from './middleware/chain-management';
 import { createEthAccountsMiddleware } from './middleware/eth-accounts';
-import { createSignatureMiddleware } from './middleware/signature';
 import { createFetchRestMiddleware } from './middleware/fetch-rest';
 import { createFetchRpcMiddleware } from './middleware/fetch-rpc';
-import { BitskiProviderConfig, InternalBitskiProviderConfig, RequestContext } from './types';
-import SafeEventEmitter from '@metamask/safe-event-emitter';
-import { BITSKI_API_BASE_URL, BITSKI_SIGNER_BASE_URL, UNAUTHORIZED_ERRORS } from './constants';
+import { createFilterMiddleware } from './middleware/filter';
+import { createFixtureMiddleware } from './middleware/fixture';
+import { createSignatureMiddleware } from './middleware/signature';
+import { createSubscriptionMiddleware } from './middleware/subscription';
+import { createTransactionValidatorMiddleware } from './middleware/transaction-validator';
+import { createTypedDataSanitizerMiddleware } from './middleware/typed-data-sanitizer';
 import createBrowserSigner from './signers/browser';
 import { BitskiProviderStateStore, LocalStorageStore } from './store';
+import { BitskiProviderConfig, InternalBitskiProviderConfig, RequestContext } from './types';
 import { assert, expect } from './utils/type-utils';
-import { createChainManagementMiddleware } from './middleware/chain-management';
 
 // global value provided by scripts/insert-package-version.mjs
 declare const BITSKI_PROVIDER_VERSION: string;
@@ -213,6 +213,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
       config: this.config,
       store: this.store,
       emit: this.events.emit.bind(this.events),
+      extra: opts?.extra,
       request: (req, opts) => this.requestWithChain(chainId, req, opts),
       addDestructor: (destroy) => this.destructors.push(destroy),
     };
