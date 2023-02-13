@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.9
+
+### Patch Changes
+
+- [#322](https://github.com/BitskiCo/bitski-js/pull/322) [`788ef37`](https://github.com/BitskiCo/bitski-js/commit/788ef373342c8558ee3ed18f4d1f8eefa4b23324) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Append extras if available to final request through requestWithChain
+
 ## 2.0.0-beta.8
 
 ### Major Changes
