@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.10
+
+### Minor Changes
+
+- [#324](https://github.com/BitskiCo/bitski-js/pull/324) [`0d48684`](https://github.com/BitskiCo/bitski-js/commit/0d48684839f0850380bdce1f645320fdfa830ace) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add Arbitrum and Optimism to list of chain types
+
 ## 2.0.0-beta.9
 
 ### Patch Changes
