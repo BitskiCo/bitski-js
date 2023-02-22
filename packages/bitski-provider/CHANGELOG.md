@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.11
+
+### Patch Changes
+
+- [#326](https://github.com/BitskiCo/bitski-js/pull/326) [`c2b6acc`](https://github.com/BitskiCo/bitski-js/commit/c2b6acc8d5351ea1d7075a190b5529cb86dc4db8) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Fix missing Arbitrum and Optimism exports for default chains
+
 ## 2.0.0-beta.10
 
 ### Minor Changes
