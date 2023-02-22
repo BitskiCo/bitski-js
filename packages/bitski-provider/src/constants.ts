@@ -93,7 +93,7 @@ export const Mainnet = makeChainDef(1, 'Mainnet', 'https://etherscan.io/');
 export const Goerli = makeChainDef(5, 'Görli', 'https://goerli.etherscan.io/');
 export const Polygon = makeChainDef(137, 'Polygon', 'https://polygonscan.com/');
 export const Mumbai = makeChainDef(80001, 'Mumbai', 'https://mumbai.polygonscan.com/');
-export const Arbitrum = makeChainDef(42161, 'Arbitrum', 'https://arbiscan.io/');
+export const ArbitrumOne = makeChainDef(42161, 'ArbitrumOne', 'https://arbiscan.io/');
 export const Optimism = makeChainDef(10, 'Optimism', 'https://optimistic.etherscan.io/');
 export const BinanceSmartChain = makeChainDef(56, 'BinanceSmartChain', 'https://bscscan.com/');
 export const BinanceSmartChainTestnet = makeChainDef(
@@ -107,6 +107,8 @@ export const DEFAULT_CHAINS: EthChainDefinitionWithRpcUrl[] = [
   Goerli,
   Polygon,
   Mumbai,
+  ArbitrumOne,
+  Optimism,
   BinanceSmartChain,
   BinanceSmartChainTestnet,
 ];
