@@ -1,8 +1,9 @@
 import { EthMethod, EthTransactionSend, TypedData } from 'eth-provider-types';
 import { ethErrors } from 'eth-rpc-errors';
-import { SUPPORTED_CHAIN_IDS } from '../constants';
-import { EthSignMethod, EthSignMethodParams, EthChainDefinitionWithRpcUrl } from '../types';
 import { v4 as uuid } from 'uuid';
+
+import { SUPPORTED_CHAIN_IDS } from '../constants';
+import { EthChainDefinitionWithRpcUrl, EthSignMethod, EthSignMethodParams } from '../types';
 
 export const enum TransactionKind {
   SendTransaction = 'ETH_SEND_TRANSACTION',
@@ -79,6 +80,8 @@ const createContext = <T extends EthSignMethod>(
       if (params && params?.length > 0) {
         return {
           from: params[0] as string,
+          chainId: parseInt(chain.chainId, 16),
+          rpcUrl: !SUPPORTED_CHAIN_IDS.includes(chain.chainId) ? chain.rpcUrls[0] : undefined,
           ...additionalContext,
         };
       }
