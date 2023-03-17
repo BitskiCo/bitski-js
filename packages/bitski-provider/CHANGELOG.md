@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.12
+
+### Patch Changes
+
+- [#328](https://github.com/BitskiCo/bitski-js/pull/328) [`bc8fbb8`](https://github.com/BitskiCo/bitski-js/commit/bc8fbb819bd4b6a0fba8f261e65ffa3a101b4f00) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add missing chainId to context for sign typed data transactions
+
 ## 2.0.0-beta.11
 
 ### Patch Changes
