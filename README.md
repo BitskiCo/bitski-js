@@ -32,16 +32,24 @@ const bitski = new Bitski('CLIENT-ID', 'https://myapp.com/callback.html');
 
 const loginButton = document.getElementById('login-button');
 loginButton.addEventListener('click', async () => {
+  // This signs the user in for the first time, and sets `window.ethereum` to
+  // the Bitski provider. After this has been called, you can initialize your
+  // Dapp's instance of Web3/Ethers
   await bitski.signIn();
   initializeDApp();
 });
 
 const logoutButton = document.getElementById('logout-button');
 logoutButton.addEventListener('click', async () => {
+  // This signs the user out and restores `window.ethereum` to whatever value it was
+  // before (e.g. restoring browser extensions if they had injected themselves previously).
   await bitski.signOut();
 });
 
 document.addEventListener('load', async () => {
+  // This signs the user in IF they have signed in before, and sets `window.ethereum`
+  // to the Bitski provider. This should be called on page load BEFORE you initialize
+  // your Dapp, so that `window.ethereum` is setup properly.
   await bitski.initialize();
   initializeDApp();
 });
