@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.13
+
+### Minor Changes
+
+- [#331](https://github.com/BitskiCo/bitski-js/pull/331) [`ce354c8`](https://github.com/BitskiCo/bitski-js/commit/ce354c8ed35d5925cc82510f0143eeacc8b9b3e7) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add zkSync Era to list of supported network constants
+
 ## 2.0.0-beta.12
 
 ### Patch Changes
