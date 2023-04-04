@@ -14,6 +14,8 @@ export enum EthMethod {
   eth_protocolVersion = 'eth_protocolVersion',
   eth_syncing = 'eth_syncing',
   eth_coinbase = 'eth_coinbase',
+  eth_createAccessList = 'eth_createAccessList',
+  eth_feeHistory = 'eth_feeHistory',
   eth_mining = 'eth_mining',
   eth_hashrate = 'eth_hashrate',
   eth_gasPrice = 'eth_gasPrice',
@@ -46,6 +48,7 @@ export enum EthMethod {
   eth_getTransactionReceipt = 'eth_getTransactionReceipt',
   eth_getUncleByBlockHashAndIndex = 'eth_getUncleByBlockHashAndIndex',
   eth_getUncleByBlockNumberAndIndex = 'eth_getUncleByBlockNumberAndIndex',
+  eth_maxPriorityFeePerGas = 'eth_maxPriorityFeePerGas',
   eth_newFilter = 'eth_newFilter',
   eth_newBlockFilter = 'eth_newBlockFilter',
   eth_newPendingTransactionFilter = 'eth_newPendingTransactionFilter',
@@ -53,6 +56,7 @@ export enum EthMethod {
   eth_getFilterChanges = 'eth_getFilterChanges',
   eth_getFilterLogs = 'eth_getFilterLogs',
   eth_getLogs = 'eth_getLogs',
+  eth_getProof = 'eth_getProof',
   eth_getWork = 'eth_getWork',
   eth_submitWork = 'eth_submitWork',
   eth_submitHashrate = 'eth_submitHashrate',
@@ -250,6 +254,11 @@ export interface EthChainDefinition {
   iconUrls?: string[]; // Currently ignored.
 }
 
+export interface AccessList {
+  address: string;
+  storageKeys: string[];
+}
+
 export interface SwitchEthereumChainParameter {
   chainId: string; // A 0x-prefixed hexadecimal string
 }
@@ -276,6 +285,15 @@ export type EthMethodParams = {
   [EthMethod.eth_protocolVersion]: void;
   [EthMethod.eth_syncing]: void;
   [EthMethod.eth_coinbase]: void;
+  [EthMethod.eth_createAccessList]: [
+    transaction: EthTransaction,
+    block?: EthBlockNumberTag | string,
+  ];
+  [EthMethod.eth_feeHistory]: [
+    blockCount: string,
+    newestBlock: EthBlockNumberTag | string,
+    rewardPercentiles: number[],
+  ];
   [EthMethod.eth_mining]: void;
   [EthMethod.eth_hashrate]: void;
   [EthMethod.eth_gasPrice]: void;
@@ -323,6 +341,7 @@ export type EthMethodParams = {
       topics?: EthTopic[];
     },
   ];
+  [EthMethod.eth_maxPriorityFeePerGas]: void;
   [EthMethod.eth_newBlockFilter]: void;
   [EthMethod.eth_newPendingTransactionFilter]: void;
   [EthMethod.eth_uninstallFilter]: [filterId: string];
@@ -336,6 +355,11 @@ export type EthMethodParams = {
       topics?: EthTopic[];
       blockHash?: string;
     },
+  ];
+  [EthMethod.eth_getProof]: [
+    address: string,
+    storageKeys: string[],
+    block: EthBlockNumberTag | string,
   ];
   [EthMethod.eth_getWork]: void;
   [EthMethod.eth_submitWork]: [nonce: string, headerHash: string, mixDigest: string];
@@ -360,6 +384,8 @@ export type EthMethodResults = {
     | { startingBlock: string; currentBlock: string; highestBlock: string }
     | false;
   [EthMethod.eth_coinbase]: string;
+  [EthMethod.eth_createAccessList]: { accessList: AccessList[]; gasUsed: string };
+  [EthMethod.eth_feeHistory]: { accessList: AccessList[]; gasUsed: string };
   [EthMethod.eth_mining]: boolean;
   [EthMethod.eth_hashrate]: string;
   [EthMethod.eth_gasPrice]: string;
@@ -393,12 +419,27 @@ export type EthMethodResults = {
   [EthMethod.eth_getUncleByBlockHashAndIndex]: EthBlock<false>;
   [EthMethod.eth_getUncleByBlockNumberAndIndex]: EthBlock<false>;
   [EthMethod.eth_newFilter]: string;
+  [EthMethod.eth_maxPriorityFeePerGas]: {
+    oldestBlock: string;
+    baseFeePerGas: string[];
+    gasUsedRatio?: number[];
+    reward?: string[][];
+  };
   [EthMethod.eth_newBlockFilter]: string;
   [EthMethod.eth_newPendingTransactionFilter]: string;
   [EthMethod.eth_uninstallFilter]: boolean;
   [EthMethod.eth_getFilterChanges]: string[] | EthLog[];
   [EthMethod.eth_getFilterLogs]: string[] | EthLog[];
   [EthMethod.eth_getLogs]: string[] | EthLog[];
+  [EthMethod.eth_getProof]: {
+    address: string;
+    accountProof: string[];
+    balance: string;
+    codeHash: string;
+    nonce: string;
+    storageHash: string;
+    storageProof?: { key: string; value: string; proof: string[] }[];
+  };
   [EthMethod.eth_getWork]: [headerHash: string, seedHash: string, boundaryCondition: string];
   [EthMethod.eth_submitWork]: boolean;
   [EthMethod.eth_submitHashrate]: true;

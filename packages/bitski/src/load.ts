@@ -70,7 +70,7 @@ const windowLoadPromise = new Promise((resolve) => {
 });
 
 export const loadScript = (): Promise<BitskiSDKConstructor | null> => {
-  // Ensure that we only attempt to load Stripe.js at most once
+  // Ensure that we only attempt to load bitski.js at most once
   if (bitskiPromise !== null) {
     return bitskiPromise;
   }
