@@ -1,5 +1,11 @@
 # eth-provider-types
 
+## 0.1.0-beta.4
+
+### Patch Changes
+
+- [#333](https://github.com/BitskiCo/bitski-js/pull/333) [`462e011`](https://github.com/BitskiCo/bitski-js/commit/462e01184269d440e9216e1d2ff92334d2d712c0) Thanks [@jtescher](https://github.com/jtescher)! - Add missing RPC methods
+
 ## 0.1.0-beta.3
 
 ### Minor Changes
