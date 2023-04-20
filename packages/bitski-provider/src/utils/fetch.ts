@@ -62,7 +62,7 @@ export const fetchJsonWithRetry = async (
       },
     });
 
-    if (response.ok) {
+    if (!response.ok) {
       switch (response.status) {
         case 405:
           throw ethErrors.rpc.methodNotFound();
