@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/BitskiCo/bitski-js"
   },
-  "version": "3.3.0-beta.1",
+  "version": "3.3.0-beta.2",
   "scripts": {
     "lint": "eslint . --cache",
     "test": "jest",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@openid/appauth": "^1.2.6",
-    "bitski-provider": "^2.0.0-beta.2",
+    "bitski-provider": "^2.0.0-beta.14",
     "eth-provider-types": "^0.1.0-beta.1",
     "decoders": "^2.0.1"
   },

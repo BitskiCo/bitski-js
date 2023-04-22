@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.0.0-beta.14
+
+### Patch Changes
+
+- [#335](https://github.com/BitskiCo/bitski-js/pull/335) [`eda0e52`](https://github.com/BitskiCo/bitski-js/commit/eda0e522110f8c7a7665d67d3a83cd976cd5d42c) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Account for all successful responses in provider shim
+
 ## 2.0.0-beta.13
 
 ### Minor Changes
