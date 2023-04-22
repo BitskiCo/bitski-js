@@ -1,5 +1,14 @@
 # bitski
 
+## 3.3.0-beta.2
+
+### Patch Changes
+
+- [#337](https://github.com/BitskiCo/bitski-js/pull/337) [`2cf0f7c`](https://github.com/BitskiCo/bitski-js/commit/2cf0f7c1c166fd9b5f572701017bc2cb9616912a) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Clear tokens if parse error on SDK updates
+
+- Updated dependencies [[`eda0e52`](https://github.com/BitskiCo/bitski-js/commit/eda0e522110f8c7a7665d67d3a83cd976cd5d42c)]:
+  - bitski-provider@2.0.0-beta.14
+
 ## 3.3.0-beta.1
 
 ### Patch Changes
