@@ -50,21 +50,31 @@ export class TokenStore {
   }
 
   public loadTokensFromCache(): void {
-    this.accessToken = Promise.resolve(this.store.getItem(this.accessTokenKey)).then(
-      (accessTokenString) => {
+    this.accessToken = Promise.resolve(this.store.getItem(this.accessTokenKey))
+      .then((accessTokenString) => {
         const accessTokenResult = string.decode(accessTokenString);
         if (accessTokenResult.value) {
           return AccessToken.fromString(accessTokenResult.value);
         }
-      },
-    );
+      })
+      .catch(() => {
+        console.log('Could not parse accessToken, setting to undefined');
+        return undefined;
+      });
 
-    this.idToken = Promise.resolve(this.store.getItem(this.idTokenKey)).then(
-      (token) => string.decode(token).value,
-    );
-    this.refreshToken = Promise.resolve(this.store.getItem(this.refreshTokenKey)).then(
-      (token) => string.decode(token).value,
-    );
+    this.idToken = Promise.resolve(this.store.getItem(this.idTokenKey))
+      .then((token) => string.decode(token).value)
+      .catch(() => {
+        console.log('Could not parse idToken, setting to undefined');
+        return undefined;
+      });
+
+    this.refreshToken = Promise.resolve(this.store.getItem(this.refreshTokenKey))
+      .then((token) => string.decode(token).value)
+      .catch(() => {
+        console.log('Could not parse refreshToken, setting to undefined');
+        return undefined;
+      });
   }
 
   public persistTokenResponse(response: TokenResponse): void {
