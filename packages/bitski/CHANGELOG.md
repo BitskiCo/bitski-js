@@ -1,5 +1,40 @@
 # bitski
 
+## 3.3.0
+
+### Minor Changes
+
+- [#300](https://github.com/BitskiCo/bitski-js/pull/300) [`3e2ced1`](https://github.com/BitskiCo/bitski-js/commit/3e2ced1d2ff939c15f3aefec6f65fec3d97b8638) Thanks [@pzuraq](https://github.com/pzuraq)! - Switch to json rpc engine
+
+  This PR updates the provider to use a simpler JSON-RPC based
+  architecture. It also includes a number of other changes and enhancements:
+
+  - Builds with Rollup instead of Browserify for smaller bundle size (down
+    to 170kb minified).
+  - Adds `bitski.initialize()` to reinitialize Bitski after page loads
+  - Updates sign in and initialize methods to set `window.ethereum` to the
+    Bitski provider after successful login. This should make it easier for
+    devs to integrate into their DApps.
+  - Adds storage for provider state so the provider can store custom
+    chains, current chain ID, etc.
+  - Adds custom chain RPC url to transaction request contexts, so we can
+    send the transaction server side in the near future.
+  - Updates `eth-provider-types` to be more accurate overall
+  - Ability for middlewares to add arbitrary context to transactions/signs
+
+### Patch Changes
+
+- [#337](https://github.com/BitskiCo/bitski-js/pull/337) [`2cf0f7c`](https://github.com/BitskiCo/bitski-js/commit/2cf0f7c1c166fd9b5f572701017bc2cb9616912a) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Clear tokens if parse error on SDK updates
+
+* [#305](https://github.com/BitskiCo/bitski-js/pull/305) [`eb505af`](https://github.com/BitskiCo/bitski-js/commit/eb505aff9cf0a3e338aec278be131df1b17fb66b) Thanks [@pzuraq](https://github.com/pzuraq)! - - Add destructor for store
+  - Also thread `Extra` type through provider and add `requestWithExtra` so
+    requests can be made with additional context. Also add a few missing eth
+    methods.
+  - Make stores able to return MaybePromise so they can be more efficient
+* Updated dependencies [[`462e011`](https://github.com/BitskiCo/bitski-js/commit/462e01184269d440e9216e1d2ff92334d2d712c0), [`eda0e52`](https://github.com/BitskiCo/bitski-js/commit/eda0e522110f8c7a7665d67d3a83cd976cd5d42c), [`b00c69e`](https://github.com/BitskiCo/bitski-js/commit/b00c69e661383c5ed8268b3de4d8a22fdd3e3929), [`bc8fbb8`](https://github.com/BitskiCo/bitski-js/commit/bc8fbb819bd4b6a0fba8f261e65ffa3a101b4f00), [`788ef37`](https://github.com/BitskiCo/bitski-js/commit/788ef373342c8558ee3ed18f4d1f8eefa4b23324), [`8c28993`](https://github.com/BitskiCo/bitski-js/commit/8c289930361aea0b3bfab2d4753908068a241e54), [`7c938da`](https://github.com/BitskiCo/bitski-js/commit/7c938dab487b90e36d68fb6ccedb8ae990a14e3d), [`868af17`](https://github.com/BitskiCo/bitski-js/commit/868af175ea21cf6a044eab519ee8f820df5657a7), [`d75da8a`](https://github.com/BitskiCo/bitski-js/commit/d75da8ae09da9b834c519c7c7a87a10e3cc66b81), [`c2b6acc`](https://github.com/BitskiCo/bitski-js/commit/c2b6acc8d5351ea1d7075a190b5529cb86dc4db8), [`0d48684`](https://github.com/BitskiCo/bitski-js/commit/0d48684839f0850380bdce1f645320fdfa830ace), [`9be4413`](https://github.com/BitskiCo/bitski-js/commit/9be4413ee4d221118cb78f0b018c04e2aec04b81), [`56c7b13`](https://github.com/BitskiCo/bitski-js/commit/56c7b13b128df0d77aae1f9e2144692727a082ce), [`8641004`](https://github.com/BitskiCo/bitski-js/commit/8641004ef308232f2708fc2afaeb8e6bdba0d098), [`3e2ced1`](https://github.com/BitskiCo/bitski-js/commit/3e2ced1d2ff939c15f3aefec6f65fec3d97b8638), [`ce354c8`](https://github.com/BitskiCo/bitski-js/commit/ce354c8ed35d5925cc82510f0143eeacc8b9b3e7), [`eb505af`](https://github.com/BitskiCo/bitski-js/commit/eb505aff9cf0a3e338aec278be131df1b17fb66b)]:
+  - eth-provider-types@0.1.0
+  - bitski-provider@2.0.0
+
 ## 3.3.0-beta.2
 
 ### Patch Changes
