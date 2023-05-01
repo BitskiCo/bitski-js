@@ -82,8 +82,6 @@ dist/**
 packages/**/dist/
 packages/**/lib/
 
-examples/**
-
 # dependencies
 packages/**/node_modules/
 
