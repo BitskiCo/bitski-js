@@ -230,12 +230,12 @@ export class BitskiSDK {
    * Embeds Bitski's UI styles
    */
   protected injectStyles(): void {
-    if (document.getElementById('BitskiSDKEmbeddedStyles')) {
+    if (document.getElementById('BitskiSDKButtonEmbeddedStyles')) {
       return;
     }
     const style = document.createElement('style');
     style.setAttribute('type', 'text/css');
-    style.setAttribute('id', 'BitskiSDKEmbeddedStyles');
+    style.setAttribute('id', 'BitskiSDKButtonEmbeddedStyles');
     style.appendChild(document.createTextNode(css));
     const head = document.head || document.getElementsByTagName('head')[0];
     head.appendChild(style);
