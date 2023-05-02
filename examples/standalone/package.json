@@ -3,7 +3,7 @@
     "start:dev": "webpack-dev-server --mode development"
   },
   "dependencies": {
-    "bitski": "../../packages/browser",
+    "bitski": "^3.3.0",
     "web3": "1.9.0"
   },
   "devDependencies": {

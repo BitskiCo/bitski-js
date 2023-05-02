@@ -12,10 +12,27 @@ function App() {
   const [currentAccount, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [hash, setHash] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getProvider();
   });
+
+  const getAccounts = async () => {
+    const accounts = await provider.getAddresses();
+
+    if (accounts.length) {
+      return accounts;
+    }
+
+    const addressAccounts = await provider.requestAddresses();
+
+    if (addressAccounts.length) {
+      return addressAccounts;
+    }
+
+    setError('Could not find valid accounts');
+  };
 
   const getProvider = async () => {
     if (provider) return;
@@ -24,10 +41,13 @@ function App() {
       chain: mainnet,
       transport: custom(bitski.getProvider()),
     });
+
     setProvider(web3);
   };
 
   const connect = async () => {
+    setError(null);
+
     if (!provider) {
       getProvider();
     }
@@ -38,11 +58,7 @@ function App() {
       await bitski.signIn();
     }
 
-    const accounts = await provider.getAddresses();
-
-    if (!accounts?.[0]) {
-      throw new Error('Could not find any valid accounts');
-    }
+    const accounts = await getAccounts();
 
     setAccount(accounts[0]);
   };
@@ -51,6 +67,7 @@ function App() {
     await bitski.signOut();
     setAccount(null);
     setHash(null);
+    setError(null);
   };
 
   const signMessage = async () => {
@@ -65,6 +82,28 @@ function App() {
   return (
     <main className="flex flex-col justify-center items-center h-screen">
       <h1 className="text-4xl">Bitski + viem</h1>
+
+      {error && (
+        <div class="alert alert-error shadow-lg max-w-xs my-4">
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{error} </span>
+          </div>
+        </div>
+      )}
+
       <section className="flex flex-col items-center justify-center">
         <button
           className="my-4 inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900"
