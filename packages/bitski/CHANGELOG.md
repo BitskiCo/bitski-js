@@ -1,5 +1,11 @@
 # bitski
 
+## 3.3.1
+
+### Patch Changes
+
+- [#344](https://github.com/BitskiCo/bitski-js/pull/344) [`2507d7f`](https://github.com/BitskiCo/bitski-js/commit/2507d7fc4b6546db6ff72258fc5c033b0124459b) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Separate button style embeded class namespace from iframe style namespace
+
 ## 3.3.0
 
 ### Minor Changes
