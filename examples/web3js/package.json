@@ -18,7 +18,7 @@
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
-    "bitski": "../../packages/browser",
+    "bitski": "^3.3.0",
     "daisyui": "^2.51.6",
     "eslint": "^8.38.0",
     "eslint-plugin-react": "^7.32.2",
