@@ -53,7 +53,7 @@ function App() {
       await bitski.signIn();
     }
 
-    const accounts = getAccounts();
+    const accounts = await getAccounts();
 
     if (accounts && accounts[0]) {
       setAccount(accounts[0]);
