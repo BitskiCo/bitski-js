@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 2.1.0-next.0
+
+### Minor Changes
+
+- [#347](https://github.com/BitskiCo/bitski-js/pull/347) [`38b66b0`](https://github.com/BitskiCo/bitski-js/commit/38b66b0c5a460a7f28fdb520d5c39d1f795e3d61) Thanks [@pzuraq](https://github.com/pzuraq)! - Add the ability for the SDK to handle multiple sequential signing reuests
+
 ## 2.0.0
 
 ### Major Changes
