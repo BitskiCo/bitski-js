@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "bitski": "3.3.1",
+    "bitski-provider": "2.0.0",
+    "eth-provider-types": "0.1.0"
+  },
+  "changesets": ["stale-donuts-beam"]
+}
