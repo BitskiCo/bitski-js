@@ -6,5 +6,5 @@
     "bitski-provider": "2.0.0",
     "eth-provider-types": "0.1.0"
   },
-  "changesets": ["stale-donuts-beam"]
+  "changesets": []
 }
