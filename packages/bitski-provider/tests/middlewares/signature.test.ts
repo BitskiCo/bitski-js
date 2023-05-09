@@ -763,7 +763,7 @@ describe('signature middleware', () => {
       expect(result).toBe('0x123');
     });
 
-    test('sign() should close existing dialog if one is already open', async () => {
+    test('sign() should enqueue multiple sign requests', async () => {
       expect.assertions(8);
       const provider = createTestProvider({ sign: createBrowserSigner() });
 
@@ -798,18 +798,15 @@ describe('signature middleware', () => {
         gasPrice: '0x',
       };
 
-      provider
-        .request({
-          method: EthMethod.eth_signTransaction,
-          params: [txn],
-        })
-        .catch((e) =>
-          expect(e).toMatchObject({
-            message: 'Another signing request was made before this one was completed',
-          }),
-        );
+      const result1 = provider.request({
+        method: EthMethod.eth_signTransaction,
+        params: [txn],
+      });
 
-      await sleep(0);
+      const result2 = provider.request({
+        method: EthMethod.eth_signTransaction,
+        params: [txn],
+      });
 
       triggerMessage(
         new MessageEvent('message', {
@@ -822,12 +819,23 @@ describe('signature middleware', () => {
         }),
       );
 
-      const result = await provider.request({
-        method: EthMethod.eth_signTransaction,
-        params: [txn],
-      });
+      await sleep(0);
 
-      expect(result).toBe('0x123');
+      triggerMessage(
+        new MessageEvent('message', {
+          data: {
+            id: 0,
+            jsonrpc: '2.0',
+            result: '0x456',
+          },
+          origin: 'https://sign.bitski.com',
+        }),
+      );
+
+      const [result1Value, result2Value] = await Promise.all([result1, result2]);
+
+      expect(result1Value).toBe('0x123');
+      expect(result2Value).toBe('0x456');
     });
 
     test('it should redirect to signer if a transaction callback url is included in config', async () => {

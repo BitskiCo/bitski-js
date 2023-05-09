@@ -5,10 +5,15 @@ import { fetchJsonWithRetry } from '../utils/fetch';
 import { Dialog } from '../components/dialog';
 import { createBitskiTransaction, Transaction } from '../utils/transaction';
 
-// Global state, this manages the currently open signer popup. There should never
-// be more than one, so it's ok for this to be module scoped.
-let currentRequestDialog: Dialog | undefined;
-let currentRequest: [(signed: any) => void, (error: Error) => void] | undefined;
+// Global state, this manages the currently open signer popup.
+interface SignRequestState {
+  dialog: Dialog;
+  promise: Promise<string>;
+  resolve: (v: string | PromiseLike<string>) => void;
+  reject: (e: unknown) => void;
+}
+
+const SIGN_REQUEST_QUEUE: SignRequestState[] = [];
 
 if (typeof window !== 'undefined') {
   window.addEventListener('message', (event: MessageEvent) => {
@@ -68,56 +73,62 @@ const showIframe = (
   transaction: Transaction,
   context: RequestContext<unknown>,
 ): Promise<string> => {
-  return new Promise((fulfill, reject) => {
-    const url = `${context.config.signerBaseUrl}/transactions/${transaction.id}`;
-
-    const iframe = document.createElement('iframe');
-    iframe.style.position = 'absolute';
-    iframe.style.top = '0';
-    iframe.style.left = '0';
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.frameBorder = '0';
-    iframe.src = url;
-
-    // Dismiss any existing dialogs to prevent UI glitches.
-    if (currentRequestDialog && currentRequest) {
-      currentRequestDialog.close();
-      const [, reject] = currentRequest;
-      reject(
-        ethErrors.provider.userRejectedRequest(
-          'Another signing request was made before this one was completed',
-        ),
-      );
-    }
-
-    currentRequest = [fulfill, reject];
-    currentRequestDialog = new Dialog(iframe, true);
+  let resolve, reject;
+  const promise = new Promise<string>((res, rej) => {
+    resolve = res;
+    reject = rej;
   });
+
+  const url = `${context.config.signerBaseUrl}/transactions/${transaction.id}`;
+
+  const iframe = document.createElement('iframe');
+  iframe.style.position = 'absolute';
+  iframe.style.top = '0';
+  iframe.style.left = '0';
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.frameBorder = '0';
+  iframe.src = url;
+
+  const dialog = new Dialog(iframe, true);
+
+  if (SIGN_REQUEST_QUEUE.length > 0) {
+    const lastRequest = SIGN_REQUEST_QUEUE[SIGN_REQUEST_QUEUE.length - 1];
+
+    lastRequest.promise.then(() => {
+      dialog.open();
+    });
+  } else {
+    dialog.open();
+  }
+
+  SIGN_REQUEST_QUEUE.push({
+    resolve,
+    reject,
+    promise,
+    dialog,
+  });
+
+  return promise;
 };
 
 const handleCallback = (callback: any): void => {
-  // Ignore messages when we don't have a current request in flight
-  if (currentRequest === undefined) {
+  const currentRequest = SIGN_REQUEST_QUEUE.shift();
+
+  if (!currentRequest) {
     return;
   }
 
-  const [fulfill, reject] = currentRequest;
+  const { resolve, reject, dialog } = currentRequest;
 
   // Dismiss current dialog
-  if (currentRequestDialog) {
-    currentRequestDialog.close();
-  }
-
-  // Clear state
-  currentRequest = undefined;
-  currentRequestDialog = undefined;
+  dialog.close();
 
   // Call the callback to complete the request
   if (callback.error) {
     reject(ethErrors.rpc.internal(callback.error));
   } else {
-    fulfill(callback.result);
+    resolve(callback.result);
   }
 };
 

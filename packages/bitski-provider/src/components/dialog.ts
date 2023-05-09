@@ -34,7 +34,7 @@ export class Dialog {
    * @param content The content (HTMLElement, selector, or text) to embed in the dialog
    * @param dynamicContent Set to true to show loading state
    */
-  constructor(content: HTMLElement | string, dynamicContent = false) {
+  constructor(content: HTMLElement | string, private dynamicContent = false) {
     // check for an element passed as content or a selector corresponding to an element
     this.content = this.parseContent(content);
 
@@ -42,21 +42,6 @@ export class Dialog {
     this.container = this.createContainer();
 
     injectStyles();
-    // Inject dialog content
-    this.injectTemplate(this.container, this.content);
-
-    // Show a spinner if content is dynamic
-    if (dynamicContent) {
-      this.setLoading(true);
-    }
-
-    // Add close handlers
-    this.addCloseHandlers();
-
-    // A short delay is required before triggering animations
-    setTimeout(() => {
-      this.show();
-    }, 10);
   }
 
   /**
@@ -70,6 +55,24 @@ export class Dialog {
    */
   public hide(): void {
     this.container.classList.remove('bitski-visible', 'bitski-loaded');
+  }
+
+  public open(): void {
+    // Inject dialog content
+    this.injectTemplate(this.container, this.content);
+
+    // Show a spinner if content is dynamic
+    if (this.dynamicContent) {
+      this.setLoading(true);
+    }
+
+    // Add close handlers
+    this.addCloseHandlers();
+
+    // A short delay is required before triggering animations
+    setTimeout(() => {
+      this.show();
+    }, 10);
   }
 
   /**
