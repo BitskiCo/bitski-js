@@ -6,6 +6,7 @@
 /***** JSON RPC *****/
 
 export enum EthMethod {
+  alchemy_requestPaymasterAndData = 'alchemy_requestPaymasterAndData',
   web3_clientVersion = 'web3_clientVersion',
   web3_sha3 = 'web3_sha3',
   net_version = 'net_version',
@@ -63,6 +64,11 @@ export enum EthMethod {
   eth_chainId = 'eth_chainId',
   eth_subscribe = 'eth_subscribe',
   eth_unsubscribe = 'eth_unsubscribe',
+  eth_estimateUserOperationGas = 'eth_estimateUserOperationGas',
+  eth_getUserOperationByHash = 'eth_getUserOperationByHash',
+  eth_getUserOperationReceipt = 'eth_getUserOperationReceipt',
+  eth_supportedEntryPoints = 'eth_supportedEntryPoints',
+  eth_sendUserOperation = 'eth_sendUserOperation',
   wallet_addEthereumChain = 'wallet_addEthereumChain',
   wallet_switchEthereumChain = 'wallet_switchEthereumChain',
   wallet_requestPermissions = 'wallet_requestPermissions',
@@ -271,12 +277,45 @@ export interface Web3WalletPermission {
   date?: number;
 }
 
+export interface UserOperation {
+  sender: string;
+  nonce: string;
+  initCode?: string;
+  callData: string;
+  callGasLimit?: string;
+  verificationGasLimit?: string;
+  preVerificationGasLimit?: string;
+  maxFeePerGas: string;
+  maxPriorityFeePerGas: string;
+  paymasterAndData?: string;
+  signature?: string;
+}
+
+export interface UserOperationReceipt {
+  userOpHash: string;
+  entryPoint: string;
+  sender: string;
+  nonce: string;
+  paymaster: string;
+  actualGasCost: string;
+  actualGasUsed: string;
+  success: boolean;
+  reason: string;
+  logs: EthLog[];
+  receipt: EthTransactionReceipt;
+}
+
 export interface RequestedPermissions {
   // eslint-disable-next-line @typescript-eslint/ban-types
   [methodName: string]: {}; // an empty object, for future extensibility
 }
 
 export type EthMethodParams = {
+  [EthMethod.alchemy_requestPaymasterAndData]: [
+    policyId: string,
+    entrypointAddress: string,
+    userOperation: UserOperation,
+  ];
   [EthMethod.web3_clientVersion]: void;
   [EthMethod.web3_sha3]: void;
   [EthMethod.net_version]: void;
@@ -371,9 +410,18 @@ export type EthMethodParams = {
   [EthMethod.wallet_switchEthereumChain]: [SwitchEthereumChainParameter];
   [EthMethod.wallet_getPermissions]: void;
   [EthMethod.wallet_requestPermissions]: RequestedPermissions[];
+  [EthMethod.eth_estimateUserOperationGas]: [
+    userOperations: UserOperation[],
+    entrypointAddress: string,
+  ];
+  [EthMethod.eth_getUserOperationByHash]: [hash: string];
+  [EthMethod.eth_getUserOperationReceipt]: [hash: string];
+  [EthMethod.eth_supportedEntryPoints]: void;
+  [EthMethod.eth_sendUserOperation]: [userOperations: UserOperation[], entrypointAddress: string];
 };
 
 export type EthMethodResults = {
+  [EthMethod.alchemy_requestPaymasterAndData]: string;
   [EthMethod.web3_clientVersion]: string;
   [EthMethod.web3_sha3]: string;
   [EthMethod.net_version]: string;
@@ -450,6 +498,22 @@ export type EthMethodResults = {
   [EthMethod.wallet_switchEthereumChain]: null;
   [EthMethod.wallet_getPermissions]: Web3WalletPermission[];
   [EthMethod.wallet_requestPermissions]: Web3WalletPermission[];
+  [EthMethod.eth_estimateUserOperationGas]: [
+    preVerificationGas: string,
+    verificationGasLimit: string,
+    callGasLimit: string,
+  ];
+  [EthMethod.eth_getUserOperationByHash]:
+    | (UserOperation & {
+        entryPoint: string;
+        blockNumber: string;
+        blockHash: string;
+        transactionHash: string;
+      })
+    | null;
+  [EthMethod.eth_getUserOperationReceipt]: UserOperation | null;
+  [EthMethod.eth_supportedEntryPoints]: string[];
+  [EthMethod.eth_sendUserOperation]: string;
 };
 
 /***** RPC Errors *****/
