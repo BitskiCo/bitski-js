@@ -284,9 +284,9 @@ export interface UserOperation {
   callData: string;
   callGasLimit?: string;
   verificationGasLimit?: string;
-  preVerificationGasLimit?: string;
-  maxFeePerGas: string;
-  maxPriorityFeePerGas: string;
+  preVerificationGas?: string;
+  maxFeePerGas?: string;
+  maxPriorityFeePerGas?: string;
   paymasterAndData?: string;
   signature?: string;
 }
