@@ -1,5 +1,11 @@
 # eth-provider-types
 
+## 0.2.0-next.1
+
+### Patch Changes
+
+- [#354](https://github.com/BitskiCo/bitski-js/pull/354) [`1a1efd5`](https://github.com/BitskiCo/bitski-js/commit/1a1efd5c2b6eae90c35aafd7cb35f6f3028b6394) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Make maxFeePerGas and maxPriorityFeePerGas optional; rename to preVerificationGas
+
 ## 0.2.0-next.0
 
 ### Minor Changes
