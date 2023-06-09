@@ -57,12 +57,30 @@ const submitTransaction = async (
   return response.transaction;
 };
 
+const getSignerUrl = (transactionId: string, config: InternalBitskiProviderConfig) => {
+  const searchParams = config.signerQueryParams ?? new URLSearchParams();
+
+  if (config.transactionCallbackUrl) {
+    searchParams.set('redirectURI', config.transactionCallbackUrl);
+  }
+
+  if (config.waas?.userId) {
+    const federatedId = btoa(`${config.appId}:${config.waas.userId}`);
+
+    searchParams.set('loginHint', `fa_${federatedId}`);
+  }
+
+  const searchParamsSerialized = searchParams.toString();
+  const searchParamsString = searchParamsSerialized !== '' ? `?${searchParamsSerialized}` : '';
+
+  return `${config.signerBaseUrl}/transactions/${transactionId}${searchParamsString}`;
+};
+
 const redirectToCallbackURL = (
   transaction: Transaction,
   config: InternalBitskiProviderConfig,
 ): Promise<string> => {
-  const url = `${config.signerBaseUrl}/transactions/${transaction.id}?redirectURI=${config.transactionCallbackUrl}`;
-  window.location.href = url;
+  window.location.href = getSignerUrl(transaction.id, config);
 
   // return a non-resolving promise so we block until redirect
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -79,7 +97,7 @@ const showIframe = (
     reject = rej;
   });
 
-  const url = `${context.config.signerBaseUrl}/transactions/${transaction.id}`;
+  const url = getSignerUrl(transaction.id, context.config);
 
   const iframe = document.createElement('iframe');
   iframe.style.position = 'absolute';

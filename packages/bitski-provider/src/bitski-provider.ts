@@ -65,13 +65,25 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
   private activeSubs = new Set<string>();
 
   constructor(config: BitskiProviderConfig<Extra>) {
+    const { appId: maybeAppId, clientId } = config;
+
+    const appId = maybeAppId ?? clientId;
+
+    if (!appId) {
+      throw new Error('You must provide an appId to BitskiProvider');
+    } else if (maybeAppId && clientId) {
+      throw new Error('You must provide either an appId or a clientId to BitskiProvider, not both');
+    } else if (clientId) {
+      console.warn('clientId is deprecated, please use appId instead');
+    }
+
     this.config = {
       ...config,
 
       fetch: config.fetch ?? fetch,
       additionalHeaders: {
-        'X-API-KEY': config.clientId,
-        'X-CLIENT-ID': config.clientId,
+        'X-API-KEY': appId,
+        'X-CLIENT-ID': appId,
         'X-CLIENT-VERSION': BITSKI_PROVIDER_VERSION,
         ...(config.additionalHeaders ?? {}),
       },

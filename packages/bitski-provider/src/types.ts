@@ -51,10 +51,18 @@ export interface InternalBitskiProviderConfig<Extra = unknown> {
   disableValidation?: boolean;
   additionalSigningContext?: Record<string, string>;
 
-  clientId: string;
+  appId?: string;
+
+  /** @deprecated switch to appId */
+  clientId?: string;
   apiBaseUrl: string;
   signerBaseUrl: string;
   transactionCallbackUrl?: string;
+  signerQueryParams?: URLSearchParams;
+
+  waas?: {
+    userId: string;
+  };
 
   store: BitskiProviderStore;
   sign: SignFn;
