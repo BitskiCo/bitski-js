@@ -1,5 +1,15 @@
 # bitski
 
+## 3.3.2-next.2
+
+### Patch Changes
+
+- [#360](https://github.com/BitskiCo/bitski-js/pull/360) [`090b983`](https://github.com/BitskiCo/bitski-js/commit/090b98393da4bc6e576066dddca903325f9ffb07) Thanks [@pzuraq](https://github.com/pzuraq)! - Add WAAS config options and signer query params config
+
+- Updated dependencies [[`090b983`](https://github.com/BitskiCo/bitski-js/commit/090b98393da4bc6e576066dddca903325f9ffb07)]:
+  - bitski-provider@2.1.0-next.2
+  - eth-provider-types@0.2.0-next.2
+
 ## 3.3.2-next.1
 
 ### Patch Changes
