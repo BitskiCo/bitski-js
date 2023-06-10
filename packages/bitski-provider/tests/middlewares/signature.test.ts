@@ -901,7 +901,7 @@ describe('signature middleware', () => {
       await sleep(10);
 
       expect(window.location.href).toMatch(
-        /https:\/\/sign\.bitski.com\/transactions\/.+\?redirectURI=https:\/\/test.com\/callback/,
+        /https:\/\/sign\.bitski.com\/transactions\/.+\?redirectURI=https%3A%2F%2Ftest.com%2Fcallback/,
       );
 
       window.location = location;
