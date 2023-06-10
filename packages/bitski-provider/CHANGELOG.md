@@ -1,5 +1,24 @@
 # bitski-provider
 
+## 2.1.0-next.1
+
+### Minor Changes
+
+- [#352](https://github.com/BitskiCo/bitski-js/pull/352) [`5277b19`](https://github.com/BitskiCo/bitski-js/commit/5277b1903ed74a6ced2f6428f7e50417c47d7885) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add Sepolia to list of default chains
+
+### Patch Changes
+
+- [#353](https://github.com/BitskiCo/bitski-js/pull/353) [`e452b76`](https://github.com/BitskiCo/bitski-js/commit/e452b76480503e29806d729d9c75476e67feb0ec) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Remove extra '.' in Sepolia chain config
+
+- Updated dependencies [[`65de42b`](https://github.com/BitskiCo/bitski-js/commit/65de42be31f3c1da983637b760f927a3c22bc319)]:
+  - eth-provider-types@0.2.0-next.0
+
+## 2.1.0-next.0
+
+### Minor Changes
+
+- [#347](https://github.com/BitskiCo/bitski-js/pull/347) [`38b66b0`](https://github.com/BitskiCo/bitski-js/commit/38b66b0c5a460a7f28fdb520d5c39d1f795e3d61) Thanks [@pzuraq](https://github.com/pzuraq)! - Add the ability for the SDK to handle multiple sequential signing reuests
+
 ## 2.0.0
 
 ### Major Changes

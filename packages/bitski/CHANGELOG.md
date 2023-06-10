@@ -1,5 +1,20 @@
 # bitski
 
+## 3.3.2-next.1
+
+### Patch Changes
+
+- Updated dependencies [[`5277b19`](https://github.com/BitskiCo/bitski-js/commit/5277b1903ed74a6ced2f6428f7e50417c47d7885), [`e452b76`](https://github.com/BitskiCo/bitski-js/commit/e452b76480503e29806d729d9c75476e67feb0ec), [`65de42b`](https://github.com/BitskiCo/bitski-js/commit/65de42be31f3c1da983637b760f927a3c22bc319)]:
+  - bitski-provider@2.1.0-next.1
+  - eth-provider-types@0.2.0-next.0
+
+## 3.3.2-next.0
+
+### Patch Changes
+
+- Updated dependencies [[`38b66b0`](https://github.com/BitskiCo/bitski-js/commit/38b66b0c5a460a7f28fdb520d5c39d1f795e3d61)]:
+  - bitski-provider@2.1.0-next.0
+
 ## 3.3.1
 
 ### Patch Changes
