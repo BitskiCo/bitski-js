@@ -15,6 +15,7 @@ import { createBitskiProvider } from 'bitski-provider';
 
 const provider = createBitskiProvider({
   clientId: 'your-client-id',
+  signerMethod: 'popup',
 });
 ```
 
@@ -62,6 +63,9 @@ interface BitskiProviderConfig {
   // A storage mechanism for storing provider state, such as current chain and
   // custom chain details.
   store?: BitskiProviderStore;
+
+  // One of the default signer methods that are included with the provider
+  signerMethod?: 'popup' | 'iframe' | 'redirect';
 
   // A signing function, see below for more details
   sign?: SignFn;

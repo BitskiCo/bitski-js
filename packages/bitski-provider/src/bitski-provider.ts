@@ -30,8 +30,15 @@ import { createTransactionValidatorMiddleware } from './middleware/transaction-v
 import { createTypedDataSanitizerMiddleware } from './middleware/typed-data-sanitizer';
 import createBrowserSigner from './signers/browser';
 import { BitskiProviderStateStore, LocalStorageStore } from './store';
-import { BitskiProviderConfig, InternalBitskiProviderConfig, RequestContext } from './types';
+import {
+  BitskiProviderConfig,
+  InternalBitskiProviderConfig,
+  RequestContext,
+  SignFn,
+} from './types';
 import { assert, expect } from './utils/type-utils';
+import { showIframe } from './signers/iframe';
+import { showPopup } from './signers/popup';
 
 // global value provided by scripts/insert-package-version.mjs
 declare const BITSKI_PROVIDER_VERSION: string;
@@ -77,6 +84,29 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
       console.warn('clientId is deprecated, please use appId instead');
     }
 
+    let sign: SignFn | undefined = config.sign;
+
+    if (config.signerMethod) {
+      switch (config.signerMethod) {
+        case 'popup':
+          sign = createBrowserSigner({ showPopup });
+          break;
+        case 'iframe':
+          sign = createBrowserSigner({ showPopup: showIframe });
+          break;
+        case 'redirect':
+          if (!config.transactionCallbackUrl) {
+            throw new Error(
+              'You must provide a transactionCallbackUrl when using the redirect sign method',
+            );
+          }
+      }
+    }
+
+    if (!sign) {
+      throw new Error('you must provide a signerMethod or custom sign function to BitskiProvider');
+    }
+
     this.config = {
       ...config,
 
@@ -92,7 +122,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
       signerBaseUrl: config.signerBaseUrl ?? BITSKI_SIGNER_BASE_URL,
 
       store: config.store ?? new LocalStorageStore(),
-      sign: config.sign ?? createBrowserSigner(),
+      sign,
     };
 
     this.store = new BitskiProviderStateStore(this.config.store);

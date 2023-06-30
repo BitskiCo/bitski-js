@@ -5,6 +5,7 @@ import { createTestProvider } from '../util/create-provider';
 import { fireEvent } from '@testing-library/dom';
 import { sleep } from '../util/async';
 import { Mainnet } from '../../src/constants';
+import { showIframe } from '../../src/signers/iframe';
 
 const getAccessToken = async () => 'test-access-token';
 
@@ -442,7 +443,10 @@ describe('signature middleware', () => {
 
     test('it should create a signature via iframe', async () => {
       expect.assertions(5);
-      const provider = createTestProvider({ sign: createBrowserSigner(), getAccessToken });
+      const provider = createTestProvider({
+        sign: createBrowserSigner({ showPopup: showIframe }),
+        getAccessToken,
+      });
 
       fetchMock.mockResponse(async (req) => {
         expect(req.headers.get('Authorization')).toBe('Bearer test-access-token');
@@ -497,7 +501,7 @@ describe('signature middleware', () => {
 
     test('it should pass errors from signing', async () => {
       expect.assertions(4);
-      const provider = createTestProvider({ sign: createBrowserSigner() });
+      const provider = createTestProvider({ sign: createBrowserSigner({ showPopup: showIframe }) });
 
       fetchMock.mockResponse(async (req) => {
         expect(req.method).toBe('POST');
@@ -553,7 +557,7 @@ describe('signature middleware', () => {
 
     test('should ignore messages when there is no current request', () => {
       expect.assertions(0);
-      createTestProvider({ sign: createBrowserSigner() });
+      createTestProvider({ sign: createBrowserSigner({ showPopup: showIframe }) });
 
       // Nothing should happen, no errors, etc
       triggerMessage(
@@ -570,7 +574,7 @@ describe('signature middleware', () => {
 
     test('should ignore messages received from another host', async () => {
       expect.assertions(4);
-      const provider = createTestProvider({ sign: createBrowserSigner() });
+      const provider = createTestProvider({ sign: createBrowserSigner({ showPopup: showIframe }) });
 
       fetchMock.mockResponse(async (req) => {
         expect(req.method).toBe('POST');
@@ -636,7 +640,7 @@ describe('signature middleware', () => {
 
     test('should ignore messages received with no data', async () => {
       expect.assertions(4);
-      const provider = createTestProvider({ sign: createBrowserSigner() });
+      const provider = createTestProvider({ sign: createBrowserSigner({ showPopup: showIframe }) });
 
       fetchMock.mockResponse(async (req) => {
         expect(req.method).toBe('POST');
@@ -698,7 +702,7 @@ describe('signature middleware', () => {
 
     test('should ignore messages when from same window', async () => {
       expect.assertions(4);
-      const provider = createTestProvider({ sign: createBrowserSigner() });
+      const provider = createTestProvider({ sign: createBrowserSigner({ showPopup: showIframe }) });
 
       fetchMock.mockResponse(async (req) => {
         expect(req.method).toBe('POST');
@@ -765,7 +769,7 @@ describe('signature middleware', () => {
 
     test('sign() should enqueue multiple sign requests', async () => {
       expect.assertions(8);
-      const provider = createTestProvider({ sign: createBrowserSigner() });
+      const provider = createTestProvider({ sign: createBrowserSigner({ showPopup: showIframe }) });
 
       fetchMock.mockResponse(async (req) => {
         expect(req.method).toBe('POST');
@@ -841,7 +845,7 @@ describe('signature middleware', () => {
     test('it should redirect to signer if a transaction callback url is included in config', async () => {
       expect.assertions(5);
       const provider = createTestProvider({
-        sign: createBrowserSigner(),
+        sign: createBrowserSigner({ showPopup: showIframe }),
         transactionCallbackUrl: 'https://test.com/callback',
       });
 
