@@ -1,5 +1,22 @@
 # bitski-provider
 
+## 2.1.0
+
+### Minor Changes
+
+- [#352](https://github.com/BitskiCo/bitski-js/pull/352) [`5277b19`](https://github.com/BitskiCo/bitski-js/commit/5277b1903ed74a6ced2f6428f7e50417c47d7885) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add Sepolia to list of default chains
+
+* [#360](https://github.com/BitskiCo/bitski-js/pull/360) [`090b983`](https://github.com/BitskiCo/bitski-js/commit/090b98393da4bc6e576066dddca903325f9ffb07) Thanks [@pzuraq](https://github.com/pzuraq)! - Add WAAS config options and signer query params config
+
+- [#347](https://github.com/BitskiCo/bitski-js/pull/347) [`38b66b0`](https://github.com/BitskiCo/bitski-js/commit/38b66b0c5a460a7f28fdb520d5c39d1f795e3d61) Thanks [@pzuraq](https://github.com/pzuraq)! - Add the ability for the SDK to handle multiple sequential signing reuests
+
+### Patch Changes
+
+- [#353](https://github.com/BitskiCo/bitski-js/pull/353) [`e452b76`](https://github.com/BitskiCo/bitski-js/commit/e452b76480503e29806d729d9c75476e67feb0ec) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Remove extra '.' in Sepolia chain config
+
+- Updated dependencies [[`090b983`](https://github.com/BitskiCo/bitski-js/commit/090b98393da4bc6e576066dddca903325f9ffb07), [`1a1efd5`](https://github.com/BitskiCo/bitski-js/commit/1a1efd5c2b6eae90c35aafd7cb35f6f3028b6394), [`65de42b`](https://github.com/BitskiCo/bitski-js/commit/65de42be31f3c1da983637b760f927a3c22bc319)]:
+  - eth-provider-types@0.2.0
+
 ## 2.1.0-next.2
 
 ### Minor Changes
