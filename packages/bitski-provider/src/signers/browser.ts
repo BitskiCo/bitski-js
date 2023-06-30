@@ -48,7 +48,9 @@ const submitTransaction = async (
     headers['Authorization'] = `Bearer ${await config.getAccessToken()}`;
   }
 
-  const response = (await fetchJsonWithRetry(config.fetch, 5, `${config.apiBaseUrl}/transactions`, {
+  const transactionApiUrl = config.waas?.transactionProxyUrl ?? `${config.apiBaseUrl}/transactions`;
+
+  const response = (await fetchJsonWithRetry(config.fetch, 5, transactionApiUrl, {
     method: 'POST',
     body: { transaction },
     headers,
@@ -130,7 +132,7 @@ const showIframe = (
   return promise;
 };
 
-const handleCallback = (callback: any): void => {
+const handleCallback = async (callback: any): Promise<void> => {
   const currentRequest = SIGN_REQUEST_QUEUE.shift();
 
   if (!currentRequest) {
@@ -140,7 +142,7 @@ const handleCallback = (callback: any): void => {
   const { resolve, reject, dialog } = currentRequest;
 
   // Dismiss current dialog
-  dialog.close();
+  await dialog.close();
 
   // Call the callback to complete the request
   if (callback.error) {

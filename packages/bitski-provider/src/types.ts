@@ -62,6 +62,7 @@ export interface InternalBitskiProviderConfig<Extra = unknown> {
 
   waas?: {
     userId: string;
+    transactionProxyUrl: string;
   };
 
   store: BitskiProviderStore;
