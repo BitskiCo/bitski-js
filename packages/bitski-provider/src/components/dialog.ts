@@ -1,3 +1,4 @@
+import { sleep } from '../utils/async';
 import css from '../styles/dialog';
 
 const TEMPLATE = `
@@ -78,12 +79,11 @@ export class Dialog {
   /**
    * Dismisses the dialog without triggering the close handler.
    */
-  public close(): void {
-    // Allow 500ms for the animations to finish before removing elements from DOM
-    setTimeout(() => {
-      this.container.remove();
-    }, 500);
+  public async close(): Promise<void> {
     this.hide();
+    // Allow 500ms for the animations to finish before removing elements from DOM
+    await sleep(500);
+    this.container.remove();
   }
 
   /**
