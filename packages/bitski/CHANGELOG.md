@@ -1,5 +1,16 @@
 # bitski
 
+## 3.4.0
+
+### Minor Changes
+
+- [#364](https://github.com/BitskiCo/bitski-js/pull/364) [`646a99d`](https://github.com/BitskiCo/bitski-js/commit/646a99dd73273d5ee07d78983b5546be927fbe66) Thanks [@pzuraq](https://github.com/pzuraq)! - Add popup method for signing transactions
+
+### Patch Changes
+
+- Updated dependencies [[`646a99d`](https://github.com/BitskiCo/bitski-js/commit/646a99dd73273d5ee07d78983b5546be927fbe66)]:
+  - bitski-provider@3.0.0
+
 ## 3.3.2
 
 ### Patch Changes
