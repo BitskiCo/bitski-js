@@ -77,7 +77,9 @@ type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>;
 export type BitskiProviderConfig<Extra = unknown> = Optional<
   InternalBitskiProviderConfig<Extra>,
   'apiBaseUrl' | 'signerBaseUrl' | 'fetch' | 'additionalHeaders' | 'sign' | 'getUser' | 'store'
->;
+> & {
+  signerMethod?: 'popup' | 'iframe' | 'redirect';
+};
 
 /**
  * Each provider request is made with a context object. The context object contains

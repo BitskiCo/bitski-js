@@ -217,6 +217,7 @@ export class BitskiSDK {
         ...options.additionalHeaders,
       },
       prependMiddleware: undefined,
+      signerMethod: 'iframe',
     });
   }
 
