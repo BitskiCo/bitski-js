@@ -417,7 +417,10 @@ export type EthMethodParams = {
   [EthMethod.eth_getUserOperationByHash]: [hash: string];
   [EthMethod.eth_getUserOperationReceipt]: [hash: string];
   [EthMethod.eth_supportedEntryPoints]: void;
-  [EthMethod.eth_sendUserOperation]: [userOperations: UserOperation[], entrypointAddress: string];
+  [EthMethod.eth_sendUserOperation]: [
+    userOperations: UserOperation | UserOperation[],
+    entrypointAddress: string,
+  ];
 };
 
 export type EthMethodResults = {
