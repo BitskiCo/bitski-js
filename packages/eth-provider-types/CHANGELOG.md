@@ -1,5 +1,11 @@
 # eth-provider-types
 
+## 0.2.1
+
+### Patch Changes
+
+- [#368](https://github.com/BitskiCo/bitski-js/pull/368) [`44e28e6`](https://github.com/BitskiCo/bitski-js/commit/44e28e6a8d71c7c509bac56894ec62e5abb5d985) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Allow single user operation to be sent
+
 ## 0.2.0
 
 ### Minor Changes
