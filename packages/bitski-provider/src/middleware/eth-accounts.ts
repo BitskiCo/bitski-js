@@ -1,6 +1,5 @@
 import { EthMethod } from 'eth-provider-types';
 import { createAsyncMiddleware, JsonRpcMiddleware, JsonRpcRequest } from 'json-rpc-engine';
-import { BITSKI_RPC_BASE_URL } from '../constants';
 import { getRequestContext } from '../utils/request-context';
 import { InternalBitskiProviderConfig } from '../types';
 import { fetchJsonRpcWithRetry } from '../utils/fetch';
@@ -20,7 +19,7 @@ const fetchAccounts = async (
     headers['Authorization'] = `Bearer ${await config.getAccessToken()}`;
   }
 
-  return (await fetchJsonRpcWithRetry(config.fetch, 5, `${BITSKI_RPC_BASE_URL}/mainnet`, {
+  return (await fetchJsonRpcWithRetry(config.fetch, 5, `${config.apiBaseUrl}/web3/mainnet`, {
     method: 'POST',
     headers,
     body: {
