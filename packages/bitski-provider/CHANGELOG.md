@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 3.1.0
+
+### Minor Changes
+
+- [#374](https://github.com/BitskiCo/bitski-js/pull/374) [`3b61a22`](https://github.com/BitskiCo/bitski-js/commit/3b61a22c8401a17b5b25b8ea91fe93461e0a9511) Thanks [@pzuraq](https://github.com/pzuraq)! - Make RPC base url use API config URL
+
 ## 3.0.0
 
 ### Major Changes
