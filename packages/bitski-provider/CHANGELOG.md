@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 3.1.1
+
+### Patch Changes
+
+- [#376](https://github.com/BitskiCo/bitski-js/pull/376) [`524d810`](https://github.com/BitskiCo/bitski-js/commit/524d8105c797bd4ea76e40d467c01986484aa38b) Thanks [@pzuraq](https://github.com/pzuraq)! - Fix signer redirect flow
+
 ## 3.1.0
 
 ### Minor Changes
