@@ -95,6 +95,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
           sign = createBrowserSigner({ showPopup: showIframe });
           break;
         case 'redirect':
+          sign = createBrowserSigner();
           if (!config.transactionCallbackUrl) {
             throw new Error(
               'You must provide a transactionCallbackUrl when using the redirect sign method',

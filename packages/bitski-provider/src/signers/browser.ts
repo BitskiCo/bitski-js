@@ -47,10 +47,10 @@ export type ShowSignerPopupFn = (
   submitTransaction: () => Promise<Transaction>,
 ) => Promise<string>;
 export interface BrowserSignerConfig {
-  showPopup: ShowSignerPopupFn;
+  showPopup?: ShowSignerPopupFn;
 }
 
-export default function createBrowserSigner({ showPopup }: BrowserSignerConfig): SignFn {
+export default function createBrowserSigner({ showPopup }: BrowserSignerConfig = {}): SignFn {
   return async (method, params, requestContext): Promise<string> => {
     const { config } = requestContext;
     const transaction = await createBitskiTransaction(
@@ -65,6 +65,10 @@ export default function createBrowserSigner({ showPopup }: BrowserSignerConfig):
       const persisted = await submitTransaction(transaction, config);
       return redirectToCallbackURL(persisted, config);
     } else {
+      if (!showPopup) {
+        throw new Error('You must provide a showPopup function when using the popup sign method');
+      }
+
       // Show the modal (await response)
       return showPopup(transaction, requestContext, () => submitTransaction(transaction, config));
     }
