@@ -17,6 +17,7 @@ import {
   Mumbai,
   Network,
   Polygon,
+  Sepolia,
 } from './-private/network';
 
 export type { ConnectButtonSize, ConnectButtonOptions } from './-private/components/connect-button';
@@ -286,6 +287,8 @@ function networkFromName(networkName: string): Network {
       return Mainnet;
     case 'goerli':
       return Goerli;
+    case 'sepolia':
+      return Sepolia;
     case 'polygon':
       return Polygon;
     case 'mumbai':
