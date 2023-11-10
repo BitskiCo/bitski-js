@@ -13,6 +13,11 @@ export const Goerli: Network = {
   rpcUrl: 'https://api.bitski.com/v1/web3/goerli',
 };
 
+export const Sepolia: Network = {
+  chainId: 5,
+  rpcUrl: 'https://api.bitski.com/v1/web3/sepolia',
+};
+
 export const Polygon: Network = {
   chainId: 137,
   rpcUrl: 'https://api.bitski.com/v1/web3/polygon',
