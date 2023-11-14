@@ -108,6 +108,16 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
       throw new Error('you must provide a signerMethod or custom sign function to BitskiProvider');
     }
 
+    let apiBaseUrl = config.apiBaseUrl ?? BITSKI_API_BASE_URL;
+
+    if (apiBaseUrl.endsWith('/v1')) {
+      console.warn(
+        'apiBaseUrl should not end with /v1 in new versions, please remove the trailing /v1',
+      );
+
+      apiBaseUrl = apiBaseUrl.slice(0, -3);
+    }
+
     this.config = {
       ...config,
 
@@ -119,7 +129,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
         ...(config.additionalHeaders ?? {}),
       },
 
-      apiBaseUrl: config.apiBaseUrl ?? BITSKI_API_BASE_URL,
+      apiBaseUrl,
       signerBaseUrl: config.signerBaseUrl ?? BITSKI_SIGNER_BASE_URL,
 
       store: config.store ?? new LocalStorageStore(),

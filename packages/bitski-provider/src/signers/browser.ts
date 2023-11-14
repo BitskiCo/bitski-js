@@ -19,7 +19,8 @@ const submitTransaction = async (
     headers['Authorization'] = `Bearer ${await config.getAccessToken()}`;
   }
 
-  const transactionApiUrl = config.waas?.transactionProxyUrl ?? `${config.apiBaseUrl}/transactions`;
+  const transactionApiUrl =
+    config.waas?.transactionProxyUrl ?? `${config.apiBaseUrl}/v1/transactions`;
 
   const response = (await fetchJsonWithRetry(config.fetch, 5, transactionApiUrl, {
     method: 'POST',

@@ -4,7 +4,7 @@ import { EthChainDefinitionWithRpcUrl } from './types';
 import { toHex } from './utils/parse-utils';
 
 // URLs
-export const BITSKI_API_BASE_URL = 'https://api.bitski.com/v1';
+export const BITSKI_API_BASE_URL = 'https://api.bitski.com';
 export const BITSKI_SIGNER_BASE_URL = 'https://sign.bitski.com';
 export const IFRAME_MESSAGE_ORIGIN_ENDS_WITH = '.bitski.com';
 

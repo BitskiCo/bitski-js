@@ -2,24 +2,21 @@ import { EthMethod } from 'eth-provider-types';
 import { createTestProvider } from '../util/create-provider';
 
 describe('eth-accounts middleware', () => {
-  test('loads accounts via RPC', async () => {
-    expect.assertions(4);
+  test('loads accounts via blockchain accounts API', async () => {
+    expect.assertions(3);
     const provider = createTestProvider();
 
     fetchMock.mockResponse(async (req) => {
-      expect(req.url).toBe('https://api.bitski.com/v1/web3/mainnet');
-      expect(req.method).toBe('POST');
-
-      const body = await req.json();
-
-      expect(body).toMatchObject({
-        method: 'eth_accounts',
-      });
+      expect(req.url).toBe('https://api.bitski.com/v2/blockchain/accounts');
+      expect(req.method).toBe('GET');
 
       return JSON.stringify({
-        id: 0,
-        jsonrpc: '2.0',
-        result: ['0x123'],
+        accounts: [
+          {
+            kind: 'bitski',
+            address: '0x123',
+          },
+        ],
       });
     });
 
@@ -27,8 +24,34 @@ describe('eth-accounts middleware', () => {
     expect(result).toEqual(['0x123']);
   });
 
+  test('prioritizes contract wallets over vault wallets', async () => {
+    expect.assertions(3);
+    const provider = createTestProvider();
+
+    fetchMock.mockResponse(async (req) => {
+      expect(req.url).toBe('https://api.bitski.com/v2/blockchain/accounts');
+      expect(req.method).toBe('GET');
+
+      return JSON.stringify({
+        accounts: [
+          {
+            kind: 'bitski',
+            address: '0x123',
+          },
+          {
+            kind: 'contract-wallet',
+            address: '0x456',
+          },
+        ],
+      });
+    });
+
+    const result = await provider.request({ method: EthMethod.eth_accounts });
+    expect(result).toEqual(['0x456']);
+  });
+
   test('uses access token if available', async () => {
-    expect.assertions(5);
+    expect.assertions(4);
     const provider = createTestProvider({
       async getAccessToken() {
         return 'test-access-token';
@@ -37,64 +60,21 @@ describe('eth-accounts middleware', () => {
 
     fetchMock.mockResponse(async (req) => {
       expect(req.headers.get('Authorization')).toBe('Bearer test-access-token');
-      expect(req.url).toBe('https://api.bitski.com/v1/web3/mainnet');
-      expect(req.method).toBe('POST');
-
-      const body = await req.json();
-
-      expect(body).toMatchObject({
-        method: 'eth_accounts',
-      });
+      expect(req.url).toBe('https://api.bitski.com/v2/blockchain/accounts');
+      expect(req.method).toBe('GET');
 
       return JSON.stringify({
-        id: 0,
-        jsonrpc: '2.0',
-        result: ['0x123'],
+        accounts: [
+          {
+            kind: 'bitski',
+            address: '0x123',
+          },
+        ],
       });
     });
 
     const result = await provider.request({ method: EthMethod.eth_accounts });
     expect(result).toEqual(['0x123']);
-  });
-
-  test('uses user accounts if available for the first request', async () => {
-    jest.useFakeTimers();
-
-    expect.assertions(5);
-    const provider = createTestProvider({
-      async getUser() {
-        return {
-          id: 'test-user-id',
-          accounts: ['0x456'],
-        };
-      },
-    });
-
-    fetchMock.mockResponse(async (req) => {
-      expect(req.url).toBe('https://api.bitski.com/v1/web3/mainnet');
-      expect(req.method).toBe('POST');
-
-      const body = await req.json();
-
-      expect(body).toMatchObject({
-        method: 'eth_accounts',
-        params: [],
-      });
-
-      return JSON.stringify({
-        id: 0,
-        jsonrpc: '2.0',
-        result: ['0x123'],
-      });
-    });
-
-    const result = await provider.request({ method: EthMethod.eth_accounts });
-    expect(result).toEqual(['0x456']);
-
-    jest.runAllTimers();
-
-    const result2 = await provider.request({ method: EthMethod.eth_accounts });
-    expect(result2).toEqual(['0x123']);
   });
 
   test('caches accounts response based on user', async () => {
@@ -112,19 +92,16 @@ describe('eth-accounts middleware', () => {
     });
 
     fetchMock.mockResponse(async (req) => {
-      expect(req.url).toBe('https://api.bitski.com/v1/web3/mainnet');
-      expect(req.method).toBe('POST');
-
-      const body = await req.json();
-
-      expect(body).toMatchObject({
-        method: 'eth_accounts',
-      });
+      expect(req.url).toBe('https://api.bitski.com/v2/blockchain/accounts');
+      expect(req.method).toBe('GET');
 
       return JSON.stringify({
-        id: 0,
-        jsonrpc: '2.0',
-        result: user.accounts,
+        accounts: [
+          {
+            kind: 'bitski',
+            address: user.accounts[0],
+          },
+        ],
       });
     });
 
