@@ -7,7 +7,6 @@ describe('transaction-validator middleware', () => {
     const provider = createTestProvider({
       getUser: async () => ({
         id: 'test-id',
-        accounts: ['0x123'],
       }),
     });
 
@@ -18,7 +17,18 @@ describe('transaction-validator middleware', () => {
       gasPrice: '0x',
     };
 
-    fetchMock.mockResponse(async (req) => {
+    fetchMock.once(async () => {
+      return JSON.stringify({
+        accounts: [
+          {
+            kind: 'bitski',
+            address: '0x123',
+          },
+        ],
+      });
+    });
+
+    fetchMock.once(async (req) => {
       const { method, params } = await req.json();
 
       expect(method).toEqual(EthMethod.eth_sendTransaction);
