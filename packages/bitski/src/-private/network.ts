@@ -25,7 +25,7 @@ export const Base: Network = {
 
 export const BaseGoerli: Network = {
   chainId: 84531,
-  rpcUrl: 'https://api.bitski.com/v1/web3/basegoerli',
+  rpcUrl: 'https://api.bitski.com/v1/web3/basegor',
 };
 
 export const Polygon: Network = {
