@@ -1,5 +1,15 @@
 # bitski-provider
 
+## 3.2.0
+
+### Minor Changes
+
+- [#385](https://github.com/BitskiCo/bitski-js/pull/385) [`cccf708`](https://github.com/BitskiCo/bitski-js/commit/cccf708b035138d7cc356bf3ea458dc1d354bef3) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add Base and Base Goerli to networks list
+
+### Patch Changes
+
+- [#383](https://github.com/BitskiCo/bitski-js/pull/383) [`14d28a4`](https://github.com/BitskiCo/bitski-js/commit/14d28a4653a45ac6677c3f75954458121c12b54d) Thanks [@pzuraq](https://github.com/pzuraq)! - Updates bitski-provider to use the blockchain accounts API
+
 ## 3.1.1
 
 ### Patch Changes
