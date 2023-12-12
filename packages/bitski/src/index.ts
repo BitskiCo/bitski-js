@@ -279,6 +279,7 @@ export class Bitski {
 
 // Note: duplicated so we don't include the whole module
 export const LOGIN_HINT_SIGNUP = 'signup';
+export const LOGIN_PROMPT = 'login';
 
 function networkFromName(networkName: string): Network {
   switch (networkName) {

@@ -1,4 +1,4 @@
-import { LOGIN_HINT_SIGNUP } from '../src/index';
+import { LOGIN_HINT_SIGNUP, LOGIN_PROMPT } from '../src/index';
 import { NoHashQueryStringUtils } from '../src/-private/utils/no-hash-query-string-utils';
 import { MockOAuthManager } from './util/mock-oauth-manager';
 import fetchMock from 'jest-fetch-mock';
@@ -84,7 +84,7 @@ describe('oauth-manager', () => {
   });
 
   test('signInPopup passes options to authorization request', () => {
-    expect.assertions(2);
+    expect.assertions(3);
     const manager = createInstance();
     jest.spyOn(window, 'open').mockImplementation(() => {
       return {
@@ -93,18 +93,20 @@ describe('oauth-manager', () => {
         innerHeight: 1000,
       } as any;
     });
-    manager.signInPopup({ login_hint: LOGIN_HINT_SIGNUP });
+    manager.signInPopup({ login_hint: LOGIN_HINT_SIGNUP, prompt: LOGIN_PROMPT });
     expect(manager.currentAuthRequest).toBeDefined();
     expect(manager.currentAuthRequest?.extras?.login_hint).toBe(LOGIN_HINT_SIGNUP);
+    expect(manager.currentAuthRequest?.extras?.prompt).toBe(LOGIN_PROMPT);
   });
 
   test('signInRedirect passes options to authorization request', () => {
-    expect.assertions(2);
+    expect.assertions(3);
     const manager = createInstance();
     window.location.assign = jest.fn();
-    manager.signInRedirect({ login_hint: LOGIN_HINT_SIGNUP });
+    manager.signInPopup({ login_hint: LOGIN_HINT_SIGNUP, prompt: LOGIN_PROMPT });
     expect(manager.currentAuthRequest).toBeDefined();
     expect(manager.currentAuthRequest?.extras?.login_hint).toBe(LOGIN_HINT_SIGNUP);
+    expect(manager.currentAuthRequest?.extras?.prompt).toBe(LOGIN_PROMPT);
   });
 
   test('can handle oauth error response', () => {
