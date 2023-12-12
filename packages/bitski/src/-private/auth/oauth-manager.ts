@@ -34,6 +34,7 @@ export interface OAuthManagerOptions {
 
 export interface SignInOptions {
   login_hint?: string;
+  prompt?: string;
 }
 
 // Use this constant in login_hint to indicate that the sign up UI should be displayed
@@ -241,6 +242,10 @@ export class OAuthManager {
     if (opts.login_hint) {
       // Only assign extras if login_hint is included in the options
       request.extras = { login_hint: opts.login_hint };
+    }
+
+    if (opts.prompt) {
+      request.extras = { ...request.extras, prompt: opts.prompt };
     }
 
     return request;

@@ -186,6 +186,16 @@ import { LOGIN_HINT_SIGNUP } from 'bitski';
 bitski.signIn({ login_hint: LOGIN_HINT_SIGNUP });
 ```
 
+### Customizing the login prompt
+
+If you want to select the WaaS account on login, you can additionally pass the `prompt` parameter to the `signIn` method.
+
+```ts
+import { LOGIN_HINT_SIGNUP, LOGIN_PROMPT } from 'bitski';
+
+bitski.signIn({ login_hint: LOGIN_HINT_SIGNUP, prompt: LOGIN_PROMPT });
+```
+
 _Note: In order for the popup window to properly open in most browsers, this needs to be triggered with a click action, otherwise it could be blocked. For your convenience, we've included a standard login button that handles that for you._
 
 ### Using the Bitski connect button
@@ -247,7 +257,7 @@ There are a few options you can pass in. These are not required, but allow you t
 - container: An HTML element that you want to inject the button into. If you don't pass anything in you can inject it yourself by accessing the button's element key.
 - size: The size of the button. `SMALL`, `MEDIUM`, or `LARGE`. Default is `MEDIUM`.
 - authMethod: The sign in method to use. `POPUP` or `REDIRECT`. Default is `POPUP`.
-- signInOptions: The options to pass during the sign in request (currently, only login_hint is supported. See above.)
+- signInOptions: The options to pass during the sign in request (login_hint and prompt are supported. See above.)
 
 Note that the `callback` will be called for either successful or failed login attempts. To handle the case where the user cancels part way through, set the `onCancel` handler.
 

@@ -18,7 +18,7 @@ export enum ConnectButtonSize {
 export interface ConnectButtonOptions {
   // The auth method to use (popup or redirect). Defaults to popup.
   authMethod?: OAuthSignInMethod;
-  // Additional sign in options (login_hint) to call sign in with.
+  // Additional sign in options (login_hint, prompt) to call sign in with.
   signInOptions?: SignInOptions;
   // Existing HTML element to embed the Bitski connect button in.
   container?: HTMLElement;
