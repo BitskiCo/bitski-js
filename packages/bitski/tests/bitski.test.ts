@@ -166,7 +166,7 @@ describe('authentication', () => {
     const authProvider = (await (bitski as any).loadSDK()).authProvider;
     const spy = jest.spyOn(authProvider, 'signIn');
     spy.mockResolvedValue(dummyUser);
-    const opts = { login_hint: 'foo' };
+    const opts = { login_hint: 'foo', prompt: 'login' };
     return bitski.signIn(opts).then((user) => {
       expect(spy).toHaveBeenCalledWith(OAuthSignInMethod.Popup, opts);
       expect(user).toBe(dummyUser);
@@ -195,7 +195,7 @@ describe('authentication', () => {
     const authProvider = (await (bitski as any).loadSDK()).authProvider;
     const spy = jest.spyOn(authProvider, 'signIn');
     spy.mockResolvedValue(dummyUser);
-    const opts = { login_hint: 'foo' };
+    const opts = { login_hint: 'foo', prompt: 'login' };
     bitski.signInRedirect(opts);
 
     return new Promise((resolve) => {
