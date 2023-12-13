@@ -28,6 +28,11 @@ export interface PaymasterDefinition {
   rpcMethod?: string;
 }
 
+export interface WaasDefinition {
+  userId?: string;
+  transactionProxyUrl?: string;
+}
+
 export interface TransactionContext {
   chainId?: number;
   rpcUrl?: string;
