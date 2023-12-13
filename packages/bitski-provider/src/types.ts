@@ -9,7 +9,7 @@ import {
 } from 'eth-provider-types';
 import { JsonRpcRequest, PendingJsonRpcResponse } from 'json-rpc-engine';
 import type { BitskiProviderStateStore } from './store';
-import { PaymasterDefinition } from './utils/transaction';
+import { PaymasterDefinition, WaasDefinition } from './utils/transaction';
 
 export interface User {
   id: string;
@@ -45,7 +45,7 @@ export interface BitskiProviderStore {
 export interface InternalBitskiProviderConfig<Extra = unknown> {
   fetch: typeof fetch;
   additionalHeaders: Record<string, string>;
-
+  paymaster?: PaymasterDefinition;
   prependMiddleware?: ProviderMiddleware<unknown[], unknown, Extra>[];
   pollingInterval?: number;
   disableCaching?: boolean;
@@ -61,10 +61,7 @@ export interface InternalBitskiProviderConfig<Extra = unknown> {
   transactionCallbackUrl?: string;
   signerQueryParams?: URLSearchParams;
 
-  waas?: {
-    userId: string;
-    transactionProxyUrl: string;
-  };
+  waas?: WaasDefinition;
 
   store: BitskiProviderStore;
   sign: SignFn;
@@ -92,6 +89,7 @@ export interface RequestContext<Extra = unknown> {
   // The current chain the request is being made on
   chain: EthChainDefinitionWithRpcUrl;
   paymaster?: PaymasterDefinition;
+  waas?: WaasDefinition;
 
   // The configuration of the provider
   config: InternalBitskiProviderConfig<Extra>;

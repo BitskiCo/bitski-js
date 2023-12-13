@@ -24,16 +24,22 @@ export interface BitskiSDKOptions {
   store?: BitskiProviderStore;
 }
 
-export interface Paymaster {
+export interface PaymasterDefinition {
   paymasterUrl: string;
   policyId?: string;
   rpcMethod?: string;
 }
 
+export interface WaasDefinition {
+  userId?: string;
+  transactionProxyUrl?: string;
+}
+
 export interface ProviderOptions extends Omit<Partial<BitskiProviderConfig>, 'prependMiddleware'> {
   networkName?: string;
   network?: Network;
-  paymaster?: Paymaster | Paymaster[];
+  paymaster?: PaymasterDefinition | PaymasterDefinition[];
+  waas?: WaasDefinition;
   // @deprecated
   webBaseUrl?: string;
   // @deprecated
