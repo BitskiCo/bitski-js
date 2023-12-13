@@ -1,7 +1,7 @@
 import { JsonRpcMiddleware } from 'json-rpc-engine';
 import createSubscriptionManager from 'eth-json-rpc-filters/subscriptionManager';
 import { createLegacyMiddleware } from '../utils/legacy-middleware';
-import SafeEventEmitter from 'safe-event-emitter';
+import SafeEventEmitter from '@metamask/safe-event-emitter';
 import { EthEvent, EthProviderMessageType } from 'eth-provider-types';
 
 interface SubNotification {

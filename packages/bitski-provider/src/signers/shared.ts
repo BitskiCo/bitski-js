@@ -11,10 +11,11 @@ export const getSignerUrl = (
   }
 
   if (config.waas?.enabled || config.waas?.userId) {
-    let federatedId = btoa(`${config.appId}`);
+    const appId = config.appId ?? config.clientId;
+    let federatedId = btoa(`${appId}`);
 
     if (config.waas?.userId) {
-      federatedId = btoa(`${config.appId}:${config.waas?.userId}`);
+      federatedId = btoa(`${appId}:${config.waas?.userId}`);
     }
 
     searchParams.set('loginHint', `fa_${federatedId}`);
