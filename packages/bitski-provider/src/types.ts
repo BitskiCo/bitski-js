@@ -89,7 +89,6 @@ export interface RequestContext<Extra = unknown> {
   // The current chain the request is being made on
   chain: EthChainDefinitionWithRpcUrl;
   paymaster?: PaymasterDefinition | PaymasterDefinition[];
-  waas?: WaasDefinition;
 
   // The configuration of the provider
   config: InternalBitskiProviderConfig<Extra>;
