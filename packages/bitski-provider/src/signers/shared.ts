@@ -10,11 +10,11 @@ export const getSignerUrl = (
     searchParams.set('redirectURI', config.transactionCallbackUrl);
   }
 
-  if (config.waas) {
+  if (config.waas?.enabled) {
     let federatedId = btoa(`${config.appId}`);
 
-    if (config.waas.userId) {
-      federatedId = btoa(`${config.appId}:${config.waas.userId}`);
+    if (config.waas?.userId) {
+      federatedId = btoa(`${config.appId}:${config.waas?.userId}`);
     }
 
     searchParams.set('loginHint', `fa_${federatedId}`);

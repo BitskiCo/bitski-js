@@ -29,6 +29,7 @@ export interface PaymasterDefinition {
 }
 
 export interface WaasDefinition {
+  enabled: boolean;
   userId?: string;
   transactionProxyUrl?: string;
 }
