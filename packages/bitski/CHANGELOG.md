@@ -1,5 +1,11 @@
 # bitski
 
+## 3.7.0
+
+### Minor Changes
+
+- [#392](https://github.com/BitskiCo/bitski-js/pull/392) [`9fe6b48`](https://github.com/BitskiCo/bitski-js/commit/9fe6b484bafef80df8069abe994dd0acf8d68f40) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Allow users to specify waas and paymaster via SDK.
+
 ## 3.6.0
 
 ### Minor Changes
