@@ -9,6 +9,7 @@ import {
 } from 'eth-provider-types';
 import { JsonRpcRequest, PendingJsonRpcResponse } from 'json-rpc-engine';
 import type { BitskiProviderStateStore } from './store';
+import { PaymasterDefinition } from './utils/transaction';
 
 export interface User {
   id: string;
@@ -90,6 +91,7 @@ export type BitskiProviderConfig<Extra = unknown> = Optional<
 export interface RequestContext<Extra = unknown> {
   // The current chain the request is being made on
   chain: EthChainDefinitionWithRpcUrl;
+  paymaster?: PaymasterDefinition;
 
   // The configuration of the provider
   config: InternalBitskiProviderConfig<Extra>;

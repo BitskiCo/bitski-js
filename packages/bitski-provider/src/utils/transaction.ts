@@ -22,9 +22,16 @@ export interface Transaction {
   context: TransactionContext;
 }
 
+export interface PaymasterDefinition {
+  paymasterUrl: string;
+  policyId?: string;
+  rpcMethod?: string;
+}
+
 export interface TransactionContext {
   chainId?: number;
   rpcUrl?: string;
+  paymaster?: PaymasterDefinition;
   from?: string;
   [key: string]: unknown;
 }
@@ -42,9 +49,10 @@ export const createBitskiTransaction = <T extends EthSignMethod>(
   method: T,
   params: EthSignMethodParams[T],
   chain: EthChainDefinitionWithRpcUrl,
+  paymaster?: PaymasterDefinition,
   additionalContext?: Record<string, string>,
 ): Transaction => {
-  const context = createContext(method, params, chain, additionalContext);
+  const context = createContext(method, params, chain, paymaster, additionalContext);
   const kind = kindForMethod(method);
   const extractedPayload = createPayload(method, params);
   return {
@@ -59,6 +67,7 @@ const createContext = <T extends EthSignMethod>(
   method: T,
   params: EthSignMethodParams[T],
   chain: EthChainDefinitionWithRpcUrl,
+  paymaster?: PaymasterDefinition,
   additionalContext?: Record<string, string>,
 ): TransactionContext => {
   switch (method) {
@@ -69,6 +78,7 @@ const createContext = <T extends EthSignMethod>(
       return {
         chainId: parseInt(chain.chainId, 16),
         rpcUrl: !SUPPORTED_CHAIN_IDS.includes(chain.chainId) ? chain.rpcUrls[0] : undefined,
+        ...paymaster,
         ...additionalContext,
       };
     }
@@ -82,6 +92,7 @@ const createContext = <T extends EthSignMethod>(
           from: params[0] as string,
           chainId: parseInt(chain.chainId, 16),
           rpcUrl: !SUPPORTED_CHAIN_IDS.includes(chain.chainId) ? chain.rpcUrls[0] : undefined,
+          ...paymaster,
           ...additionalContext,
         };
       }
