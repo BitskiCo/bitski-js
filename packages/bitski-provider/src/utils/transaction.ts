@@ -36,7 +36,7 @@ export interface WaasDefinition {
 export interface TransactionContext {
   chainId?: number;
   rpcUrl?: string;
-  paymaster?: PaymasterDefinition;
+  paymaster?: PaymasterDefinition | PaymasterDefinition[];
   from?: string;
   [key: string]: unknown;
 }
@@ -54,7 +54,7 @@ export const createBitskiTransaction = <T extends EthSignMethod>(
   method: T,
   params: EthSignMethodParams[T],
   chain: EthChainDefinitionWithRpcUrl,
-  paymaster?: PaymasterDefinition,
+  paymaster?: PaymasterDefinition | PaymasterDefinition[],
   additionalContext?: Record<string, string>,
 ): Transaction => {
   const context = createContext(method, params, chain, paymaster, additionalContext);
@@ -72,7 +72,7 @@ const createContext = <T extends EthSignMethod>(
   method: T,
   params: EthSignMethodParams[T],
   chain: EthChainDefinitionWithRpcUrl,
-  paymaster?: PaymasterDefinition,
+  paymaster?: PaymasterDefinition | PaymasterDefinition[],
   additionalContext?: Record<string, string>,
 ): TransactionContext => {
   switch (method) {
