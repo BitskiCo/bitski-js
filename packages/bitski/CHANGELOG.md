@@ -1,5 +1,11 @@
 # bitski
 
+## 3.6.0
+
+### Minor Changes
+
+- [#386](https://github.com/BitskiCo/bitski-js/pull/386) [`2c34004`](https://github.com/BitskiCo/bitski-js/commit/2c34004f3521aed613400c0446922f6d1b8fc2ed) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add login prompt as request option for sign in
+
 ## 3.5.0
 
 ### Minor Changes
