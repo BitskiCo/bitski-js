@@ -45,7 +45,7 @@ export interface BitskiProviderStore {
 export interface InternalBitskiProviderConfig<Extra = unknown> {
   fetch: typeof fetch;
   additionalHeaders: Record<string, string>;
-  paymaster?: PaymasterDefinition;
+  paymaster?: PaymasterDefinition | PaymasterDefinition[];
   prependMiddleware?: ProviderMiddleware<unknown[], unknown, Extra>[];
   pollingInterval?: number;
   disableCaching?: boolean;
@@ -88,7 +88,7 @@ export type BitskiProviderConfig<Extra = unknown> = Optional<
 export interface RequestContext<Extra = unknown> {
   // The current chain the request is being made on
   chain: EthChainDefinitionWithRpcUrl;
-  paymaster?: PaymasterDefinition;
+  paymaster?: PaymasterDefinition | PaymasterDefinition[];
   waas?: WaasDefinition;
 
   // The configuration of the provider
