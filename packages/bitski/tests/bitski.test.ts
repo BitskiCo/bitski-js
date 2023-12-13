@@ -84,6 +84,14 @@ describe('managing providers', () => {
         rpcUrl: 'https://api-v2.otl.com/web3/goerli',
         chainId: 4,
       },
+      paymaster: {
+        paymasterUrl: 'https://api-v2.otl.com/paymaster',
+        policyId: '1n123n-1nnlsn9-1012311eee',
+        rpcMethod: 'pm_sponsorTransaction',
+      },
+      waas: {
+        enabled: true,
+      },
       webBaseUrl: 'https://next.bitski.com',
     });
     expect(provider).toBeDefined();
@@ -92,6 +100,8 @@ describe('managing providers', () => {
 
     expect(innerProvider.config.additionalHeaders['X-CLIENT-ID']).toBe(clientID);
     expect(innerProvider.config.signerBaseUrl).toBe('https://next.bitski.com');
+    expect(innerProvider.config.waas.enabled).toBe(true);
+    expect(innerProvider.config.paymaster.paymasterUrl).toBe('https://api-v2.otl.com/paymaster');
     expect(await innerProvider.store.getCurrentChainId()).toBe('0x4');
     expect(await innerProvider.store.findChain('0x4')).toEqual({
       chainId: '0x4',
