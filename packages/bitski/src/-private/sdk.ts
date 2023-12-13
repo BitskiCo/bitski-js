@@ -24,10 +24,16 @@ export interface BitskiSDKOptions {
   store?: BitskiProviderStore;
 }
 
+export interface Paymaster {
+  paymasterUrl: string;
+  policyId?: string;
+  rpcMethod?: string;
+}
+
 export interface ProviderOptions extends Omit<Partial<BitskiProviderConfig>, 'prependMiddleware'> {
   networkName?: string;
   network?: Network;
-
+  paymaster?: Paymaster | Paymaster[];
   // @deprecated
   webBaseUrl?: string;
   // @deprecated

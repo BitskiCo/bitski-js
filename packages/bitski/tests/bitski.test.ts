@@ -84,6 +84,11 @@ describe('managing providers', () => {
         rpcUrl: 'https://api-v2.otl.com/web3/goerli',
         chainId: 4,
       },
+      paymaster: {
+        paymasterUrl: 'https://api-v2.otl.com/paymaster',
+        policyId: '1n123n-1nnlsn9-1012311eee',
+        rpcMethod: 'pm_sponsorTransaction',
+      },
       webBaseUrl: 'https://next.bitski.com',
     });
     expect(provider).toBeDefined();
