@@ -265,7 +265,6 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
       chain,
       config: this.config,
       paymaster: this.config.paymaster,
-      waas: this.config.waas,
       store: this.store,
       emit: this.events.emit.bind(this.events),
       extra: opts?.extra,
