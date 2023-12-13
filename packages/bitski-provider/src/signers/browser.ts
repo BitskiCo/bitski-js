@@ -58,6 +58,7 @@ export default function createBrowserSigner({ showPopup }: BrowserSignerConfig =
       method,
       params,
       requestContext.chain,
+      requestContext.paymaster,
       requestContext.config.additionalSigningContext,
     );
 

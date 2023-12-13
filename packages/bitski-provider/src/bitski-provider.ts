@@ -264,6 +264,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
     const context: RequestContext<Extra> = {
       chain,
       config: this.config,
+      paymaster: this.config.paymaster,
       store: this.store,
       emit: this.events.emit.bind(this.events),
       extra: opts?.extra,
