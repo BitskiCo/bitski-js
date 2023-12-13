@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 3.3.0
+
+### Minor Changes
+
+- [#390](https://github.com/BitskiCo/bitski-js/pull/390) [`007bdbd`](https://github.com/BitskiCo/bitski-js/commit/007bdbd583a0c59f9b55e38c2e9eb23e710a88d6) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add support for paymaster and waas config in bitski-provider
+
 ## 3.2.0
 
 ### Minor Changes
