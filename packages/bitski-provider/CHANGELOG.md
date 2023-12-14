@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 3.3.1
+
+### Patch Changes
+
+- [#395](https://github.com/BitskiCo/bitski-js/pull/395) [`b1f11ed`](https://github.com/BitskiCo/bitski-js/commit/b1f11ed09ca71e29e3a0cc57e5d356edd89ffefc) Thanks [@ptescher](https://github.com/ptescher)! - Fix issue with appId vs clientID in waas login hints
+
 ## 3.3.0
 
 ### Minor Changes
