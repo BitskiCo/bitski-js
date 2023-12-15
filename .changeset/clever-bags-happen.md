@@ -1,5 +1,5 @@
 ---
-'bitski': minor
+'bitski': patch
 ---
 
 Update provider package
