@@ -14,9 +14,12 @@ declare global {
   }
 }
 
-const BITSKI_SDK_URL = 'https://cdn.bitskistatic.com/js/sdk/v3.3/bitski.min.js';
-const BITSKI_SDK_REGEX =
-  /^https:\/\/cdn\.bitskistatic\.com\/js\/sdk\/v3.3\/bitski\.min\.js\/?(\?.*)?$/;
+const version = 'BITSKI_SDK_VERSION';
+
+const BITSKI_SDK_URL = `https://cdn.bitskistatic.com/js/sdk/v${version}/bitski.min.js`;
+const BITSKI_SDK_REGEX = new RegExp(
+  `^https://cdn\\.bitskistatic\\.com/js/sdk/v${version}/bitski\\.min\\.js/?(\\?.*)?$`,
+);
 
 export const findScript = (): HTMLScriptElement | null => {
   const scripts = document.querySelectorAll<HTMLScriptElement>(`script[src^="${BITSKI_SDK_URL}"]`);

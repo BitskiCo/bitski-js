@@ -226,7 +226,7 @@ export class BitskiSDK {
       transactionCallbackUrl: options.callbackURL,
       ...options,
       additionalHeaders: {
-        'X-CLIENT-VERSION': BITSKI_SDK_VERSION,
+        'X-CLIENT-VERSION': 'bitski-sdk-vBITSKI_SDK_VERSION',
         ...options.additionalHeaders,
       },
       prependMiddleware: undefined,
