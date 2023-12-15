@@ -72,6 +72,7 @@ export class BitskiSDK {
     options?: BitskiSDKOptions,
   ) {
     this.clientId = clientId;
+    // BITSKI_SDK_VERSION is replaced by /scripts/insert-package-version during build time
     this.sdkVersion = 'BITSKI_SDK_VERSION';
     this.store = options?.store || new LocalStorageStore();
     this.authProvider = new OpenidAuthProvider(
@@ -223,6 +224,7 @@ export class BitskiSDK {
       transactionCallbackUrl: options.callbackURL,
       ...options,
       additionalHeaders: {
+        // BITSKI_SDK_VERSION is replaced by /scripts/insert-package-version during build time
         'X-CLIENT-VERSION': 'bitski-sdk-vBITSKI_SDK_VERSION',
         ...options.additionalHeaders,
       },

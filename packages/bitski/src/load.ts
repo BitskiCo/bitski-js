@@ -14,6 +14,7 @@ declare global {
   }
 }
 
+// BITSKI_SDK_VERSION is replaced by /scripts/insert-package-version during build time
 const version = 'BITSKI_SDK_VERSION';
 
 const BITSKI_SDK_URL = `https://cdn.bitskistatic.com/js/sdk/v${version}/bitski.min.js`;
