@@ -10,12 +10,9 @@ import {
 import { SignInOptions } from './auth/oauth-manager';
 import { OpenidAuthProvider } from './auth/openid-auth-provider';
 import { User } from './auth/user';
-import { AuthenticationStatus, OAuthSignInMethod, SDK_VERSION } from './constants';
+import { AuthenticationStatus, OAuthSignInMethod } from './constants';
 import { Network } from './network';
 import css from './styles/connect-button';
-
-// global value provided by scripts/insert-package-version.mjs
-declare const BITSKI_SDK_VERSION: string;
 
 export interface BitskiSDKOptions {
   // Customize oauth configuration
@@ -75,7 +72,7 @@ export class BitskiSDK {
     options?: BitskiSDKOptions,
   ) {
     this.clientId = clientId;
-    this.sdkVersion = SDK_VERSION;
+    this.sdkVersion = 'BITSKI_SDK_VERSION';
     this.store = options?.store || new LocalStorageStore();
     this.authProvider = new OpenidAuthProvider(
       clientId,
