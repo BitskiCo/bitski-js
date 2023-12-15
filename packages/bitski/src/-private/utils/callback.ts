@@ -42,7 +42,7 @@ function notifyOpener(url: Location): void {
 export function parseUrlParams(url: Location): any {
   let params: string | undefined;
 
-  if (url.href.includes('#')) {
+  if (url.href.includes('#') && !url.href.endsWith('#')) {
     params = extractQuery(url.hash);
   } else if (url.href.includes('?')) {
     params = url.search.split('?').pop();
