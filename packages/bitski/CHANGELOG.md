@@ -1,5 +1,13 @@
 # bitski
 
+## 3.7.1
+
+### Patch Changes
+
+- [#397](https://github.com/BitskiCo/bitski-js/pull/397) [`5442939`](https://github.com/BitskiCo/bitski-js/commit/54429391915c5a3c68c08a431aeb34e3c117c350) Thanks [@jtescher](https://github.com/jtescher)! - Update provider package
+
+* [#400](https://github.com/BitskiCo/bitski-js/pull/400) [`9523590`](https://github.com/BitskiCo/bitski-js/commit/9523590c5d9fb0c8f00b44ea442b7afa2e6b14c8) Thanks [@jtescher](https://github.com/jtescher)! - Ignore trailing hash in callbacks
+
 ## 3.7.0
 
 ### Minor Changes
