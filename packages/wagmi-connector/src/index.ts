@@ -95,7 +95,7 @@ export class BitskiWagmiConnector extends Connector<
   }
 
   async connect(config?: { chainId?: number }): Promise<Required<ConnectorData>> {
-    await this.bitski.signIn({ login_hint: this.loginHint, prompt: 'login' });
+    await this.bitski.start({ login_hint: this.loginHint, prompt: 'login' });
 
     const user = await this.bitski.getUser();
     let account = user.accounts && user.accounts[0];
