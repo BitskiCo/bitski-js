@@ -2,6 +2,7 @@ import { processCallback } from './-private/utils/callback';
 import { loadScript } from './load';
 import { BitskiProviderShim } from './provider-shim';
 import { ConnectButton, ConnectButtonOptions } from './-private/components/connect-button';
+import hash from 'hash-it';
 
 import type { User } from './-private/auth/user';
 import type { BitskiSDK, BitskiSDKOptions, ProviderOptions } from './-private/sdk';
@@ -40,6 +41,7 @@ export {
 export class Bitski {
   private sdk: Promise<BitskiSDK | null> | undefined;
   private provider?: BitskiProviderShim;
+  private providerCache: Record<string, ProviderOptions | string> = {};
 
   /**
    * Alternative to using our static callback.html file. Call this from your own redirect page.
@@ -67,8 +69,14 @@ export class Bitski {
    * @param options options for the provider, or a network name
    */
   public getProvider(options?: ProviderOptions | string): BitskiProviderShim {
+    const optionsHash = hash(options);
+
+    if (options && !this.providerCache[optionsHash]) {
+      this.providerCache[optionsHash] = options;
+    }
+
     if (typeof window !== 'undefined' && window.Bitski?.getProvider) {
-      return window.Bitski.getProvider(options);
+      return window.Bitski.getProvider(this.providerCache[optionsHash] ?? options);
     }
 
     const network = networkFromProviderOptions(options);
