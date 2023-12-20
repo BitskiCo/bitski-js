@@ -2,6 +2,7 @@ import { processCallback } from './-private/utils/callback';
 import { loadScript } from './load';
 import { BitskiProviderShim } from './provider-shim';
 import { ConnectButton, ConnectButtonOptions } from './-private/components/connect-button';
+import hash from 'hash-it';
 
 import type { User } from './-private/auth/user';
 import type { BitskiSDK, BitskiSDKOptions, ProviderOptions } from './-private/sdk';
@@ -40,7 +41,7 @@ export {
 export class Bitski {
   private sdk: Promise<BitskiSDK | null> | undefined;
   private provider?: BitskiProviderShim;
-
+  private providerCache = new Map<number, BitskiProviderShim>();
   /**
    * Alternative to using our static callback.html file. Call this from your own redirect page.
    */
@@ -67,6 +68,13 @@ export class Bitski {
    * @param options options for the provider, or a network name
    */
   public getProvider(options?: ProviderOptions | string): BitskiProviderShim {
+    const existingProvider = this.providerCache.get(hash(options));
+
+    if (existingProvider) {
+      this.provider = existingProvider;
+      return existingProvider;
+    }
+
     if (typeof window !== 'undefined' && window.Bitski?.getProvider) {
       return window.Bitski.getProvider(options);
     }
@@ -85,6 +93,8 @@ export class Bitski {
     if (network) {
       (provider as any).setNetwork(network);
     }
+
+    this.providerCache.set(hash(options), provider);
 
     return provider;
   }
