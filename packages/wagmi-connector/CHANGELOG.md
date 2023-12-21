@@ -1,5 +1,18 @@
 # bitski-provider
 
+## 0.2.0
+
+### Minor Changes
+
+- [#401](https://github.com/BitskiCo/bitski-js/pull/401) [`643aad0`](https://github.com/BitskiCo/bitski-js/commit/643aad034d8c261cd476a1a00c4a85ec30e243a3) Thanks [@ptescher](https://github.com/ptescher)! - Switch from .signIn to .start so that we re-use the existing session if it exists
+
+### Patch Changes
+
+- [#404](https://github.com/BitskiCo/bitski-js/pull/404) [`3d15e50`](https://github.com/BitskiCo/bitski-js/commit/3d15e507bfc54f5ab8e6768c404270c909646b73) Thanks [@ptescher](https://github.com/ptescher)! - Fix chain info lookup
+
+- Updated dependencies [[`1533a01`](https://github.com/BitskiCo/bitski-js/commit/1533a0158c2ba8ad767d24db147f7ce49d3b638b)]:
+  - bitski@3.8.0
+
 ## 3.3.0
 
 ### Minor Changes

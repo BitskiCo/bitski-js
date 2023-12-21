@@ -1,5 +1,13 @@
 # bitski-provider
 
+## 3.3.2
+
+### Patch Changes
+
+- [#404](https://github.com/BitskiCo/bitski-js/pull/404) [`3d15e50`](https://github.com/BitskiCo/bitski-js/commit/3d15e507bfc54f5ab8e6768c404270c909646b73) Thanks [@ptescher](https://github.com/ptescher)! - Fix chain info lookup
+
+* [#404](https://github.com/BitskiCo/bitski-js/pull/404) [`3d15e50`](https://github.com/BitskiCo/bitski-js/commit/3d15e507bfc54f5ab8e6768c404270c909646b73) Thanks [@ptescher](https://github.com/ptescher)! - Fix an issue with custom RPC endpoints
+
 ## 3.3.1
 
 ### Patch Changes
