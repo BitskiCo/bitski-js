@@ -1,5 +1,11 @@
 # bitski
 
+## 3.8.1
+
+### Patch Changes
+
+- [#405](https://github.com/BitskiCo/bitski-js/pull/405) [`f640fa5`](https://github.com/BitskiCo/bitski-js/commit/f640fa5fae117177593177a23921b222cc4b9b22) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Pass options to BitskiProviderShim when existing provider does not exist
+
 ## 3.8.0
 
 ### Minor Changes
