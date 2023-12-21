@@ -81,10 +81,12 @@ export class Bitski {
 
     const network = networkFromProviderOptions(options);
 
-    const provider = new BitskiProviderShim(
+    this.provider = new BitskiProviderShim(
       () => this.loadSDK(),
       typeof options === 'string' ? undefined : options,
     );
+
+    const provider = this.provider;
 
     if (network) {
       (provider as any).setNetwork(network);
