@@ -18,6 +18,12 @@ export const createFetchRestMiddleware = (): JsonRpcMiddleware<unknown[], unknow
 
     const { config, chain } = getRequestContext(req);
 
+    const rpcUrl = new URL(chain.rpcUrls[0]);
+    if (rpcUrl.hostname !== 'api.bitski.com') {
+      // Custom RPC url
+      return next();
+    }
+
     const query =
       (req.params?.length ?? 0) > 0
         ? `?params=${encodeURIComponent(JSON.stringify(req.params))}`
