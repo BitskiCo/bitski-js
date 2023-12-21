@@ -1,6 +1,6 @@
 {
   "name": "@bitski/wagmi-connector",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Wagmi adapter for Bitski",
   "main": "lib/index.js",
   "module": "dist/index.js",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@wagmi/core": "^1.4.11",
-    "bitski": "^3.7.0",
+    "bitski": "^3.8.0",
     "viem": "^1.19.13"
   },
   "devDependencies": {
