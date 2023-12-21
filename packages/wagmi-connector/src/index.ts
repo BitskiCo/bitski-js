@@ -74,7 +74,7 @@ export class BitskiWagmiConnector extends Connector<
     const chainId = config?.chainId ?? this.chains[0].id ?? 1;
 
     const chain = this.chains.find((chain) => {
-      chain.id === chainId;
+      return chain.id === chainId;
     });
 
     const network = (chain && getNetwork(chain)) ?? {
