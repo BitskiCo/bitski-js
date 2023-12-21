@@ -1,5 +1,16 @@
 # bitski
 
+## 3.8.0
+
+### Minor Changes
+
+- [#403](https://github.com/BitskiCo/bitski-js/pull/403) [`1533a01`](https://github.com/BitskiCo/bitski-js/commit/1533a0158c2ba8ad767d24db147f7ce49d3b638b) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Hash provider options for reuse or change if new config is passed.
+
+### Patch Changes
+
+- Updated dependencies [[`3d15e50`](https://github.com/BitskiCo/bitski-js/commit/3d15e507bfc54f5ab8e6768c404270c909646b73), [`3d15e50`](https://github.com/BitskiCo/bitski-js/commit/3d15e507bfc54f5ab8e6768c404270c909646b73)]:
+  - bitski-provider@3.3.2
+
 ## 3.7.1
 
 ### Patch Changes
