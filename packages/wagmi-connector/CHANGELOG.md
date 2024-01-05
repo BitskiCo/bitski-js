@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 0.2.1
+
+### Patch Changes
+
+- [#407](https://github.com/BitskiCo/bitski-js/pull/407) [`f52050c`](https://github.com/BitskiCo/bitski-js/commit/f52050c949c2e6b37963b9bc373016deb2c8c1df) Thanks [@ptescher](https://github.com/ptescher)! - Don't grab account from userinfo in wagmi connector
+
 ## 0.2.0
 
 ### Minor Changes
