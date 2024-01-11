@@ -14,7 +14,7 @@
     "release": "turbo run build && changeset publish"
   },
   "volta": {
-    "node": "16.17.0"
+    "node": "18.17.0"
   },
   "version": "0.0.0",
   "devDependencies": {
