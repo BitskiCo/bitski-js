@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist",
+    "rootDir": "src",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "lib": ["ESNext"],
@@ -15,6 +16,6 @@
     "strict": true,
     "resolveJsonModule": true
   },
-  "include": ["**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
