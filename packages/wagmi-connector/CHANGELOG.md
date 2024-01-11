@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 1.0.2
+
+### Patch Changes
+
+- [#414](https://github.com/BitskiCo/bitski-js/pull/414) [`22451ccb16608dd19bc6a0147294c3d46378eaed`](https://github.com/BitskiCo/bitski-js/commit/22451ccb16608dd19bc6a0147294c3d46378eaed) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Remove exclusion of node_module types from tsconfig
+
 ## 1.0.1
 
 ### Patch Changes
