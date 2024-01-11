@@ -1,6 +1,6 @@
 {
   "name": "@bitski/wagmi-connector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wagmi adapter for Bitski",
   "main": "lib/index.js",
   "module": "dist/index.js",
