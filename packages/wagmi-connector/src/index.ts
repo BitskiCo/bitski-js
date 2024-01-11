@@ -76,7 +76,7 @@ export class BitskiConnector extends Connector<BitskiProviderShim, BitskiConnect
       account: account as any,
       chain: {
         id: chain?.id ?? 1,
-        unsupported: chain ? true : false,
+        unsupported: chain ? false : true,
       },
     };
   }
@@ -154,7 +154,18 @@ export class BitskiConnector extends Connector<BitskiProviderShim, BitskiConnect
 
 export interface BitskiWalletOptions {
   chains: Chain[];
-  options: BitskiConnectorOptions & Wallet;
+  options: BitskiConnectorOptions & {
+    id?: string;
+    name?: string;
+    iconUrl?: string;
+    iconBackground?: string;
+    downloadUrls?: {
+      browserExtension?: string;
+      desktop?: string;
+      ios?: string;
+      mobile?: string;
+    };
+  };
 }
 
 export const bitskiWallet = ({ chains, options }: BitskiWalletOptions): Wallet => ({
