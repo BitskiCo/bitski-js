@@ -65,8 +65,6 @@ export class BitskiConnector extends Connector<BitskiProviderShim, BitskiConnect
   }
 
   async connect(config?: { chainId?: number }): Promise<Required<ConnectorData>> {
-    debugger;
-
     if (this.bitskiOptions.waas?.enabled) {
       const loginHint = `fa_${btoa(this.options.appId)}`;
       await this.bitski.start({
@@ -106,7 +104,6 @@ export class BitskiConnector extends Connector<BitskiProviderShim, BitskiConnect
   }
 
   async getChainId(): Promise<number> {
-    debugger;
     const provider = await this.getProvider();
     if (!provider) throw new ConnectorNotFoundError();
 
