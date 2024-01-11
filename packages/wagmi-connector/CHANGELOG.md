@@ -1,5 +1,13 @@
 # bitski-provider
 
+## 1.0.0
+
+### Major Changes
+
+- [#409](https://github.com/BitskiCo/bitski-js/pull/409) [`774ab2195a99443812afcd5c13069350665bb1ce`](https://github.com/BitskiCo/bitski-js/commit/774ab2195a99443812afcd5c13069350665bb1ce) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - - Update to be compatible with latest RainbowKit.
+  - Abstract Bitski SDK inclusion and simplify connector options. Now only accepts chains and options, where options requires an appId and optionally bitskiOptions which map to Bitski SDK provider options.
+  - Include bitskiWallet export for usage with RainbowKit.
+
 ## 0.2.1
 
 ### Patch Changes
