@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 1.0.1
+
+### Patch Changes
+
+- [#411](https://github.com/BitskiCo/bitski-js/pull/411) [`0085e662bd2e4281fc74e13dd0ad9c5e90c8c33f`](https://github.com/BitskiCo/bitski-js/commit/0085e662bd2e4281fc74e13dd0ad9c5e90c8c33f) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Invert unsupported flag to be false when chain is defined
+
 ## 1.0.0
 
 ### Major Changes
