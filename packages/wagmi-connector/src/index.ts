@@ -1,22 +1,11 @@
 import type { BitskiProviderShim } from 'bitski/lib/provider-shim';
 
 import { Bitski, ProviderOptions } from 'bitski';
-import { Chain, Wallet } from '@rainbow-me/rainbowkit';
-import { Connector, ConnectorData, WalletClient } from 'wagmi';
-import {
-  ProviderRpcError,
-  SwitchChainError,
-  UserRejectedRequestError,
-  createWalletClient,
-  custom,
-  getAddress,
-} from 'viem';
+import type { Chain, Wallet } from '@rainbow-me/rainbowkit';
+import { Connector, ConnectorData, WalletClient } from '@wagmi/core';
+import { createWalletClient, custom, getAddress } from 'viem';
 
-import {
-  normalizeChainId,
-  ConnectorNotFoundError,
-  ChainNotConfiguredForConnectorError,
-} from '@wagmi/connectors';
+import { normalizeChainId, ConnectorNotFoundError } from '@wagmi/connectors';
 
 export interface BitskiConnectorOptions {
   id?: string;
@@ -153,112 +142,27 @@ export class BitskiConnector extends Connector<BitskiProviderShim, BitskiConnect
     }
   }
 
-  async switchChain(chainId: number): Promise<Chain> {
-    const provider = await this.getProvider();
-    if (!provider) throw new ConnectorNotFoundError();
-    const id = chainId.toString(16);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  protected onAccountsChanged(): void {}
 
-    try {
-      await Promise.all([
-        provider.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: id }],
-        }),
-        new Promise<void>((res) =>
-          this.on('change', ({ chain }) => {
-            if (chain?.id === chainId) res();
-          }),
-        ),
-      ]);
-      return (
-        this.chains.find((x) => x.id === chainId) ?? {
-          id: chainId,
-          name: `Chain ${id}`,
-          network: `${id}`,
-          nativeCurrency: { name: 'Ether', decimals: 18, symbol: 'ETH' },
-          rpcUrls: { default: { http: [''] }, public: { http: [''] } },
-        }
-      );
-    } catch (error) {
-      const chain = this.chains.find((x) => x.id === chainId);
-      if (!chain)
-        throw new ChainNotConfiguredForConnectorError({
-          chainId,
-          connectorId: this.id,
-        });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  protected onChainChanged(): void {}
 
-      if (
-        (error as ProviderRpcError).code === 4902 ||
-        (error as ProviderRpcError<{ originalError?: { code: number } }>)?.data?.originalError
-          ?.code === 4902
-      ) {
-        try {
-          await provider.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: id,
-                chainName: chain.name,
-                nativeCurrency: chain.nativeCurrency,
-                rpcUrls: [chain.rpcUrls.public?.http[0] ?? ''],
-                blockExplorerUrls: this.getBlockExplorerUrls(chain),
-              },
-            ],
-          });
-
-          const currentChainId = await this.getChainId();
-          if (currentChainId !== chainId)
-            throw new UserRejectedRequestError(
-              new Error('User rejected switch after adding network.'),
-            );
-
-          return chain;
-        } catch (error) {
-          throw new UserRejectedRequestError(error as Error);
-        }
-      }
-
-      if (this.isUserRejectedRequestError(error))
-        throw new UserRejectedRequestError(error as Error);
-      throw new SwitchChainError(error as Error);
-    }
-  }
-
-  protected onAccountsChanged = (accounts: string[]): void => {
-    if (accounts.length === 0) this.onDisconnect();
-    else
-      this.emit('change', {
-        account: getAddress(accounts[0] as string),
-      });
-  };
-
-  protected onChainChanged = (chainId: number | string): void => {
-    const id = normalizeChainId(chainId);
-    const unsupported = this.isChainUnsupported(id);
-    this.emit('change', { chain: { id, unsupported } });
-  };
-
-  protected onDisconnect = async (): Promise<void> => {
-    this.emit('disconnect');
-    if (this.options.shimDisconnect) this.storage?.removeItem(this.shimDisconnectKey);
-  };
-
-  protected isUserRejectedRequestError(error: unknown): boolean {
-    return (error as ProviderRpcError).code === 4001;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  protected onDisconnect(): void {}
 }
 
 export interface BitskiWalletOptions {
   chains: Chain[];
-  options: BitskiConnectorOptions;
+  options: BitskiConnectorOptions & Wallet;
 }
 
 export const bitskiWallet = ({ chains, options }: BitskiWalletOptions): Wallet => ({
-  id: 'bitski',
-  name: 'Bitski',
-  iconUrl: 'https://cdn.bitskistatic.com/docs-web/bitskiWallet.svg',
-  iconBackground: '#fff',
-  downloadUrls: {
+  id: options.id ?? 'bitski',
+  name: options.id ?? 'Bitski',
+  iconUrl: options.iconUrl ?? 'https://cdn.bitskistatic.com/docs-web/bitskiWallet.svg',
+  iconBackground: options.iconBackground ?? '#fff',
+  downloadUrls: options.downloadUrls ?? {
     browserExtension:
       'https://chrome.google.com/webstore/detail/bitski/feejiigddaafeojfddjjlmfkabimkell',
     desktop: 'https://chrome.google.com/webstore/detail/bitski/feejiigddaafeojfddjjlmfkabimkell',
