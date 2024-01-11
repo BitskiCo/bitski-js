@@ -15,9 +15,10 @@
     "prettier": "prettier --config ../../.prettierrc '{src,tests}/**/*.ts' --write"
   },
   "dependencies": {
-    "@wagmi/core": "^1.4.11",
+    "@wagmi/core": "^1.4.13",
     "bitski": "^3.8.0",
-    "viem": "^1.19.13"
+    "viem": "^1.19.13",
+    "@rainbow-me/rainbowkit": "^1.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
