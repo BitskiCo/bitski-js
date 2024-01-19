@@ -23,13 +23,15 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime', 'react-dom', 'tailwindcss'],
+      external: ['react', 'react/jsx-runtime', 'react-dom', 'tailwindcss', 'wagmi', 'viem'],
       output: {
         globals: {
           react: 'React',
           'react/jsx-runtime': 'react/jsx-runtime',
           'react-dom': 'ReactDOM',
           tailwindcss: 'tailwindcss',
+          wagmi: 'wagmi',
+          viem: 'viem',
         },
       },
     },

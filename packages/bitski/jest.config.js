@@ -21,7 +21,6 @@ module.exports = {
       diagnostics: false,
     },
   },
-  name: 'bitski',
   displayName: 'Bitski SDK',
   testEnvironment: 'jsdom',
   automock: false,
