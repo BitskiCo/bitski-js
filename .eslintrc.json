@@ -1,23 +1,29 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true,
-    "node": true
-  },
+  "env": { "browser": true, "es2020": true },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:react/recommended",
     "plugin:prettier/recommended"
   ],
+  "ignorePatterns": ["dist"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "react-refresh"],
   "rules": {
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-empty-function": "warn"
+    "@typescript-eslint/no-empty-function": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

@@ -6,9 +6,7 @@
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
     "target": "ES2017",
-    "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types", "./types"],
-    "types": ["node", "jest"]
+    "esModuleInterop": true
   },
-  "include": ["src", "types", "**/*.test.ts"]
+  "include": ["src", "**/*.test.ts"]
 }
