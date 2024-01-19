@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import dts from 'vite-plugin-dts';
 import tailwindcss from 'tailwindcss';
+import { libInjectCss } from 'vite-plugin-lib-inject-css';
 
 export default defineConfig({
   css: {
@@ -49,5 +50,5 @@ export default defineConfig({
   optimizeDeps: {
     include: ['eth-provider-types'],
   },
-  plugins: [react(), dts({ include: 'src/lib', rollupTypes: true })],
+  plugins: [libInjectCss(), react(), dts({ include: 'src/lib', rollupTypes: true })],
 });
