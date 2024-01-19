@@ -23,7 +23,15 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime', 'react-dom', 'tailwindcss', 'wagmi', 'viem'],
+      external: [
+        'react',
+        'react/jsx-runtime',
+        'react-dom',
+        'tailwindcss',
+        'wagmi',
+        'viem',
+        '@tanstack/react-query',
+      ],
       output: {
         globals: {
           react: 'React',
@@ -32,6 +40,7 @@ export default defineConfig({
           tailwindcss: 'tailwindcss',
           wagmi: 'wagmi',
           viem: 'viem',
+          '@tanstack/react-query': '@tanstack/react-query',
         },
       },
     },

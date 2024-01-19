@@ -16,6 +16,7 @@
   "files": [
     "/dist"
   ],
+  "sideEffects": true,
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -24,16 +25,17 @@
     "preview": "vite preview"
   },
   "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
     "react": "^18",
     "react-dom": "^18",
     "viem": "2.x",
     "wagmi": "2.x"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.0.0",
     "bitski": "^3.0.0"
   },
   "devDependencies": {
+    "@tanstack/react-query": "^5.0.0",
     "@types/node": "^20.11.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
