@@ -69,7 +69,12 @@ export default function useConnectionState() {
   }
 
   function reset() {
-    connections.forEach((c) => disconnectWallet({ connector: c.connector }));
+    if (connections.length) {
+      connections.forEach((c) => disconnectWallet({ connector: c.connector }));
+      return;
+    }
+
+    setConnectionState({ type: ConnectionState.Idle });
   }
 
   return {
