@@ -19,8 +19,8 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/lib/index.ts'),
       name: 'bitski-widget',
-      formats: ['es', 'umd'],
-      fileName: (format) => `bitski-widget.${format}.js`,
+      formats: ['es', 'cjs'],
+      fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
       external: ['react', 'react/jsx-runtime', 'react-dom', 'tailwindcss'],
