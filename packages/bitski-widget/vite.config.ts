@@ -38,5 +38,5 @@ export default defineConfig({
   optimizeDeps: {
     include: ['eth-provider-types'],
   },
-  plugins: [react(), dts({ include: 'src/lib', outputDir: 'dist', rollupTypes: true })],
+  plugins: [react(), dts({ include: 'src/lib', rollupTypes: true })],
 });
