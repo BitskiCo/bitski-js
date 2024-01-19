@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
+  }
+}
+
+:root {
+  --aux-light-grey: #c1c1c31a;
+  --aux-grey: #c1c1c333;
+  --main-grey: #98979c;
+  --main-obsidian: #17181A;
+  --aux-blue: #299EFF40;
+}
+
+@layer utilities {
+  .text-body-b {
+    @apply text-[color:var(--main-black,color(display-p3_0.2_0.2_0.2))] text-[15px] not-italic font-bold leading-[18px];
+  }
+
+  .text-body-m {
+    @apply text-[color:var(--main-grey,color(display-p3_0.5961_0.5922_0.6118))] text-[15px] not-italic font-[500] leading-[18px];
+  }
+
+  .sub-caption-r {
+    @apply self-stretch text-[color:var(--main-grey,color(display-p3_0.5961_0.5922_0.6118))] text-xs not-italic font-normal leading-[15px];
+  }
+
+  .sub-caption-s {
+    color: var(--Main-Black, #333);
+    color: var(--Main-Black, color(display-p3 0.2 0.2 0.2));
+
+    /* Sub-Caption S (600, Semibold) */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 590;
+    line-height: 15px; /* 125% */
+  }
+
+  .sub-caption-m {
+    color: var(--Main-Black, #333);
+    color: var(--Main-Black, color(display-p3 0.2 0.2 0.2));
+    text-align: center;
+
+    /* Sub-Caption M (500, Medium) */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 510;
+    line-height: 15px; /* 125% */
+  }
+}
+
+.button {
+  @apply text-[color:var(--main-grey,color(display-p3_0.5961_0.5922_0.6118))] text-center text-[13px] not-italic font-[590] leading-[13px];
+}
+
+.bg-main-grey {
+  background-color: #98979c;
+}
+
+.bg-main-obsidian {
+  background-color: #17181a;
+}
+
+.heading-2 {
+  @apply text-[color:var(--main-black,color(display-p3_0.2_0.2_0.2))] text-[26px] not-italic font-bold leading-[30px] tracking-[-0.4px];
+}
+
+.text-button {
+  @apply text-[color:var(--main-white,color(display-p3_1_1_1))] text-center text-[13px] not-italic font-[590] leading-[13px];
+}
+
+.black-button {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background: var(--Main-Obsidian, #17181a);
+  background: var(--Main-Obsidian, color(display-p3 0.0902 0.0941 0.102));
+  /* shadow-lg */
+  box-shadow: 0px 10px 40px 0px rgba(0, 18, 53, 0.15);
+  box-shadow: 0px 10px 40px 0px color(display-p3 0 0.0667 0.2 / 0.15);
+  color: var(--Main-White, #fff);
+}
+
+.grey-button {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background: var(--Aux-Grey, rgba(193, 193, 195, 0.2));
+  background: var(--Aux-Grey, color(display-p3 0.7569 0.7569 0.7647 / 0.2));
+  color: var(--Main-Grey, color(display-p3 0.5961 0.5922 0.6118));
+}
+
+.text-color-main-grey {
+  color: #98979c;
+}
+
+.bg-color-aux-light-grey {
+  background-color: #c1c1c31a;
+}
+
+.bg-color-aux-grey {
+  background-color: #c1c1c333;
+}
+
+.dots-background {
+  background-color: #c1c1c333;
+  background-image: url('../public/background.svg');
+  background-repeat: repeat; /* or repeat-x or repeat-y for specific directions */
+  background-size: auto; /* or cover or contain depending on your preference */
+}
+
+.social-button {
+  @apply flex flex-col justify-center items-center flex-[1_0_0] self-stretch border border-[color:var(--aux-grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_1px_1px_0px_color(display-p3_0_0_0_/_0.20)] px-5 py-3 rounded border-solid;
+  background: #ffffff;
+}
+
+.top-nav-button {
+  @apply flex justify-center items-center gap-2.5 flex-[1_0_0] shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] px-2 py-[9px] rounded-[10px];
+  background: linear-gradient(
+    180deg,
+    color(display-p3 0.2256 0.2442 0.2627) 0%,
+    color(display-p3 0.0431 0.0471 0.051) 100%
+  );
+}

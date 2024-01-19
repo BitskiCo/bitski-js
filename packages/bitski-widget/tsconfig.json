@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "preserveSymlinks": true,
+    "declaration": true,
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "strict": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*.ts"]
+}

@@ -1,0 +1,70 @@
+{
+  "name": "bitski-widget",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --project tsconfig.json --outDir ./dist/esm --declaration --declarationMap --declarationDir ./dist/types && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "files": [
+    "/dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
+    "bitski": "3.x",
+    "react": "^18",
+    "react-dom": "^18",
+    "viem": "2.x",
+    "wagmi": "2.x"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.17.8",
+    "bitski": "^3.8.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "viem": "^2.0.3",
+    "wagmi": "^2.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.0.1",
+    "babelify": "^10.0.0",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "@babel/preset-env"
+          ],
+          "plugins": [
+            "@babel/plugin-transform-runtime"
+          ]
+        }
+      ]
+    ]
+  }
+}
