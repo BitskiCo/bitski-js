@@ -18,7 +18,7 @@ export default defineConfig({
     emptyOutDir: true,
     lib: {
       entry: path.resolve(__dirname, 'src/lib/index.ts'),
-      name: 'bitski-widget',
+      name: 'BitskiWidget',
       formats: ['es', 'cjs'],
       fileName: (format) => `index.${format}.js`,
     },
@@ -38,5 +38,5 @@ export default defineConfig({
   optimizeDeps: {
     include: ['eth-provider-types'],
   },
-  plugins: [react(), dts({ insertTypesEntry: true })],
+  plugins: [react(), dts({ include: 'src/lib', insertTypesEntry: true, rollupTypes: true })],
 });
