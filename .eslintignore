@@ -14,3 +14,10 @@ jest.config.base.js
 packages/bitski/scripts/version.js
 
 typedoc.js
+
+packages/bitski/tests/bitski.test.test
+packages/bitski/src/index.ts 
+packages/bitski/src/provider-shim.ts
+
+packages/eth-provider-types/index.d.ts 
+packages/eth-provider-types/index.js

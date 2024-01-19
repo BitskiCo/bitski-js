@@ -64,7 +64,7 @@ describe('oauth-manager', () => {
     const manager = createInstance();
 
     // Spy on window open
-    jest.spyOn(window, 'open').mockImplementation((url, target, features) => {
+    jest.spyOn(window, 'open').mockImplementation((url) => {
       // Assert the URL is something we expect
       expect(url).toMatch(manager.configuration.authorizationEndpoint);
       // Hack to create an object that is similar to Location in JSDom
@@ -115,7 +115,7 @@ describe('oauth-manager', () => {
     const manager = createInstance();
 
     // Spy on window open
-    jest.spyOn(window, 'open').mockImplementation((url, target, features) => {
+    jest.spyOn(window, 'open').mockImplementation((url) => {
       // Assert the URL is something we expect
       expect(url).toMatch(manager.configuration.authorizationEndpoint);
       // Hack to create an object that is similar to Location in JSDom
@@ -142,7 +142,7 @@ describe('oauth-manager', () => {
     const manager = createInstance();
 
     // Spy on window open
-    jest.spyOn(window, 'open').mockImplementation((url, target, features) => {
+    jest.spyOn(window, 'open').mockImplementation(() => {
       // Return null, simulating a blocked popup
       return null;
     });

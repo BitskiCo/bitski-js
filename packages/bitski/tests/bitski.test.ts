@@ -117,7 +117,7 @@ describe('managing providers', () => {
         'X-FOO-FEATURE': 'ENABLED',
       },
     });
-    provider.on('error', (error) => {});
+    provider.on('error', () => {});
     expect(provider).toBeDefined();
 
     const innerProvider = await (provider as any).providerPromise;
