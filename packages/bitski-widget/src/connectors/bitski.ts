@@ -44,7 +44,7 @@ export function bitski(parameters: BitskiParameters) {
   } = parameters;
   const { waas, includeApple, includeGoogle, includeX } = bitskiOptions;
 
-  type Provider = any | undefined;
+  type Provider = unknown | undefined;
   type Properties = {
     connect(parameters?: { chainId?: number; isReconnecting?: boolean }): Promise<{
       accounts: readonly Address[];
