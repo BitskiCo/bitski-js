@@ -1,5 +1,5 @@
 import './lib/index.css';
-import { BitskiProvider, BitskiWidget } from './lib/components/BitskiWidget';
+import { BitskiProvider, BitskiWidget } from './lib';
 import { LoginMethod } from './lib/components/BitskiWidget/constants';
 import { base, mainnet, optimism, polygon } from 'viem/chains';
 
