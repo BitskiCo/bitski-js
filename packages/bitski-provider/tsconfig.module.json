@@ -4,5 +4,5 @@
     "outDir": "dist/",
     "module": "es6"
   },
-  "include": ["src", "types"]
+  "include": ["src"]
 }

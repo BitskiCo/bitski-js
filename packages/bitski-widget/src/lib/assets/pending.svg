@@ -1,0 +1,17 @@
+<svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon / Status / Pending">
+<mask id="mask0_1716_31785" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="1" y="1" width="8" height="8">
+<path id="Stroke" d="M8.21422 4.99993C8.21422 3.22473 6.77513 1.78564 4.99993 1.78564C3.22473 1.78564 1.78564 3.22473 1.78564 4.99993C1.78564 6.77513 3.22473 8.21422 4.99993 8.21422" stroke="url(#paint0_angular_1716_31785)" style="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="bevel"/>
+</mask>
+<g mask="url(#mask0_1716_31785)">
+<rect id="Color" width="10" height="10" fill="white" style="fill:white;fill:white;fill-opacity:1;"/>
+</g>
+</g>
+<defs>
+<radialGradient id="paint0_angular_1716_31785" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(4.99993 4.99993) rotate(90) scale(3.21429)">
+<stop offset="0.783452" style="stop-color:black;stop-color:black;stop-opacity:1;"/>
+<stop offset="0.888512" stop-opacity="0" style="stop-color:none;stop-color:none;stop-opacity:0;"/>
+<stop offset="1" stop-opacity="0" style="stop-color:none;stop-color:none;stop-opacity:0;"/>
+</radialGradient>
+</defs>
+</svg>

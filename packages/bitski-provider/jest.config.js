@@ -22,7 +22,6 @@ module.exports = {
       diagnostics: false,
     },
   },
-  name: 'bitski-provider',
   displayName: 'Bitski Provider',
   testEnvironment: 'jsdom',
   setupFiles: ['<rootDir>/tests/util/setup-jest.ts'],

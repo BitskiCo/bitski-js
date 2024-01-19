@@ -1,5 +1,5 @@
 import { EthMethod } from 'eth-provider-types';
-import { createAsyncMiddleware, JsonRpcMiddleware, JsonRpcRequest } from 'json-rpc-engine';
+import { createAsyncMiddleware, JsonRpcMiddleware } from 'json-rpc-engine';
 import { getRequestContext } from '../utils/request-context';
 import { InternalBitskiProviderConfig } from '../types';
 import { fetchJsonWithRetry } from '../utils/fetch';

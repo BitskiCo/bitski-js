@@ -1,7 +1,6 @@
 import { InternalBitskiProviderConfig, RequestContext, SignFn } from '../types';
 import { fetchJsonWithRetry } from '../utils/fetch';
 import { createBitskiTransaction, Transaction } from '../utils/transaction';
-import { showIframe } from './iframe';
 import { getSignerUrl } from './shared';
 
 /**
