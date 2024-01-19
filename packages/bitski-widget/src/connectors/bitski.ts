@@ -7,7 +7,6 @@ import {
   normalizeChainId,
   ProviderNotFoundError,
 } from 'wagmi';
-import type { BitskiProviderShim } from 'bitski/lib/provider-shim';
 
 const BitskiIcon = 'https://cdn.bitskistatic.com/docs-web/bitskiWallet.svg';
 
@@ -45,7 +44,7 @@ export function bitski(parameters: BitskiParameters) {
   } = parameters;
   const { waas, includeApple, includeGoogle, includeX } = bitskiOptions;
 
-  type Provider = BitskiProviderShim | undefined;
+  type Provider = any | undefined;
   type Properties = {
     connect(parameters?: { chainId?: number; isReconnecting?: boolean }): Promise<{
       accounts: readonly Address[];

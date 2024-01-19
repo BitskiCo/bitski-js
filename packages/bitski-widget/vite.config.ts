@@ -9,6 +9,9 @@ export default defineConfig({
       name: 'BitskiWidget',
       fileName: (format) => `index.${format}.js`,
     },
+    commonjsOptions: {
+      include: [/eth-provider-types/, /node_modules/],
+    },
     rollupOptions: {
       external: ['react', 'react-dom'],
       output: {
@@ -18,8 +21,12 @@ export default defineConfig({
         },
       },
     },
+
     sourcemap: true,
     emptyOutDir: true,
+  },
+  optimizeDeps: {
+    include: ['eth-provider-types'],
   },
   plugins: [react()],
 });
