@@ -66,7 +66,7 @@ export default function Socials(props: {
 
   const connectableSocials = socials
     .map((social) => {
-      let connector = connectors.filter((connector) => {
+      const connector = connectors.filter((connector) => {
         return connector.id === social;
       })[0];
 

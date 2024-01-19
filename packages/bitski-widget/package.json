@@ -1,11 +1,14 @@
 {
-  "name": "bitski-widget",
+  "name": "@bitski/bitski-widget",
   "version": "0.0.0",
   "type": "module",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc --project tsconfig.json --outDir ./dist/esm --declaration --declarationMap --declarationDir ./dist/types && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --config ../../.prettierrc '{src,tests}/**/*.ts' --write",
     "preview": "vite preview"
   },
   "files": [
@@ -45,6 +48,7 @@
     "autoprefixer": "^10.0.1",
     "babelify": "^10.0.0",
     "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "postcss": "^8",
@@ -58,7 +62,11 @@
         "babelify",
         {
           "presets": [
-            "@babel/preset-env"
+            "@babel/preset-env",
+            "@babel/preset-react",
+            {
+              "runtime": "automatic"
+            }
           ],
           "plugins": [
             "@babel/plugin-transform-runtime"

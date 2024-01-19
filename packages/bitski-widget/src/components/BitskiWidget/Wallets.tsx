@@ -133,12 +133,12 @@ export default function Wallets(props: {
   const wallets = useExternalWallets();
   const { connectors } = useConnect();
 
-  let connectableWallets = connectors.flatMap((connector) => {
+  const connectableWallets = connectors.flatMap((connector) => {
     if (BITSKI_CONNECTORS.includes(connector.id)) {
       return [];
     }
 
-    var wallet = wallets.filter((wallet) => {
+    const wallet = wallets.filter((wallet) => {
       return connector.id === wallet;
     })[0];
 

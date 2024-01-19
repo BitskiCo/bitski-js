@@ -1,35 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Connector, useAccount, useDisconnect, useConnect, useConnections } from 'wagmi';
 import { ConnectionStateType } from '../types';
 import { ConnectionState } from '../constants';
 import { mapChainIdToName } from '../../../utils';
 
 export default function useConnectionState() {
-  const { connector, isConnected, address, chainId } = useAccount();
+  const { connector, address, chainId } = useAccount();
   const { disconnect } = useDisconnect();
   const { connectAsync } = useConnect();
   const connections = useConnections();
 
-  var connectionState: ConnectionStateType = {
+  const [connectionState, setConnectionState] = useState<ConnectionStateType>({
     type: ConnectionState.Idle,
-  };
+  });
 
-  if (connector && isConnected && address && chainId) {
-    const activeConnection = connections.find((c) => c.connector.name === connector?.name);
+  useEffect(() => {
+    if (connections.length && connector && address && chainId) {
+      const activeConnection = connections.find((c) => c.connector.name === connector?.name);
 
-    if (activeConnection) {
-      connectionState = {
-        type: ConnectionState.Connected,
-        address,
-        chain: mapChainIdToName(chainId),
-        connector: activeConnection.connector,
-      };
-    } else {
-      disconnect({ connector });
+      if (activeConnection) {
+        setConnectionState({
+          type: ConnectionState.Connected,
+          address,
+          chain: mapChainIdToName(chainId),
+          connector: activeConnection.connector,
+        });
+      } else {
+        disconnect({ connector });
+      }
     }
-  }
-
-  const [_connectionState, setConnectionState] = useState<ConnectionStateType>(connectionState);
+  }, [connections]);
 
   async function connectWallet({
     connector,

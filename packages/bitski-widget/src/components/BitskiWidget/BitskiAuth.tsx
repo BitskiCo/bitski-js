@@ -11,7 +11,6 @@ export function BitskiAuth() {
   switch (connectionState.type) {
     case ConnectionState.Idle:
       return <IdleConnection connectWallet={connectWallet} />;
-    // @ts-ignore
     case ConnectionState.Pending:
       const { pendingConnector } = connectionState as PendingState;
       return <PendingConnection connector={pendingConnector} reset={reset} />;
@@ -25,9 +24,7 @@ export function BitskiAuth() {
           disconnect={() => disconnectWallet({ connector })}
         />
       );
-    // @ts-ignore
-    case ConnectionStateType.Error:
-      // @ts-ignore
+    case ConnectionState.Error:
       return <ConnectionError reset={reset} connector={connectionState.connector} />;
     default:
       return <IdleConnection connectWallet={connectWallet} />;
