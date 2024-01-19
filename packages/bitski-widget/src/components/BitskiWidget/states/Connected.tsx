@@ -1,5 +1,6 @@
 import { Connector, useSignMessage } from 'wagmi';
 import { useState } from 'react';
+import dappIcon from '../../../assets/dapp-icon.svg';
 
 enum SignedMessageStateType {
   Rest,
@@ -47,7 +48,7 @@ export default function Connected(props: {
           <div className="flex justify-center items-center gap-2 pl-2.5 pr-3 py-2 rounded-xl bg-[var(--aux-grey)]">
             <img
               className="w-6 h-6 fill-[radial-gradient(69.05%_69.05%_at_59.52%_33.33%,color(display-p3_0.851_0.851_0.851)_0%,color(display-p3_0.16_0.6201_1)_100%)]"
-              src="../../../assets/dapp-icon.svg"
+              src={dappIcon}
               alt="Dapp"
             />
             {props.address ? (

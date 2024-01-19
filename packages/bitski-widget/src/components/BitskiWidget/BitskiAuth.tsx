@@ -8,14 +8,16 @@ import { ConnectionState } from './constants';
 
 export function BitskiAuth() {
   const { connectionState, connectWallet, disconnectWallet, reset } = useConnectionState();
+
+  const { pendingConnector } = connectionState as PendingState;
+  const { connector, address, chain } = connectionState as ConnectedState;
+
   switch (connectionState.type) {
     case ConnectionState.Idle:
       return <IdleConnection connectWallet={connectWallet} />;
     case ConnectionState.Pending:
-      const { pendingConnector } = connectionState as PendingState;
       return <PendingConnection connector={pendingConnector} reset={reset} />;
     case ConnectionState.Connected:
-      const { connector, address, chain } = connectionState as ConnectedState;
       return (
         <Connected
           connector={connector}

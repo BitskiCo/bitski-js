@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "target": "ESNext",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "preserveSymlinks": true,

@@ -1,4 +1,14 @@
 import { Connector } from 'wagmi';
+import DEFAULT_CONNECTOR_ICON from '../../../assets/waas-logo.png';
+import apple from '../../../assets/apple.png';
+import google from '../../../assets/google.png';
+import phantom from '../../../assets/phantom.svg';
+import coinbaseWalletSDK from '../../../assets/coinbase-wallet.svg';
+import metaMaskSDK from '../../../assets/metamask.svg';
+import injected from '../../../assets/injected-wallet.svg';
+import walletConnect from '../../../assets/waas-logo.png';
+import bitskiSDK from '../../../assets/email.svg';
+import x from '../../../assets/x.svg';
 
 export default function ConnectionError(props: {
   connector: Connector | undefined;
@@ -35,36 +45,34 @@ export default function ConnectionError(props: {
   );
 }
 
-const DEFAULT_CONNECTOR_ICON = 'waas-logo.png';
-
 export function iconForConnector(connector: Connector | undefined): string {
   if (!connector) {
-    return `/images/${DEFAULT_CONNECTOR_ICON}`;
+    return DEFAULT_CONNECTOR_ICON;
   }
   const icon = getIcon(connector.id) ?? DEFAULT_CONNECTOR_ICON;
-  return '/images/' + icon;
+  return icon;
 }
 
 const getIcon = (type: string): string | undefined => {
   switch (type) {
     case 'apple':
-      return 'apple.png';
+      return apple;
     case 'google':
-      return 'google.png';
+      return google;
     case 'phantom':
-      return 'phantom.svg';
+      return phantom;
     case 'coinbaseWalletSDK':
-      return 'coinbase-wallet.svg';
+      return coinbaseWalletSDK;
     case 'metaMaskSDK':
-      return 'metamask.svg';
+      return metaMaskSDK;
     case 'injected':
-      return 'injected-wallet.svg';
+      return injected;
     case 'walletConnect':
-      return 'waas-logo.png';
+      return walletConnect;
     case 'bitskiSDK':
-      return 'email.svg';
+      return bitskiSDK;
     case 'x':
-      return 'x.svg';
+      return x;
     default:
       return undefined;
   }

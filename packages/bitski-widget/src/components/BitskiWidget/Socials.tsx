@@ -1,5 +1,8 @@
 import { Connector, useConnect } from 'wagmi';
 import { Social } from './constants';
+import appleIcon from '../../assets/apple.png';
+import googleIcon from '../../assets/google.png';
+import xIcon from '../../assets/x.png';
 
 interface SocialProps {
   name: string;
@@ -30,21 +33,21 @@ function socialRow(
     case Social.Apple:
       return {
         name: 'Apple',
-        icon: '/images/apple.png',
+        icon: appleIcon,
         social,
         connector,
       };
     case Social.Google:
       return {
         name: 'Google',
-        icon: '/images/google.png',
+        icon: googleIcon,
         social,
         connector,
       };
     case Social.X:
       return {
         name: 'X',
-        icon: '/images/x.png',
+        icon: xIcon,
         social,
         connector,
       };

@@ -1,5 +1,11 @@
 import { Connector, useConnect } from 'wagmi';
 import { ExternalWallet } from './constants';
+import phantom from '../../assets/phantom.svg';
+import coinbaseWalletSDK from '../../assets/coinbase-wallet.svg';
+import metaMaskSDK from '../../assets/metamask.svg';
+import injected from '../../assets/injected-wallet.svg';
+import walletConnect from '../../assets/other-wallets.svg';
+import bitskiSDK from '../../assets/email.svg';
 
 interface WalletProps {
   key: string;
@@ -49,35 +55,35 @@ function walletRow(
     case ExternalWallet.Phantom:
       return {
         name: 'Phantom',
-        icon: '/images/phantom.svg',
+        icon: phantom,
         wallet,
         connector,
       };
     case ExternalWallet.CoinbaseWallet:
       return {
         name: 'Coinbase Wallet',
-        icon: '/images/coinbase-wallet.svg',
+        icon: coinbaseWalletSDK,
         wallet,
         connector,
       };
     case ExternalWallet.MetaMask:
       return {
         name: 'MetaMask',
-        icon: '/images/metamask.svg',
+        icon: metaMaskSDK,
         wallet,
         connector,
       };
     case ExternalWallet.Injected:
       return {
         name: 'Injected Wallet',
-        icon: '/images/injected-wallet.svg',
+        icon: injected,
         wallet,
         connector,
       };
     case ExternalWallet.WalletConnect:
       return {
         name: 'Other wallets',
-        icon: '/images/other-wallets.svg',
+        icon: walletConnect,
         wallet,
         connector,
       };
@@ -85,7 +91,7 @@ function walletRow(
       if (connector.name === ExternalWallet.MetaMask) {
         return {
           name: 'MetaMask',
-          icon: '/images/metamask.svg',
+          icon: metaMaskSDK,
           wallet,
           connector,
         };
@@ -94,7 +100,7 @@ function walletRow(
       if (connector.name === ExternalWallet.Phantom) {
         return {
           name: 'Phantom',
-          icon: '/images/phantom.svg',
+          icon: phantom,
           wallet,
           connector,
         };
@@ -103,7 +109,7 @@ function walletRow(
       if (connector.name === ExternalWallet.CoinbaseWallet) {
         return {
           name: 'Coinbase Wallet',
-          icon: '/images/coinbase-wallet.svg',
+          icon: coinbaseWalletSDK,
           wallet,
           connector,
         };
@@ -112,7 +118,7 @@ function walletRow(
       if (connector.name === 'bitski') {
         return {
           name: 'WalletConnect',
-          icon: '/images/wallet-connect.svg',
+          icon: bitskiSDK,
           wallet,
           connector,
         };
@@ -120,7 +126,7 @@ function walletRow(
 
       return {
         name: connector.name,
-        icon: connector.icon || '/images/injected-wallet.svg',
+        icon: connector.icon || injected,
         wallet,
         connector,
       };
