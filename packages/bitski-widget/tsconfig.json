@@ -3,6 +3,7 @@
     "rootDir": "src",
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "module": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "target": "ESNext",
     "allowSyntheticDefaultImports": true,
