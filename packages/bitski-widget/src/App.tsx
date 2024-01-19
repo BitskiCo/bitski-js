@@ -1,6 +1,6 @@
-import './App.css';
-import { BitskiProvider, BitskiWidget } from './components/BitskiWidget';
-import { LoginMethod } from './components/BitskiWidget/constants';
+import './lib/index.css';
+import { BitskiProvider, BitskiWidget } from './lib/components/BitskiWidget';
+import { LoginMethod } from './lib/components/BitskiWidget/constants';
 import { base, mainnet, optimism, polygon } from 'viem/chains';
 
 function App() {
@@ -16,26 +16,28 @@ function App() {
   };
 
   return (
-    <BitskiProvider
-      chains={[providerConfig.chains[0], ...providerConfig.chains]}
-      loginMethods={providerConfig.loginMethods}
-      config={{
-        wallet: 'bitski',
-        options: {
-          appId: '6ee158ab-0210-4aa9-90e1-fba42b4d0d71',
-          bitskiOptions: {
-            callbackURL: new URL(
-              '../callback.html',
-              typeof window !== 'undefined' && window
-                ? window.location.href
-                : 'http://localhost:3000',
-            ).href,
+    <div className="w-full h-screen flex items-center justify-center">
+      <BitskiProvider
+        chains={[providerConfig.chains[0], ...providerConfig.chains]}
+        loginMethods={providerConfig.loginMethods}
+        config={{
+          wallet: 'bitski',
+          options: {
+            appId: '6ee158ab-0210-4aa9-90e1-fba42b4d0d71',
+            bitskiOptions: {
+              callbackURL: new URL(
+                '../callback.html',
+                typeof window !== 'undefined' && window
+                  ? window.location.href
+                  : 'http://localhost:3000',
+              ).href,
+            },
           },
-        },
-      }}
-    >
-      <BitskiWidget />
-    </BitskiProvider>
+        }}
+      >
+        <BitskiWidget />
+      </BitskiProvider>
+    </div>
   );
 }
 

@@ -2,15 +2,16 @@
   "name": "@bitski/bitski-widget",
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/index.umd.js",
-  "module": "dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/bitski-widget.umd.js",
+  "module": "dist/bitski-widget.es.js",
+  "types": "dist/bitski-widget.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js",
-      "types": "./dist/index.d.ts"
-    }
+      "import": "./dist/bitski-widget.es.js",
+      "require": "./dist/bitski-widget.umd.js",
+      "types": "./dist/bitski-widget.d.ts"
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "files": [
     "/dist"
@@ -32,17 +33,19 @@
     "wagmi": "2.x"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.17.8",
-    "bitski": "^3.8.1",
+    "@tanstack/react-query": ">=5.0.0",
+    "bitski": "3.x",
     "react": "^18",
     "react-dom": "^18",
-    "viem": "^2.0.3",
-    "wagmi": "^2.0.3"
+    "viem": "2.x",
+    "vite-plugin-lib-inject-css": "^1.3.0",
+    "wagmi": "2.x"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
+    "@types/node": "^20.11.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
