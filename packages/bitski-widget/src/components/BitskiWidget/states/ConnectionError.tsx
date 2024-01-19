@@ -1,14 +1,16 @@
 import { Connector } from 'wagmi';
-import DEFAULT_CONNECTOR_ICON from '../../../assets/waas-logo.png';
-import apple from '../../../assets/apple.png';
-import google from '../../../assets/google.png';
-import phantom from '../../../assets/phantom.svg';
-import coinbaseWalletSDK from '../../../assets/coinbase-wallet.svg';
-import metaMaskSDK from '../../../assets/metamask.svg';
-import injected from '../../../assets/injected-wallet.svg';
-import walletConnect from '../../../assets/waas-logo.png';
-import bitskiSDK from '../../../assets/email.svg';
-import x from '../../../assets/x.svg';
+import defaultConnectorIcon from '../../../assets/waas-logo.png';
+import appleIcon from '../../../assets/apple.svg';
+import googleIcon from '../../../assets/google.svg';
+import phantomIcon from '../../../assets/phantom.svg';
+import coinbaseWalletIcon from '../../../assets/coinbase-wallet.svg';
+import metaMaskIcon from '../../../assets/metamask.svg';
+import injectedIcon from '../../../assets/injected-wallet.svg';
+import walletConnectIcon from '../../../assets/other-wallets.svg';
+import emailIcon from '../../../assets/email.svg';
+import xIcon from '../../../assets/x.svg';
+import arrowRotateIcon from '../../../assets/arrow-rotate-right-left.svg';
+import chevronLeftIcon from '../../../assets/chevron-left-small.svg';
 
 export default function ConnectionError(props: {
   connector: Connector | undefined;
@@ -18,7 +20,7 @@ export default function ConnectionError(props: {
     <div className="flex w-[350px] relative flex-col items-center gap-6 shadow-[0px_4px_12px_0px_color(display-p3_0_0_0_/_0.12)] p-8 rounded-3xl bg-white">
       <div className="w-6 h-6 absolute left-6 top-[23.5px]">
         <button onClick={props.reset}>
-          <img src="/images/chevron-left-small.svg" alt="Back" />
+          <img src={chevronLeftIcon} alt="Back" />
         </button>
       </div>
       <img src={iconForConnector(props.connector)} />
@@ -38,7 +40,7 @@ export default function ConnectionError(props: {
           <p className="text-[color:var(--main-black,color(display-p3_0.2_0.2_0.2))] text-center text-[13px] not-italic font-[590] leading-[13px]">
             Retry
           </p>
-          <img src="/images/arrow-rotate-right-left.svg" alt="Retry" />
+          <img src={arrowRotateIcon} alt="Retry" />
         </div>
       </button>
     </div>
@@ -47,32 +49,33 @@ export default function ConnectionError(props: {
 
 export function iconForConnector(connector: Connector | undefined): string {
   if (!connector) {
-    return DEFAULT_CONNECTOR_ICON;
+    return defaultConnectorIcon;
   }
-  const icon = getIcon(connector.id) ?? DEFAULT_CONNECTOR_ICON;
+
+  const icon = getIcon(connector.id) ?? defaultConnectorIcon;
   return icon;
 }
 
 const getIcon = (type: string): string | undefined => {
   switch (type) {
     case 'apple':
-      return apple;
+      return appleIcon;
     case 'google':
-      return google;
+      return googleIcon;
     case 'phantom':
-      return phantom;
+      return phantomIcon;
     case 'coinbaseWalletSDK':
-      return coinbaseWalletSDK;
+      return coinbaseWalletIcon;
     case 'metaMaskSDK':
-      return metaMaskSDK;
+      return metaMaskIcon;
     case 'injected':
-      return injected;
+      return injectedIcon;
     case 'walletConnect':
-      return walletConnect;
+      return walletConnectIcon;
     case 'bitskiSDK':
-      return bitskiSDK;
+      return emailIcon;
     case 'x':
-      return x;
+      return xIcon;
     default:
       return undefined;
   }

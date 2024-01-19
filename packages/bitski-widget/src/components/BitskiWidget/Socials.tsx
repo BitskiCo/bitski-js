@@ -1,8 +1,8 @@
 import { Connector, useConnect } from 'wagmi';
 import { Social } from './constants';
-import appleIcon from '../../assets/apple.png';
-import googleIcon from '../../assets/google.png';
-import xIcon from '../../assets/x.png';
+import appleIcon from '../../assets/apple.svg';
+import googleIcon from '../../assets/google.svg';
+import xIcon from '../../assets/x.svg';
 
 interface SocialProps {
   name: string;

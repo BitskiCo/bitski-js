@@ -1,11 +1,11 @@
 import { Connector, useConnect } from 'wagmi';
 import { ExternalWallet } from './constants';
-import phantom from '../../assets/phantom.svg';
-import coinbaseWalletSDK from '../../assets/coinbase-wallet.svg';
-import metaMaskSDK from '../../assets/metamask.svg';
-import injected from '../../assets/injected-wallet.svg';
-import walletConnect from '../../assets/other-wallets.svg';
-import bitskiSDK from '../../assets/email.svg';
+import phantomIcon from '../../assets/phantom.svg';
+import coinbaseWalletIcon from '../../assets/coinbase-wallet.svg';
+import metaMaskIcon from '../../assets/metamask.svg';
+import injectedIcon from '../../assets/injected-wallet.svg';
+import walletConnectIcon from '../../assets/other-wallets.svg';
+import chevronRightIcon from '../../assets/chevron-right-small.svg';
 
 interface WalletProps {
   key: string;
@@ -28,7 +28,7 @@ const Wallet = ({ name, icon, onWalletClick }: WalletProps) => {
           {name}
         </p>
       </div>
-      <img className="w-5 h-5" src="/images/chevron-right-small.svg" alt="More" />
+      <img className="w-5 h-5" src={chevronRightIcon} alt="More" />
     </button>
   );
 };
@@ -55,78 +55,42 @@ function walletRow(
     case ExternalWallet.Phantom:
       return {
         name: 'Phantom',
-        icon: phantom,
+        icon: phantomIcon,
         wallet,
         connector,
       };
     case ExternalWallet.CoinbaseWallet:
       return {
         name: 'Coinbase Wallet',
-        icon: coinbaseWalletSDK,
+        icon: coinbaseWalletIcon,
         wallet,
         connector,
       };
     case ExternalWallet.MetaMask:
       return {
         name: 'MetaMask',
-        icon: metaMaskSDK,
+        icon: metaMaskIcon,
         wallet,
         connector,
       };
     case ExternalWallet.Injected:
       return {
         name: 'Injected Wallet',
-        icon: injected,
+        icon: injectedIcon,
         wallet,
         connector,
       };
     case ExternalWallet.WalletConnect:
       return {
         name: 'Other wallets',
-        icon: walletConnect,
+        icon: walletConnectIcon,
         wallet,
         connector,
       };
     default:
-      if (connector.name === ExternalWallet.MetaMask) {
-        return {
-          name: 'MetaMask',
-          icon: metaMaskSDK,
-          wallet,
-          connector,
-        };
-      }
-
-      if (connector.name === ExternalWallet.Phantom) {
-        return {
-          name: 'Phantom',
-          icon: phantom,
-          wallet,
-          connector,
-        };
-      }
-
-      if (connector.name === ExternalWallet.CoinbaseWallet) {
-        return {
-          name: 'Coinbase Wallet',
-          icon: coinbaseWalletSDK,
-          wallet,
-          connector,
-        };
-      }
-
-      if (connector.name === 'bitski') {
-        return {
-          name: 'WalletConnect',
-          icon: bitskiSDK,
-          wallet,
-          connector,
-        };
-      }
-
       return {
         name: connector.name,
-        icon: connector.icon || injected,
+        icon: connector.icon || injectedIcon,
         wallet,
         connector,
       };

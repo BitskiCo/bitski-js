@@ -5,9 +5,7 @@
 @layer base {
   body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    font-feature-settings:
-      'clig' off,
-      'liga' off;
+    font-feature-settings: 'clig' off, 'liga' off;
   }
 }
 
@@ -15,8 +13,8 @@
   --aux-light-grey: #c1c1c31a;
   --aux-grey: #c1c1c333;
   --main-grey: #98979c;
-  --main-obsidian: #17181A;
-  --aux-blue: #299EFF40;
+  --main-obsidian: #17181a;
+  --aux-blue: #299eff40;
 }
 
 @layer utilities {
@@ -113,25 +111,4 @@
 
 .bg-color-aux-grey {
   background-color: #c1c1c333;
-}
-
-.dots-background {
-  background-color: #c1c1c333;
-  background-image: url('../public/background.svg');
-  background-repeat: repeat; /* or repeat-x or repeat-y for specific directions */
-  background-size: auto; /* or cover or contain depending on your preference */
-}
-
-.social-button {
-  @apply flex flex-col justify-center items-center flex-[1_0_0] self-stretch border border-[color:var(--aux-grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_1px_1px_0px_color(display-p3_0_0_0_/_0.20)] px-5 py-3 rounded border-solid;
-  background: #ffffff;
-}
-
-.top-nav-button {
-  @apply flex justify-center items-center gap-2.5 flex-[1_0_0] shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] px-2 py-[9px] rounded-[10px];
-  background: linear-gradient(
-    180deg,
-    color(display-p3 0.2256 0.2442 0.2627) 0%,
-    color(display-p3 0.0431 0.0471 0.051) 100%
-  );
 }
