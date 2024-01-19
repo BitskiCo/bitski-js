@@ -1,5 +1,11 @@
 # @bitski/bitski-widget
 
+## 0.0.3
+
+### Patch Changes
+
+- [#430](https://github.com/BitskiCo/bitski-js/pull/430) [`221afc507b06715171cbb8778bf2a360e7a6d792`](https://github.com/BitskiCo/bitski-js/commit/221afc507b06715171cbb8778bf2a360e7a6d792) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Fix retry buttons not working when no connections
+
 ## 0.0.2
 
 ### Patch Changes
