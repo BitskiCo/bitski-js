@@ -32,7 +32,7 @@ export function createBitskiConnector({
 
   if (!callbackURL) {
     throw new Error(
-      'BitskiProvider: A callbackURL is required in the config when using the Social or Bitski login method. Please pass a valid appId.',
+      'BitskiProvider: A callbackURL is required in the config when using the Social or Bitski login method. Please pass a valid callbackURL.',
     );
   }
 
