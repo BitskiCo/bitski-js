@@ -1,5 +1,11 @@
 # bitski
 
+## 4.0.0
+
+### Major Changes
+
+- [#436](https://github.com/BitskiCo/bitski-js/pull/436) [`69571b8c9024ede11a280d2de16b3ef20f27fb72`](https://github.com/BitskiCo/bitski-js/commit/69571b8c9024ede11a280d2de16b3ef20f27fb72) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Remove Bitski extension provider support for SDK in favor of WaaS SDK. No code changes needed by consumers; SDK should work for Email/Password login, but no longer work with extension installed.
+
 ## 3.8.1
 
 ### Patch Changes

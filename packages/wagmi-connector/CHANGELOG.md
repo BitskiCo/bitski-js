@@ -1,5 +1,12 @@
 # bitski-provider
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`69571b8c9024ede11a280d2de16b3ef20f27fb72`](https://github.com/BitskiCo/bitski-js/commit/69571b8c9024ede11a280d2de16b3ef20f27fb72)]:
+  - bitski@4.0.0
+
 ## 1.0.2
 
 ### Patch Changes
