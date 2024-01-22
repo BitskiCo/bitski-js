@@ -79,7 +79,6 @@ dist/**
 
 # compiled output
 packages/**/dist/
-packages/**/lib/
 
 # dependencies
 packages/**/node_modules/
