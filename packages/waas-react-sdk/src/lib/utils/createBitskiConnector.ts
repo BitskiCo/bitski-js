@@ -39,7 +39,7 @@ export function createBitskiConnector({
   if (callbackURL || bitskiOptions?.callbackURL) {
     try {
       new URL(callbackURL ?? bitskiOptions?.callbackURL);
-    } catch (err) {
+    } catch (_) {
       throw new Error(
         `BitskiProvider: A valid callbackURL is required in the config when using the Social or Bitski login method. Please pass a valid callbackURL. You provided: ${
           callbackURL ?? bitskiOptions?.callbackURL
