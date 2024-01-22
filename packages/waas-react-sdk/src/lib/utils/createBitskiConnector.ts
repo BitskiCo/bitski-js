@@ -18,7 +18,7 @@ export function createBitskiConnector({
 
   if (emptyBitskiConfig && !appId && !callbackURL) {
     throw new Error(
-      'BitskiProvider: Bitski config is required when using Social login method. Please pass a valid Bitski config object.',
+      'BitskiProvider: Bitski config is required when using Bitski or Social login method without a provided appId or callbackURL. Please pass a valid Bitski config object.',
     );
   }
 
