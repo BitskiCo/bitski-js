@@ -38,28 +38,41 @@ export function createBitskiConnector({
 
   switch (loginMethod) {
     case LoginMethod.Bitski:
-      return bitski(configMap.bitski);
+      return bitski({
+        ...configMap.bitski,
+        appId,
+        bitskiOptions: {
+          ...bitskiOptions,
+          callbackURL,
+        },
+      });
     case LoginMethod.Google:
       return bitski({
         ...configMap.bitski,
+        appId,
         bitskiOptions: {
           ...bitskiOptions,
+          callbackURL,
           includeGoogle: true,
         },
       });
     case LoginMethod.Apple:
       return bitski({
         ...configMap.bitski,
+        appId,
         bitskiOptions: {
           ...bitskiOptions,
+          callbackURL,
           includeApple: true,
         },
       });
     case LoginMethod.X:
       return bitski({
         ...configMap.bitski,
+        appId,
         bitskiOptions: {
           ...bitskiOptions,
+          callbackURL,
           includeX: true,
         },
       });
