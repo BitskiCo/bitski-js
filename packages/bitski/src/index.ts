@@ -75,10 +75,6 @@ export class Bitski {
       return existingProvider;
     }
 
-    if (typeof window !== 'undefined' && window.Bitski?.getProvider) {
-      return window.Bitski.getProvider(options);
-    }
-
     const network = networkFromProviderOptions(options);
 
     this.provider = new BitskiProviderShim(
