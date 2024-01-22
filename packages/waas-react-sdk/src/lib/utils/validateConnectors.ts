@@ -16,9 +16,13 @@ import { LoginMethods } from '../components/BitskiWidget/types';
 export const validateConnectors = ({
   loginMethods,
   config,
+  appId,
+  callbackURL,
 }: {
   loginMethods: LoginMethods[];
   config?: ConnectorConfig | ConnectorConfig[];
+  appId?: string;
+  callbackURL?: string;
 }) => {
   const configConnectors: CreateConnectorFn[] = [];
 
@@ -91,7 +95,7 @@ export const validateConnectors = ({
 
   const bitskiConnectors = loginMethods
     .filter((method) => method != LoginMethod.Wallet)
-    .map((method) => createBitskiConnector(configMap, method));
+    .map((method) => createBitskiConnector({ configMap, loginMethod: method, appId, callbackURL }));
   configConnectors.push(...bitskiConnectors);
 
   return configConnectors;

@@ -10,17 +10,26 @@ import { ConnectorConfig } from './types';
 
 interface BitskiProviderProps {
   children: ReactNode;
+  appId?: string;
+  callbackURL?: string;
   chains: readonly [Chain, ...Chain[]];
   loginMethods: LoginMethods[];
   config?: ConnectorConfig | ConnectorConfig[];
 }
 
-function BitskiProvider({ children, chains, loginMethods, config }: BitskiProviderProps) {
+function BitskiProvider({
+  children,
+  chains,
+  appId,
+  callbackURL,
+  loginMethods,
+  config,
+}: BitskiProviderProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   const bitskiWidgetConfig = createBitskiConfig({
     chains: validateChains(chains),
-    connectors: validateConnectors({ loginMethods, config }),
+    connectors: validateConnectors({ appId, callbackURL, loginMethods, config }),
   });
 
   return (
