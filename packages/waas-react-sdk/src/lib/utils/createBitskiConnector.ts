@@ -16,7 +16,7 @@ export function createBitskiConnector({
 }): CreateConnectorFn {
   const emptyBitskiConfig = Object.keys(configMap.bitski).length === 0;
 
-  if (emptyBitskiConfig) {
+  if (emptyBitskiConfig && !appId && !callbackURL) {
     throw new Error(
       'BitskiProvider: Bitski config is required when using Social login method. Please pass a valid Bitski config object.',
     );
