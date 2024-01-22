@@ -1,5 +1,11 @@
 # @bitski/bitski-widget
 
+## 0.0.1
+
+### Patch Changes
+
+- [#432](https://github.com/BitskiCo/bitski-js/pull/432) [`6aade4ae892f953684a1cbd457f5dcab1da4910a`](https://github.com/BitskiCo/bitski-js/commit/6aade4ae892f953684a1cbd457f5dcab1da4910a) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Publish @bitski/waas-react-sdk
+
 ## 0.0.3
 
 ### Patch Changes
