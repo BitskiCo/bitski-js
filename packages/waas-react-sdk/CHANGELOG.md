@@ -1,5 +1,14 @@
 # @bitski/waas-react-sdk
 
+## 0.0.2
+
+### Patch Changes
+
+- [#435](https://github.com/BitskiCo/bitski-js/pull/435) [`d964c005be6b9105ae0335f6e47567c74185a007`](https://github.com/BitskiCo/bitski-js/commit/d964c005be6b9105ae0335f6e47567c74185a007) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Update demo app; only throw error for Bitski config if no appId or callbackURL
+
+- Updated dependencies [[`69571b8c9024ede11a280d2de16b3ef20f27fb72`](https://github.com/BitskiCo/bitski-js/commit/69571b8c9024ede11a280d2de16b3ef20f27fb72)]:
+  - bitski@4.0.0
+
 ## 0.0.1
 
 ### Patch Changes
