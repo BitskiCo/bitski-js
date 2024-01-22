@@ -1,4 +1,4 @@
-# @bitski/bitski-widget
+# @bitski/waas-react-sdk
 
 ## 0.0.1
 

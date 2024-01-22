@@ -18,22 +18,17 @@ function App() {
   return (
     <div className="w-full h-screen flex items-center justify-center">
       <BitskiProvider
+        appId="6ee158ab-0210-4aa9-90e1-fba42b4d0d71"
+        callbackURL={
+          new URL(
+            '../callback.html',
+            typeof window !== 'undefined' && window
+              ? window.location.href
+              : 'http://localhost:3000',
+          ).href
+        }
         chains={[providerConfig.chains[0], ...providerConfig.chains]}
         loginMethods={providerConfig.loginMethods}
-        config={{
-          wallet: 'bitski',
-          options: {
-            appId: '6ee158ab-0210-4aa9-90e1-fba42b4d0d71',
-            bitskiOptions: {
-              callbackURL: new URL(
-                '../callback.html',
-                typeof window !== 'undefined' && window
-                  ? window.location.href
-                  : 'http://localhost:3000',
-              ).href,
-            },
-          },
-        }}
       >
         <BitskiWidget />
       </BitskiProvider>

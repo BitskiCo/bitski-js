@@ -19,7 +19,7 @@ export default defineConfig({
     emptyOutDir: true,
     lib: {
       entry: path.resolve(__dirname, 'src/lib/index.ts'),
-      name: 'BitskiWidget',
+      name: 'BitskiWaasReactSDK',
       formats: ['es', 'cjs'],
       fileName: (format) => `index.${format}.js`,
     },

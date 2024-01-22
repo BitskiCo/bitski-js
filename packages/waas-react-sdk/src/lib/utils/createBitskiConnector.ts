@@ -16,9 +16,9 @@ export function createBitskiConnector({
 }): CreateConnectorFn {
   const emptyBitskiConfig = Object.keys(configMap.bitski).length === 0;
 
-  if (emptyBitskiConfig) {
+  if (emptyBitskiConfig && !appId && !callbackURL) {
     throw new Error(
-      'BitskiProvider: Bitski config is required when using Social login method. Please pass a valid Bitski config object.',
+      'BitskiProvider: Bitski config is required when using Bitski or Social login method without a provided appId or callbackURL. Please pass a valid Bitski config object.',
     );
   }
 
@@ -34,6 +34,18 @@ export function createBitskiConnector({
     throw new Error(
       'BitskiProvider: A callbackURL is required in the config when using the Social or Bitski login method. Please pass a valid callbackURL.',
     );
+  }
+
+  if (callbackURL || bitskiOptions?.callbackURL) {
+    try {
+      new URL(callbackURL ?? bitskiOptions?.callbackURL);
+    } catch (_) {
+      throw new Error(
+        `BitskiProvider: A valid callbackURL is required in the config when using the Social or Bitski login method. Please pass a valid callbackURL. You provided: ${
+          callbackURL ?? bitskiOptions?.callbackURL
+        }.`,
+      );
+    }
   }
 
   switch (loginMethod) {
