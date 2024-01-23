@@ -73,7 +73,7 @@ describe('eth-accounts middleware', () => {
     });
 
     const result = await provider.request({ method: EthMethod.eth_accounts });
-    expect(result).toEqual(['0x456']);
+    expect(result).toEqual(['0x123']);
   });
 
   test('returns accounts if only one account', async () => {
