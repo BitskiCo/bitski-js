@@ -1,5 +1,11 @@
 # @bitski/waas-react-sdk
 
+## 0.0.4
+
+### Patch Changes
+
+- [#439](https://github.com/BitskiCo/bitski-js/pull/439) [`28d4472e4a700dac3e1d80ce7c4f2a6cecda0d91`](https://github.com/BitskiCo/bitski-js/commit/28d4472e4a700dac3e1d80ce7c4f2a6cecda0d91) Thanks [@RealAndyLawton](https://github.com/RealAndyLawton)! - Use Blockchain Accounts for provider.getAccounts
+
 ## 0.0.3
 
 ### Patch Changes
