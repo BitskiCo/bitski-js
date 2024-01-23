@@ -24,32 +24,6 @@ describe('eth-accounts middleware', () => {
     expect(result).toEqual(['0x123']);
   });
 
-  test('prioritizes contract wallets over vault wallets', async () => {
-    expect.assertions(3);
-    const provider = createTestProvider();
-
-    fetchMock.mockResponse(async (req) => {
-      expect(req.url).toBe('https://api.bitski.com/v2/blockchain/accounts');
-      expect(req.method).toBe('GET');
-
-      return JSON.stringify({
-        accounts: [
-          {
-            kind: 'bitski',
-            address: '0x123',
-          },
-          {
-            kind: 'contract-wallet',
-            address: '0x456',
-          },
-        ],
-      });
-    });
-
-    const result = await provider.request({ method: EthMethod.eth_accounts });
-    expect(result).toEqual(['0x456']);
-  });
-
   test('uses access token if available', async () => {
     expect.assertions(4);
     const provider = createTestProvider({

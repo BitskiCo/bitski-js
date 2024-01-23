@@ -2,4 +2,4 @@
 'bitski-provider': minor
 ---
 
-Return the contract wallet on when waas is passed in config
+Allow blockchain accounts to handle filtering of account type instead; accept response passthrough.
