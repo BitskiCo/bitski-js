@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@openid/appauth": "^1.2.6",
-    "bitski-provider": "^3.3.2",
+    "bitski-provider": "^3.4.0",
     "decoders": "^2.0.1",
     "eth-provider-types": "^0.2.0",
     "hash-it": "^6.0.0"
