@@ -1,6 +1,6 @@
 {
   "name": "@bitski/waas-react-sdk",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -32,7 +32,7 @@
     "wagmi": "2.x"
   },
   "dependencies": {
-    "bitski": "^4.0.0"
+    "bitski": "^4.1.0"
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.0.0",

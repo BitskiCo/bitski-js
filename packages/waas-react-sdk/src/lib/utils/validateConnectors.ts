@@ -4,6 +4,7 @@ import {
   MetaMaskParameters,
   WalletConnectParameters,
   InjectedParameters,
+  injected,
 } from 'wagmi/connectors';
 import { BitskiParameters } from '../connectors';
 import { LoginMethod } from '../components/BitskiWidget/constants';
@@ -12,6 +13,7 @@ import { ConfigTypeMap, ConnectorConfig } from '../components/BitskiWidget/types
 import { CreateConnectorFn } from 'wagmi';
 import { createBitskiConnector } from './createBitskiConnector';
 import { LoginMethods } from '../components/BitskiWidget/types';
+import { hasWindowProvider } from '.';
 
 export const validateConnectors = ({
   loginMethods,
@@ -86,6 +88,10 @@ export const validateConnectors = ({
   }
 
   if (loginMethods.includes(LoginMethod.Wallet)) {
+    if (!hasWindowProvider()) {
+      configConnectors.push(injected());
+    }
+
     configConnectors.push(
       walletConnect({
         projectId: '0b416ed746cf3516ca4f65b89e6e99f8',

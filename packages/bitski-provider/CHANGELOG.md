@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 3.4.0
+
+### Minor Changes
+
+- [#440](https://github.com/BitskiCo/bitski-js/pull/440) [`7a078e3980d44d0dc0949becaaefd1754827e1e9`](https://github.com/BitskiCo/bitski-js/commit/7a078e3980d44d0dc0949becaaefd1754827e1e9) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Allow blockchain accounts to handle eth_accounts filtering of account type instead if only one account; otherwise, only prioritize vault accounts for users with more than one account.
+
 ## 3.3.2
 
 ### Patch Changes
