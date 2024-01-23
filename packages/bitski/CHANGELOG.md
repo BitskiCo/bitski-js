@@ -1,5 +1,11 @@
 # bitski
 
+## 4.1.0
+
+### Minor Changes
+
+- [#442](https://github.com/BitskiCo/bitski-js/pull/442) [`76ae5674109e32adad5cc95d21c59678a3a6f992`](https://github.com/BitskiCo/bitski-js/commit/76ae5674109e32adad5cc95d21c59678a3a6f992) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Update bitski-provider to take in eth-accounts change to default to vault wallets
+
 ## 4.0.0
 
 ### Major Changes
