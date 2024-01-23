@@ -8,6 +8,7 @@ import {
   ProviderNotFoundError,
 } from 'wagmi';
 import type { BitskiProviderShim } from 'bitski/lib/provider-shim';
+import { getBlockchainAccounts } from '../utils/getBlockchainAccounts';
 
 const BitskiIcon = 'https://cdn.bitskistatic.com/docs-web/bitskiWallet.svg';
 
@@ -100,10 +101,7 @@ export function bitski(parameters: BitskiParameters) {
         const chainId: number = parameters?.chainId ?? (await this.getChainId());
 
         if (status === AuthenticationStatus.Connected) {
-          const accounts: string[] = (await provider.request({
-            method: 'eth_accounts',
-          })) as string[];
-
+          const accounts = await this.getAccounts();
           return {
             accounts,
             chainId,
@@ -147,10 +145,7 @@ export function bitski(parameters: BitskiParameters) {
           await bitski.signIn();
         }
 
-        const accounts: string[] = (await provider.request({
-          method: 'eth_requestAccounts',
-        })) as string[];
-
+        const accounts = await this.getAccounts();
         if (!accounts) {
           throw new BaseError('No Accounts found');
         }
@@ -178,9 +173,11 @@ export function bitski(parameters: BitskiParameters) {
           await this.connect();
         }
 
-        const { accounts = [] } = await bitski.getUser();
-
-        return accounts as WagmiAccounts;
+        const token = await bitski.getCurrentAccessToken();
+        const blockchainAccounts = await getBlockchainAccounts(fetch, token);
+        return blockchainAccounts.map((account) => {
+          return account.address;
+        }) as WagmiAccounts;
       },
 
       async getChainId() {
