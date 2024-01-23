@@ -42,7 +42,23 @@ const fetchAccounts = async (config: InternalBitskiProviderConfig): Promise<stri
     throw ethErrors.rpc.internal('Could not find blockchain accounts');
   }
 
-  return accounts as unknown as string[];
+  const moreThanOneAccount = accounts.length > 1;
+  const mainAccount = config.waas?.enabled
+    ? accounts.find((a) => a.kind === 'contract-wallet') ??
+      accounts.find((a) => a.kind === 'bitski')
+    : accounts.find((a) => a.kind === 'bitski');
+
+  if (moreThanOneAccount && !mainAccount) {
+    throw ethErrors.rpc.internal('Could not find blockchain accounts');
+  }
+
+  if (moreThanOneAccount && mainAccount) {
+    return [mainAccount.address];
+  }
+
+  const accountAddresses = accounts.map((a) => a.address);
+
+  return accountAddresses;
 };
 
 export const createEthAccountsMiddleware = (): JsonRpcMiddleware<unknown[], string[]> => {
