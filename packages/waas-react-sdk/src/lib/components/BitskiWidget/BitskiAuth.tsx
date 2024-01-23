@@ -6,7 +6,7 @@ import Connected from './states/Connected';
 import ConnectionError from './states/ConnectionError';
 import { ConnectionState } from './constants';
 
-export function BitskiAuth() {
+export function BitskiAuth(props: { logoUrl?: string }) {
   const { connectionState, connectWallet, disconnectWallet, reset } = useConnectionState();
 
   const { pendingConnector } = connectionState as PendingState;
@@ -14,7 +14,7 @@ export function BitskiAuth() {
 
   switch (connectionState.type) {
     case ConnectionState.Idle:
-      return <IdleConnection connectWallet={connectWallet} />;
+      return <IdleConnection connectWallet={connectWallet} logoUrl={props.logoUrl} />;
     case ConnectionState.Pending:
       return <PendingConnection connector={pendingConnector} reset={reset} />;
     case ConnectionState.Connected:

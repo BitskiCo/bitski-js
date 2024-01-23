@@ -5,7 +5,6 @@ import { ExternalWallet, Social } from '../constants';
 import Wallets from '../Wallets';
 import TOS from '../TOS';
 import Socials from '../Socials';
-import dappIcon from '../../../assets/dapp-icon.svg';
 
 export default function IdleConnection(props: {
   connectWallet: ({
@@ -14,7 +13,8 @@ export default function IdleConnection(props: {
   }: {
     connector: Connector;
     parameters?: Record<string, unknown>;
-  }) => void;
+  }) => void,
+  logoUrl?: string
 }) {
   const config = useConfig();
 
@@ -31,7 +31,9 @@ export default function IdleConnection(props: {
       <p className="text-[color:var(--main-grey)] text-sm not-italic font-[590] leading-[17px] tracking-[-0.28px]">
         Login or Sign Up
       </p>
-      <img className="w-12 h-12" src={dappIcon} alt="Logo" />
+      {props.logoUrl ? (
+        <img className="w-12 h-12" src={props.logoUrl} alt="Logo" />
+      ) : null}
       {bitskiConnector ? (
         <div className="flex flex-col items-center gap-3 self-stretch">
           <EmailInput connector={bitskiConnector} connect={props.connectWallet} />
