@@ -43,10 +43,7 @@ const fetchAccounts = async (config: InternalBitskiProviderConfig): Promise<stri
   }
 
   const moreThanOneAccount = accounts.length > 1;
-  const mainAccount = config.waas?.enabled
-    ? accounts.find((a) => a.kind === 'contract-wallet') ??
-      accounts.find((a) => a.kind === 'bitski')
-    : accounts.find((a) => a.kind === 'bitski');
+  const mainAccount = accounts.find((a) => a.kind === 'bitski');
 
   if (moreThanOneAccount && !mainAccount) {
     throw ethErrors.rpc.internal('Could not find blockchain accounts');
