@@ -1,5 +1,11 @@
 # @bitski/waas-react-sdk
 
+## 0.0.5
+
+### Patch Changes
+
+- [#447](https://github.com/BitskiCo/bitski-js/pull/447) [`a520aa7c53666cb2bb27ca8dba2c19ec773a08e7`](https://github.com/BitskiCo/bitski-js/commit/a520aa7c53666cb2bb27ca8dba2c19ec773a08e7) Thanks [@RealAndyLawton](https://github.com/RealAndyLawton)! - Make logo configurable
+
 ## 0.0.4
 
 ### Patch Changes
