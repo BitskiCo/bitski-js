@@ -61,7 +61,7 @@ export function bitski(parameters: BitskiParameters) {
 
   return createConnector<Provider, Properties, StorageItem>((config) => {
     let id = 'bitkiSDK';
-    let name = 'Bitski';
+    let name = 'bitski';
     let type = 'bitski';
 
     if (includeApple) {
