@@ -1,5 +1,13 @@
 # @bitski/waas-react-sdk
 
+## 0.0.7
+
+### Patch Changes
+
+- [#453](https://github.com/BitskiCo/bitski-js/pull/453) [`64d513d664a5a35eb776ffb18c30108d2a5a8ff2`](https://github.com/BitskiCo/bitski-js/commit/64d513d664a5a35eb776ffb18c30108d2a5a8ff2) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Undo change of socials prompt to none back to login
+
+- [#455](https://github.com/BitskiCo/bitski-js/pull/455) [`0494c896b98cfdddb12ee800b9186c3a45dd1f34`](https://github.com/BitskiCo/bitski-js/commit/0494c896b98cfdddb12ee800b9186c3a45dd1f34) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Push injected connector when mobile is detected; externalize connectors and wagmi core.
+
 ## 0.0.6
 
 ### Patch Changes
