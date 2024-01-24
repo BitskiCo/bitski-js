@@ -13,7 +13,7 @@ import { ConfigTypeMap, ConnectorConfig } from '../components/BitskiWidget/types
 import { CreateConnectorFn } from 'wagmi';
 import { createBitskiConnector } from './createBitskiConnector';
 import { LoginMethods } from '../components/BitskiWidget/types';
-import { hasWindowProvider } from '.';
+import { isMobile } from '.';
 
 export const validateConnectors = ({
   loginMethods,
@@ -88,7 +88,12 @@ export const validateConnectors = ({
   }
 
   if (loginMethods.includes(LoginMethod.Wallet)) {
-    if (!hasWindowProvider()) {
+    /*
+     * If a user is using a mobile app with a Dapp browser, multi-discovery
+     * does not work due to its injection timing. So instead, manually
+     * push the injected provider.
+     */
+    if (!isMobile()) {
       configConnectors.push(injected());
     }
 

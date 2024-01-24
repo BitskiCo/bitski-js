@@ -25,6 +25,8 @@
     "preview": "vite preview"
   },
   "peerDependencies": {
+    "@wagmi/core": ">=2.0.0",
+    "@wagmi/connectors": ">=2.0.0",
     "@tanstack/react-query": ">=5.0.0",
     "react": "^18",
     "react-dom": "^18",

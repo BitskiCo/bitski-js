@@ -32,6 +32,8 @@ export default defineConfig({
         'wagmi',
         'viem',
         '@tanstack/react-query',
+        '@wagmi/core',
+        '@wagmi/connectors',
       ],
       output: {
         globals: {
@@ -42,6 +44,8 @@ export default defineConfig({
           wagmi: 'wagmi',
           viem: 'viem',
           '@tanstack/react-query': '@tanstack/react-query',
+          '@wagmi/core': '@wagmi/core',
+          '@wagmi/connectors': '@wagmi/connectors',
         },
       },
     },
