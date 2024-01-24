@@ -1,6 +1,6 @@
 {
   "name": "@bitski/waas-react-sdk",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
