@@ -127,19 +127,19 @@ export function bitski(parameters: BitskiParameters) {
           const loginHint = APPLE_LOGIN_HINT;
           await bitski.start({
             login_hint: loginHint,
-            prompt: 'none',
+            prompt: 'login',
           });
         } else if (includeGoogle) {
           const loginHint = GOOGLE_LOGIN_HINT;
           await bitski.start({
             login_hint: loginHint,
-            prompt: 'none',
+            prompt: 'login',
           });
         } else if (includeX) {
           const loginHint = X_LOGIN_HINT;
           await bitski.start({
             login_hint: loginHint,
-            prompt: 'none',
+            prompt: 'login',
           });
         } else {
           await bitski.signIn();
