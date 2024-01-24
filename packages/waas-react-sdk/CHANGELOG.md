@@ -1,5 +1,13 @@
 # @bitski/waas-react-sdk
 
+## 0.0.6
+
+### Patch Changes
+
+- [#451](https://github.com/BitskiCo/bitski-js/pull/451) [`334ccea453655d34664a40a2f1db3fdeaaade5fa`](https://github.com/BitskiCo/bitski-js/commit/334ccea453655d34664a40a2f1db3fdeaaade5fa) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Undo bitski connector name change
+
+- [#449](https://github.com/BitskiCo/bitski-js/pull/449) [`8627d5fc8c42dba133effc5cff6961b9f7bc9d1b`](https://github.com/BitskiCo/bitski-js/commit/8627d5fc8c42dba133effc5cff6961b9f7bc9d1b) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Set social logins prompt to none to avoid re-auth
+
 ## 0.0.5
 
 ### Patch Changes
