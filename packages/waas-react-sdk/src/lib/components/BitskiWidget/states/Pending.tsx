@@ -22,7 +22,7 @@ export default function PendingConnection(props: { connector: Connector; reset: 
         />
       </div>
       <div className="flex flex-col items-center gap-3 self-stretch">
-        <h3 className="text-black text-lg not-italic font-bold leading-[23px] tracking-[-0.45px]">
+        <h3 className="capitalize text-black text-lg not-italic font-bold leading-[23px] tracking-[-0.45px]">
           Connecting {props.connector.name}
         </h3>
       </div>
