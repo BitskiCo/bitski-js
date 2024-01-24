@@ -61,7 +61,7 @@ export function bitski(parameters: BitskiParameters) {
 
   return createConnector<Provider, Properties, StorageItem>((config) => {
     let id = 'bitkiSDK';
-    let name = 'bitski';
+    let name = 'Bitski';
     let type = 'bitski';
 
     if (includeApple) {
@@ -127,19 +127,19 @@ export function bitski(parameters: BitskiParameters) {
           const loginHint = APPLE_LOGIN_HINT;
           await bitski.start({
             login_hint: loginHint,
-            prompt: 'login',
+            prompt: 'none',
           });
         } else if (includeGoogle) {
           const loginHint = GOOGLE_LOGIN_HINT;
           await bitski.start({
             login_hint: loginHint,
-            prompt: 'login',
+            prompt: 'none',
           });
         } else if (includeX) {
           const loginHint = X_LOGIN_HINT;
           await bitski.start({
             login_hint: loginHint,
-            prompt: 'login',
+            prompt: 'none',
           });
         } else {
           await bitski.signIn();
