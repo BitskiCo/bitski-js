@@ -14,7 +14,7 @@ const BitskiIcon = 'https://cdn.bitskistatic.com/docs-web/bitskiWallet.svg';
 
 const APPLE_LOGIN_HINT = 'fa_ZWY0YTdjNTAtZDkzZC00YmI4LWI3MTktYzFjNDU0ZjRkMTYw';
 const GOOGLE_LOGIN_HINT = 'fa_NTcyYjUyZWUtZjk4Yi00NTdhLTgzOTItYzI2MjM0YTU0MjIx';
-const X_LOGIN_HINT = 'x';
+const X_LOGIN_HINT = 'fa_NzBmODA3MzEtNmVhYy00OWFlLWI4YzMtNjdlYjBjYzBkMzA2';
 
 type WagmiAccounts = `0x${string}`[];
 
