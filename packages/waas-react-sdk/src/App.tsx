@@ -2,6 +2,7 @@ import './lib/index.css';
 import { BitskiProvider, BitskiWidget } from './lib';
 import { LoginMethod } from './lib/components/BitskiWidget/constants';
 import { base, mainnet, optimism, polygon } from 'viem/chains';
+import { useAccountEffect } from '../../../node_modules/wagmi/dist/types/hooks/useAccountEffect';
 
 function App() {
   const providerConfig = {
@@ -14,6 +15,16 @@ function App() {
     ],
     chains: [mainnet, base, polygon, optimism],
   };
+
+  useAccountEffect({
+    config,
+    onConnect(data) {
+      console.log('Connected!', data)
+    },
+    onDisconnect() {
+      console.log('Disconnected!')
+    },
+  })
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
