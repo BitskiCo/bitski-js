@@ -1,5 +1,11 @@
 # @bitski/waas-react-sdk
 
+## 0.0.8
+
+### Patch Changes
+
+- [#456](https://github.com/BitskiCo/bitski-js/pull/456) [`1eb3250666b9f48e3598cc2c681e98efcfcb2b89`](https://github.com/BitskiCo/bitski-js/commit/1eb3250666b9f48e3598cc2c681e98efcfcb2b89) Thanks [@RealAndyLawton](https://github.com/RealAndyLawton)! - Adds Twitter login hint
+
 ## 0.0.7
 
 ### Patch Changes
