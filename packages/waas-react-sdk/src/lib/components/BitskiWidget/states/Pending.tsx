@@ -1,6 +1,7 @@
 import { Connector } from 'wagmi';
 import { iconForConnector } from './ConnectionError';
 
+import chevronLeftSmall from '../../../assets/chevron-left-small.svg';
 import pendingIcon from '../../../assets/pending.svg';
 
 export default function PendingConnection(props: { connector: Connector; reset: () => void }) {
@@ -8,7 +9,7 @@ export default function PendingConnection(props: { connector: Connector; reset: 
     <div className="relative flex w-[350px] flex-col items-center gap-6 shadow-[0px_4px_12px_0px_color(display-p3_0_0_0_/_0.12)] p-8 rounded-3xl bg-white">
       <div className="w-6 h-6 absolute left-6 top-[23.5px]">
         <button onClick={props.reset}>
-          <img src={pendingIcon} alt="Back" />
+          <img src={chevronLeftSmall} alt="Back" />
         </button>
       </div>
       <div className="flex justify-center items-center flex-[1_0_0] self-stretch p-[6.667px]">

@@ -6,7 +6,13 @@ import Connected from './states/Connected';
 import ConnectionError from './states/ConnectionError';
 import { ConnectionState } from './constants';
 
-export function BitskiAuth(props: { logoUrl?: string }) {
+interface BitskiAuthProps {
+  children?: React.ReactNode;
+  logoUrl?: string;
+  onBack?: () => void;
+}
+
+export function BitskiAuth({ children, logoUrl, onBack }: BitskiAuthProps) {
   const { connectionState, connectWallet, disconnectWallet, reset } = useConnectionState();
 
   const { pendingConnector } = connectionState as PendingState;
@@ -14,7 +20,7 @@ export function BitskiAuth(props: { logoUrl?: string }) {
 
   switch (connectionState.type) {
     case ConnectionState.Idle:
-      return <IdleConnection connectWallet={connectWallet} logoUrl={props.logoUrl} />;
+      return <IdleConnection connectWallet={connectWallet} onBack={onBack} logoUrl={logoUrl} />;
     case ConnectionState.Pending:
       return <PendingConnection connector={pendingConnector} reset={reset} />;
     case ConnectionState.Connected:
@@ -24,11 +30,13 @@ export function BitskiAuth(props: { logoUrl?: string }) {
           chainName={chain}
           address={address}
           disconnect={() => disconnectWallet({ connector })}
-        />
+        >
+          {children}
+        </Connected>
       );
     case ConnectionState.Error:
       return <ConnectionError reset={reset} connector={connectionState.connector} />;
     default:
-      return <IdleConnection connectWallet={connectWallet} />;
+      return <IdleConnection connectWallet={connectWallet} onBack={onBack} logoUrl={logoUrl} />;
   }
 }

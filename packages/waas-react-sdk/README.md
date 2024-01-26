@@ -1,5 +1,7 @@
 # @bitski/waas-react-sdk
 
+> DISCLAIMER: While we are under v1.0.0 - please expect breaking changes. All changes will be communicated via the CHANGELOG.md
+
 Solve all your dApp’s authentication challenges with a simple React Widget.
 
 We aim to use tools you are already familiar with, mainly Wagmi and Viem so you can focus on building your application.
