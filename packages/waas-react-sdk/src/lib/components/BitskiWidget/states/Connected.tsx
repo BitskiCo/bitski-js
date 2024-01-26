@@ -18,7 +18,30 @@ export default function Connected(props: {
   chainName: string;
   address: string;
   disconnect: () => void;
+  children?: React.ReactNode;
 }) {
+  return (
+    <div className="flex flex-col items-start gap-6">
+      {props.children ? (
+        props.children
+      ) : (
+        <DefaultConnectView
+          connector={props.connector}
+          chainName={props.chainName}
+          address={props.address}
+          disconnect={props.disconnect}
+        />
+      )}
+    </div>
+  );
+}
+
+export const DefaultConnectView = (props: {
+  connector: Connector;
+  chainName: string;
+  address: string;
+  disconnect: () => void;
+}) => {
   const { signMessageAsync } = useSignMessage();
   const [signedMessageState, setSignedMessageState] = useState<SignedMessageState>({
     type: SignedMessageStateType.Rest,
@@ -42,7 +65,7 @@ export default function Connected(props: {
   }
 
   return (
-    <div className="flex flex-col items-start gap-6">
+    <>
       <div className="flex w-[375px] flex-col items-start gap-6 shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] p-6 rounded-2xl bg-white">
         <div className="flex h-[150px] flex-col justify-center items-center gap-2.5 self-stretch rounded-xl bg-[var(--aux-light-grey)]">
           <div className="flex justify-center items-center gap-2 pl-2.5 pr-3 py-2 rounded-xl bg-[var(--aux-grey)]">
@@ -108,9 +131,9 @@ export default function Connected(props: {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
-}
+};
 
 function shortenEthereumAddress(address: string) {
   if (!address || address.length !== 42 || !address.startsWith('0x')) {
