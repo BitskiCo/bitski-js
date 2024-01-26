@@ -1,5 +1,22 @@
 # @bitski/waas-react-sdk
 
+## 0.0.9
+
+### Patch Changes
+
+- [#458](https://github.com/BitskiCo/bitski-js/pull/458) [`84cd44fa8cc53a85095f37b4a994c9e7d61828f5`](https://github.com/BitskiCo/bitski-js/commit/84cd44fa8cc53a85095f37b4a994c9e7d61828f5) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - - Added children, collapsed, and loginText props to BitskiWidget
+
+  <BitskiWidget collapsed>
+  - To show login button initially before showing the auth view
+
+  <BitskiWidget collapsed displayText="Connect">
+  - You can set displayText prop to customize the button's text
+
+  <BitskiWidget>
+    <h1>Hello, world!</h1>
+  </BitskiWidget>
+  - Customize the connected state to display your own UI if desired. This can instead be a list of links for user settings or application settings. Or your own display of address and chains.
+
 ## 0.0.8
 
 ### Patch Changes
