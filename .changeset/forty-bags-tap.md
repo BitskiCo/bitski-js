@@ -2,4 +2,15 @@
 '@bitski/waas-react-sdk': patch
 ---
 
-Extend the Widget to accept children which will dictate the connected view. If no children, we will show a default view. In addition, enable a collapsed state for widget via the "collapsed" prop. If provided, the widget will initially show as a login button.
+- Added children, collapsed, and loginText props to BitskiWidget
+
+<BitskiWidget collapsed>
+- To show login button initially before showing the auth view
+
+<BitskiWidget collapsed displayText="Connect">
+- You can set displayText prop to customize the button's text
+
+<BitskiWidget>
+  <h1>Hello, world!</h1>
+</BitskiWidget>
+- Customize the connected state to display your own UI if desired. This can instead be a list of links for user settings or application settings. Or your own display of address and chains.
