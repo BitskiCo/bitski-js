@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { BitskiAuth } from './BitskiAuth';
 import { BitskiConnect } from './BitskiConnect';
+import { Dialog, DialogContent, DialogTrigger } from '../Dialog';
 
 export interface BitskiWidgetProps {
   children?: React.ReactNode;
@@ -10,7 +11,6 @@ export interface BitskiWidgetProps {
 }
 
 function BitskiWidget({ children, collapsed = false, logoUrl, loginText }: BitskiWidgetProps) {
-  console.log('widget has children', children);
   const [showAuth, setShowAuth] = useState(false);
 
   const displayAuth = useCallback(() => {
@@ -25,12 +25,17 @@ function BitskiWidget({ children, collapsed = false, logoUrl, loginText }: Bitsk
     return <BitskiAuth logoUrl={logoUrl}>{children}</BitskiAuth>;
   }
 
-  return showAuth ? (
-    <BitskiAuth logoUrl={logoUrl} onBack={hideAuth}>
-      {children}
-    </BitskiAuth>
-  ) : (
-    <BitskiConnect displayText={loginText} onClick={displayAuth} />
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <BitskiConnect displayText={loginText} onClick={displayAuth} />
+      </DialogTrigger>
+      <DialogContent className="Dialog">
+        <BitskiAuth logoUrl={logoUrl} onBack={hideAuth}>
+          {children}
+        </BitskiAuth>
+      </DialogContent>
+    </Dialog>
   );
 }
 
