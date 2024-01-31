@@ -1,18 +1,6 @@
-import { Connector, useSignMessage } from 'wagmi';
-import { useState } from 'react';
+import { Connector } from 'wagmi';
 import dappIcon from '../../../assets/dapp-icon.svg';
 import { truncateAddress } from '../../../utils';
-
-enum SignedMessageStateType {
-  Rest,
-  Signing,
-  Signed,
-}
-
-type SignedMessageState =
-  | { type: SignedMessageStateType.Rest }
-  | { type: SignedMessageStateType.Signing }
-  | { type: SignedMessageStateType.Signed; message: string };
 
 export default function Connected(props: {
   connector: Connector;
@@ -43,28 +31,6 @@ export const DefaultConnectView = (props: {
   address: string;
   disconnect: () => void;
 }) => {
-  const { signMessageAsync } = useSignMessage();
-  const [signedMessageState, setSignedMessageState] = useState<SignedMessageState>({
-    type: SignedMessageStateType.Rest,
-  });
-
-  async function signMessage() {
-    setSignedMessageState({ type: SignedMessageStateType.Signing });
-    try {
-      const signedMessage = await signMessageAsync({
-        message: 'Welcome to Bitski WaaS',
-        connector: props.connector,
-      });
-      setSignedMessageState({
-        type: SignedMessageStateType.Signed,
-        message: signedMessage,
-      });
-    } catch (e) {
-      console.error(e);
-      setSignedMessageState({ type: SignedMessageStateType.Rest });
-    }
-  }
-
   return (
     <>
       <div className="flex w-[375px] flex-col items-start gap-6 shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] p-6 rounded-2xl bg-white">

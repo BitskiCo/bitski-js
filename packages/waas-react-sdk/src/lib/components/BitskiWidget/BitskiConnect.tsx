@@ -20,7 +20,11 @@ const DefaultConnect = ({ displayText }: { displayText: string }) => {
   );
 };
 
-export const BitskiConnect = ({ children, displayText = 'Login', onClick }: BitskiConnectProps) => {
+export default function BitskiConnect({
+  children,
+  displayText = 'Login',
+  onClick,
+}: BitskiConnectProps) {
   return (
     <button
       className="bg-[color:var(--main-obsidian)] flex h-11 flex-col justify-center items-center px-5 py-0 rounded-2xl"
@@ -29,4 +33,4 @@ export const BitskiConnect = ({ children, displayText = 'Login', onClick }: Bits
       {children ? children : <DefaultConnect displayText={displayText} />}
     </button>
   );
-};
+}
