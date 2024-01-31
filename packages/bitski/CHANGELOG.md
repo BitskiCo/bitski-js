@@ -1,5 +1,11 @@
 # bitski
 
+## 4.1.1
+
+### Patch Changes
+
+- [#460](https://github.com/BitskiCo/bitski-js/pull/460) [`fb0e5a66700a6532bf86030a4c925ca5e75dd323`](https://github.com/BitskiCo/bitski-js/commit/fb0e5a66700a6532bf86030a4c925ca5e75dd323) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Only load SDK script from provider shim, not extension.
+
 ## 4.1.0
 
 ### Minor Changes
