@@ -30,7 +30,7 @@ function App() {
         chains={[providerConfig.chains[0], ...providerConfig.chains]}
         loginMethods={providerConfig.loginMethods}
       >
-        <BitskiWidget logoUrl="https://i.imgur.com/QYSwQ00.png" />
+        <BitskiWidget logoUrl="https://i.imgur.com/QYSwQ00.png" collapsed />
       </BitskiProvider>
     </div>
   );

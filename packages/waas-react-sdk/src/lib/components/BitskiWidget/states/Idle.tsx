@@ -5,7 +5,8 @@ import { ExternalWallet, Social } from '../constants';
 import Wallets from '../Wallets';
 import TOS from '../TOS';
 import Socials from '../Socials';
-import chevronLeftSmall from '../../../assets/chevron-left-small.svg';
+import crossSmall from '../../../assets/cross-small.svg';
+import { DialogClose } from '../../Dialog';
 
 interface IdleConnectionProps {
   connectWallet: ({
@@ -15,11 +16,11 @@ interface IdleConnectionProps {
     connector: Connector;
     parameters?: Record<string, unknown>;
   }) => void;
-  onBack?: () => void;
+  collapsed?: boolean;
   logoUrl?: string;
 }
 
-export default function IdleConnection({ connectWallet, onBack, logoUrl }: IdleConnectionProps) {
+export default function IdleConnection({ connectWallet, collapsed, logoUrl }: IdleConnectionProps) {
   const config = useConfig();
 
   const connectors = config.connectors;
@@ -32,12 +33,10 @@ export default function IdleConnection({ connectWallet, onBack, logoUrl }: IdleC
 
   return (
     <div className="relative flex w-[350px] flex-col items-center gap-6 shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] pt-7 pb-0 px-8 rounded-3xl bg-white">
-      {onBack ? (
-        <div className="w-6 h-6 absolute left-6 top-[23.5px]">
-          <button onClick={onBack}>
-            <img src={chevronLeftSmall} alt="Back" />
-          </button>
-        </div>
+      {collapsed ? (
+        <DialogClose className="w-6 h-6 absolute right-6 top-[23.5px]">
+          <img src={crossSmall} alt="Back" />
+        </DialogClose>
       ) : null}
       <p className="text-[color:var(--main-grey)] text-sm not-italic font-[590] leading-[17px] tracking-[-0.28px]">
         Login or Sign Up
