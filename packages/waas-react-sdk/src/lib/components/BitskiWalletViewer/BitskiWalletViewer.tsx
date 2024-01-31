@@ -69,7 +69,7 @@ export default function BitskiWalletViewer({
   ) : null;
 
   return (
-    <div className="flex flex-col bg-white w-[375px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] rounded-3xl border-solid">
+    <div className="flex flex-col bg-white w-[375px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] rounded-3xl border-solid max-h-[600px]">
       <div className="flex p-4">
         <button className="flex-none" onClick={() => setShowChainSwitcher(!showChainSwitcher)}>
           <ChainIcon chainId={connection.chainId} size={'[21px]'} />
@@ -85,7 +85,7 @@ export default function BitskiWalletViewer({
         <div className="relative bottom-2 left-4 z-10">{chainSwitcher}</div>
         <div className="relative bottom-2 -end-[150px] z-10">{settingsMenu}</div>
       </div>
-      <div className="flex flex-col px-6 my-6">{page}</div>
+      <div className="flex flex-col px-6 my-6  overflow-y-auto">{page}</div>
       <div className="bg-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] h-[1px]"></div>
       <div className="inline-flex place-content-center gap-6 p-4">
         {tabs.map((tab) => {
