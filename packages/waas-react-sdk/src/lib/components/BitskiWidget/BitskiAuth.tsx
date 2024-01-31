@@ -69,5 +69,5 @@ export function BitskiAuth({ children, logoUrl, collapsed }: BitskiAuthProps) {
       );
   }
 
-  return <AuthWrapper>{Component}</AuthWrapper>;
+  return collapsed ? <AuthWrapper>{Component}</AuthWrapper> : Component;
 }
