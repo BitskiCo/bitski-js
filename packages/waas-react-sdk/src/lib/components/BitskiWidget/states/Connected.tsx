@@ -1,6 +1,7 @@
 import { Connector, useSignMessage } from 'wagmi';
 import { useState } from 'react';
 import dappIcon from '../../../assets/dapp-icon.svg';
+import { truncateAddress } from '../../../utils';
 
 enum SignedMessageStateType {
   Rest,
@@ -76,7 +77,7 @@ export const DefaultConnectView = (props: {
             />
             {props.address ? (
               <p className="text-[color:var(--main-black,color(display-p3_0.2_0.2_0.2))] text-center text-base not-italic font-[590] leading-[22px] tracking-[-0.32px]">
-                {shortenEthereumAddress(props.address)}
+                {truncateAddress(props.address)}
               </p>
             ) : (
               <p className="text-[color:var(--main-black,color(display-p3_0.2_0.2_0.2))] text-center text-base not-italic font-[590] leading-[22px] tracking-[-0.32px]">
@@ -90,58 +91,21 @@ export const DefaultConnectView = (props: {
             Connected Component
           </h3>
           <p className="self-stretch text-[color:var(--main-grey,color(display-p3_0.5961_0.5922_0.6118))] text-sm not-italic font-normal leading-[17px] tracking-[-0.084px]">
-            Allows users to disconnect from your app, change networks, and open the wallet viewer
+            Replace this with your own content. You can choose to allow users to disconnect from
+            your app, change networks, or open a wallet viewer.
           </p>
         </div>
       </div>
       <div className="flex w-[375px] flex-col items-start gap-6 shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] p-6 rounded-2xl bg-white">
-        <div className="flex flex-col items-start gap-2 self-stretch">
-          <h3 className="text-black text-base not-italic font-bold leading-[22px] tracking-[-0.32px]">
-            Wallet Actions
-          </h3>
-          <p className="self-stretch text-[color:var(--main-grey,color(display-p3_0.5961_0.5922_0.6118))] text-sm not-italic font-normal leading-[17px] tracking-[-0.084px]">
-            Allows users to disconnect from your app, change networks, and open the wallet viewer
+        <button
+          className="flex h-11 flex-col justify-center items-center self-stretch px-5 py-0 bg-gray-200 bg-opacity-33 rounded-2xl"
+          onClick={props.disconnect}
+        >
+          <p className="text-black text-center text-[13px] not-italic font-[590] leading-[13px]">
+            Disconnect
           </p>
-          <div className="flex flex-col gap-4 self-stretch">
-            {signedMessageState.type === SignedMessageStateType.Signed ? (
-              <div className="grid grid-cols-1">
-                <p className="shrink">{signedMessageState.message.substring(0, 24) + '...'}</p>
-              </div>
-            ) : (
-              <div className="h-"></div>
-            )}
-            <div className="flex flex-col gap-2">
-              <button
-                className="bg-[color:var(--main-obsidian)] flex h-11 flex-col justify-center items-center self-stretch px-5 py-0 rounded-2xl"
-                onClick={signMessage}
-              >
-                <p className="text-[color:var(--main-white,color(display-p3_1_1_1))] text-center text-[13px] not-italic font-[590] leading-[13px]">
-                  Sign Test Transaction
-                </p>
-              </button>
-              <button
-                className="flex h-11 flex-col justify-center items-center self-stretch px-5 py-0 bg-gray-200 bg-opacity-33 rounded-2xl"
-                onClick={props.disconnect}
-              >
-                <p className="text-black text-center text-[13px] not-italic font-[590] leading-[13px]">
-                  Disconnect
-                </p>
-              </button>
-            </div>
-          </div>
-        </div>
+        </button>
       </div>
     </>
   );
 };
-
-function shortenEthereumAddress(address: string) {
-  if (!address || address.length !== 42 || !address.startsWith('0x')) {
-    throw new Error('Invalid Ethereum address');
-  }
-
-  const firstFive = address.substring(0, 8);
-  const lastFive = address.substring(address.length - 5);
-
-  return `${firstFive}...${lastFive}`;
-}

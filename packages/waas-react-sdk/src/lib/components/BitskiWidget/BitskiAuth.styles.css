@@ -1,0 +1,26 @@
+/* Content animations */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.85);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.85);
+  }
+}
+
+.Dialog-content-entering {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.Dialog-content-exiting {
+  animation: scaleOut 0.3s ease-in;
+}

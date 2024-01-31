@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useFloating,
   useClick,
@@ -135,11 +135,31 @@ export const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLProps<HT
     const { context: floatingContext, ...context } = useDialogContext();
     const ref = useMergeRefs([context.refs.setFloating, propRef]);
 
-    if (!floatingContext.open) return null;
+    // Used to delay the closing of the dialog to allow the exit animation to play
+    const [isVisible, setIsVisible] = useState(floatingContext.open);
+    const [animationState, setAnimationState] = useState(
+      floatingContext.open ? 'entering' : 'exiting',
+    );
+
+    useEffect(() => {
+      if (floatingContext.open) {
+        setIsVisible(true);
+        setAnimationState('entering');
+        setTimeout(() => setAnimationState('entered'), 300); // match this with the animation duration
+      } else {
+        setAnimationState('exiting');
+        setTimeout(() => {
+          setIsVisible(false);
+        }, 300); // match this with the animation duration
+      }
+    }, [floatingContext.open]);
+
+    // Return null if the dialog is not visible and the exit animation is completed
+    if (!isVisible) return null;
 
     return (
       <FloatingPortal>
-        <FloatingOverlay className="Dialog-overlay" lockScroll>
+        <FloatingOverlay className={`Dialog-overlay Dialog-overlay-${animationState}`} lockScroll>
           <FloatingFocusManager context={floatingContext}>
             <div
               ref={ref}
