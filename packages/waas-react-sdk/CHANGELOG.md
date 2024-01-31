@@ -1,5 +1,11 @@
 # @bitski/waas-react-sdk
 
+## 0.0.10
+
+### Patch Changes
+
+- [#462](https://github.com/BitskiCo/bitski-js/pull/462) [`5e5d11d96252a670b136042e176a4e0175fd00c6`](https://github.com/BitskiCo/bitski-js/commit/5e5d11d96252a670b136042e176a4e0175fd00c6) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Update bitski package in WaaS SDK to reflect provider change
+
 ## 0.0.9
 
 ### Patch Changes
