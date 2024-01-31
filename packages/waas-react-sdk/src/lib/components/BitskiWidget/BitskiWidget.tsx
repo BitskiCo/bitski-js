@@ -1,11 +1,14 @@
 import { BitskiAuth } from './BitskiAuth';
 import BitskiConnect from './BitskiConnect';
 import { Dialog, DialogContent, DialogTrigger } from '../Dialog';
+import { BitskiWalletProvider } from '../BitskiWalletViewer/BitskiWalletProvider';
+import { BitskiWalletViewer } from '../BitskiWalletViewer';
 
 export interface BitskiWidgetProps {
   children?: React.ReactNode;
   collapsed?: boolean;
   connect?: React.ReactNode;
+  showWallet?: boolean;
   logoUrl?: string;
   loginText?: string;
 }
@@ -13,6 +16,7 @@ export interface BitskiWidgetProps {
 function BitskiWidget({
   children,
   collapsed = false,
+  showWallet = true,
   connect,
   logoUrl,
   loginText,
@@ -28,7 +32,13 @@ function BitskiWidget({
       </DialogTrigger>
       <DialogContent className="Dialog">
         <BitskiAuth logoUrl={logoUrl} collapsed={collapsed}>
-          {children}
+          {showWallet ? (
+            <BitskiWalletProvider>
+              <BitskiWalletViewer />
+            </BitskiWalletProvider>
+          ) : (
+            children
+          )}
         </BitskiAuth>
       </DialogContent>
     </Dialog>
