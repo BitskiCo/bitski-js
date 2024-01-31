@@ -92,7 +92,7 @@ export const loadScript = (): Promise<BitskiSDKConstructor | null> => {
     }
 
     windowLoadPromise.then(() => {
-      if (window.Bitski && window.Bitski.BitskiSDK.name !== ) {
+      if (window.Bitski && window.Bitski.BitskiSDK.name !== BITSKI_EXTENSION_SDK_STUB) {
         resolve(window.Bitski.BitskiSDK);
         return;
       }
