@@ -34,7 +34,7 @@
     "wagmi": "2.x"
   },
   "dependencies": {
-    "bitski": "^4.1.0"
+    "bitski": "^4.1.1"
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.0.0",
