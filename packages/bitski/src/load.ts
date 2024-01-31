@@ -14,6 +14,7 @@ declare global {
   }
 }
 
+const BITSKI_EXTENSION_SDK_STUB = 'BitskiSDKStub';
 const BITSKI_SDK_URL = 'https://cdn.bitskistatic.com/js/sdk/v3.3/bitski.min.js';
 const BITSKI_SDK_REGEX =
   /^https:\/\/cdn\.bitskistatic\.com\/js\/sdk\/v3.3\/bitski\.min\.js\/?(\?.*)?$/;
@@ -78,7 +79,7 @@ export const loadScript = (): Promise<BitskiSDKConstructor | null> => {
   bitskiPromise = new Promise((resolve, reject) => {
     // First check to see if we've already loaded Bitski SDK in somehow
     // (primarily for tests)
-    if (globalThis.Bitski) {
+    if (globalThis.Bitski && globalThis.Bitski.BitskiSDK.name !== BITSKI_EXTENSION_SDK_STUB) {
       resolve(globalThis.Bitski.BitskiSDK);
       return;
     }
@@ -91,7 +92,7 @@ export const loadScript = (): Promise<BitskiSDKConstructor | null> => {
     }
 
     windowLoadPromise.then(() => {
-      if (window.Bitski) {
+      if (window.Bitski && window.Bitski.BitskiSDK.name !== ) {
         resolve(window.Bitski.BitskiSDK);
         return;
       }
@@ -104,7 +105,7 @@ export const loadScript = (): Promise<BitskiSDKConstructor | null> => {
         }
 
         script.addEventListener('load', () => {
-          if (window.Bitski) {
+          if (window.Bitski && window.Bitski.BitskiSDK.name !== BITSKI_EXTENSION_SDK_STUB) {
             resolve(window.Bitski.BitskiSDK);
           } else {
             reject(new Error('Bitski SDK not available'));
