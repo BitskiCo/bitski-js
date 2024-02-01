@@ -6,3 +6,4 @@ export { validateConnectors } from './validateConnectors';
 export { hasWindowProvider } from './hasWindowProvider';
 export { isMobile } from './isMobile';
 export { truncateAddress } from './truncateAddress';
+export { truncateTitle } from './truncateTitle';

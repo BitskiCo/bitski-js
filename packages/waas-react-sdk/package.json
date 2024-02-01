@@ -34,6 +34,7 @@
     "wagmi": "2.x"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.10",
     "@floating-ui/react": "^0.26.8",
     "bitski": "^4.1.1"
   },
