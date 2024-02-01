@@ -1,25 +1,8 @@
 import { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
 
 const httpLink = new HttpLink({
   uri: 'https://api.bitski.com/graphql',
   useGETForQueries: true,
-  // fetchOptions: {
-  //     mode: 'cors', // no-cors, *cors, same-origin
-  // }
-});
-
-const authLink = setContext((_, { headers }) => {
-  // Replace 'YOUR_BEARER_TOKEN' with the actual token value
-  const token =
-    'pTAnXWzGBDTRafLD8R3uReYYgMseWH8YBU67geVAQD4.uvFvvqzK8ogKmD0u9OpA7DbeWwmNpy4Q8WiyjNzrmDQ';
-
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
 });
 
 const client = new ApolloClient({
