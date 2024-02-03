@@ -1,5 +1,20 @@
 # @bitski/waas-react-sdk
 
+## 0.0.11
+
+### Patch Changes
+
+- [#466](https://github.com/BitskiCo/bitski-js/pull/466) [`50b2c736364e21fedb981e7760fe09e7e798a15b`](https://github.com/BitskiCo/bitski-js/commit/50b2c736364e21fedb981e7760fe09e7e798a15b) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add wallet viewer
+
+- [#464](https://github.com/BitskiCo/bitski-js/pull/464) [`72df3c03c17ee3bcbb65ec3fdf6ee86b075b45f0`](https://github.com/BitskiCo/bitski-js/commit/72df3c03c17ee3bcbb65ec3fdf6ee86b075b45f0) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - This change wraps BitskiAuth in a Dialog component when `collapsed` is provided as a prop. By default, if no `connect` prop is provided, BitskiWidget will use `<BitskiConnect displayText="Login" />` as the dialog
+  trigger. If a `connect` prop is provided, the component passed to the `connect` prop will replace the dialog trigger.
+  Alternatively, users can extend `<BitskiConnect />` by passing children components into it to utilize the default interactivity of showing the account address on connection.
+
+  Summary:
+
+  - Add `connect` prop to control widget's login/connect button
+  - Wraps BitskiAuth in an animated dialog on entry and exit
+
 ## 0.0.10
 
 ### Patch Changes
