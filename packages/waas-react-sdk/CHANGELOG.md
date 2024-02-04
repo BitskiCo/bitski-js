@@ -1,5 +1,11 @@
 # @bitski/waas-react-sdk
 
+## 0.0.12
+
+### Patch Changes
+
+- [#468](https://github.com/BitskiCo/bitski-js/pull/468) [`c8519ddf2d99a77433cc57e2632b24c47d9464ee`](https://github.com/BitskiCo/bitski-js/commit/c8519ddf2d99a77433cc57e2632b24c47d9464ee) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Remove console log for debugging
+
 ## 0.0.11
 
 ### Patch Changes
