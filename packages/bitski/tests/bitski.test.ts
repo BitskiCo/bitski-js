@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { User } from '../src/-private/auth/user';
 import { BitskiSDK, ProviderOptions } from '../src/-private/sdk';
 import { AuthenticationStatus, Bitski, Goerli, Mainnet, OAuthSignInMethod } from '../src/index';

@@ -58,6 +58,7 @@ export class TokenStore {
         }
       })
       .catch(() => {
+        // eslint-disable-next-line no-console
         console.log('Could not parse accessToken, setting to undefined');
         return undefined;
       });
@@ -65,6 +66,7 @@ export class TokenStore {
     this.idToken = Promise.resolve(this.store.getItem(this.idTokenKey))
       .then((token) => string.decode(token).value)
       .catch(() => {
+        // eslint-disable-next-line no-console
         console.log('Could not parse idToken, setting to undefined');
         return undefined;
       });
@@ -72,6 +74,7 @@ export class TokenStore {
     this.refreshToken = Promise.resolve(this.store.getItem(this.refreshTokenKey))
       .then((token) => string.decode(token).value)
       .catch(() => {
+        // eslint-disable-next-line no-console
         console.log('Could not parse refreshToken, setting to undefined');
         return undefined;
       });

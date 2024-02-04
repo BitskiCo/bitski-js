@@ -4,5 +4,6 @@ import { processCallback } from './utils/callback';
 try {
   processCallback();
 } catch (error) {
+  // eslint-disable-next-line no-console
   console.error('Error logging in: ' + error); // tslint:disable-line
 }

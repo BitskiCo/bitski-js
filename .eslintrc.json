@@ -19,7 +19,8 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-empty-function": "warn",
     "react/react-in-jsx-scope": "off",
-    "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }]
+    "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
+    "no-console": "error"
   },
   "settings": {
     "react": {

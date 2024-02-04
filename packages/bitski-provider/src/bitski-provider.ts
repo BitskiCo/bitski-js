@@ -81,6 +81,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
     } else if (maybeAppId && clientId) {
       throw new Error('You must provide either an appId or a clientId to BitskiProvider, not both');
     } else if (clientId) {
+      // eslint-disable-next-line no-console
       console.warn('clientId is deprecated, please use appId instead');
     }
 
@@ -111,6 +112,7 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
     let apiBaseUrl = config.apiBaseUrl ?? BITSKI_API_BASE_URL;
 
     if (apiBaseUrl.endsWith('/v1')) {
+      // eslint-disable-next-line no-console
       console.warn(
         'apiBaseUrl should not end with /v1 in new versions, please remove the trailing /v1',
       );
