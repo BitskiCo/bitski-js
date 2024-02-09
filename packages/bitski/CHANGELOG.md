@@ -1,5 +1,16 @@
 # bitski
 
+## 4.2.0
+
+### Minor Changes
+
+- [#470](https://github.com/BitskiCo/bitski-js/pull/470) [`4b8ba8ae9556c77c7c1e404802c32e2e282a2f1d`](https://github.com/BitskiCo/bitski-js/commit/4b8ba8ae9556c77c7c1e404802c32e2e282a2f1d) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Expose additional signing context in SDK; change type to Record<string, unknown>
+
+### Patch Changes
+
+- Updated dependencies [[`4b8ba8ae9556c77c7c1e404802c32e2e282a2f1d`](https://github.com/BitskiCo/bitski-js/commit/4b8ba8ae9556c77c7c1e404802c32e2e282a2f1d)]:
+  - bitski-provider@3.5.0
+
 ## 4.1.1
 
 ### Patch Changes
