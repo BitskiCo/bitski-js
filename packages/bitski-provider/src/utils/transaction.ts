@@ -56,7 +56,7 @@ export const createBitskiTransaction = <T extends EthSignMethod>(
   params: EthSignMethodParams[T],
   chain: EthChainDefinitionWithRpcUrl,
   paymaster?: PaymasterDefinition | PaymasterDefinition[],
-  additionalContext?: Record<string, string>,
+  additionalContext?: Record<string, unknown>,
 ): Transaction => {
   const context = createContext(method, params, chain, paymaster, additionalContext);
   const kind = kindForMethod(method);
@@ -74,7 +74,7 @@ const createContext = <T extends EthSignMethod>(
   params: EthSignMethodParams[T],
   chain: EthChainDefinitionWithRpcUrl,
   paymaster?: PaymasterDefinition | PaymasterDefinition[],
-  additionalContext?: Record<string, string>,
+  additionalContext?: Record<string, unknown>,
 ): TransactionContext => {
   switch (method) {
     case 'personal_sign':
