@@ -47,7 +47,7 @@ interface BitskiProviderConfig {
 
   // Additional parameters added to the context of a sign request, e.g. the origin
   // that is attempting to sign
-  additionalSigningContext?: Record<string, string>;
+  additionalSigningContext?: Record<string, unknown>;
 
   // The API base URL for RPC and other API requests. Defaults to
   // https://api.bitski.com

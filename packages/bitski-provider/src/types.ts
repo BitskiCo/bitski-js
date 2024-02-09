@@ -50,7 +50,7 @@ export interface InternalBitskiProviderConfig<Extra = unknown> {
   pollingInterval?: number;
   disableCaching?: boolean;
   disableValidation?: boolean;
-  additionalSigningContext?: Record<string, string>;
+  additionalSigningContext?: Record<string, unknown>;
 
   appId?: string;
 

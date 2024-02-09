@@ -41,6 +41,7 @@ export interface ProviderOptions extends Omit<Partial<BitskiProviderConfig>, 'pr
   network?: Network;
   paymaster?: PaymasterDefinition | PaymasterDefinition[];
   waas?: WaasDefinition;
+  additionalSigningContext?: Record<string, unknown>;
   // @deprecated
   webBaseUrl?: string;
   // @deprecated
@@ -229,6 +230,7 @@ export class BitskiSDK {
         'X-CLIENT-VERSION': BITSKI_SDK_VERSION,
         ...options.additionalHeaders,
       },
+      additionalSigningContext: options.additionalSigningContext,
       prependMiddleware: undefined,
       signerMethod: 'iframe',
     });
