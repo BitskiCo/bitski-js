@@ -5,7 +5,7 @@ import { useDialogContext } from '../Dialog';
 import { useEffect, useState } from 'react';
 import './BitskiAuth.styles.css';
 import { ConnectionState, ConnectionStateKind } from '../../BitskiContext';
-import { useBitski } from '../../useBitski';
+import { useBitski } from '../hooks/useBitski';
 
 interface BitskiAuthProps {
   children?: React.ReactNode;

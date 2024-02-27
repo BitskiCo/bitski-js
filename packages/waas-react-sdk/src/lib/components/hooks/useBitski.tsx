@@ -1,8 +1,8 @@
 import { Connector, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import { useContext } from 'react';
-import { CONNECTOR_TYPE_BITSKI } from './connectors/bitski';
+import { CONNECTOR_TYPE_BITSKI } from '../../connectors/bitski';
 import { UserRejectedRequestError } from 'viem';
-import { BitskiContext, ConnectionActionKind } from './BitskiContext';
+import { BitskiContext, ConnectionActionKind } from '../../BitskiContext';
 
 export function useBitski() {
   const { connectionState, dispatchConnectionAction, signMessageOnConnect } =
