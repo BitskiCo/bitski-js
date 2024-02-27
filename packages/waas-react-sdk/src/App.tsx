@@ -1,12 +1,12 @@
 import './lib/index.css';
-import { BitskiProvider, BitskiWidget } from './lib';
-import { LoginMethod } from './lib/components/BitskiWidget/constants';
+import { BitskiProvider, BitskiWidget, Tab } from './lib';
+import { LoginMethod } from './lib';
 import { base, mainnet, optimism, polygon } from 'viem/chains';
 
 function App() {
   const providerConfig = {
     loginMethods: [
-      LoginMethod.Bitski,
+      LoginMethod.Email,
       LoginMethod.Wallet,
       LoginMethod.Apple,
       LoginMethod.Google,
@@ -29,8 +29,9 @@ function App() {
         }
         chains={[providerConfig.chains[0], ...providerConfig.chains]}
         loginMethods={providerConfig.loginMethods}
+        tabs={[Tab.Tokens, Tab.Activity]}
       >
-        <BitskiWidget logoUrl="https://i.imgur.com/QYSwQ00.png" collapsed />
+        <BitskiWidget logoUrl="https://i.imgur.com/QYSwQ00.png" />
       </BitskiProvider>
     </div>
   );

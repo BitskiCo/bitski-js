@@ -1,3 +1,5 @@
+import { truncateAddress, truncateTitle } from '../../utils';
+
 export enum ActivityStateKind {
   NoAddress = 'noAddress',
   Loading = 'loading',
@@ -65,14 +67,15 @@ export type ActivityState =
 
 const MAX_ACTIVITY_LENGTH = 6;
 
-export function mapActivity(data: any): Activity[] {
+// @ts-ignore
+export function mapActivity(data): Activity[] {
   const activities = data.activitiesV2.slice(0, MAX_ACTIVITY_LENGTH);
-  return activities
-    .map((activity: any) => mapActivityType(activity))
-    .filter((activity: any) => !!activity);
+  // @ts-ignore
+  return activities.map((activity) => mapActivityType(activity)).filter((activity) => !!activity);
 }
 
-function mapActivityType(activity: any): Activity | undefined {
+// @ts-ignore
+function mapActivityType(activity): Activity | undefined {
   switch (activity.__typename) {
     case 'TokenMintV2':
       return {
@@ -89,7 +92,7 @@ function mapActivityType(activity: any): Activity | undefined {
         icon: activity.token.image?.url,
         subIcon: '',
         title: truncateTitle(activity.token.displayName),
-        subtitle: `Received from ${truncateEthAddress(activity.from)}`,
+        subtitle: `Received from ${truncateAddress(activity.from)}`,
         accessory: '',
       };
     case 'TokenSentV2':
@@ -98,34 +101,10 @@ function mapActivityType(activity: any): Activity | undefined {
         icon: activity.token.image?.url,
         subIcon: '',
         title: truncateTitle(activity.token.displayName),
-        subtitle: `Sent to ${truncateEthAddress(activity.to)}`,
+        subtitle: `Sent to ${truncateAddress(activity.to)}`,
         accessory: '',
       };
     default:
       return undefined;
-  }
-}
-
-// Captures 0x + 4 characters, then the last 4 characters.
-const truncateRegex = /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/;
-
-/**
- * Truncates an ethereum address to the format 0x0000…0000
- * @param address Full address to truncate
- * @returns Truncated address
- */
-const truncateEthAddress = (address: string) => {
-  const match = address.match(truncateRegex);
-  if (!match) return address;
-  return `${match[1]}…${match[2]}`;
-};
-
-const MAX_TITLE_LENGTH = 22;
-
-function truncateTitle(input: string): string {
-  if (input.length <= MAX_TITLE_LENGTH) {
-    return input;
-  } else {
-    return input.slice(0, MAX_TITLE_LENGTH) + '...';
   }
 }

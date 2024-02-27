@@ -1,0 +1,2466 @@
+schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/join/v0.2", for: EXECUTION)
+{
+  query: Query
+  mutation: Mutation
+}
+
+directive @join__field(graph: join__Graph!, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+enum AccountTag
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  PORTFOLIO
+  WATCHLIST
+}
+
+interface Activity
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+}
+
+type ActivityConnection
+  @join__type(graph: ACTIVITYV2)
+{
+  pageInfo: PageInfo!
+  edges: [ActivityEdge!]!
+  nodes: [ActivityV2!]!
+}
+
+type ActivityEdge
+  @join__type(graph: ACTIVITYV2)
+{
+  cursor: String!
+  node: ActivityV2!
+}
+
+type ActivityStatistics
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String!
+  totalMints: Int!
+  totalPurchases: Int!
+  totalSales: Int!
+}
+
+interface ActivityV2
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+}
+
+input ActivityV2Features
+  @join__type(graph: ACTIVITYV2)
+{
+  includeBatchTransfers: Boolean
+  includeAirdrops: Boolean
+}
+
+type ActivityV3
+  @join__type(graph: ACTIVITYV2, key: "chainId transactionHash address")
+{
+  chainId: Int!
+  transactionHash: String!
+  address: String!
+  details: ActivityV2
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+}
+
+interface Address
+  @join__type(graph: TOKEN_API)
+{
+  raw: String!
+}
+
+input AddressWithId
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  address: String!
+
+  """Used for spam checking"""
+  blockchainAccountId: String!
+}
+
+type Amount
+  @join__type(graph: ACTIVITY, key: "value decimals", resolvable: false)
+  @join__type(graph: ACTIVITYV2, key: "value decimals")
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "value decimals")
+  @join__type(graph: TOKEN_API, key: "value decimals")
+{
+  value: String!
+  decimals: Int
+  formatted(input: FormattedAmountInput): String @join__field(graph: ACTIVITYV2) @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+}
+
+input AmountInput
+  @join__type(graph: TOKEN_API)
+{
+  value: String!
+  decimals: Int
+}
+
+type Balance
+  @join__type(graph: TOKEN_API)
+{
+  address: String! @deprecated(reason: "Use `addressV2.raw`")
+  addressV2: Address! @deprecated(reason: "use `addressV3`")
+  addressV3: BlockchainAddress!
+  amount: String!
+  amountUnit: Amount
+  amountBigInt: BigInt! @deprecated(reason: "Use `amountUnit.value`")
+  value: String
+  valueUnit: Amount
+  token: Token!
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+}
+
+enum BalanceType
+  @join__type(graph: TOKEN_API)
+{
+  NFTS
+  CURRENCIES
+}
+
+type BannerItem
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  """
+  A unique ID that is agnostic of Claims -- comes directly from Contentful
+  """
+  id: String!
+
+  """The Claim ID.  Optional because Product types won't have a Claim"""
+  claimId: String
+
+  """The type of Claim"""
+  claimableType: ClaimableType
+
+  """The title copy for this banner"""
+  title: String
+
+  """An image associated with this banner"""
+  imageUrl: String
+
+  """The source url for the image on this modal"""
+  animationUrl: String
+
+  """Copy that is shown with share sheet materials"""
+  shareText: String
+
+  """A link to additional contents / materials on the web"""
+  learnMore: String
+
+  """Time the link will expire"""
+  expireTime: DateTime
+
+  """Preclaim modal view description"""
+  modalDescription: String
+
+  """Confirmation view title"""
+  confirmationTitle: String
+
+  """Confirmation view description"""
+  confirmationDescription: String
+
+  """Drop Link URL"""
+  droplinkUrl: String
+
+  """The Product ID that is suitable for an In App Purchase"""
+  iapProductId: String
+
+  """The Bitski Product ID"""
+  bitskiProductId: String
+
+  """The number of this Product / Claim  that are available"""
+  availableCount: Int
+}
+
+type BatchTokenMintV2 implements BatchTokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "BatchTokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  count: Int
+  contractAddress: String
+  contract: ContractMetadata
+  cost: String
+  costUnit: Amount
+}
+
+type BatchTokenReceivedV2 implements BatchTokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "BatchTokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  count: Int
+  contractAddress: String
+  contract: ContractMetadata
+  from: String
+  fromAddress: EVMAddress
+}
+
+type BatchTokenSentV2 implements BatchTokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "BatchTokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  count: Int
+  contractAddress: String
+  contract: ContractMetadata
+  to: String
+  toAddress: EVMAddress
+}
+
+type BatchTokenTransferAbsoluteV2 implements BatchTokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "BatchTokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  count: Int
+  contractAddress: String
+  contract: ContractMetadata
+  to: String
+  from: String
+}
+
+interface BatchTokenTransferV2
+  @join__type(graph: ACTIVITYV2)
+{
+  count: Int
+  contractAddress: String
+  contract: ContractMetadata
+}
+
+scalar BigInt
+  @join__type(graph: TOKEN_API)
+
+type BlockchainAccount
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS, key: "id")
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "id")
+  @join__type(graph: TOKEN_API, key: "id")
+{
+  id: String!
+  displayName: String @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  kind: BlockchainAccountKind! @deprecated(reason: "Use `kindV2`") @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  kindV2: BlockchainAccountKindV2! @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  coinType: Int! @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  address: String! @deprecated(reason: "use `addressV2`") @join__field(graph: BLOCKCHAIN_ACCOUNTS) @join__field(graph: SIMPLEHASH_SUBGRAPH, external: true) @join__field(graph: TOKEN_API, external: true)
+  addressV2: EVMAddress! @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  annotations: JSONObject @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  labels: JSONObject @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  createdAt: DateTime! @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  updatedAt: DateTime! @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  emoji: String @deprecated(reason: "Use `avatar`") @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  avatar: String @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  image: RemoteAsset @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  hasSeenOnboarding: Boolean @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  isPortfolio: Boolean @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  hardwareWalletDetails: HardwareWalletDetails @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  enabledNotifications: [NotificationType!] @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  tagsForNFT(input: NFTInput!): [String] @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  tagsForAllNFTs: [TokenTags] @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  allNFTTags: [String] @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  tokensForTag(input: String!): [TokenKeys] @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  tagsForContract(input: ContractInput!): [String] @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  contractsForTag(input: String!): [ContractKeys] @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  balances(input: GetBlockchainAccountBalancesInput!): [Balance] @join__field(graph: TOKEN_API, requires: "address")
+  totalCurrencyValueUSD(input: TotalCurrencyValueInput!): String @deprecated(reason: "Use `totalCurrencyValue(input: { currency: USD })`") @join__field(graph: TOKEN_API, requires: "address")
+  totalCurrencyValue(input: TotalCurrencyValueV2Input!): String @join__field(graph: TOKEN_API, requires: "address")
+}
+
+enum BlockchainAccountKind
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  Bitski
+  ContractWallet
+  View
+}
+
+enum BlockchainAccountKindV2
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  BITSKI
+  ETH_ACCOUNT
+  WATCHED
+  ACCOUNT_ABSTRACTION
+  SELF_CUSTODY
+  SELF_CUSTODY_INSTALLED
+  HARDWARE
+}
+
+type BlockchainAccountPayload
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  blockchainAccount: BlockchainAccount
+}
+
+type BlockchainAccounts
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS, key: "userId")
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "userId")
+{
+  userId: String!
+  accounts: [BlockchainAccount!]! @join__field(graph: BLOCKCHAIN_ACCOUNTS) @join__field(graph: SIMPLEHASH_SUBGRAPH, external: true)
+  currencySummary(chainIds: [Int!]): CurrencyPortfolioSummary @join__field(graph: SIMPLEHASH_SUBGRAPH, requires: "accounts { id address }")
+  nftSummary(chainIds: [Int!]): NFTPortfolioSummary @join__field(graph: SIMPLEHASH_SUBGRAPH, requires: "accounts { id address }")
+  historicalTotalValue(chainIds: PortfolioSummaryChainsInput): [HistoricalTotalValuesByCurrency!] @join__field(graph: SIMPLEHASH_SUBGRAPH, requires: "accounts { id address }")
+  totalValue(chainIds: PortfolioSummaryChainsInput): TotalValuesByCurrency @join__field(graph: SIMPLEHASH_SUBGRAPH, requires: "accounts { id address }")
+}
+
+input BlockchainAccountsV2Input
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  userId: String!
+  installationId: String
+  fallbackToEthAccounts: Boolean
+  filterByTag: AccountTag
+}
+
+interface BlockchainAddress
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+  @join__type(graph: TOKEN_API)
+{
+  displayName: String
+  fullName: String
+}
+
+enum CacheControlScope
+  @join__type(graph: ACTIVITY)
+  @join__type(graph: ACTIVITYV2)
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+  @join__type(graph: FEATURE_FLAGS)
+  @join__type(graph: TOKEN_API)
+{
+  PUBLIC
+  PRIVATE
+}
+
+type Chain
+  @join__type(graph: TOKEN_API, key: "id")
+{
+  id: Int!
+  name: String!
+  nativeTokenName: String
+  isTestNet: Boolean
+}
+
+enum ClaimableType
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  RAFFLE
+  DROP_LINK_GROUP
+  PRODUCT
+}
+
+type ClaimCode
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  id: String!
+  maxClaims: Int
+  claimableType: ClaimableType
+  description: String
+  storeUsername: String
+}
+
+type ClaimCodeMerged
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  claimCode: ClaimCode!
+  network: String!
+  claimCodeMetadata: ClaimCodeMergedMetadata!
+}
+
+type ClaimCodeMergedMetadata
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  """The token's name / title copy for this modal"""
+  title: String!
+
+  """The token's description / confirmation copy"""
+  description: String!
+
+  """The source url for the image on this modal"""
+  imageUrl: String
+
+  """The source url for the image on this modal"""
+  animationUrl: String
+
+  """Copy that is shown with share sheet materials"""
+  shareText: String
+
+  """A link to additional contents / materials on the web"""
+  learnMore: String
+
+  """Time the link will expire"""
+  expireTime: DateTime
+
+  """Preclaim modal view description"""
+  modalDescription: String
+
+  """Confirmation view title"""
+  confirmationTitle: String
+
+  """Confirmation view description"""
+  confirmationDescription: String
+
+  """Drop Link URL"""
+  droplinkUrl: String
+}
+
+type ClaimCodeTokenMetadata
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  image: String
+  externalUrl: String
+  description: String
+  name: String
+  backgroundColor: String
+  animationUrl: String
+  youtubeUrl: String
+  attributes: [JSONObject!]
+  properties: JSONObject
+}
+
+type ClaimCodeWithMetadata
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  claimCode: ClaimCode!
+  network: String!
+  tokenMetadata: ClaimCodeTokenMetadata!
+}
+
+input ClaimEthereumInput
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  claimCodeId: String!
+  destination: EthereumBlockchainAccountIdentifier!
+}
+
+type ClaimResponse
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  success: Boolean!
+}
+
+type Collection
+  @join__type(graph: TOKEN_API)
+{
+  name: String
+  description: String
+  image: RemoteAsset
+  standards: [String]
+  floorPrices: [Price]
+}
+
+type CollectionStats
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  floorSaleChange: PeriodicalStats
+  volumeChange: PeriodicalStats
+  volume: PeriodicalStats
+  topBid: Price
+  topBidV2: MarketplaceCurrencyValue
+}
+
+type CollectionV2
+  @join__type(graph: ACTIVITY, key: "contractAddress coinType chainId", resolvable: false)
+  @join__type(graph: ACTIVITYV2, key: "contractAddress coinType chainId", resolvable: false)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "contractAddress coinType chainId")
+  @join__type(graph: TOKEN_API, key: "contractAddress coinType chainId")
+{
+  contractAddress: String! @deprecated(reason: "Use `address.raw`")
+  coinType: Int!
+  chainId: Int!
+  name: String @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  description: String @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  image: RemoteAsset @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  standards: [String] @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  addressV2: BlockchainAddress! @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  priceChanges: PriceChanges @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  floorPrice1DChange: Float @deprecated(reason: "Use `priceChanges` instead.") @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  floorPrice1DChangeV2: Percentage @deprecated(reason: "Use `priceChanges` instead.") @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  floorPriceV2: MarketplaceCurrencyValue @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  historicalFloorPrices: [HistoricalCurrencyValue!] @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  address: Address! @deprecated(reason: "use `addressV2`") @join__field(graph: TOKEN_API)
+  floorPrice: Price @deprecated(reason: "This data is still in testing. Use `groupedNFTBalances.floorPrices` in production.") @join__field(graph: TOKEN_API)
+}
+
+enum CombinedPortfolioInclude
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  SPAM
+  NON_SPAM
+  BOTH
+}
+
+type CombinedPortfolioSummary
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  nfts: NFTPortfolioSummary!
+  currencies: CurrencyPortfolioSummary!
+  wallets: [PortfolioWalletBalance!]!
+  totalValue: TotalValuesByCurrency
+  historicalTotalValues(chainIds: [Int!]): HistoricalPortfolioValues
+  historicalTotalValue(chainIds: [Int!]): [HistoricalTotalValuesByCurrency!]
+}
+
+enum ContentfulEnvironmentId
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  MASTER
+  SANDBOX
+}
+
+input ContractInput
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+}
+
+type ContractInteraction implements Activity
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  contractAddress: String
+}
+
+type ContractInteractionV2 implements ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  contractAddress: String
+}
+
+type ContractKeys
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+}
+
+type ContractMetadata
+  @join__type(graph: ACTIVITY, key: "contractAddress coinType chainId", resolvable: false)
+  @join__type(graph: ACTIVITYV2, key: "contractAddress coinType chainId", resolvable: false)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "contractAddress coinType chainId")
+  @join__type(graph: TOKEN_API, key: "contractAddress coinType chainId")
+{
+  contractAddress: String! @deprecated(reason: "Use `address.raw`")
+  coinType: Int!
+  chainId: Int!
+  spamScore(blockchainAccountId: String): Int @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  balanceAmount(walletAddress: String!): Amount @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  address: Address! @deprecated(reason: "use `addressV2`") @join__field(graph: TOKEN_API)
+  addressV2: BlockchainAddress! @join__field(graph: TOKEN_API)
+
+  """A unique string key for caching and de-duping"""
+  key: String! @join__field(graph: TOKEN_API)
+  loadStatus: EntityLoadStatus @join__field(graph: TOKEN_API)
+  didLoad: Boolean @deprecated(reason: "use `loadStatus`") @join__field(graph: TOKEN_API)
+  name: String @deprecated(reason: "Use `displayName`") @join__field(graph: TOKEN_API)
+  displayName: String @join__field(graph: TOKEN_API)
+  collection: Collection @deprecated(reason: "Use `collectionV2`") @join__field(graph: TOKEN_API)
+  collectionV2: CollectionV2 @join__field(graph: TOKEN_API)
+  decimals: Int @join__field(graph: TOKEN_API)
+  symbol: String @join__field(graph: TOKEN_API)
+}
+
+input ContractTagInput
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  accountId: String!
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+  tag: String!
+}
+
+type ContractTags
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  contract: ContractKeys!
+  tags: [String!]!
+}
+
+input CreateBlockchainAccountInput
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  address: String!
+  additionalSigners: [String!]
+  threshold: Int
+  avatar: String
+  coinType: Int
+  displayName: String
+  isSelfCustody: Boolean
+  installationId: String
+  kindV2: BlockchainAccountKindV2
+  hardwareWalletDetails: HardwareWalletDetailsInput
+  tag: AccountTag
+}
+
+type Currency implements Token
+  @join__implements(graph: ACTIVITY, interface: "Token")
+  @join__implements(graph: TOKEN_API, interface: "Token")
+  @join__type(graph: ACTIVITY, key: "contractAddress coinType chainId", resolvable: false)
+  @join__type(graph: ACTIVITYV2, key: "contractAddress coinType chainId", resolvable: false)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "contractAddress coinType chainId")
+  @join__type(graph: TOKEN_API, key: "contractAddress coinType chainId")
+{
+  contractAddress: String! @deprecated(reason: "Use `address.raw`")
+  coinType: Int!
+  chainId: Int!
+  displayName: String @join__field(graph: SIMPLEHASH_SUBGRAPH, external: true) @join__field(graph: TOKEN_API)
+  decimals: Int @join__field(graph: SIMPLEHASH_SUBGRAPH, external: true) @join__field(graph: TOKEN_API)
+  symbol: String @join__field(graph: SIMPLEHASH_SUBGRAPH, external: true) @join__field(graph: TOKEN_API)
+  image: RemoteAsset @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  spamScore(blockchainAccountId: String): Int @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  priceChanges: PriceChanges @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  price1DChange: Percentage @deprecated(reason: "Use `priceChanges` instead.") @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  balanceAmount(walletAddress: String!): Amount @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  address: Address! @deprecated(reason: "use `addressV2`") @join__field(graph: TOKEN_API)
+  addressV2: BlockchainAddress! @join__field(graph: TOKEN_API)
+  chain: Chain @join__field(graph: TOKEN_API)
+  id: String @join__field(graph: TOKEN_API)
+
+  """A unique string key for caching and de-duping"""
+  key: String! @join__field(graph: TOKEN_API)
+  collection: Collection @deprecated(reason: "Use `collectionV2`") @join__field(graph: TOKEN_API)
+  collectionV2: CollectionV2 @join__field(graph: TOKEN_API)
+  metadata: TokenMetadata @deprecated(reason: "Use `metadataV2`") @join__field(graph: TOKEN_API)
+  metadataV2: TokenMetadataV2 @join__field(graph: TOKEN_API)
+  loadStatus: EntityLoadStatus @join__field(graph: TOKEN_API)
+  didLoad: Boolean @deprecated(reason: "use `loadStatus`") @join__field(graph: TOKEN_API)
+  prices: [Price] @join__field(graph: TOKEN_API)
+  name: String @deprecated(reason: "Use `displayName`") @join__field(graph: TOKEN_API)
+}
+
+type CurrencyAmount
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  symbol: String
+  amount: Amount!
+  formatted(input: CurrencyAmountFormattedInput): String
+}
+
+input CurrencyAmountFormattedInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  locale: Locale
+  truncateTo: Int
+  cleanup: Boolean
+  includeUnit: Boolean
+}
+
+type CurrencyBalance
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  currency: Currency! @join__field(graph: SIMPLEHASH_SUBGRAPH, provides: "displayName symbol decimals")
+  address: EVMAddress!
+  amount: Amount! @deprecated(reason: "Use `amountV2` instead.")
+  value: Amount!
+
+  """Contract address + amount, for svelte rendering"""
+  key: String!
+  totalValue: CurrencyValue
+  amountV2: CurrencyAmount!
+}
+
+type CurrencyBalanceConnection
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CurrencyBalanceEdge!]!
+
+  """A list of nodes."""
+  nodes: [CurrencyBalance!]!
+}
+
+"""An edge in a connection."""
+type CurrencyBalanceEdge
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  """A cursor for use in pagination"""
+  cursor: String!
+
+  """The item at the end of the edge"""
+  node: CurrencyBalance!
+}
+
+enum CurrencyBalancesInclude
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  SPAM
+  NON_SPAM
+  BOTH
+}
+
+type CurrencyBalancesResult
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  totalBalanceUSD: Amount!
+  connections: CurrencyBalanceConnection!
+}
+
+input CurrencyFormattedAmountInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  locale: Locale
+  truncateTo: Int
+  cleanup: Boolean
+  includeUnit: Boolean
+}
+
+type CurrencyPortfolioSummary
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  wallets: [CurrencyWalletBalances!]!
+  totalValue: TotalValuesByCurrency
+  historicalTotalValues(chainIds: [Int!]): HistoricalPortfolioValues
+  historicalTotalValue(chainIds: [Int!]): [HistoricalTotalValuesByCurrency!] @deprecated(reason: "Use `historical_total_values.daily_30d` instead.")
+  collections: [CurrencyBalance]
+}
+
+interface CurrencyValue
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  asEth: EthValue
+  asUsd: UsdValue
+  asMatic: MaticValue
+  amount: Amount!
+  formatted(input: CurrencyFormattedAmountInput): String
+}
+
+type CurrencyWalletBalances
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  address: String!
+  balances: [CurrencyBalance!]!
+  totalValue: TotalValuesByCurrency
+}
+
+"""
+Implement the DateTime<Utc> scalar
+
+The input/output is a string in RFC3339 format.
+"""
+scalar DateTime
+  @join__type(graph: ACTIVITY)
+  @join__type(graph: ACTIVITYV2)
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+  @join__type(graph: CLAIMS_SUBGRAPH)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+  @join__type(graph: TOKEN_API)
+
+type DeleteBlockchainAccountPayload
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  id: ID
+}
+
+type ENSAddress implements BlockchainAddress
+  @join__implements(graph: SIMPLEHASH_SUBGRAPH, interface: "BlockchainAddress")
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "ens")
+{
+  ens: String!
+  address: EVMAddress
+  fullName: String
+  displayName: String
+}
+
+enum EntityLoadStatus
+  @join__type(graph: ACTIVITYV2)
+  @join__type(graph: TOKEN_API)
+{
+  JoinSuceeded
+  JoinFailed
+  JoinNotAuthorized
+  Local
+  LocalLoadSuceeded
+  LocalLoadFailed
+}
+
+input EthereumBlockchainAccountIdentifier
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  address: String!
+}
+
+type EthValue implements CurrencyValue
+  @join__implements(graph: SIMPLEHASH_SUBGRAPH, interface: "CurrencyValue")
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  amount: Amount!
+  asEth: EthValue
+  asUsd: UsdValue
+  asMatic: MaticValue
+  formatted(input: CurrencyFormattedAmountInput): String
+}
+
+enum EventType
+  @join__type(graph: ACTIVITYV2)
+{
+  MINT
+  BURN
+  APPROVAL
+  TRANSFER
+}
+
+type EVMAddress implements BlockchainAddress & Address
+  @join__implements(graph: SIMPLEHASH_SUBGRAPH, interface: "BlockchainAddress")
+  @join__implements(graph: TOKEN_API, interface: "Address")
+  @join__implements(graph: TOKEN_API, interface: "BlockchainAddress")
+  @join__type(graph: ACTIVITYV2, key: "raw")
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS, key: "raw", resolvable: false)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "raw")
+  @join__type(graph: TOKEN_API, key: "raw")
+{
+  raw: String!
+  fullName: String @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  truncated: String @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  displayName: String @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API, external: true)
+  ens: ENSAddress @join__field(graph: SIMPLEHASH_SUBGRAPH)
+}
+
+enum FiatCurrencies
+  @join__type(graph: TOKEN_API)
+{
+  USD
+}
+
+input FormattedAmountInput
+  @join__type(graph: ACTIVITYV2)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+  @join__type(graph: TOKEN_API)
+{
+  locale: Locale
+  truncateTo: Int
+  cleanup: Boolean
+}
+
+input FormattedPercentageInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  locale: Locale
+  truncateTo: Int
+  cleanup: Boolean
+  includeUnit: Boolean
+}
+
+type GatedContent
+  @join__type(graph: TOKEN_API)
+{
+  kind: GatedContentKind!
+  value: String!
+}
+
+enum GatedContentKind
+  @join__type(graph: TOKEN_API)
+{
+  BULLET_TEXT
+  FULL_RESOLUTION_IMAGE
+  FULL_RESOLUTION_ANIMATION
+  SNAP_LENS
+  INSTAGRAM_FILTER
+  CUSTOM_FILE
+}
+
+type GatedContentV2
+  @join__type(graph: TOKEN_API)
+{
+  authorized: Boolean
+  items: [GatedContent!]
+}
+
+enum GateType
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  BETA
+}
+
+input GetActivitiesConnections
+  @join__type(graph: ACTIVITYV2)
+{
+  blockchainAccountId: String
+  address: String!
+  chainIds: [Int!]
+}
+
+input GetActivitiesInput
+  @join__type(graph: ACTIVITY)
+{
+  address: String!
+  chainIds: [Int!]
+  supportedChains: Boolean
+  includeTestNets: Boolean
+  limit: Int
+}
+
+input GetActivitiesInputV2
+  @join__type(graph: ACTIVITYV2)
+{
+  blockchainAccountId: String
+  address: String!
+  chainIds: [Int!]
+  supportedChains: Boolean
+  includeTestNets: Boolean
+  limit: Int
+  features: ActivityV2Features
+  eventTypes: [EventType!]
+}
+
+input GetActivitiesInputV3
+  @join__type(graph: ACTIVITYV2)
+{
+  blockchainAccountId: String
+  address: String!
+  chainIds: [Int!]
+  limit: Int
+}
+
+input GetActivityInput
+  @join__type(graph: ACTIVITYV2)
+{
+  chainId: Int!
+  transactionHash: String!
+  address: String
+  features: ActivityV2Features
+}
+
+input GetActivityStatisticsInput
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String!
+}
+
+input GetBalanceInput
+  @join__type(graph: TOKEN_API)
+{
+  chainId: Int!
+  address: String!
+  type: BalanceType!
+  contractAddress: String!
+  id: String
+}
+
+input GetBalancesInput
+  @join__type(graph: TOKEN_API)
+{
+  chainIds: [Int!]
+  supportedChains: Boolean
+  includeTestNets: Boolean
+  address: String!
+  type: BalanceType!
+  disableMetadataPrefetch: Boolean @deprecated(reason: "This is always true now")
+  contractAddresses: [String]
+}
+
+input GetBannerItemsInput
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  environmentId: ContentfulEnvironmentId!
+}
+
+input GetBlockchainAccountBalancesInput
+  @join__type(graph: TOKEN_API)
+{
+  chainIds: [Int!]
+  supportedChains: Boolean
+  includeTestNets: Boolean
+  type: BalanceType!
+}
+
+input GetChainActivitiesInput
+  @join__type(graph: ACTIVITY)
+{
+  address: String!
+}
+
+input GetChainBalancesInput
+  @join__type(graph: TOKEN_API)
+{
+  address: String!
+  type: BalanceType!
+}
+
+input GetContractMetadataInput
+  @join__type(graph: TOKEN_API)
+{
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+}
+
+input GetCurrencyBalancesV2Input
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  address: String!
+  chainIds: [Int!]
+  include: CurrencyBalancesInclude
+  blockchainAccountId: String
+}
+
+input GetFeatureFlagsInput
+  @join__type(graph: FEATURE_FLAGS)
+{
+  userId: String!
+}
+
+input GetGatesInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  addresses: [String!]!
+}
+
+input GetMarketingCodesInput
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  environmentId: ContentfulEnvironmentId!
+}
+
+input GetNFTBalancesGroupedInput
+  @join__type(graph: TOKEN_API)
+{
+  chainIds: [Int!]
+  supportedChains: Boolean
+  includeTestNets: Boolean
+  address: String!
+  groupBy: NFTBalancesGroupedBy
+  sortedBy: NFTBalancesSortedBy
+  disableMetadataPrefetch: Boolean @deprecated(reason: "This is always true now")
+}
+
+input GetNftBalancesInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  address: String!
+  chainIds: [Int!]
+  include: NftBalancesInclude
+  blockchainAccountId: String
+}
+
+input GetNftBalancesSummaryInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  address: String!
+  chainIds: [Int!]
+  include: NftBalancesInclude
+  limit: Int!
+  blockchainAccountId: String
+}
+
+input GetNFTMetadataInput
+  @join__type(graph: TOKEN_API)
+{
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+  id: String!
+}
+
+input GetPendingAirdrops
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String!
+}
+
+input GetTokenAllowancesInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  address: String!
+  chainIds: [Int!]
+  contractAddresses: [String!]
+}
+
+input GetUnclaimedCodesInput
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  ids: [String!]!
+}
+
+type HardwareWalletDetails
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  deviceId: String!
+  productId: String!
+  productName: String!
+  kind: HardwareWalletKind!
+  hdPath: String!
+}
+
+input HardwareWalletDetailsInput
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  kind: HardwareWalletKind!
+  deviceId: String!
+  productId: String!
+  productName: String!
+  hdPath: String!
+}
+
+enum HardwareWalletKind
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  LEDGER
+}
+
+type HistoricalCurrencyValue
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  timestamp: DateTime!
+  value: CurrencyValue!
+}
+
+type HistoricalPortfolioValues
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  """Portfolio data in 1 hour increments for the last 24 hours."""
+  hourly24Hr: [HistoricalTotalValuesByCurrency!]!
+
+  """Portfolio data in 6 hour increments for the last 7 days."""
+  hourly7D: [HistoricalTotalValuesByCurrency!]!
+
+  """Portfolio data in 1 day increments for the last 30 days."""
+  daily30D: [HistoricalTotalValuesByCurrency!]!
+
+  """
+  (TODO - add support) Portfolio data in 1 day increments for the last 90 days.
+  """
+  daily90D: [HistoricalTotalValuesByCurrency!]!
+}
+
+type HistoricalTotalValuesByCurrency
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  timestamp: DateTime!
+  value: TotalValuesByCurrency!
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  ACTIVITY @join__graph(name: "activity", url: "http://activity-subgraph")
+  ACTIVITYV2 @join__graph(name: "activityV2", url: "http://activity-subgraph-v2")
+  BLOCKCHAIN_ACCOUNTS @join__graph(name: "blockchain-accounts", url: "http://blockchain-accounts-subgraph")
+  CLAIMS_SUBGRAPH @join__graph(name: "claims-subgraph", url: "http://claims-subgraph")
+  FEATURE_FLAGS @join__graph(name: "feature-flags", url: "http://feature-flags-subgraph")
+  PENDING_ACTIVITY_SUBGRAPH @join__graph(name: "pending-activity-subgraph", url: "http://activity-subgraph-v3")
+  SIMPLEHASH_SUBGRAPH @join__graph(name: "simplehash-subgraph", url: "http://simplehash-subgraph")
+  TOKEN_API @join__graph(name: "token-api", url: "http://token-api-subgraph")
+}
+
+scalar JSONObject
+  @join__type(graph: ACTIVITY)
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+  @join__type(graph: CLAIMS_SUBGRAPH)
+  @join__type(graph: FEATURE_FLAGS)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+  @join__type(graph: TOKEN_API)
+
+scalar link__Import
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+input ListCollectionNftsInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+  ids: [String!]!
+  blockchainAccountId: String
+}
+
+enum Locale
+  @join__type(graph: ACTIVITYV2)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+  @join__type(graph: TOKEN_API)
+{
+  EN_US
+}
+
+type MarketplaceCurrencyValue
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  value: CurrencyValue!
+  marketplace: String
+}
+
+type MaticValue implements CurrencyValue
+  @join__implements(graph: SIMPLEHASH_SUBGRAPH, interface: "CurrencyValue")
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  amount: Amount!
+  asEth: EthValue
+  asUsd: UsdValue
+  asMatic: MaticValue
+  formatted(input: CurrencyFormattedAmountInput): String
+}
+
+input ModifyAccountTagsInput
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  removeTags: [AccountTag!]
+  addTags: [AccountTag!]
+}
+
+type ModifyNotificationsPayload
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  types: [NotificationType!]!
+}
+
+type Mutation
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+  @join__type(graph: CLAIMS_SUBGRAPH)
+{
+  createBlockchainAccount(input: CreateBlockchainAccountInput!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  onboardBlockchainAccount(id: ID!, avatar: String!, installationId: String): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  deleteBlockchainAccount(id: ID!): DeleteBlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  changeBlockchainAccountDisplayName(id: ID!, displayName: String!, installationId: String): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  changeBlockchainAccountDisplayDetails(id: ID!, displayName: String, avatar: String, installationId: String): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  convertWatchedWalletToSelfCustody(id: ID!, installationId: String): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  installSelfCustody(id: ID!, installationId: String!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  uninstallSelfCustody(id: ID!, installationId: String!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  changeOwnerToSafeAccount(id: ID!, address: String!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  modifyAccountTags(id: ID!, installationId: String!, input: ModifyAccountTagsInput!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  addNFTTag(input: NFTTagInput!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  removeNFTTag(input: NFTTagInput!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  addContractTag(input: ContractTagInput!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  removeContractTag(input: ContractTagInput!): BlockchainAccountPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  enableNotifications(id: ID!, types: [NotificationType!]): ModifyNotificationsPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  disableNotifications(id: ID!, types: [NotificationType!]): ModifyNotificationsPayload @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+
+  """claims a given claim code"""
+  claim(input: ClaimEthereumInput!): ClaimResponse! @join__field(graph: CLAIMS_SUBGRAPH)
+}
+
+type NFT implements Token
+  @join__implements(graph: ACTIVITY, interface: "Token")
+  @join__implements(graph: TOKEN_API, interface: "Token")
+  @join__type(graph: ACTIVITY, key: "contractAddress coinType chainId id", resolvable: false)
+  @join__type(graph: ACTIVITYV2, key: "contractAddress coinType chainId id", resolvable: false)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "contractAddress coinType chainId id")
+  @join__type(graph: TOKEN_API, key: "contractAddress coinType chainId id")
+{
+  contractAddress: String! @deprecated(reason: "Use `address.raw`")
+  coinType: Int!
+  chainId: Int!
+  id: String!
+  blurHash: String @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  lastSale: Price @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  lastSaleV2: MarketplaceCurrencyValue @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  preloadedSpamScore: Int @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  collectionV2: CollectionV2 @join__field(graph: SIMPLEHASH_SUBGRAPH, external: true) @join__field(graph: TOKEN_API)
+  metadataV2: TokenMetadataV2 @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  decimals: Int @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  image: RemoteAsset @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  symbol: String @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+
+  """A unique string key for caching and de-duping"""
+  key: String! @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  displayName: String @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  shareUrl: String @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  addressV2: BlockchainAddress! @join__field(graph: SIMPLEHASH_SUBGRAPH) @join__field(graph: TOKEN_API)
+  spamScore(blockchainAccountId: String): Int @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  collectionStats: CollectionStats @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  nftTopBid: MarketplaceCurrencyValue @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  tokenAllowances(walletAddress: String!): TokenAllowancesResult @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  address: Address! @deprecated(reason: "use `addressV2`") @join__field(graph: TOKEN_API)
+  chain: Chain @join__field(graph: TOKEN_API)
+  collection: Collection @deprecated(reason: "Use `collectionV2`") @join__field(graph: TOKEN_API)
+  metadata: TokenMetadata @deprecated(reason: "Use `metadataV2`") @join__field(graph: TOKEN_API)
+  loadStatus: EntityLoadStatus @join__field(graph: TOKEN_API)
+  didLoad: Boolean @deprecated(reason: "use `loadStatus`") @join__field(graph: TOKEN_API)
+  requestingOwner: String @deprecated(reason: "Use `balance.address`") @join__field(graph: TOKEN_API)
+  gatedContent: [GatedContent!] @join__field(graph: TOKEN_API)
+  gatedContentV2: GatedContentV2 @join__field(graph: TOKEN_API)
+}
+
+type NFTBalance
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  nft: NFT!
+  address: EVMAddress!
+  amount: Amount!
+}
+
+type NFTBalanceConnection
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [NFTBalanceEdge!]!
+
+  """A list of nodes."""
+  nodes: [NFTBalance!]!
+}
+
+"""An edge in a connection."""
+type NFTBalanceEdge
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  """A cursor for use in pagination"""
+  cursor: String!
+
+  """The item at the end of the edge"""
+  node: NFTBalance!
+}
+
+type NFTBalanceGroup
+  @join__type(graph: TOKEN_API)
+{
+  name: String
+  image: RemoteAsset
+  balances: [Balance]
+  floorPrices: [Price]
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  collection: CollectionV2 @deprecated(reason: "This query is still in testing. Use `balances[0].collection` in production.")
+}
+
+enum NFTBalancesGroupedBy
+  @join__type(graph: TOKEN_API)
+{
+  CONTRACT_ADDRESS
+}
+
+enum NftBalancesInclude
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  SPAM
+  NON_SPAM
+  BOTH
+}
+
+enum NFTBalancesSortedBy
+  @join__type(graph: TOKEN_API)
+{
+  COLLECTION_NAME
+}
+
+type NFTBalancesSummary
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  contract: ContractMetadata
+  chainId: Int
+  amount: Int
+  nftIds: [String!]
+  nfts: [NFT] @deprecated(reason: "Use the `nftIds` instead and shallow load.")
+  totalValue: CurrencyValue
+  nonSpam(blockchainAccountId: String): [NFT] @deprecated(reason: "Use the `include` input on `nftBalanceSummary` to filter out spam contracts.")
+}
+
+type NFTBalanceV2
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  nft: NFT!
+  address: EVMAddress!
+  amount: Amount!
+}
+
+type NFTBalanceV2Connection
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [NFTBalanceV2Edge!]!
+
+  """A list of nodes."""
+  nodes: [NFTBalanceV2!]!
+}
+
+"""An edge in a connection."""
+type NFTBalanceV2Edge
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  """A cursor for use in pagination"""
+  cursor: String!
+
+  """The item at the end of the edge"""
+  node: NFTBalanceV2
+}
+
+input NFTInput
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+  id: String!
+}
+
+type NFTPortfolioSummary
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  wallets: [NFTWalletBalances!]!
+  totalValue: TotalValuesByCurrency
+  historicalTotalValues(chainIds: [Int!]): HistoricalPortfolioValues
+  historicalTotalValue(chainIds: [Int!]): [HistoricalTotalValuesByCurrency!] @deprecated(reason: "Use `historical_total_values.daily_30d` instead.")
+  collections: [NFTBalancesSummary]
+}
+
+input NFTTagInput
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  accountId: String!
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+  id: String!
+  tag: String!
+}
+
+type NFTWalletBalances
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  address: String!
+  balances: [NFTBalancesSummary!]!
+  totalValue: TotalValuesByCurrency
+}
+
+enum NotificationType
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  TOKEN_AIRDROP
+  TOKEN_APPROVAL
+  OPENSEA_BID_OFFER
+  NFT_DELIVERY
+  NFT_SENT
+  TOKEN_DELIVERY
+  TOKEN_SENT
+  NFT_PURCHASE
+  NFT_SALE
+  NFT_MINT
+  TOKEN_SWAP
+  DRIP_FEED
+  CONTRACT_INTERACTION
+}
+
+"""Information about pagination in a connection"""
+type PageInfo
+  @join__type(graph: ACTIVITYV2)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Payment
+  @join__type(graph: ACTIVITY)
+{
+  amount: String
+  from: String
+  to: String
+  token: Token @deprecated(reason: "Use `currency`")
+  currency: Currency
+  amountUnit: Amount
+}
+
+type PaymentV2
+  @join__type(graph: ACTIVITYV2)
+{
+  amount: String
+  from: String
+  to: String
+  currency: Currency
+  amountUnit: Amount
+}
+
+input PendingActivitiesInput
+  @join__type(graph: PENDING_ACTIVITY_SUBGRAPH)
+{
+  address: String!
+  chainIds: [Int!]
+}
+
+type PendingActivity
+  @join__type(graph: ACTIVITYV2, key: "transactionId")
+  @join__type(graph: PENDING_ACTIVITY_SUBGRAPH, key: "transactionId")
+{
+  transactionId: String!
+  activity: PendingActivityJoin @join__field(graph: ACTIVITYV2)
+}
+
+input PendingActivityInput
+  @join__type(graph: PENDING_ACTIVITY_SUBGRAPH)
+{
+  transactionId: String!
+}
+
+type PendingActivityJoin
+  @join__type(graph: ACTIVITYV2)
+{
+  loadStatus: EntityLoadStatus
+  details: ActivityV2
+}
+
+type Percentage
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  value: Float!
+  formatted(input: FormattedPercentageInput): String
+}
+
+type PeriodicalStats
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  day1: Float
+  day7: Float
+  day30: Float
+  allTime: Float
+}
+
+type Platform
+  @join__type(graph: ACTIVITY)
+{
+  name: String
+}
+
+input PortfolioCombinedInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  addressesWithIds: [AddressWithId!]!
+  chainIds: [Int!]
+  include: CombinedPortfolioInclude
+}
+
+input PortfolioCurrencyInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  addressesWithIds: [AddressWithId!]!
+  chainIds: [Int!]
+  include: CurrencyBalancesInclude
+}
+
+input PortfolionNftCollectionsInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  addressesWithIds: [AddressWithId!]!
+  chainIds: [Int!]
+  include: NftBalancesInclude
+}
+
+input PortfolioSummaryChainsInput
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  currencies: [Int!]
+  nfts: [Int!]
+}
+
+type PortfolioWalletBalance
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  address: String!
+  nfts: [NFTBalancesSummary!]!
+  currencies: [CurrencyBalance!]!
+  totalValue: TotalValuesByCurrency
+}
+
+type Price
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "price currency")
+  @join__type(graph: TOKEN_API, key: "price currency")
+{
+  currency: String!
+  price: String!
+  marketplace: String
+  priceUnit: Amount
+  timestamp: DateTime @join__field(graph: TOKEN_API)
+}
+
+type PriceChanges
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  percent1H: Percentage
+  percent1D: Percentage
+  percent7D: Percentage
+  percent30D: Percentage
+  percent90D: Percentage
+}
+
+enum PurchaseType
+  @join__type(graph: ACTIVITY)
+  @join__type(graph: ACTIVITYV2)
+{
+  BUY_NOW
+  ACCEPT_OFFER
+}
+
+type Query
+  @join__type(graph: ACTIVITY)
+  @join__type(graph: ACTIVITYV2)
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+  @join__type(graph: CLAIMS_SUBGRAPH)
+  @join__type(graph: FEATURE_FLAGS)
+  @join__type(graph: PENDING_ACTIVITY_SUBGRAPH)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+  @join__type(graph: TOKEN_API)
+{
+  activities(input: GetActivitiesInput!): [Activity] @join__field(graph: ACTIVITY)
+  activitiesV2(input: GetActivitiesInputV2!): [ActivityV2] @join__field(graph: ACTIVITYV2)
+  activitiesV3(input: GetActivitiesInputV3!): [ActivityV3] @deprecated(reason: "In dev, do not use. Prefer `activitiesV2`") @join__field(graph: ACTIVITYV2)
+  pendingAirdrops(input: GetPendingAirdrops!): [ActivityV2] @join__field(graph: ACTIVITYV2)
+  activitiesConnections(input: GetActivitiesConnections!, first: Int, after: String): ActivityConnection! @join__field(graph: ACTIVITYV2)
+  activity(input: GetActivityInput!): ActivityV2 @join__field(graph: ACTIVITYV2)
+  activityStatistics(input: GetActivityStatisticsInput!): ActivityStatistics @join__field(graph: ACTIVITYV2)
+  testPendingActivity(transactionId: String!): PendingActivity @join__field(graph: ACTIVITYV2)
+  blockchainAccounts(installationId: String, fallbackToEthAccounts: Boolean, filterByTag: AccountTag): [BlockchainAccount] @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  blockchainAccountsV2(input: BlockchainAccountsV2Input!): BlockchainAccounts @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  blockchainAccount(id: String!, installationId: String): BlockchainAccount @join__field(graph: BLOCKCHAIN_ACCOUNTS)
+  unclaimedCodes(input: GetUnclaimedCodesInput!): [ClaimCodeWithMetadata!] @join__field(graph: CLAIMS_SUBGRAPH)
+
+  """A list of Banner items that always returns Product Banners"""
+  bannerItems(input: GetBannerItemsInput): [BannerItem!] @join__field(graph: CLAIMS_SUBGRAPH)
+
+  """
+  returns which active marketing campaign claim codes are not yet claimed
+  """
+  unclaimedMarketingCodes(input: GetMarketingCodesInput): [ClaimCodeMerged!] @join__field(graph: CLAIMS_SUBGRAPH)
+  featureFlags(input: GetFeatureFlagsInput!): JSONObject @join__field(graph: FEATURE_FLAGS)
+  pendingActivities(input: PendingActivitiesInput!): [PendingActivity!] @join__field(graph: PENDING_ACTIVITY_SUBGRAPH)
+  pendingActivity(input: PendingActivityInput!): PendingActivity @join__field(graph: PENDING_ACTIVITY_SUBGRAPH)
+  nftBalances(input: GetNftBalancesInput!, first: Int, after: String): NFTBalanceConnection! @join__field(graph: SIMPLEHASH_SUBGRAPH, provides: "nodes { nft { collectionV2 { name description image { url } standards } } }")
+  nftBalancesV2(input: GetNftBalancesInput!, first: Int, after: String): NFTBalanceV2Connection! @join__field(graph: SIMPLEHASH_SUBGRAPH, provides: "nodes { nft { collectionV2 { name description image { url } standards } } }")
+  nftBalanceSummary(input: GetNftBalancesSummaryInput!): [NFTBalancesSummary] @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  portfolioNftCollections(input: PortfolionNftCollectionsInput!): NFTPortfolioSummary @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  portfolioCurrencies(input: PortfolioCurrencyInput!): CurrencyPortfolioSummary! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  portfolioCombined(input: PortfolioCombinedInput!): CombinedPortfolioSummary! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  walletGates(input: GetGatesInput!): [GateType] @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  currencyBalances(input: GetCurrencyBalancesV2Input!, first: Int, after: String): CurrencyBalancesResult! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  tokenAllowances(input: GetTokenAllowancesInput!): TokenAllowancesResult @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  ensAddress(address: String!): ENSAddress @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  evmAddress(address: String!): EVMAddress @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testNft(contractAddress: String!, coinType: Int!, chainId: Int!, id: String!): NFT @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testCurrency(contractAddress: String!, coinType: Int!, chainId: Int!): Currency @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testContractMetadata(contractAddress: String!, coinType: Int!, chainId: Int!): ContractMetadata @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  listCollectionNFTs(input: ListCollectionNftsInput!): [NFT!]! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testBlockchainAccounts(userId: String!): BlockchainAccounts! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testTotalValuesByCurrency(eth: Float!, usd: Float!, matic: Float!): TotalValuesByCurrency! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testUsdValue(value: Float!): UsdValue! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testEthValue(value: Float!): EthValue! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testMaticValue(value: Float!): MaticValue! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testPercentage(value: Float!): Percentage! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  testCurrencyAmount(amount: Float!, symbol: String!): CurrencyAmount! @join__field(graph: SIMPLEHASH_SUBGRAPH)
+  contractMetadata(input: GetContractMetadataInput!): ContractMetadata @join__field(graph: TOKEN_API)
+  token(input: GetNFTMetadataInput!): Token @join__field(graph: TOKEN_API)
+  balances(input: GetBalancesInput!): [Balance] @deprecated(reason: "Use either `nftBalances` or `currencyBalances`") @join__field(graph: TOKEN_API)
+  balance(input: GetBalanceInput!): Balance @join__field(graph: TOKEN_API)
+  groupedNFTBalances(input: GetNFTBalancesGroupedInput!): [NFTBalanceGroup] @deprecated(reason: "Use `nftBalanceSummary`") @join__field(graph: TOKEN_API)
+  amount(input: AmountInput!): Amount @join__field(graph: TOKEN_API)
+  getImageMimeType(url: String!): String @join__field(graph: TOKEN_API)
+  remoteAsset(url: String!): RemoteAsset @join__field(graph: TOKEN_API)
+}
+
+type RemoteAsset
+  @join__type(graph: ACTIVITY, key: "url", resolvable: false)
+  @join__type(graph: ACTIVITYV2, key: "url", resolvable: false)
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS, key: "url", resolvable: false)
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "url")
+  @join__type(graph: TOKEN_API, key: "url")
+{
+  url: String!
+  type: RemoteAssetType @deprecated(reason: "Do not use") @join__field(graph: TOKEN_API)
+  mimeType: String @deprecated(reason: "Do not use") @join__field(graph: TOKEN_API)
+  resizedImage(input: ResizedImageInput!): RemoteAsset @deprecated(reason: "Use url instead") @join__field(graph: TOKEN_API)
+  responsiveImages(widths: [Int!]!): [RemoteAsset] @deprecated(reason: "Do not use") @join__field(graph: TOKEN_API)
+}
+
+enum RemoteAssetType
+  @join__type(graph: TOKEN_API)
+{
+  IMAGE
+  VIDEO
+}
+
+input ResizedImageInput
+  @join__type(graph: TOKEN_API)
+{
+  anim: Boolean
+  background: String
+  blur: Int
+  brightness: Float
+  contrast: Float
+  dpr: Int
+  fit: ResizedImageInputFit
+  format: ResizedImageInputFormat
+  gamma: Float
+  gravity: ResizedImageInputGravity
+  height: Int
+  metadata: ResizedImageInputMetadata
+  quality: Int
+  rotate: Int
+  sharpen: Int
+  width: Int
+}
+
+enum ResizedImageInputFit
+  @join__type(graph: TOKEN_API)
+{
+  SCALE_DOWN
+  CONTAIN
+  COVER
+  CROP
+  PAD
+}
+
+enum ResizedImageInputFormat
+  @join__type(graph: TOKEN_API)
+{
+  AUTO
+  AVIF
+  WEBP
+}
+
+input ResizedImageInputGravity
+  @join__type(graph: TOKEN_API)
+{
+  auto: Boolean
+  side: ResizedImageInputGravitySide
+  x: Float
+  y: Float
+}
+
+enum ResizedImageInputGravitySide
+  @join__type(graph: TOKEN_API)
+{
+  LEFT
+  RIGHT
+  TOP
+  BOTTOM
+}
+
+enum ResizedImageInputMetadata
+  @join__type(graph: TOKEN_API)
+{
+  KEEP
+  COPYRIGHT
+  NONE
+}
+
+interface Token
+  @join__type(graph: ACTIVITY)
+  @join__type(graph: TOKEN_API)
+{
+  contractAddress: String! @deprecated(reason: "Use `address.raw`")
+  coinType: Int!
+  chainId: Int!
+  address: Address! @deprecated(reason: "use `addressV2`") @join__field(graph: TOKEN_API)
+  addressV2: BlockchainAddress! @join__field(graph: TOKEN_API)
+
+  """A unique string key for caching and de-duping"""
+  key: String! @join__field(graph: TOKEN_API)
+  chain: Chain @join__field(graph: TOKEN_API)
+  id: String @join__field(graph: TOKEN_API)
+  collection: Collection @join__field(graph: TOKEN_API)
+  collectionV2: CollectionV2 @join__field(graph: TOKEN_API)
+  metadata: TokenMetadata @join__field(graph: TOKEN_API)
+  metadataV2: TokenMetadataV2 @join__field(graph: TOKEN_API)
+  symbol: String @join__field(graph: TOKEN_API)
+  decimals: Int @join__field(graph: TOKEN_API)
+  loadStatus: EntityLoadStatus @join__field(graph: TOKEN_API)
+  didLoad: Boolean @deprecated(reason: "use `loadStatus`") @join__field(graph: TOKEN_API)
+}
+
+type TokenAirdropV2 implements TokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  amount: String
+  token: TokenV2
+  amountUnit: Amount
+  contractAddress: String
+  contract: ContractMetadata
+  from: String
+  fromAddress: EVMAddress
+}
+
+type TokenAllowance
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  spender: ContractMetadata
+  allowance: Amount
+  kind: TokenAllowanceKind
+  isApprovalForAll: Boolean
+}
+
+union TokenAllowanceKind
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+ = Currency | ContractMetadata
+
+type TokenAllowancesResult
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  allowances: [TokenAllowance]
+}
+
+interface TokenApproval
+  @join__type(graph: ACTIVITY)
+{
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+}
+
+type TokenApprovalAll implements TokenApproval & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenApproval")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+}
+
+type TokenApprovalAllV2 implements TokenApprovalV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenApprovalV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+}
+
+interface TokenApprovalV2
+  @join__type(graph: ACTIVITYV2)
+{
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+}
+
+type TokenApproved implements TokenApproval & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenApproval")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+  rawAllowance: String
+}
+
+type TokenApprovedV2 implements TokenApprovalV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenApprovalV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+  rawAllowance: String
+}
+
+type TokenBurn implements TokenTransfer & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenTransfer")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  amount: String
+  token: Token
+  amountUnit: Amount
+  to: String
+}
+
+type TokenBurnV2 implements TokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  amount: String
+  token: TokenV2
+  amountUnit: Amount
+  contractAddress: String
+  contract: ContractMetadata
+  to: String
+}
+
+type TokenKeys
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  contractAddress: String!
+  coinType: Int!
+  chainId: Int!
+  id: String!
+}
+
+type TokenMetadata
+  @join__type(graph: TOKEN_API)
+{
+  name: String
+  description: String
+  image: RemoteAsset
+  animation: RemoteAsset
+  animationUrl: RemoteAsset @deprecated(reason: "Use `animation`.")
+  externalUrl: String
+  marketplaceUrl: String
+  attributes: [JSONObject!]
+  properties: JSONObject
+}
+
+type TokenMetadataV2
+  @join__type(graph: SIMPLEHASH_SUBGRAPH, key: "contractAddress coinType chainId id")
+  @join__type(graph: TOKEN_API, key: "contractAddress coinType chainId id")
+{
+  contractAddress: String! @deprecated(reason: "Use `address.raw`")
+  coinType: Int!
+  chainId: Int!
+  id: String!
+  animation: RemoteAsset
+  attributes: [JSONObject!]
+  description: String
+  externalUrl: String
+  image: RemoteAsset
+  marketplaceUrl: String
+  name: String
+  properties: JSONObject
+  addressV2: BlockchainAddress!
+  address: Address! @deprecated(reason: "use `addressV2`") @join__field(graph: TOKEN_API)
+  loadStatus: EntityLoadStatus @join__field(graph: TOKEN_API)
+  didLoad: Boolean @deprecated(reason: "use `loadStatus`") @join__field(graph: TOKEN_API)
+}
+
+type TokenMint implements TokenTransfer & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenTransfer")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  amount: String
+  token: Token
+  amountUnit: Amount
+  cost: String
+  costUnit: Amount
+}
+
+type TokenMintV2 implements TokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  amount: String
+  token: TokenV2
+  amountUnit: Amount
+  contractAddress: String
+  contract: ContractMetadata
+  cost: String
+  costUnit: Amount
+}
+
+type TokenPurchased implements TokenSale & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenSale")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  token: Token @deprecated(reason: "Use `nft`")
+  nft: NFT
+  amount: String
+  payment: Payment
+  purchaseType: PurchaseType
+  platform: Platform
+  amountUnit: Amount
+  seller: String
+}
+
+type TokenPurchasedV2 implements TokenSaleV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenSaleV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  nft: NFT
+  amount: String
+  payment: PaymentV2
+  purchaseType: PurchaseType
+  platform: ContractMetadata
+  amountUnit: Amount
+  seller: String
+}
+
+type TokenReceived implements TokenTransfer & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenTransfer")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  amount: String
+  token: Token
+  amountUnit: Amount
+  from: String
+}
+
+type TokenReceivedV2 implements TokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  amount: String
+  token: TokenV2
+  amountUnit: Amount
+  contractAddress: String
+  contract: ContractMetadata
+  from: String
+  fromAddress: EVMAddress
+}
+
+type TokenRejectAll implements TokenApproval & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenApproval")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+}
+
+type TokenRejectAllV2 implements TokenApprovalV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenApprovalV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+}
+
+type TokenRevokeApprovalV2 implements TokenApprovalV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenApprovalV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  owner: String
+  spender: ContractMetadata
+  contract: ContractMetadata
+}
+
+interface TokenSale
+  @join__type(graph: ACTIVITY)
+{
+  token: Token @deprecated(reason: "Use `nft`")
+  nft: NFT
+  amount: String
+  payment: Payment
+  purchaseType: PurchaseType
+  platform: Platform
+  amountUnit: Amount
+}
+
+type TokenSaleAbsoluteV2 implements TokenSaleV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenSaleV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  nft: NFT
+  amount: String
+  payment: PaymentV2
+  purchaseType: PurchaseType
+  platform: ContractMetadata
+  amountUnit: Amount
+  buyer: String
+  seller: String
+}
+
+interface TokenSaleV2
+  @join__type(graph: ACTIVITYV2)
+{
+  nft: NFT
+  amount: String
+  payment: PaymentV2
+  purchaseType: PurchaseType
+  platform: ContractMetadata
+  amountUnit: Amount
+}
+
+type TokenSent implements TokenTransfer & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenTransfer")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  amount: String
+  token: Token
+  amountUnit: Amount
+  to: String
+}
+
+type TokenSentV2 implements TokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  amount: String
+  token: TokenV2
+  amountUnit: Amount
+  contractAddress: String
+  contract: ContractMetadata
+  to: String
+  toAddress: EVMAddress
+}
+
+type TokenSold implements TokenSale & Activity
+  @join__implements(graph: ACTIVITY, interface: "TokenSale")
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  token: Token @deprecated(reason: "Use `nft`")
+  nft: NFT
+  amount: String
+  payment: Payment
+  purchaseType: PurchaseType
+  platform: Platform
+  amountUnit: Amount
+  buyer: String
+}
+
+type TokenSoldV2 implements TokenSaleV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenSaleV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  nft: NFT
+  amount: String
+  payment: PaymentV2
+  purchaseType: PurchaseType
+  platform: ContractMetadata
+  amountUnit: Amount
+  buyer: String
+}
+
+type TokenSwap implements Activity
+  @join__implements(graph: ACTIVITY, interface: "Activity")
+  @join__type(graph: ACTIVITY)
+{
+  chainId: Int!
+  timestamp: DateTime
+  transactionHash: String
+  trader: String
+  received: TokenSwapDetails
+  sent: TokenSwapDetails
+  platform: Platform
+}
+
+type TokenSwapDetails
+  @join__type(graph: ACTIVITY)
+{
+  token: Token @deprecated(reason: "Use `currency`")
+  currency: Currency
+  amount: String
+  amountUnit: Amount
+}
+
+type TokenSwapDetailsV2
+  @join__type(graph: ACTIVITYV2)
+{
+  token: TokenV2
+  amount: String
+  amountUnit: Amount
+}
+
+type TokenSwapV2 implements ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  trader: String
+  received: TokenSwapDetailsV2
+  sent: TokenSwapDetailsV2
+  platform: ContractMetadata
+}
+
+type TokenTags
+  @join__type(graph: BLOCKCHAIN_ACCOUNTS)
+{
+  token: TokenKeys!
+  tags: [String!]!
+}
+
+interface TokenTransfer
+  @join__type(graph: ACTIVITY)
+{
+  amount: String
+  token: Token
+  amountUnit: Amount
+}
+
+type TokenTransferAbsoluteV2 implements TokenTransferV2 & ActivityV2
+  @join__implements(graph: ACTIVITYV2, interface: "TokenTransferV2")
+  @join__implements(graph: ACTIVITYV2, interface: "ActivityV2")
+  @join__type(graph: ACTIVITYV2)
+{
+  address: String
+  chainId: Int!
+  transaction: Transaction!
+  timestamp: DateTime
+
+  """A unique string key for caching and de-duping"""
+  key: String!
+  amount: String
+  token: TokenV2
+  amountUnit: Amount
+  contractAddress: String
+  contract: ContractMetadata
+  to: String
+  from: String
+}
+
+interface TokenTransferV2
+  @join__type(graph: ACTIVITYV2)
+{
+  amount: String
+  token: TokenV2
+  amountUnit: Amount
+  contractAddress: String
+  contract: ContractMetadata
+}
+
+union TokenV2
+  @join__type(graph: ACTIVITYV2)
+ = NFT | Currency
+
+input TotalCurrencyValueInput
+  @join__type(graph: TOKEN_API)
+{
+  chainIds: [Int!]
+  supportedChains: Boolean
+}
+
+input TotalCurrencyValueV2Input
+  @join__type(graph: TOKEN_API)
+{
+  chainIds: [Int!]
+  supportedChains: Boolean
+  currency: FiatCurrencies!
+}
+
+type TotalValuesByCurrency
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  eth: EthValue!
+  matic: MaticValue!
+  usd: UsdValue!
+  sumAsEth: EthValue
+  sumAsUsd: UsdValue
+}
+
+type Transaction
+  @join__type(graph: ACTIVITYV2)
+{
+  blockNumber: Int
+  hash: String
+  status: Int
+  detailsUrl: String
+  gasUsed: Amount
+  effectiveGasPrice: Amount
+}
+
+type UsdValue implements CurrencyValue
+  @join__implements(graph: SIMPLEHASH_SUBGRAPH, interface: "CurrencyValue")
+  @join__type(graph: SIMPLEHASH_SUBGRAPH)
+{
+  amount: Amount!
+  asEth: EthValue
+  asUsd: UsdValue
+  asMatic: MaticValue
+  formatted(input: CurrencyFormattedAmountInput): String
+}

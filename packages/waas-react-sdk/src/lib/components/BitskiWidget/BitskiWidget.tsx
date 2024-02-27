@@ -1,8 +1,9 @@
-import { BitskiAuth } from './BitskiAuth';
 import BitskiConnect from './BitskiConnect';
 import { Dialog, DialogContent, DialogTrigger } from '../Dialog';
-import { BitskiWalletProvider } from '../BitskiWalletViewer/BitskiWalletProvider';
-import { BitskiWalletViewer } from '../BitskiWalletViewer';
+import { BitskiWalletViewer, Tab } from '../BitskiWalletViewer';
+import { useContext } from 'react';
+import { BitskiContext, ConnectionStateKind } from '../../BitskiContext';
+import { BitskiAuth } from './index';
 
 export interface BitskiWidgetProps {
   children?: React.ReactNode;
@@ -21,8 +22,14 @@ function BitskiWidget({
   logoUrl,
   loginText,
 }: BitskiWidgetProps) {
-  if (!collapsed) {
-    return <BitskiAuth logoUrl={logoUrl}>{children}</BitskiAuth>;
+  const { connectionState } = useContext(BitskiContext);
+  let dialogContent;
+  switch (connectionState.kind) {
+    case ConnectionStateKind.Connected:
+      dialogContent = <BitskiWalletViewer />;
+      break;
+    default:
+      dialogContent = <BitskiAuth logoUrl={logoUrl} collapsed={false} />;
   }
 
   return (
@@ -30,17 +37,7 @@ function BitskiWidget({
       <DialogTrigger asChild>
         {connect ? connect : <BitskiConnect displayText={loginText} />}
       </DialogTrigger>
-      <DialogContent className="Dialog">
-        <BitskiAuth logoUrl={logoUrl} collapsed={collapsed}>
-          {showWallet ? (
-            <BitskiWalletProvider>
-              <BitskiWalletViewer />
-            </BitskiWalletProvider>
-          ) : (
-            children
-          )}
-        </BitskiAuth>
-      </DialogContent>
+      <DialogContent className="Dialog">{dialogContent}</DialogContent>
     </Dialog>
   );
 }
