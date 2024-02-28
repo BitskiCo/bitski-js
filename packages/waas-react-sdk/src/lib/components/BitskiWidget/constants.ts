@@ -12,10 +12,11 @@ import {
 
 export enum LoginMethod {
   Wallet = 'wallet',
-  Bitski = 'bitski',
+  Email = 'email',
   Google = 'google',
   Apple = 'apple',
   X = 'x',
+  Sms = 'sms',
 }
 
 export type LoginMethods = `${LoginMethod}`;

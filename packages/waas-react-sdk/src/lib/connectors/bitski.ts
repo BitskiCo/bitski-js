@@ -1,5 +1,4 @@
 import { Address, getAddress, ProviderConnectInfo } from 'viem';
-import { AuthenticationStatus, Bitski, ProviderOptions } from 'bitski';
 import {
   BaseError,
   Connector,
@@ -8,43 +7,38 @@ import {
   ProviderNotFoundError,
 } from 'wagmi';
 import type { BitskiProviderShim } from 'bitski/lib/provider-shim';
-import { getBlockchainAccounts } from '../utils/getBlockchainAccounts';
+import {
+  BlockchainAccount,
+  getBlockchainAccounts,
+  LOCAL_STORAGE_LABEL,
+} from '../utils/getBlockchainAccounts';
+import { AuthenticationStatus, Bitski } from 'bitski';
+import { LoginMethod } from '../components/BitskiWidget/constants';
+import { configurator } from './loginMethodConnectorConfigurator';
+import { openLocalStoragePopup } from './localStoragePopup';
 
-const BitskiIcon = 'https://cdn.bitskistatic.com/docs-web/bitskiWallet.svg';
-
-const APPLE_LOGIN_HINT = 'fa_ZWY0YTdjNTAtZDkzZC00YmI4LWI3MTktYzFjNDU0ZjRkMTYw';
-const GOOGLE_LOGIN_HINT = 'fa_NTcyYjUyZWUtZjk4Yi00NTdhLTgzOTItYzI2MjM0YTU0MjIx';
-const X_LOGIN_HINT = 'fa_NzBmODA3MzEtNmVhYy00OWFlLWI4YzMtNjdlYjBjYzBkMzA2';
+export const CONNECTOR_TYPE_BITSKI = 'bitski';
 
 type WagmiAccounts = `0x${string}`[];
 
 export interface BitskiConnector extends Connector {
   setEmail: (email: string) => void;
+  setPhone: (phone: string) => void;
 }
-
-type BitskiOptions = ProviderOptions & {
-  includeX?: boolean;
-  includeApple?: boolean;
-  includeGoogle?: boolean;
-};
 
 export interface BitskiParameters {
   appId: string;
-  icon?: string;
-  bitskiOptions?: BitskiOptions;
+  callbackUrl: string;
+  loginMethod: LoginMethod;
   shimDisconnect?: boolean | undefined;
 }
 
 export function bitski(parameters: BitskiParameters) {
+  const providerSearchParams = new URLSearchParams();
   let email: string | undefined;
+  let phone: string | undefined;
 
-  const {
-    appId,
-    icon = BitskiIcon,
-    bitskiOptions = { waas: { enabled: false } },
-    shimDisconnect = false,
-  } = parameters;
-  const { waas, includeApple, includeGoogle, includeX } = bitskiOptions;
+  const { appId, callbackUrl, loginMethod, shimDisconnect = false } = parameters;
 
   type Provider = BitskiProviderShim | undefined;
   type Properties = {
@@ -57,31 +51,17 @@ export function bitski(parameters: BitskiParameters) {
   type StorageItem = { 'bitski.disconnected': true };
 
   let provider_: Provider | undefined;
-  const bitski = new Bitski(appId, bitskiOptions.callbackURL);
+  const bitski = new Bitski(appId, callbackUrl);
+  let { id, login, name, type, loginHint, icon } = configurator(loginMethod, email);
+
+  if (loginHint) {
+    providerSearchParams.set('login_hint', loginHint);
+  }
+
+  const url = new URL(window.location.href);
+  const enableLocalStorage = url.searchParams.get('useLocalStorage') === 'true';
 
   return createConnector<Provider, Properties, StorageItem>((config) => {
-    let id = 'bitkiSDK';
-    let name = 'bitski';
-    let type = 'bitski';
-
-    if (includeApple) {
-      id = 'apple';
-      name = 'Apple';
-      type = 'apple';
-    }
-
-    if (includeGoogle) {
-      id = 'google';
-      name = 'Google';
-      type = 'google';
-    }
-
-    if (includeX) {
-      id = 'x';
-      name = 'X';
-      type = 'x';
-    }
-
     return {
       id,
       name,
@@ -91,6 +71,10 @@ export function bitski(parameters: BitskiParameters) {
 
       setEmail(value: string) {
         email = value;
+      },
+
+      setPhone(value: string) {
+        phone = value;
       },
 
       async connect(parameters) {
@@ -111,41 +95,14 @@ export function bitski(parameters: BitskiParameters) {
           };
         }
 
-        if (waas?.enabled) {
-          const loginHint = `fa_${btoa(appId)}`;
-          await bitski.start({
-            login_hint: loginHint,
-            prompt: 'login',
-          });
-        } else if (email) {
-          const loginHint = email;
-          await bitski.start({
-            login_hint: loginHint,
-            prompt: 'login',
-          });
-        } else if (includeApple) {
-          const loginHint = APPLE_LOGIN_HINT;
-          await bitski.start({
-            login_hint: loginHint,
-            prompt: 'login',
-          });
-        } else if (includeGoogle) {
-          const loginHint = GOOGLE_LOGIN_HINT;
-          await bitski.start({
-            login_hint: loginHint,
-            prompt: 'login',
-          });
-        } else if (includeX) {
-          const loginHint = X_LOGIN_HINT;
-          await bitski.start({
-            login_hint: loginHint,
-            prompt: 'login',
-          });
-        } else {
-          await bitski.signIn();
+        await login(bitski, { email, phoneNumber: phone });
+        let accounts = await this.getAccounts();
+
+        if (!accounts && enableLocalStorage) {
+          await openLocalStoragePopup();
+          accounts = await this.getAccounts();
         }
 
-        const accounts = await this.getAccounts();
         if (!accounts) {
           throw new BaseError('No Accounts found');
         }
@@ -175,9 +132,16 @@ export function bitski(parameters: BitskiParameters) {
 
         const token = await bitski.getCurrentAccessToken();
         const blockchainAccounts = await getBlockchainAccounts(fetch, token);
-        return blockchainAccounts.map((account) => {
-          return account.address;
-        }) as WagmiAccounts;
+        // Signing not supported with AA, embedded wallets will be Bitski
+        return blockchainAccounts
+          .filter((account) =>
+            enableLocalStorage
+              ? account.kind === 'view' && !!account.labels[LOCAL_STORAGE_LABEL]
+              : account.kind === 'bitski',
+          )
+          .map((account) => {
+            return account.address;
+          }) as WagmiAccounts;
       },
 
       async getChainId() {
@@ -191,16 +155,11 @@ export function bitski(parameters: BitskiParameters) {
 
       async getProvider() {
         if (!provider_) {
-          const searchParams = new URLSearchParams();
-          if (includeApple) {
-            searchParams.set('loginHint', APPLE_LOGIN_HINT);
-          } else if (includeGoogle) {
-            searchParams.set('loginHint', GOOGLE_LOGIN_HINT);
-          } else if (includeX) {
-            searchParams.set('loginHint', X_LOGIN_HINT);
-          }
           provider_ = await bitski.getProvider({
-            signerQueryParams: searchParams,
+            signerQueryParams: providerSearchParams,
+            additionalSigningContext: {
+              embedded: true,
+            },
           });
         }
         return provider_;
@@ -252,6 +211,7 @@ export function bitski(parameters: BitskiParameters) {
         config.emitter.emit('disconnect');
         if (!shimDisconnect) {
           await config.storage?.setItem('bitski.disconnected', true);
+          await localStorage.removeItem('bitski.email');
         }
       },
     };

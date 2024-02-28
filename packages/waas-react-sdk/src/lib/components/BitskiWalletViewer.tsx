@@ -1,40 +1,52 @@
-import { Connector, useConfig, useDisconnect } from 'wagmi';
-import { TokensState, TokenStateKind } from './useTokens';
-import { useContext, useState } from 'react';
+import { Connector, useConfig } from 'wagmi';
+import { TokensState, TokenStateKind } from './hooks/useTokens';
+import { useContext, useRef, useState } from 'react';
 import { WalletViewerContext } from './BitskiWalletProvider';
-import { Activity, ActivityState, ActivityStateKind } from './useActivity';
+import { Activity, ActivityState, ActivityStateKind } from './hooks/useActivity';
 import { Chain } from 'viem/chains';
 import { switchChain } from '@wagmi/core';
 import { ChainIcon } from './ChainIcon';
-import { truncateAddress } from '../../utils';
-import { Tab } from './constants';
-import iconTokenSelected from '../../assets/icon-tokens-selected.svg';
-import iconToken from '../../assets/icon-tokens.svg';
-import iconActivitySelected from '../../assets/icon-activity-selected.svg';
-import iconActivity from '../../assets/icon-activity.svg';
-import iconSwapsSelected from '../../assets/icon-swaps-selected.svg';
-import iconSwaps from '../../assets/icon-swaps.svg';
-import checkChecked from '../../assets/check-checked.svg';
-import checkDisabled from '../../assets/check-disabled.svg';
-import iconSettings from '../../assets/settings.svg';
-import iconDisconnect from '../../assets/icon-disconnect.svg';
+import { BitskiContext, ConnectionStateKind } from '../BitskiContext';
+import iconTokenSelected from '../assets/icon-tokens-selected.svg';
+import iconToken from '../assets/icon-tokens.svg';
+import iconActivitySelected from '../assets/icon-activity-selected.svg';
+import iconActivity from '../assets/icon-activity.svg';
+import checkChecked from '../assets/check-checked.svg';
+import checkDisabled from '../assets/check-disabled.svg';
+import iconSettings from '../assets/settings.svg';
+import iconDisconnect from '../assets/icon-disconnect.svg';
+import useOnClickOutside from 'use-onclickoutside';
+import { EmptyActivities } from './EmptyActivities';
+import { EmptyTokens } from './EmptyTokens';
+import { CopyAddress } from './CopyAddress';
+import { useBitski } from './hooks/useBitski';
 
-interface BitskiWalletViewerProps {
-  tabs?: Tab[];
+export enum Tab {
+  Tokens = 'Tokens',
+  Activity = 'Activity',
 }
 
-export default function BitskiWalletViewer({
-  tabs = [Tab.Tokens, Tab.Activity],
-}: BitskiWalletViewerProps) {
-  const { activityState, connection, tokensState } = useContext(WalletViewerContext);
+const CHAIN_SWITCHING_ENABLED = false;
+
+export function BitskiWalletViewer() {
+  const { tabs, connectionState } = useContext(BitskiContext);
+
+  const { activityState, tokensState } = useContext(WalletViewerContext);
   const [showChainSwitcher, setShowChainSwitcher] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [selectedTab, setTab] = useState<Tab>(tabs[0]);
 
-  if (!connection) {
-    return null;
+  let address, chainId: number, connector: Connector;
+  switch (connectionState.kind) {
+    case ConnectionStateKind.Connected:
+      address = connectionState.address;
+      chainId = connectionState.chainId;
+      connector = connectionState.connector;
+      break;
+    default:
+      console.info('No Connection to Display');
+      return null;
   }
-  const address = connection.accounts[0];
 
   function icon(tab: Tab) {
     switch (tab) {
@@ -42,12 +54,10 @@ export default function BitskiWalletViewer({
         return selectedTab === tab ? iconTokenSelected : iconToken;
       case Tab.Activity:
         return selectedTab === tab ? iconActivitySelected : iconActivity;
-      case Tab.Swaps:
-        return selectedTab === tab ? iconSwapsSelected : iconSwaps;
     }
   }
 
-  let page;
+  var page;
   switch (selectedTab) {
     case Tab.Tokens:
       page = <TokensPage tokensState={tokensState} />;
@@ -55,28 +65,26 @@ export default function BitskiWalletViewer({
     case Tab.Activity:
       page = <ActivityPage activityState={activityState} />;
       break;
+    default:
+      throw new Error('Not a valid tab');
   }
 
-  const chainSwitcher = showChainSwitcher ? (
-    <ChainSwitcher
-      selectedChainId={connection.chainId}
-      setShowChainSwitcher={setShowChainSwitcher}
-    />
-  ) : null;
+  const chainSwitcher =
+    CHAIN_SWITCHING_ENABLED && showChainSwitcher ? (
+      <ChainSwitcher selectedChainId={chainId} setShowChainSwitcher={setShowChainSwitcher} />
+    ) : null;
 
   const settingsMenu = showSettings ? (
-    <SettingsMenu connector={connection.connector} setShowSettings={setShowSettings} />
+    <SettingsMenu connector={connector} setShowSettings={setShowSettings} />
   ) : null;
 
   return (
-    <div className="flex flex-col bg-white w-[375px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] rounded-3xl border-solid max-h-[600px]">
+    <div className="flex flex-col bg-white w-[375px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] rounded-3xl border-solid">
       <div className="flex p-4">
         <button className="flex-none" onClick={() => setShowChainSwitcher(!showChainSwitcher)}>
-          <ChainIcon chainId={connection.chainId} size={'[21px]'} />
+          <ChainIcon chainId={chainId} size={'[21px]'} />
         </button>
-        <p className="grow text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-base not-italic font-[590] leading-[22px] tracking-[-0.32px]">
-          {truncateAddress(address)}
-        </p>
+        <CopyAddress address={address} />
         <button className="flex-none" onClick={() => setShowSettings(!showSettings)}>
           <img src={iconSettings} alt="Settings" />
         </button>
@@ -85,7 +93,7 @@ export default function BitskiWalletViewer({
         <div className="relative bottom-2 left-4 z-10">{chainSwitcher}</div>
         <div className="relative bottom-2 -end-[150px] z-10">{settingsMenu}</div>
       </div>
-      <div className="flex flex-col px-6 my-6  overflow-y-auto">{page}</div>
+      <div className="flex flex-col p-6 max-h-[400px] overflow-y-auto">{page}</div>
       <div className="bg-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] h-[1px]"></div>
       <div className="inline-flex place-content-center gap-6 p-4">
         {tabs.map((tab) => {
@@ -109,6 +117,10 @@ function ChainSwitcher({
 }) {
   const config = useConfig();
   const chains = config.chains;
+  const ref = useRef(null);
+  useOnClickOutside(ref, () => {
+    setShowChainSwitcher(false);
+  });
 
   async function setChain(chain: Chain) {
     setShowChainSwitcher(false);
@@ -120,7 +132,10 @@ function ChainSwitcher({
   }
 
   return (
-    <div className="bg-white flex flex-col w-[207px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_3px_15px_0px_color(display-p3_0_0.0667_0.2_/_0.05)] rounded-lg border-solid">
+    <div
+      ref={ref}
+      className="bg-white flex flex-col w-[207px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_3px_15px_0px_color(display-p3_0_0.0667_0.2_/_0.05)] rounded-lg border-solid"
+    >
       {chains.map((chain, index) => {
         const checkSrc = chain.id === selectedChainId ? checkChecked : checkDisabled;
         return (
@@ -160,31 +175,6 @@ function SkeletonRow() {
 
 function TokensPage(props: { tokensState: TokensState }) {
   const { tokensState } = props;
-  const balances = (
-    <div className="flex flex-col gap-4 self-stretch">
-      {'tokens' in tokensState &&
-        tokensState.tokens.balances.map((balance) => {
-          return (
-            <div key={balance.name} className="h-10 relative">
-              <p className="absolute right-0 mr-4 text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-sm not-italic font-[590] leading-[17px] tracking-[-0.28px]">
-                ${balance.amountUSD}
-              </p>
-              <div className="inline-flex items-center gap-3">
-                <img src={balance.image} className="w-10 h-10 rounded-[999px]" />
-                <div className="flex flex-col items-start gap-0">
-                  <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-base not-italic font-bold leading-[22px] tracking-[-0.32px]">
-                    {balance.name}
-                  </p>
-                  <p className="text-[color:var(--Main-Grey,color(display-p3_0.5961_0.5922_0.6118))] text-center text-[13px] not-italic font-[590] leading-[17px] tracking-[-0.26px]">
-                    {balance.amount}
-                  </p>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-    </div>
-  );
   switch (tokensState.kind) {
     case TokenStateKind.NoAddress:
       return null;
@@ -199,20 +189,46 @@ function TokensPage(props: { tokensState: TokensState }) {
     case TokenStateKind.Error:
       return <ErrorTokens address={tokensState.address} chainId={tokensState.chainId} />;
     case TokenStateKind.Tokens:
-      return (
+      const balances = (
+        <div className="flex flex-col gap-4 self-stretch">
+          {tokensState.tokens.balances.map((balance) => {
+            return (
+              <div key={balance.name} className="h-10 relative">
+                <p className="absolute right-0 mr-4 text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-sm not-italic font-[590] leading-[17px] tracking-[-0.28px]">
+                  ${balance.amountUSD}
+                </p>
+                <div className="inline-flex items-center gap-3">
+                  <img src={balance.image} className="w-10 h-10 rounded-[999px]" />
+                  <div className="flex flex-col items-start gap-0">
+                    <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-base not-italic font-bold leading-[22px] tracking-[-0.32px]">
+                      {balance.name}
+                    </p>
+                    <p className="text-[color:var(--Main-Grey,color(display-p3_0.5961_0.5922_0.6118))] text-center text-[13px] not-italic font-[590] leading-[17px] tracking-[-0.26px]">
+                      {balance.amount}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+      return tokensState.tokens.balances.length ? (
         <div className="flex flex-col gap-6 items-center">
           <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-[40px] not-italic font-[590] leading-9 tracking-[-0.4px]">
             ${tokensState.tokens.totalBalanceUsd}
           </p>
           {balances}
         </div>
+      ) : (
+        <EmptyTokens />
       );
   }
 }
 
 function ErrorTokens(props: { address: string; chainId: number }) {
   const { address, chainId } = props;
-  const { syncTokens } = useContext(WalletViewerContext);
+  let { syncTokens } = useContext(WalletViewerContext);
   return (
     <div className="flex flex-col gap-4">
       <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-base not-italic leading-[22px] tracking-[-0.32px]">
@@ -229,13 +245,6 @@ function ErrorTokens(props: { address: string; chainId: number }) {
 
 function ActivityPage(props: { activityState: ActivityState }) {
   const state = props.activityState;
-  const { activity, chain } = state as {
-    kind: ActivityStateKind.Activity;
-    address: string;
-    chain: number;
-    activity: Activity[];
-  };
-
   switch (state.kind) {
     case ActivityStateKind.NoAddress:
       return null;
@@ -248,12 +257,13 @@ function ActivityPage(props: { activityState: ActivityState }) {
         </div>
       );
     case ActivityStateKind.Activity:
+      const { activity, address, chain, kind } = state;
       if (!activity.length) {
-        return <EmptyActivity />;
+        return <EmptyActivities />;
       }
       return (
         <div className="flex flex-col gap-5">
-          {activity.map((activity: any) => {
+          {activity.map((activity) => {
             return <ActivityRow activity={activity} key={activity.txnHash} chainId={chain} />;
           })}
         </div>
@@ -263,17 +273,9 @@ function ActivityPage(props: { activityState: ActivityState }) {
   }
 }
 
-function EmptyActivity() {
-  return (
-    <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-base not-italic leading-[22px] tracking-[-0.32px]">
-      No Activity...yet
-    </p>
-  );
-}
-
 function ErrorActivity(props: { address: string; chainId: number }) {
   const { address, chainId } = props;
-  const { syncActivity } = useContext(WalletViewerContext);
+  let { syncActivity } = useContext(WalletViewerContext);
   return (
     <div className="flex flex-col gap-4">
       <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-base not-italic leading-[22px] tracking-[-0.32px]">
@@ -323,13 +325,20 @@ function SettingsMenu({
   connector: Connector;
   setShowSettings: (showSettings: boolean) => void;
 }) {
-  const { disconnectAsync } = useDisconnect();
+  const ref = useRef(null);
+  useOnClickOutside(ref, () => {
+    setShowSettings(false);
+  });
+  const { disconnect } = useBitski();
   return (
-    <div className="bg-white inline-flex items-center border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_3px_15px_0px_color(display-p3_0_0.0667_0.2_/_0.05)] pl-3 pr-[98px] py-3 rounded-lg border-solid">
+    <div
+      ref={ref}
+      className="bg-white inline-flex items-center border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_3px_15px_0px_color(display-p3_0_0.0667_0.2_/_0.05)] pl-3 pr-[98px] py-3 rounded-lg border-solid"
+    >
       <button
-        onClick={() => {
+        onClick={async () => {
           setShowSettings(false);
-          disconnectAsync({ connector });
+          await disconnect(connector);
         }}
         className="flex gap-2"
       >

@@ -1,5 +1,5 @@
 import { Connector, useConnect } from 'wagmi';
-import { ExternalWallet } from './constants';
+import { ExternalWallet, LoginMethod } from './constants';
 import phantomIcon from '../../assets/phantom.svg';
 import coinbaseWalletIcon from '../../assets/coinbase-wallet.svg';
 import metaMaskIcon from '../../assets/metamask.svg';
@@ -13,8 +13,6 @@ interface WalletProps {
   icon: string;
   onWalletClick: () => void;
 }
-
-const BITSKI_CONNECTORS = ['apple', 'x', 'bitkiSDK', 'google', 'email'];
 
 const Wallet = ({ name, icon, onWalletClick }: WalletProps) => {
   return (
@@ -101,19 +99,33 @@ export default function Wallets(props: {
   onWalletClick: (connectableWallet: ConnectableWallet) => void;
 }) {
   const wallets = useExternalWallets();
-  const { connectors } = useConnect();
+  const connectors = useConnect().connectors.filter((connector) => {
+    switch (connector.id) {
+      case LoginMethod.Email:
+        return false;
+      case LoginMethod.Google:
+        return false;
+      case LoginMethod.Apple:
+        return false;
+      case LoginMethod.X:
+        return false;
+      case LoginMethod.Sms:
+        return false;
+      default:
+        return true;
+    }
+  });
 
   const connectableWallets = connectors.flatMap((connector) => {
-    if (BITSKI_CONNECTORS.includes(connector.id)) {
-      return [];
-    }
-
     const wallet = wallets.filter((wallet) => {
       return connector.id === wallet;
     })[0];
-
     return [{ wallet, connector }];
   });
+
+  if (!connectableWallets.length) {
+    return null;
+  }
 
   // Move 'Other Wallets' to the end
   connectableWallets.push(connectableWallets.splice(0, 1)[0]);

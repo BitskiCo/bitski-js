@@ -1,8 +1,12 @@
 import { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 const httpLink = new HttpLink({
   uri: 'https://api.bitski.com/graphql',
   useGETForQueries: true,
+  // fetchOptions: {
+  //     mode: 'cors', // no-cors, *cors, same-origin
+  // }
 });
 
 const client = new ApolloClient({

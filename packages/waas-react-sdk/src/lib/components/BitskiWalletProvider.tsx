@@ -1,25 +1,66 @@
-import { createContext, ReactNode, useEffect, useReducer } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useReducer } from 'react';
 import {
   TokenActionKind,
   TokenBalance,
   tokensReducer,
   TokensState,
   TokenStateKind,
-} from './useTokens';
-import { Connection, useConnections } from 'wagmi';
+} from './hooks/useTokens';
+import { useConfig } from 'wagmi';
+import { GetAccountReturnType, watchAccount } from '@wagmi/core';
 import {
   ActivityActionKind,
   activityReducer,
   ActivityState,
   ActivityStateKind,
   mapActivity,
-} from './useActivity';
-import { queryActivity, queryTotalBalanceUSD } from './api';
+} from './hooks/useActivity';
+import { queryActivity, queryTotalBalanceUSD } from '../api';
+import { BitskiContext, ConnectionActionKind, ConnectionStateKind } from '../BitskiContext';
 
 export function BitskiWalletProvider({ children }: { children: ReactNode }) {
-  console.log('hahah');
-  const connections = useConnections();
-  const connection = connections[0];
+  const { dispatchConnectionAction, connectionState } = useContext(BitskiContext);
+  const config = useConfig();
+
+  const unwatch = watchAccount(config, {
+    onChange(account: GetAccountReturnType, prevAccount: GetAccountReturnType): void {
+      switch (account.status) {
+        case 'connected':
+          // This also changes on network/chain change
+          syncTokens(account.address, account.chainId);
+          syncActivity(account.address, account.chainId);
+
+          if (connectionState.kind !== ConnectionStateKind.Discovering) {
+            return;
+          }
+          dispatchConnectionAction({
+            kind: ConnectionActionKind.ConnectedDetected,
+            address: account.address,
+            chainId: account.chainId,
+            connector: account.connector,
+          });
+          break;
+        case 'reconnecting':
+          break;
+        case 'connecting':
+          break;
+        case 'disconnected':
+          if (connectionState.kind !== ConnectionStateKind.Discovering) {
+            return;
+          }
+          dispatchConnectionAction({
+            kind: ConnectionActionKind.Disconnected,
+          });
+          break;
+      }
+    },
+  });
+
+  useEffect(() => {
+    return () => {
+      unwatch();
+    };
+  }, []);
 
   const [tokensState, dispatchTokenAction] = useReducer(tokensReducer, {
     kind: TokenStateKind.NoAddress,
@@ -28,14 +69,6 @@ export function BitskiWalletProvider({ children }: { children: ReactNode }) {
   const [activityState, dispatchActivityAction] = useReducer(activityReducer, {
     kind: ActivityStateKind.NoAddress,
   });
-
-  useEffect(() => {
-    if (connection) {
-      const nextAddress = connection.accounts[0];
-      syncTokens(nextAddress, connection.chainId);
-      syncActivity(nextAddress, connection.chainId);
-    }
-  }, [connection]);
 
   function syncActivity(address: string, chain: number) {
     dispatchActivityAction({
@@ -76,7 +109,8 @@ export function BitskiWalletProvider({ children }: { children: ReactNode }) {
       .then((result) => {
         const data = result.data;
         const { totalBalanceUSD, connections } = data.currencyBalances;
-        const balances: TokenBalance[] = connections.nodes.map((node: Record<string, any>) => {
+        // @ts-ignore
+        const balances: TokenBalance[] = connections.nodes.map((node) => {
           return {
             amount: node.amountV2.formatted,
             image: node.currency.image.url,
@@ -105,26 +139,20 @@ export function BitskiWalletProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <WalletViewerContext.Provider
-      value={{ connection, activityState, tokensState, syncActivity, syncTokens }}
-    >
+    <WalletViewerContext.Provider value={{ activityState, tokensState, syncActivity, syncTokens }}>
       {children}
     </WalletViewerContext.Provider>
   );
 }
 
 export const WalletViewerContext = createContext<{
-  connection: Connection | undefined;
   activityState: ActivityState;
   tokensState: TokensState;
   syncActivity: (address: string, chainId: number) => void;
   syncTokens: (address: string, chainId: number) => void;
 }>({
-  connection: undefined,
   activityState: { kind: ActivityStateKind.NoAddress },
   tokensState: { kind: TokenStateKind.NoAddress },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   syncActivity: (address: string, chainId: number) => {},
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   syncTokens: (address: string, chainId: number) => {},
 });

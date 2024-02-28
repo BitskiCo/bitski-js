@@ -12,12 +12,16 @@ export async function getBlockchainAccounts(
   return accounts;
 }
 
-interface BlockchainAccount {
+export const LOCAL_STORAGE_LABEL = 'wallet.bitski.com/local-storage';
+
+export interface BlockchainAccount {
   id: string;
   address: string;
   kind: string;
+  labels: Record<string, string>;
+  annotations: Record<string, string>;
 }
 
-interface AccountsResponse {
+export interface AccountsResponse {
   accounts: BlockchainAccount[];
 }

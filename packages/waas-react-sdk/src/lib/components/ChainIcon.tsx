@@ -1,8 +1,8 @@
 import { base, mainnet, optimism, polygon } from 'viem/chains';
-import iconEth from '../../assets/icon-eth.svg';
-import iconMatic from '../../assets/icon-matic.svg';
-import iconCoinbase from '../../assets/icon-coinbase.svg';
-import iconOptimism from '../../assets/icon-optimism.svg';
+import iconEth from '../assets/icon-eth.svg';
+import iconMatic from '../assets/icon-matic.svg';
+import iconCoinbase from '../assets/icon-coinbase.svg';
+import iconOptimism from '../assets/icon-optimism.svg';
 
 const iconMap: Record<number, { src: string; bg: string }> = {
   [mainnet.id]: { src: iconEth, bg: 'bg-[color:var(--main-obsidian)]' },
