@@ -50,14 +50,14 @@ export class Bitski {
   }
 
   /**
-   * @param clientId OAuth Client ID
+   * @param appId OAuth Client ID
    * @param redirectUri Redirect uri, defaults to the current url. This should be the location of your callback html file.
    * @param additionalScopes To use custom scopes, add them here. The default value is ['offline'].
    * Note: Make sure your app is approved for the scopes you are requesting first.
    * @param options Other OAuth settings. Don't change these unless you know what you are doing.
    */
   constructor(
-    private clientId: string,
+    private appId: string,
     private redirectUri?: string,
     private additionalScopes?: string[],
     private options?: BitskiSDKOptions,
@@ -262,7 +262,7 @@ export class Bitski {
     if (!this.sdk) {
       this.sdk = loadScript().then((BitskiSDK) => {
         return BitskiSDK
-          ? new BitskiSDK(this.clientId, this.redirectUri, this.additionalScopes, this.options)
+          ? new BitskiSDK(this.appId, this.redirectUri, this.additionalScopes, this.options)
           : null;
       });
     }
