@@ -1,10 +1,9 @@
 import { Connector } from 'wagmi';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { BitskiConnector } from '../../connectors';
-import emailIcon from '../../assets/email.svg';
-import useOnClickOutside from 'use-onclickoutside';
+import React from 'react';
 
-export default function EmailInput(props: {
+interface EmailInputProps {
   connector: Connector | BitskiConnector;
   connect: ({
     connector,
@@ -13,16 +12,10 @@ export default function EmailInput(props: {
     connector: Connector;
     parameters?: Record<string, unknown>;
   }) => void;
-}) {
-  const { connector } = props;
-  const [email, setEmail] = useState('');
-  const [revealed, setRevealed] = useState(false);
+}
 
-  const ref = useRef(null);
-  useOnClickOutside(ref, () => {
-    setEmail('');
-    setRevealed(false);
-  });
+export const EmailInput = ({ connector, connect }: EmailInputProps) => {
+  const [email, setEmail] = useState('');
 
   const buttonEnabled = email.length > 0;
   const buttonBgColor = buttonEnabled ? 'bg-black' : 'bg-[color:var(--aux-light-grey)]';
@@ -36,10 +29,10 @@ export default function EmailInput(props: {
       connector.setEmail(email);
     }
 
-    props.connect({ connector });
+    connect({ connector });
   };
 
-  const form = (
+  return (
     <form className="relative w-mx" onSubmit={handleSubmit}>
       <input
         type="email"
@@ -62,22 +55,4 @@ export default function EmailInput(props: {
       </button>
     </form>
   );
-
-  const continueButton = (
-    <button
-      onClick={() => {
-        setRevealed(true);
-      }}
-      className="w-[286px] focus:outline-none border-[color:var(--aux-grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] p-4 rounded-xl border-[1.5px] border-solid hover:border-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))]"
-    >
-      <div className="flex flex-row gap-3 items-center">
-        <img src={emailIcon} className="w-5 h-5" />
-        <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-sm not-italic font-bold leading-[17px] tracking-[-0.28px]">
-          Continue with Email
-        </p>
-      </div>
-    </button>
-  );
-
-  return <div ref={ref}>{revealed ? form : continueButton}</div>;
-}
+};
