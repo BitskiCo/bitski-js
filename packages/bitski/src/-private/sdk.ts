@@ -219,7 +219,7 @@ export class BitskiSDK {
 
   public createProvider(options: ProviderOptions = {}): BitskiProvider {
     return createBitskiProvider({
-      clientId: this.clientId,
+      appId: this.clientId,
       getAccessToken: this.getCurrentAccessToken.bind(this),
       clearAccessToken: this.signOut.bind(this),
       getUser: async () => this.authProvider.getUserFromCache(),
