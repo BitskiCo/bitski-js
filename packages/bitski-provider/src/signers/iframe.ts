@@ -47,7 +47,7 @@ export const showIframe: ShowSignerPopupFn = (
     reject = rej;
   });
 
-  const url = getSignerUrl(transaction.id, context.config);
+  const url = getSignerUrl(transaction.id, context.config, true);
 
   const iframe = document.createElement('iframe');
   iframe.style.position = 'absolute';

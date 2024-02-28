@@ -3,6 +3,7 @@ import { InternalBitskiProviderConfig } from '../types';
 export const getSignerUrl = (
   transactionId: string,
   config: InternalBitskiProviderConfig,
+  isIframe = false,
 ): string => {
   const searchParams = config.signerQueryParams ?? new URLSearchParams();
 
@@ -18,7 +19,11 @@ export const getSignerUrl = (
       federatedId = btoa(`${appId}:${config.waas?.userId}`);
     }
 
-    searchParams.set('loginHint', `fa_${federatedId}`);
+    searchParams.set('login_hint', `fa_${federatedId}`);
+  }
+
+  if (isIframe) {
+    searchParams.set('isIframe', 'true');
   }
 
   const searchParamsSerialized = searchParams.toString();
