@@ -1,19 +1,17 @@
 import {
-  walletConnect,
   CoinbaseWalletParameters,
-  MetaMaskParameters,
-  WalletConnectParameters,
-  InjectedParameters,
   injected,
+  InjectedParameters,
+  MetaMaskParameters,
+  walletConnect,
+  WalletConnectParameters,
 } from 'wagmi/connectors';
-import { BitskiParameters } from '../connectors';
+import { bitski, BitskiParameters } from '../connectors';
 import { LoginMethod } from '../components/BitskiWidget/constants';
 
 import { ConfigTypeMap, ConnectorConfig } from '../components/BitskiWidget/types';
 import { CreateConnectorFn } from 'wagmi';
-import { createBitskiConnector } from './createBitskiConnector';
-import { LoginMethods } from '../components/BitskiWidget/types';
-import { hasWindowProvider, isMobile } from '.';
+import { hasWindowProvider, isMobile } from './index';
 
 export const validateConnectors = ({
   loginMethods,
@@ -21,12 +19,17 @@ export const validateConnectors = ({
   appId,
   callbackURL,
 }: {
-  loginMethods: LoginMethods[];
+  loginMethods: LoginMethod[];
   config?: ConnectorConfig | ConnectorConfig[];
-  appId?: string;
+  appId: string;
   callbackURL?: string;
 }) => {
   const configConnectors: CreateConnectorFn[] = [];
+  if (loginMethods.includes(LoginMethod.Sms)) {
+    throw new Error(
+      `SMS not yet supported for App ID ${appId}.  Please turn off until a future release.`,
+    );
+  }
 
   const configMap: ConfigTypeMap = {
     injected: {} as InjectedParameters,
@@ -104,9 +107,17 @@ export const validateConnectors = ({
     );
   }
 
+  if (!callbackURL) {
+    throw new Error(
+      'BitskiProvider: A callbackURL is required in the config when using the Social or Bitski login method. Please pass a valid callbackURL.',
+    );
+  }
+
   const bitskiConnectors = loginMethods
     .filter((method) => method != LoginMethod.Wallet)
-    .map((method) => createBitskiConnector({ configMap, loginMethod: method, appId, callbackURL }));
+    .map((loginMethod) => {
+      return bitski({ appId, callbackUrl: callbackURL, loginMethod });
+    });
   configConnectors.push(...bitskiConnectors);
 
   return configConnectors;

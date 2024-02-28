@@ -1,13 +1,8 @@
 import './index.css';
-export { BitskiProvider, BitskiConnect, BitskiWidget } from './components/BitskiWidget';
-export {
-  BitskiWalletProvider,
-  BitskiWalletViewer,
-  WalletViewerContext,
-  ChainIcon,
-} from './components/BitskiWalletViewer';
+export { BitskiProvider, BitskiWidget, BitskiAuth } from './components/BitskiWidget';
+export { BitskiWalletViewer, Tab } from './components/BitskiWalletViewer';
+export { BitskiWalletProvider } from './components/BitskiWalletProvider';
 export type { LoginMethods } from './components/BitskiWidget/types';
-export { Tab } from './components/BitskiWalletViewer/constants';
 export { LoginMethod } from './components/BitskiWidget/constants';
-export { bitski, phantom } from './connectors';
-export { createBitskiConfig } from './utils';
+export { ConnectionStateKind, type ConnectionState } from './BitskiContext';
+export { useBitski } from './components/hooks/useBitski';

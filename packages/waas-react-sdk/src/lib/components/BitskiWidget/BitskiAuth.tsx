@@ -1,13 +1,11 @@
-import useConnectionState from './states/useConnectionState';
-import { PendingState, ConnectedState } from './types';
 import IdleConnection from './states/Idle';
 import PendingConnection from './states/Pending';
-import Connected from './states/Connected';
 import ConnectionError from './states/ConnectionError';
-import { ConnectionState } from './constants';
 import { useDialogContext } from '../Dialog';
 import { useEffect, useState } from 'react';
 import './BitskiAuth.styles.css';
+import { ConnectionState, ConnectionStateKind } from '../../BitskiContext';
+import { useBitski } from '../hooks/useBitski';
 
 interface BitskiAuthProps {
   children?: React.ReactNode;
@@ -31,43 +29,23 @@ const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   return <div className={`Dialog-content Dialog-content-${contentAnimationState}`}>{children}</div>;
 };
 
-export function BitskiAuth({ children, logoUrl, collapsed }: BitskiAuthProps) {
-  const { connectionState, connectWallet, disconnectWallet, reset } = useConnectionState();
-
-  const { pendingConnector } = connectionState as PendingState;
-  const { connector, address, chain } = connectionState as ConnectedState;
-
-  let Component;
-
-  switch (connectionState.type) {
-    case ConnectionState.Idle:
-      Component = (
-        <IdleConnection connectWallet={connectWallet} collapsed={collapsed} logoUrl={logoUrl} />
-      );
-      break;
-    case ConnectionState.Pending:
-      Component = <PendingConnection connector={pendingConnector} reset={reset} />;
-      break;
-    case ConnectionState.Connected:
-      Component = (
-        <Connected
-          connector={connector}
-          chainName={chain}
-          address={address}
-          disconnect={() => disconnectWallet({ connector })}
-        >
-          {children}
-        </Connected>
-      );
-      break;
-    case ConnectionState.Error:
-      Component = <ConnectionError reset={reset} connector={connectionState.connector} />;
-      break;
-    default:
-      Component = (
-        <IdleConnection connectWallet={connectWallet} collapsed={collapsed} logoUrl={logoUrl} />
-      );
+function componentForConnectionState(connectionState: ConnectionState, reset: () => void) {
+  switch (connectionState.kind) {
+    case ConnectionStateKind.Discovering:
+      return <IdleConnection />;
+    case ConnectionStateKind.NotConnected:
+      return <IdleConnection />;
+    case ConnectionStateKind.Pending:
+      return <PendingConnection connector={connectionState.pendingConnector} reset={reset} />;
+    case ConnectionStateKind.Connected:
+      return <h1>I'm connected, we should dismiss the dialog at this point.</h1>;
+    case ConnectionStateKind.Error:
+      return <ConnectionError connector={connectionState.connector} reset={reset} />;
   }
+}
 
+export default function BitskiAuth({ collapsed }: BitskiAuthProps) {
+  const { connectionState, reset } = useBitski();
+  let Component = componentForConnectionState(connectionState, reset);
   return collapsed ? <AuthWrapper>{Component}</AuthWrapper> : Component;
 }

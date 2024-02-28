@@ -5,7 +5,7 @@ export interface TokenBalance {
   image?: string;
 }
 
-export interface Tokens {
+interface Tokens {
   totalBalanceUsd: string;
   balances: TokenBalance[];
 }

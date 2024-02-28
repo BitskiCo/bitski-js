@@ -1,6 +1,8 @@
 import { Connector } from 'wagmi';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BitskiConnector } from '../../connectors';
+import emailIcon from '../../assets/email.svg';
+import useOnClickOutside from 'use-onclickoutside';
 
 export default function EmailInput(props: {
   connector: Connector | BitskiConnector;
@@ -14,6 +16,13 @@ export default function EmailInput(props: {
 }) {
   const { connector } = props;
   const [email, setEmail] = useState('');
+  const [revealed, setRevealed] = useState(false);
+
+  const ref = useRef(null);
+  useOnClickOutside(ref, () => {
+    setEmail('');
+    setRevealed(false);
+  });
 
   const buttonEnabled = email.length > 0;
   const buttonBgColor = buttonEnabled ? 'bg-black' : 'bg-[color:var(--aux-light-grey)]';
@@ -30,7 +39,7 @@ export default function EmailInput(props: {
     props.connect({ connector });
   };
 
-  return (
+  const form = (
     <form className="relative w-mx" onSubmit={handleSubmit}>
       <input
         type="email"
@@ -38,7 +47,7 @@ export default function EmailInput(props: {
         onChange={(event) => setEmail(event.target.value)}
         placeholder="Enter your email"
         value={email}
-        className={`w-[286px] focus:outline-none border-[color:var(--aux-grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] p-4 rounded-xl border-[1.5px] border-solid ${inputTextColor} text-sm not-italic font-[510] leading-[17px] tracking-[-0.084px]`}
+        className={`w-[286px] focus:outline-none border-[color:var(--aux-grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] p-4 rounded-xl border-[1.5px] border-solid ${inputTextColor} hover:border-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] focus:border-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-sm not-italic font-[510] leading-[17px] tracking-[-0.084px]`}
       />
       <button
         type="submit"
@@ -53,4 +62,22 @@ export default function EmailInput(props: {
       </button>
     </form>
   );
+
+  const continueButton = (
+    <button
+      onClick={() => {
+        setRevealed(true);
+      }}
+      className="w-[286px] focus:outline-none border-[color:var(--aux-grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] p-4 rounded-xl border-[1.5px] border-solid hover:border-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))]"
+    >
+      <div className="flex flex-row gap-3 items-center">
+        <img src={emailIcon} className="w-5 h-5" />
+        <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-sm not-italic font-bold leading-[17px] tracking-[-0.28px]">
+          Continue with Email
+        </p>
+      </div>
+    </button>
+  );
+
+  return <div ref={ref}>{revealed ? form : continueButton}</div>;
 }
