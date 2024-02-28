@@ -1,39 +1,29 @@
-import { Connector, useConfig } from 'wagmi';
+import { Connector } from 'wagmi';
 import { TokensState, TokenStateKind } from './hooks/useTokens';
-import { useContext, useRef, useState } from 'react';
+import { useContext, useState } from 'react';
 import { WalletViewerContext } from './BitskiWalletProvider';
 import { Activity, ActivityState, ActivityStateKind } from './hooks/useActivity';
-import { Chain } from 'viem/chains';
-import { switchChain } from '@wagmi/core';
 import { ChainIcon } from './ChainIcon';
 import { BitskiContext, ConnectionStateKind } from '../BitskiContext';
 import iconTokenSelected from '../assets/icon-tokens-selected.svg';
 import iconToken from '../assets/icon-tokens.svg';
 import iconActivitySelected from '../assets/icon-activity-selected.svg';
 import iconActivity from '../assets/icon-activity.svg';
-import checkChecked from '../assets/check-checked.svg';
-import checkDisabled from '../assets/check-disabled.svg';
-import iconSettings from '../assets/settings.svg';
-import iconDisconnect from '../assets/icon-disconnect.svg';
-import useOnClickOutside from 'use-onclickoutside';
 import { EmptyActivities } from './EmptyActivities';
 import { EmptyTokens } from './EmptyTokens';
 import { CopyAddress } from './CopyAddress';
-import { useBitski } from './hooks/useBitski';
+import { ChainSwitcher } from './ChainSwitcher';
+import { SettingsMenu } from './SettingsMenu';
 
 export enum Tab {
   Tokens = 'Tokens',
   Activity = 'Activity',
 }
 
-const CHAIN_SWITCHING_ENABLED = false;
-
 export function BitskiWalletViewer() {
   const { tabs, connectionState } = useContext(BitskiContext);
 
   const { activityState, tokensState } = useContext(WalletViewerContext);
-  const [showChainSwitcher, setShowChainSwitcher] = useState<boolean>(false);
-  const [showSettings, setShowSettings] = useState<boolean>(false);
   const [selectedTab, setTab] = useState<Tab>(tabs[0]);
 
   let address, chainId: number, connector: Connector;
@@ -69,32 +59,14 @@ export function BitskiWalletViewer() {
       throw new Error('Not a valid tab');
   }
 
-  const chainSwitcher =
-    CHAIN_SWITCHING_ENABLED && showChainSwitcher ? (
-      <ChainSwitcher selectedChainId={chainId} setShowChainSwitcher={setShowChainSwitcher} />
-    ) : null;
-
-  const settingsMenu = showSettings ? (
-    <SettingsMenu connector={connector} setShowSettings={setShowSettings} />
-  ) : null;
-
   return (
-    <div className="flex flex-col bg-white w-[375px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] rounded-3xl border-solid">
-      <div className="flex p-4">
-        <button className="flex-none" onClick={() => setShowChainSwitcher(!showChainSwitcher)}>
-          <ChainIcon chainId={chainId} size={'[21px]'} />
-        </button>
+    <div className="flex flex-col bg-white w-[375px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_10px_40px_0px_color(display-p3_0_0.0667_0.2_/_0.10)] rounded-3xl border-solid border-b">
+      <div className="relative flex p-4">
+        <ChainSwitcher />
         <CopyAddress address={address} />
-        <button className="flex-none" onClick={() => setShowSettings(!showSettings)}>
-          <img src={iconSettings} alt="Settings" />
-        </button>
-      </div>
-      <div className="bg-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] h-[1px] flex relative w-full">
-        <div className="relative bottom-2 left-4 z-10">{chainSwitcher}</div>
-        <div className="relative bottom-2 -end-[150px] z-10">{settingsMenu}</div>
+        <SettingsMenu connector={connector} />
       </div>
       <div className="flex flex-col p-6 max-h-[400px] overflow-y-auto">{page}</div>
-      <div className="bg-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] h-[1px]"></div>
       <div className="inline-flex place-content-center gap-6 p-4">
         {tabs.map((tab) => {
           return (
@@ -104,59 +76,6 @@ export function BitskiWalletViewer() {
           );
         })}
       </div>
-    </div>
-  );
-}
-
-function ChainSwitcher({
-  selectedChainId,
-  setShowChainSwitcher,
-}: {
-  selectedChainId: number;
-  setShowChainSwitcher: (showChainSwitcher: boolean) => void;
-}) {
-  const config = useConfig();
-  const chains = config.chains;
-  const ref = useRef(null);
-  useOnClickOutside(ref, () => {
-    setShowChainSwitcher(false);
-  });
-
-  async function setChain(chain: Chain) {
-    setShowChainSwitcher(false);
-    try {
-      await switchChain(config, { chainId: chain.id });
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  return (
-    <div
-      ref={ref}
-      className="bg-white flex flex-col w-[207px] shrink-0 border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_3px_15px_0px_color(display-p3_0_0.0667_0.2_/_0.05)] rounded-lg border-solid"
-    >
-      {chains.map((chain, index) => {
-        const checkSrc = chain.id === selectedChainId ? checkChecked : checkDisabled;
-        return (
-          <div className="flex flex-col" key={chain.id}>
-            <button className="flex items-center p-4" onClick={() => setChain(chain)}>
-              <div className="flex gap-2 items-center">
-                <ChainIcon chainId={chain.id} size={'4'} />
-                <p className="text-[color:var(--Main-Black,color(display-p3_0.2_0.2_0.2))] text-center text-[13px] not-italic font-[590] leading-[13px]">
-                  {chain.name}
-                </p>
-              </div>
-              <div className="flex flex-grow flex-row-reverse items-center">
-                <img className={'w-4 h-4 shrink-0'} src={checkSrc} />
-              </div>
-            </button>
-            {index < chains.length - 1 ? (
-              <div className="w-full h-px shrink-0 bg-gray-200"></div>
-            ) : null}
-          </div>
-        );
-      })}
     </div>
   );
 }
@@ -257,7 +176,7 @@ function ActivityPage(props: { activityState: ActivityState }) {
         </div>
       );
     case ActivityStateKind.Activity:
-      const { activity, address, chain, kind } = state;
+      const { activity, chain } = state;
       if (!activity.length) {
         return <EmptyActivities />;
       }
@@ -295,7 +214,7 @@ function ActivityRow(props: { activity: Activity; chainId: number }) {
   const icon = activity.icon ? (
     <img src={activity.icon} alt={activity.title} className="w-10 h-10 rounded-[99px]" />
   ) : (
-    <ChainIcon chainId={props.chainId} size={'10'} />
+    <ChainIcon chainId={props.chainId} size={10} />
   );
 
   return (
@@ -314,39 +233,6 @@ function ActivityRow(props: { activity: Activity; chainId: number }) {
       <p className="flex items-end text-[color:var(--Main-Green,color(display-p3_0.1098_0.7804_0))] text-sm not-italic font-[590] leading-[17px] tracking-[-0.28px]">
         {activity.accessory}
       </p>
-    </div>
-  );
-}
-
-function SettingsMenu({
-  connector,
-  setShowSettings,
-}: {
-  connector: Connector;
-  setShowSettings: (showSettings: boolean) => void;
-}) {
-  const ref = useRef(null);
-  useOnClickOutside(ref, () => {
-    setShowSettings(false);
-  });
-  const { disconnect } = useBitski();
-  return (
-    <div
-      ref={ref}
-      className="bg-white inline-flex items-center border border-[color:var(--Aux-Grey,color(display-p3_0.7569_0.7569_0.7647_/_0.20))] shadow-[0px_3px_15px_0px_color(display-p3_0_0.0667_0.2_/_0.05)] pl-3 pr-[98px] py-3 rounded-lg border-solid"
-    >
-      <button
-        onClick={async () => {
-          setShowSettings(false);
-          await disconnect(connector);
-        }}
-        className="flex gap-2"
-      >
-        <img src={iconDisconnect} alt="Disconnect" />
-        <p className="text-[color:var(--Main-Grey,color(display-p3_0.5961_0.5922_0.6118))] text-center text-[13px] not-italic font-[590] leading-[13px]">
-          Disconnect
-        </p>
-      </button>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { Connector, useConnectors } from 'wagmi';
-import EmailInput from '../EmailInput';
+import { EmailInput } from '../EmailInput';
 import { LoginMethod, Social } from '../constants';
 import Wallets from '../Wallets';
 import Socials from '../Socials';
@@ -7,12 +7,12 @@ import { SmsInput } from '../SmsInput';
 import { useContext } from 'react';
 import { BitskiContext } from '../../../BitskiContext';
 import TOS from '../TOS';
-import { useBitski } from '../../hooks/useBitski';
+import { useBitski } from '../../../useBitski';
 
 export default function IdleConnection() {
   const { loginMethods, logoUrl } = useContext(BitskiContext);
   const connectors = useConnectors();
-  const { connect, reset } = useBitski();
+  const { connect } = useBitski();
 
   const emailConnector = connectors.find((connector) => connector.id === LoginMethod.Email);
   const smsConnector: Connector | undefined = connectors.find(

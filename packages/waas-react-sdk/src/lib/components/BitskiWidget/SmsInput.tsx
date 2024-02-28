@@ -2,7 +2,6 @@ import { Connector } from 'wagmi';
 import { useRef, useState } from 'react';
 import { BitskiConnector } from '../../connectors';
 import phoneIcon from '../../assets/phone.svg';
-import useOnClickOutside from 'use-onclickoutside';
 
 export function SmsInput({
   connector,
@@ -25,10 +24,6 @@ export function SmsInput({
 
   const [revealed, setRevealed] = useState(false);
   const ref = useRef(null);
-  useOnClickOutside(ref, () => {
-    setPhone('');
-    setRevealed(false);
-  });
 
   async function handleSubmit() {
     try {
