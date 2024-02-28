@@ -1,5 +1,14 @@
 # bitski
 
+## 4.2.1
+
+### Patch Changes
+
+- [#477](https://github.com/BitskiCo/bitski-js/pull/477) [`fe68fd25723cef9248b5ee630fbd195d76c84c91`](https://github.com/BitskiCo/bitski-js/commit/fe68fd25723cef9248b5ee630fbd195d76c84c91) Thanks [@pzuraq](https://github.com/pzuraq)! - Update clientId to appId when creating provider
+
+- Updated dependencies [[`aca0a6f6cc731a832cba5891f223d61ab5c5c0c2`](https://github.com/BitskiCo/bitski-js/commit/aca0a6f6cc731a832cba5891f223d61ab5c5c0c2)]:
+  - bitski-provider@3.5.1
+
 ## 4.2.0
 
 ### Minor Changes

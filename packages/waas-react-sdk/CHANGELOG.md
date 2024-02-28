@@ -1,5 +1,14 @@
 # @bitski/waas-react-sdk
 
+## 1.0.1
+
+### Patch Changes
+
+- [#479](https://github.com/BitskiCo/bitski-js/pull/479) [`db47fb846b02e959bb18eba1f7052b894b26c983`](https://github.com/BitskiCo/bitski-js/commit/db47fb846b02e959bb18eba1f7052b894b26c983) Thanks [@chronicIntrovert](https://github.com/chronicIntrovert)! - Add chain switching; default email input display
+
+- Updated dependencies [[`fe68fd25723cef9248b5ee630fbd195d76c84c91`](https://github.com/BitskiCo/bitski-js/commit/fe68fd25723cef9248b5ee630fbd195d76c84c91)]:
+  - bitski@4.2.1
+
 ## 0.0.12
 
 ### Patch Changes

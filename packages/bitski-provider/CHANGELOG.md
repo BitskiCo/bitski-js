@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 3.5.1
+
+### Patch Changes
+
+- [#472](https://github.com/BitskiCo/bitski-js/pull/472) [`aca0a6f6cc731a832cba5891f223d61ab5c5c0c2`](https://github.com/BitskiCo/bitski-js/commit/aca0a6f6cc731a832cba5891f223d61ab5c5c0c2) Thanks [@pzuraq](https://github.com/pzuraq)! - Add isIframe query param to force prompt=none in iframes
+
 ## 3.5.0
 
 ### Minor Changes
