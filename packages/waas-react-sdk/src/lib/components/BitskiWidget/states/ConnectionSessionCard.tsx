@@ -6,7 +6,6 @@ import {ConnectionState, ConnectionStateKind} from "../../../BitskiContext";
 import {CONNECTOR_TYPE_BITSKI} from "../../../connectors/bitski";
 import chevronLeftIcon from "../../../assets/chevron-left-small.svg";
 import {LoginMethod} from "../constants";
-import './ConnectionSessionCard.styles.css';
 
 export function ConnectionSessionCard({connectionState, onBackClick}: {
     connectionState: ConnectionState,
@@ -64,7 +63,7 @@ function displayForConnector(connectionState: ConnectionState): ConnectorDisplay
                 icon: iconForConnector(pendingConnector),
                 stateIcon: pendingIcon,
                 stateBgColor: "bg-[#299EFF]",
-                stateAdditionalClass: "rotate-infinite",
+                stateAdditionalClass: "animate-spin",
                 text: pendingText
             }
         case ConnectionStateKind.Error:
