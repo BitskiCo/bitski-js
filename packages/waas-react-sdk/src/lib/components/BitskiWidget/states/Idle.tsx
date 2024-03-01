@@ -7,7 +7,7 @@ import { SmsInput } from '../SmsInput';
 import { useContext } from 'react';
 import { BitskiContext } from '../../../BitskiContext';
 import TOS from '../TOS';
-import { useBitski } from '../../hooks/useBitski';
+import { useBitski } from '../../../useBitski';
 
 export default function IdleConnection() {
   const { loginMethods, logoUrl } = useContext(BitskiContext);

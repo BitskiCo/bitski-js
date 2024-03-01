@@ -1,7 +1,7 @@
-import { createContext } from 'react';
-import { Connector } from 'wagmi';
-import { LoginMethod } from './components/BitskiWidget/constants';
-import { Tab } from './components/BitskiWalletViewer';
+import {createContext} from 'react';
+import {Connector} from 'wagmi';
+import {LoginMethod} from './components/BitskiWidget/constants';
+import {Tab} from './components/BitskiWalletViewer';
 
 export enum ConnectionStateKind {
   Discovering = 'discovering',
@@ -137,3 +137,4 @@ export function connectionStateReducer(
       };
   }
 }
+

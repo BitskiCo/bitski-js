@@ -6,22 +6,12 @@ import { BitskiContext, ConnectionStateKind } from '../../BitskiContext';
 import { BitskiAuth } from './index';
 
 export interface BitskiWidgetProps {
-  children?: React.ReactNode;
-  collapsed?: boolean;
   connect?: React.ReactNode;
-  showWallet?: boolean;
   logoUrl?: string;
   loginText?: string;
 }
 
-function BitskiWidget({
-  children,
-  collapsed = false,
-  showWallet = true,
-  connect,
-  logoUrl,
-  loginText,
-}: BitskiWidgetProps) {
+function BitskiWidget({ connect, logoUrl, loginText }: BitskiWidgetProps) {
   const { connectionState } = useContext(BitskiContext);
   let dialogContent;
   switch (connectionState.kind) {

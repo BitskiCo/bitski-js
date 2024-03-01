@@ -1,0 +1,36 @@
+query TotalBalanceUSD($input: GetCurrencyBalancesV2Input!) {
+  currencyBalances(input: $input) {
+    totalBalanceUSD {
+      formatted
+    }
+    connections {
+      nodes {
+        address {
+          raw
+          truncated
+        }
+        amountV2 {
+          amount {
+            decimals
+            formatted
+            value
+          }
+          formatted
+        }
+        value {
+          decimals
+          formatted
+          value
+        }
+        currency {
+          displayName
+          image {
+            url
+          }
+          symbol
+          decimals
+        }
+      }
+    }
+  }
+}
