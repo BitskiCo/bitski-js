@@ -37,8 +37,8 @@ import {
   SignFn,
 } from './types';
 import { assert, expect } from './utils/type-utils';
-import { showIframe } from './signers/iframe';
-import { showPopup } from './signers/popup';
+import { createDialogSigner } from './signers/dialog';
+import { openPopupDialog, openIframeDialog } from './dialogs';
 
 // global value provided by scripts/insert-package-version.mjs
 declare const BITSKI_PROVIDER_VERSION: string;
@@ -90,10 +90,10 @@ export class BitskiProvider<Extra = unknown> implements EthProvider {
     if (config.signerMethod) {
       switch (config.signerMethod) {
         case 'popup':
-          sign = createBrowserSigner({ showPopup });
+          sign = createBrowserSigner({ showPopup: createDialogSigner(openPopupDialog, false) });
           break;
         case 'iframe':
-          sign = createBrowserSigner({ showPopup: showIframe });
+          sign = createBrowserSigner({ showPopup: createDialogSigner(openIframeDialog, true) });
           break;
         case 'redirect':
           sign = createBrowserSigner();
