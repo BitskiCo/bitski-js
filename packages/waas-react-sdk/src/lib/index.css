@@ -12,7 +12,9 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
   }
 
   :root {
@@ -29,7 +31,9 @@
     color: var(--Main-Black, #333);
     color: var(--Main-Black, color(display-p3 0.2 0.2 0.2));
     text-align: center;
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
 
     /* Body B (700, Bold) */
     font-size: 16px;
@@ -48,7 +52,9 @@
 
     color: var(--Main-Black, color(display-p3 0.2 0.2 0.2));
     text-align: center;
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
     /* Caption S (600, Semibold) */
     font-size: 14px;
     font-style: normal;
@@ -62,7 +68,9 @@
 
     color: var(--Main-Grey, color(display-p3 0.5961 0.5922 0.6118));
     text-align: center;
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
     /* Caption M (500, Medium) */
     font-size: 14px;
     font-style: normal;
@@ -76,7 +84,9 @@
 
     color: var(--Main-Black, color(display-p3 0.2 0.2 0.2));
     text-align: center;
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
     /* Subtitle B (700, Bold) */
     font-size: 18px;
     font-style: normal;
@@ -200,7 +210,9 @@
     color: var(--Main-White, #fff);
     color: var(--Main-White, color(display-p3 1 1 1));
     text-align: center;
-    font-feature-settings: 'clig' off, 'liga' off;
+    font-feature-settings:
+      'clig' off,
+      'liga' off;
     font-size: 13px;
     font-style: normal;
     font-weight: 590;

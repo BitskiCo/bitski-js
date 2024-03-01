@@ -1,6 +1,6 @@
 import { truncateAddress } from '../../utils';
 import { ConnectionStateKind } from '../../BitskiContext';
-import { useBitski } from '../hooks/useBitski';
+import {useBitski} from "../../useBitski";
 
 interface BitskiConnectProps {
   children?: React.ReactNode;

@@ -1,11 +1,10 @@
 import IdleConnection from './states/Idle';
-import PendingConnection from './states/Pending';
-import ConnectionError from './states/ConnectionError';
 import { useDialogContext } from '../Dialog';
 import { useEffect, useState } from 'react';
 import './BitskiAuth.styles.css';
 import { ConnectionState, ConnectionStateKind } from '../../BitskiContext';
-import { useBitski } from '../hooks/useBitski';
+import {useBitski} from "../../useBitski";
+import {ConnectionSessionCard} from "./states/ConnectionSessionCard";
 
 interface BitskiAuthProps {
   children?: React.ReactNode;
@@ -36,11 +35,9 @@ function componentForConnectionState(connectionState: ConnectionState, reset: ()
     case ConnectionStateKind.NotConnected:
       return <IdleConnection />;
     case ConnectionStateKind.Pending:
-      return <PendingConnection connector={connectionState.pendingConnector} reset={reset} />;
     case ConnectionStateKind.Connected:
-      return <h1>I'm connected, we should dismiss the dialog at this point.</h1>;
     case ConnectionStateKind.Error:
-      return <ConnectionError connector={connectionState.connector} reset={reset} />;
+     return <ConnectionSessionCard connectionState={connectionState} onBackClick={reset} />
   }
 }
 

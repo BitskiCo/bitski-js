@@ -9,11 +9,12 @@ import iconTokenSelected from '../assets/icon-tokens-selected.svg';
 import iconToken from '../assets/icon-tokens.svg';
 import iconActivitySelected from '../assets/icon-activity-selected.svg';
 import iconActivity from '../assets/icon-activity.svg';
+import { ChainSwitcher } from './ChainSwitcher';
+import { SettingsMenu } from './SettingsMenu';
+
 import { EmptyActivities } from './EmptyActivities';
 import { EmptyTokens } from './EmptyTokens';
 import { CopyAddress } from './CopyAddress';
-import { ChainSwitcher } from './ChainSwitcher';
-import { SettingsMenu } from './SettingsMenu';
 
 export enum Tab {
   Tokens = 'Tokens',

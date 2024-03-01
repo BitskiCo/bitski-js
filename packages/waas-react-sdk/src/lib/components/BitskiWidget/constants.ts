@@ -1,15 +1,3 @@
-import {
-  arbitrum,
-  base,
-  baseGoerli,
-  mainnet,
-  optimism,
-  optimismSepolia,
-  polygon,
-  polygonMumbai,
-  sepolia,
-} from 'viem/chains';
-
 export enum LoginMethod {
   Wallet = 'wallet',
   Email = 'email',
@@ -20,17 +8,6 @@ export enum LoginMethod {
 }
 
 export type LoginMethods = `${LoginMethod}`;
-export const supportedChains = [
-  mainnet,
-  sepolia,
-  polygon,
-  polygonMumbai,
-  base,
-  baseGoerli,
-  optimism,
-  optimismSepolia,
-  arbitrum,
-];
 
 export enum ExternalWallet {
   Phantom = 'phantom',
