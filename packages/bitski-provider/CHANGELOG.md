@@ -1,5 +1,11 @@
 # bitski-provider
 
+## 3.5.2
+
+### Patch Changes
+
+- [#480](https://github.com/BitskiCo/bitski-js/pull/480) [`e3f9d70c125e08c3c3e8daf09a81b4ffbae4a962`](https://github.com/BitskiCo/bitski-js/commit/e3f9d70c125e08c3c3e8daf09a81b4ffbae4a962) Thanks [@pzuraq](https://github.com/pzuraq)! - Fix modal dialog promise queueing
+
 ## 3.5.1
 
 ### Patch Changes

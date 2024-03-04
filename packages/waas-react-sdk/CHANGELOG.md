@@ -1,5 +1,11 @@
 # @bitski/waas-react-sdk
 
+## 1.0.3
+
+### Patch Changes
+
+- [#482](https://github.com/BitskiCo/bitski-js/pull/482) [`98af96b14c12cc8e1fbad8548505c52a9e052dbd`](https://github.com/BitskiCo/bitski-js/commit/98af96b14c12cc8e1fbad8548505c52a9e052dbd) Thanks [@RealAndyLawton](https://github.com/RealAndyLawton)! - WaaS React 1.0.2
+
 ## 1.0.1
 
 ### Patch Changes
