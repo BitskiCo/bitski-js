@@ -1,5 +1,11 @@
 # @bitski/waas-react-sdk
 
+## 1.0.4
+
+### Patch Changes
+
+- [#483](https://github.com/BitskiCo/bitski-js/pull/483) [`1f850b695e3288e15c1434180e6aedd9fa814a90`](https://github.com/BitskiCo/bitski-js/commit/1f850b695e3288e15c1434180e6aedd9fa814a90) Thanks [@RealAndyLawton](https://github.com/RealAndyLawton)! - Show nothing if Chain doesn't have known icon
+
 ## 1.0.3
 
 ### Patch Changes
