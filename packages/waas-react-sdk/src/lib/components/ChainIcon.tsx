@@ -12,8 +12,11 @@ const iconMap: Record<number, { src: string }> = {
 };
 
 export function ChainIcon({ chainId, size }: { chainId: number; size: number }) {
-  const { src } = iconMap[chainId];
+  const iconEntry = iconMap[chainId];
+  if (!iconEntry) {
+    return null
+  }
   return (
-    <img width={size} height={size} className="rounded-full object-cover object-center" src={src} />
+    <img width={size} height={size} className="rounded-full object-cover object-center" src={iconEntry.src} />
   );
 }
